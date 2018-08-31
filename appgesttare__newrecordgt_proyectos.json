@@ -1,0 +1,29 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "articuosForm": {
+            "prefix": "gt_proyectos",
+            "componente": "YBForm",
+            "class": "claseGrid",
+            "submit": "create",
+            "return": true,
+            "success": [{"slot": "return"}],
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "codproyecto": {},
+                        "nombre": {},
+                        "descripcion": {},
+                        "estado": {},
+                        "codequipo": {},
+                        "codcliente": {}
+                    }
+                }
+            },
+            "exclude": {}
+        }
+    },
+    "acciones": {}
+}

@@ -1,0 +1,65 @@
+{
+    "querystring": {},
+    "schema": {
+    	"gt_listatareas": {
+            "rel": "codespacio",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1
+            }
+        },
+        "gt_tareas": {
+            "rel": "codespacio",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1
+            }
+        }
+    },
+    "layout": {
+    	"listatareasGrid": {
+            "label": "Grupos de tareas",
+        	"componente": "YBTable",
+        	"prefix": "gt_listatareas",
+        	"colorRowField": "rowColor",
+        	"class": "claseGrid",
+            "columns": [
+                {"tipo": "field", "listpos": "subtitle", "key": "codlistarea", "width": 50},
+                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 300}
+            ],
+            "accionesGrid": [{
+                "key": "nuevaLinea",
+                "label": "Nuevo",
+                "success": []
+            }]
+        },
+        "tareasGrid": {
+            "label": "Tareas",
+        	"componente": "YBTable",
+        	"prefix": "gt_tareas",
+        	"colorRowField": "rowColor",
+        	"class": "claseGrid",
+            "columns": [
+            	{"tipo": "field", "listpos": "title", "key": "codproyecto", "width": 50},
+                {"tipo": "field", "listpos": "title", "key": "descripcion", "width": 300},
+                {"tipo": "field", "listpos": "title", "key": "resuelta", "width": 50}
+            ],
+            "accionesGrid": [{
+                "key": "nuevaLinea",
+                "label": "Nuevo",
+                "success": []
+            }]
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+    	"nuevaLinea": {
+            "label": "Nuevo",
+            "action": "newRow",
+            "icon": "add_circle"
+        }
+    }
+}

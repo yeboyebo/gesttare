@@ -1,3 +1,90 @@
 {
-    "modifications": []
+    "modifications": [
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/root",
+            "value": {
+                "authentication": {
+                    "url": "^login/$",
+                    "func": "auth_login"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/authentication",
+            "value": {
+                "account": {
+                    "url": "^account/$",
+                    "func": "account_request"
+                }
+            }
+        },
+        {
+            "type": "deleteNode",
+            "path": "/portal/rest",
+            "value": null
+        },
+        {
+            "type": "deleteNode",
+            "path": "/portal/external",
+            "value": null
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal",
+            "value": {
+                "gesttare": {
+                    "uploadFile": {
+                        "url": "uploadFile",
+                        "func": "uploadFile"
+                    }
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/root",
+            "value": {
+                "flsisppal": {
+                    "auth_group": null,
+                    "auth_user": null,
+                    "sis_gridfilter": null
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/flsisppal",
+            "value": {
+                "flgesttare": {
+                    "gt_actualizaciones": null,
+                    "gt_actualizusuario": null,
+                    "gt_comentarios": null,
+                    "gt_equipos": null,
+                    "gt_espaciostrabajo": null,
+                    "gt_listatareas": null,
+                    "gt_particespactrabajo": null,
+                    "gt_partictarea": null,
+                    "gt_proyectos": null,
+                    "gt_refcliente": null,
+                    "gt_subtareas": null,
+                    "gt_tareas": null,
+                    "gt_usuarios": null,
+                    "gt_estadostarea": null,
+                    "gt_particproyecto": null
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/flgesttare",
+            "value": {
+                "flfactppal": {
+                    "clientes": null,
+                    "usuarios": null
+                }
+            }
+        }
+    ]
 }

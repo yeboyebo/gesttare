@@ -1,3 +1,23 @@
 {
-    "modifications": []
+    "modifications": [
+        {
+            "type": "insertAfterNode",
+            "path": "/root",
+            "value": {
+                "flgesttare": {
+                    "gt_comentarios": null,
+                    "gt_proyectos": null,
+                    "gt_tareas": null,
+                    "gt_partictarea": null
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/flgesttare",
+            "value": {
+                "flfactppal": {}
+            }
+        }
+    ]
 }

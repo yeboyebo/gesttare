@@ -1,6 +1,6 @@
 {
     "fk": true,
-    "fun_aq": null,
+    "fun_aq": "gestor_tareas",
     "dependencias": [
         {
             "version": "v1.0",

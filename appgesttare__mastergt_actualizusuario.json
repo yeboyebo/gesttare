@@ -1,0 +1,37 @@
+{
+    "querystring": {},
+    "schema": {
+    	"notificacionesUsuario": {
+            "query": {
+                "p_l": 20
+            }
+        }
+    },
+    "layout": {
+    	"queryGrid_notificacionesUsuario": {
+            "componente": "YBTable",
+            "label": "Notificaciones",
+            "prefix": "notificacionesUsuario",
+            "filter": "",
+            "type": "query",
+            "columns": [
+                {"tipo": "field", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 150},
+                {"tipo": "field", "key": "gt_actualizaciones.idtarea", "label": "Tarea", "width": 450},
+                {"tipo": "field", "key": "gt_tareas.descripcion", "label": "Desc. tarea", "width": 300}
+            ],
+            "rowclick": "verTarea",
+            "accionesGrid": []
+        }
+    },
+    "acciones": {
+    	"verTarea": {
+            "action": "goto",
+            "serverAction": "visualizarTarea",
+            "prefix": "gt_actualizusuario"
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        }
+    }
+}

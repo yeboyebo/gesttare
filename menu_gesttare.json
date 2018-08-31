@@ -1,0 +1,34 @@
+{
+    "format": "navBarMenu",
+    "items": [
+        {
+            "NAME": "tareas",
+            "TEXT": "tareas",
+            "URL": "gesttare/gt_tareas/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)"
+        },
+        {
+            "NAME": "gt_actualizaciones",
+            "TEXT": "Notificaciones",
+            "URL": "gesttare/gt_actualizaciones/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)"
+        },
+        {
+            "NAME": "gt_proyectos",
+            "TEXT": "proyectos",
+            "URL": "gesttare/gt_proyectos/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)",
+            "VISIBLE": true
+        },
+        {
+            "NAME": "calendario",
+            "TEXT": "Calendario",
+            "URL": "gesttare/gt_tareas/custom/calendario",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)"
+        }
+    ]
+}

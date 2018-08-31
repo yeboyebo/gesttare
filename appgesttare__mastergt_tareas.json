@@ -1,0 +1,117 @@
+{
+    "querystring": {
+        "p_l": 50,
+        "p_c": true,
+        "o_1": "idtarea"
+    },
+    "schema": {
+        "gt_tareas":{
+            "customfilter": true
+        }
+    },
+    "layout": {
+        "masterTareas": {
+            "componente": "YBTable",
+            "prefix": "gt_tareas",
+            "multiselectable": true,
+            "customfilter": true,
+            "filter": {
+                "codproyecto": null,
+                "codestado": null,
+                "idusuario": {
+                	"label": "Usuario"
+                },
+                "fechavencimiento":  {
+                    "filterType": "interval"
+                }
+            },
+            "columns": [
+                {"tipo": "field", "listpos": "subtitle", "key": "descripcion", "width": 200},
+                {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 50},
+                {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 200},
+                {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "width": 100},
+                {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100},
+                {
+                    "tipo": "act",
+                    "key": "cambiarFecha",
+                    "label": "Fecha",
+                    "success": [{"slot": "refrescar"}]
+                },
+                {
+                    "tipo": "act",
+                    "key": "editarHoras",
+                    "label": "Editar",
+                    "success": [{"slot": "refrescar", "custom": "tareas"}]
+                }
+            ],
+            "rowclick": "link"
+        },
+        "newRecordTarea": {
+            "componente": "YBNewRecord",
+            "class": "info",
+            "icon": "add"
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+        "cambiarFecha": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "cambiarFecha",
+            "icon": "date_range",
+            "params": [
+            	{
+            		"tipo": 26,
+                    "required": true,
+                    "verbose_name": "Fecha",
+                    "key": "fechavencimiento",
+                    "width": 400,
+                    "validaciones": null
+            	}
+            ]
+        },
+        "editarHoras": {
+            "action": "legacy",
+            "prefix": "gt_comentarios",
+            "serverAction": "editarHoras",
+            "icon": "create",
+            "params": [
+                {
+                    "tipo": 3,
+                    "verbose_name": "Horas dedicadas",
+                    "key": "hdedicadas",
+                    "validaciones": null
+                },
+                {
+                    "tipo": 3,
+                    "verbose_name": "Horas dedicadas",
+                    "key": "gt_comentarios.fecha",
+                    "validaciones": null
+                },
+                {
+                    "tipo": 6,
+                    "verbose_name": "Comentario",
+                    "key": "comentario",
+                    "validaciones": null
+                }
+            ]
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

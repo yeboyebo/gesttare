@@ -1,7 +1,232 @@
 {
     "name": "gesttare",
     "modifications": {
-        "addFile": [],
+        "addFile": [
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_actualizaciones.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_actualizaciones_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_actualizusuario.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_actualizusuario_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_comentarios.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_comentarios_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_equipos.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_equipos_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_espaciostrabajo.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_espaciostrabajo_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_listatareas.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_listatareas_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_particespactrabajo.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_particespactrabajo_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_partictarea.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_partictarea_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_proyectos.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_proyectos_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_refcliente.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_refcliente_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_subtareas.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_subtareas_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_tareas.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_tareas_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_usuarios.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_usuarios_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_estadostarea.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_estadostarea_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_particproyecto.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "gt_particproyecto_def.py"
+            },
+            {
+                "path": "models/flfactppal/",
+                "name": "clientes.py"
+            },
+            {
+                "path": "models/flfactppal/",
+                "name": "clientes_def.py"
+            },
+            {
+                "path": "models/flfactppal/",
+                "name": "usuarios.py"
+            },
+            {
+                "path": "models/flfactppal/",
+                "name": "usuarios_def.py"
+            },
+            {
+                "name": "flgesttare_def.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "__init__.py",
+                "path": "apps/portal/"
+            },
+            {
+                "name": "index.html",
+                "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "login.html",
+                "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "menu_portal.json",
+                "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "views_portal.py",
+                "path": "apps/portal/viewset/"
+            },
+            {
+                "name": "menu_gesttare.json",
+                "path": "apps/gesttare/templates/gesttare/"
+            },
+            {
+                "name": "appgesttare__newrecordgt_tareas.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__gt_proyectos.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__mastergt_actualizaciones.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__mastergt_proyectos.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__mastergt_tareas.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__newrecordgt_proyectos.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__mastergt_usuarios.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__mastergt_espaciostrabajo.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__gt_tareas.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__newrecordgt_partictarea.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__mastergt_actualizusuario.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__newrecordgt_particproyecto.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__gt_espaciostrabajo.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "appgesttare__calendario.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "views_gesttare.py",
+                "path": "apps/gesttare/viewset/"
+            }
+        ],
         "replaceFile": [
             {
                 "path": "config/",

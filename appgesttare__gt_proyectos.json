@@ -1,0 +1,76 @@
+{
+    "querystring": {},
+    "schema": {
+    	"gt_particproyecto": {
+            "rel": "codproyecto",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1,
+                "o_1": "idusuario"
+            }
+        }
+    },
+    "layout": {
+        "proyectosForm": {
+            "prefix": "gt_proyectos",
+            "componente": "YBForm",
+            "class": "claseGrid",
+            "submit": "update",
+            "return": true,
+            "success": [{"slot": "return"}],
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "codproyecto": {},
+                        "nombre": {},
+                        "descripcion": {},
+                        "estado": {},
+                        "codequipo": {},
+                        "codcliente": {}
+                    }
+                }
+            },
+            "exclude": {}
+        },
+        "groupBoxUsuarios": {
+            "componente": "YBGroupBox",
+            "className": "",
+            "layout": {
+                "participantesGrid": {
+                    "label": "Usuarios",
+                    "componente": "YBGrid",
+                    "prefix": "gt_particproyecto",
+                    "className": "claseGrid",
+                    "columns": [
+                        {"tipo": "field", "listpos": "title", "key": "idusuario"},
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Borrar Linea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        }
+                    ],
+                    "rowclick": "",
+                    "accionesGrid": [{
+                        "key": "nuevaLinea",
+                        "label": "Nuevo",
+                        "success": []
+                    }]
+                }
+            }
+        }
+    },
+    "acciones": {
+    	"delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+    	"nuevaLinea": {
+            "action": "newRow",
+            "icon": "add_circle"
+        }
+    }
+}

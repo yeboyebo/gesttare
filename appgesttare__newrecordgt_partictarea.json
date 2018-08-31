@@ -1,0 +1,26 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "articuosForm": {
+            "prefix": "gt_partictarea",
+            "componente": "YBForm",
+            "class": "claseGrid",
+            "submit": "create",
+            "return": true,
+            "success": [{"slot": "return"}],
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "idusuario": {
+                        	"auto_name": "Partipante"
+                        }
+                    }
+                }
+            },
+            "exclude": {}
+        }
+    },
+    "acciones": {}
+}

@@ -1,0 +1,31 @@
+{
+    "querystring": {
+        "p_l": 50,
+        "p_c": true
+    },
+    "schema": {},
+    "layout": {
+        "masterEspaciostrabajo": {
+            "componente": "YBList",
+            "prefix": "gt_espaciostrabajo",
+            "filter": "buscador",
+            "multiselectable": true,
+            "columns": [
+                {"tipo": "field", "listpos": "subtitle", "key": "codespacio", "width": 50},
+                {"tipo": "field", "listpos": "title", "key": "descripcion", "width": 100}
+            ],
+            "rowclick": "link"
+        },
+        "newRecordEspaciostrabajo": {
+            "componente": "YBNewRecord",
+            "class": "info",
+            "icon": "add"
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        }
+    }
+}

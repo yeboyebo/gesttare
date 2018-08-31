@@ -1,0 +1,28 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "articuosForm": {
+            "prefix": "gt_tareas",
+            "componente": "YBForm",
+            "class": "claseGrid",
+            "submit": "create",
+            "return": true,
+            "success": [{"slot": "return"}],
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "codproyecto": {},
+                        "descripcion": {},
+                        "fechavencimiento": {},
+                        "codestado": {},
+                        "idusuario": {}
+                    }
+                }
+            },
+            "exclude": {}
+        }
+    },
+    "acciones": {}
+}

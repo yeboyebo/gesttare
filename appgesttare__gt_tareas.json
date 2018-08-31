@@ -1,0 +1,174 @@
+{%comment%}
+    (Opcional)
+{%endcomment%}
+{
+    "querystring": {},
+    "schema": {
+        "gt_partictarea": {
+            "rel": "idtarea",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1,
+                "o_1": "idusuario"
+            }
+        },
+        "gt_comentarios": {
+            "rel": "idtarea",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1,
+                "o_1": "-idcomentario"
+            }
+        }
+    },
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "",
+            "style": {
+                "width": "66%",
+                "marginLeft": "auto",
+                "marginRight": "auto"
+            },
+            "layout": {
+                "articuosForm": {
+                    "prefix": "gt_tareas",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "update",
+                    "return": true,
+                    "success": [{"slot": "return"}],
+                    "fields": {
+                        "gb_title": {
+                            "title": " ",
+                            "fields": {
+                                "descripcion": {}
+                            }
+                        },
+                        "gb__body": {
+                            "title": "",
+                            "fields": {
+                                "codproyecto": {},
+                                "fechavencimiento": {},
+                                "resuelta": {},
+                                "codestado": {},
+                                "idusuario": {}
+                            }
+                        }
+                    },
+                    "exclude": {}
+                },
+                "groupBoxUsuarios": {
+                    "componente": "YBGroupBox",
+                    "className": "",
+                    "layout": {
+                        "participantesGrid": {
+                            "label": "Usuarios",
+                            "componente": "YBGrid",
+                            "prefix": "gt_partictarea",
+                            "className": "claseGrid",
+                            "columns": [
+                                {"tipo": "field", "listpos": "title", "key": "idusuario"},
+                                {
+                                    "tipo": "act",
+                                    "key": "delete",
+                                    "label": "Borrar Linea",
+                                    "success": [
+                                        {"slot": "refrescar"}
+                                    ]
+                                }
+                            ],
+                            "rowclick": "",
+                            "accionesGrid": [{
+                                "key": "nuevaLinea",
+                                "label": "Nuevo",
+                                "success": []
+                            }]
+                        }
+                    }
+                },
+                "groupBoxComentarios": {
+                    "componente": "YBGroupBox",
+                    "className": "",
+                    "layout": {
+                        "groupBoxNuevoComentario": {
+                            "componente": "YBGroupBox",
+                            "className": "gbform",
+                            "layout": {
+                                "field_adjunto": {
+                                    "componente": "YBFileInput",
+                                    "prefix": "otros",
+                                    "className": "",
+                                    "key": "adjunto",
+                                    "label": "Adjunto",
+                                    "tipo": 1,
+                                    "style": {
+                                        "width": "300px"
+                                    },
+                                    "action": "uploadFile",
+                                    "fields": {
+                                        "field_comentario": {
+                                            "componente": "YBFieldDB",
+                                            "prefix": "otros",
+                                            "className": "",
+                                            "key": "comentario",
+                                            "label": "Escribe un comentario ...",
+                                            "tipo": 6,
+                                            "style": {
+                                                "width": "300px"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "comentariosGrid": {
+            "label": "Comentarios",
+            "componente": "YBList",
+            "prefix": "gt_comentarios",
+            "className": "claseGrid",
+            "columns": [
+                {"tipo": "field", "key": "idusuario","width": 100, "avatar": true},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "fecha","width": 100},
+                {"tipo": "field", "listpos": "subtitle", "key": "comentario", "flex":5},
+                {
+                    "tipo": "act",
+                    "key": "delete",
+                    "label": "Borrar Linea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                }
+            ],
+            "rowclick": ""
+        }
+    },
+    "acciones": {
+        "actNuevoComentario": {
+            "label": "Nuevo comentario",
+            "action": "legacy",
+            "icon": "payment",
+            "serverAction": "actNuevoComentario",
+            "params": [
+                {
+                    "tipo": 3,
+                    "verbose_name": "comentario",
+                    "key": "comentario",
+                    "validaciones": null
+                }
+            ]
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+        "nuevaLinea": {
+            "action": "newRow",
+            "icon": "add_circle"
+        }
+    }
+}
