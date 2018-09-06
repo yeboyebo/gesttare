@@ -225,6 +225,10 @@
             {
                 "name": "app_gesttare__views_gesttare.py",
                 "path": "apps/gesttare/viewset/"
+            },
+            {
+                "name": "app_gesttare____init__.py",
+                "path": "apps/gesttare/"
             }
         ],
         "replaceFile": [
