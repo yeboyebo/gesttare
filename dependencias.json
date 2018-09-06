@@ -1,5 +1,5 @@
 {
-    "fk": true,
+    "fk": "True",
     "fun_aq": "gestor_tareas",
     "dependencias": [
         {
