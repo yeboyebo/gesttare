@@ -39,8 +39,8 @@
                     "return": true,
                     "success": [{"slot": "return"}],
                     "fields": {
-                        "gb_title": {
-                            "title": " ",
+                        "gb__titulo": {
+                            "title": "",
                             "fields": {
                                 "descripcion": {}
                             }
