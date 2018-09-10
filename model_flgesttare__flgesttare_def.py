@@ -36,6 +36,7 @@ class gesttare(interna):
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_tareas(curTarea):
             return False
 
+        _i.comprobarUsuarioResponsable(curTarea)
         print("gesttare_aftercommit_gt_tareas")
 
         if curTarea.modeAccess() == curTarea.Edit:
@@ -146,6 +147,15 @@ class gesttare(interna):
         print("Termina")
         return True
 
+    def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
+        if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario"):
+            if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = '", curTarea.valueBuffer(u"idusuario"), u"' AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
+                if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
+                    return False
+        print("usuario antes: ", curTarea.valueBufferCopy(u"idusuario"))
+        print("usuario despues: ", curTarea.valueBuffer(u"idusuario"))
+        return True
+
     def __init__(self, context=None):
         super(gesttare, self).__init__(context)
 
@@ -160,6 +170,9 @@ class gesttare(interna):
 
     def crearActualizaciones(self, tipo, cursor=None):
         return self.ctx.gesttare_crearActualizaciones(tipo, cursor)
+
+    def comprobarUsuarioResponsable(self, curTarea=None):
+        return self.ctx.gesttare_comprobarUsuarioResponsable(curTarea)
 
 # @class_declaration head #
 class head(gesttare):

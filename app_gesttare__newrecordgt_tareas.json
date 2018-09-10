@@ -13,6 +13,7 @@
                 "gb__": {
                     "title": "",
                     "fields": {
+                    	"nombre": {},
                         "codproyecto": {},
                         "descripcion": {},
                         "fechavencimiento": {},

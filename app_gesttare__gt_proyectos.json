@@ -1,7 +1,7 @@
 {
     "querystring": {},
     "schema": {
-    	"gt_particproyecto": {
+        "gt_particproyecto": {
             "rel": "codproyecto",
             "querystring": {
                 "p_l": 10,
@@ -26,7 +26,6 @@
                         "nombre": {},
                         "descripcion": {},
                         "estado": {},
-                        "codequipo": {},
                         "codcliente": {}
                     }
                 }
@@ -64,11 +63,11 @@
         }
     },
     "acciones": {
-    	"delete": {
+        "delete": {
             "action": "deleteRow",
             "icon": "delete"
         },
-    	"nuevaLinea": {
+        "nuevaLinea": {
             "action": "newRow",
             "icon": "add_circle"
         }

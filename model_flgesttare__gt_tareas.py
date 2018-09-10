@@ -65,6 +65,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def queryGrid_calendarioTareas_initFilter(model=None):
         return form.iface.queryGrid_calendarioTareas_initFilter()
 
+    def field_proyecto(self):
+        return form.iface.field_proyecto(self)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

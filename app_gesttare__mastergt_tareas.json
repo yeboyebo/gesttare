@@ -28,7 +28,7 @@
             "columns": [
                 {"tipo": "field", "listpos": "subtitle", "key": "descripcion", "width": 200},
                 {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 50},
-                {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 200},
+                {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
                 {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "width": 100},
                 {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100},
                 {

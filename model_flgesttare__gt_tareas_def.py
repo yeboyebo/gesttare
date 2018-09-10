@@ -36,7 +36,7 @@ class gesttare(interna):
         return 30
 
     def gesttare_getForeignFields(self, model, template=None):
-        fields = []
+        fields = [{'verbose_name': 'Proyecto', 'func': 'field_proyecto'}]
         if template == "calendarioTareas":
             return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
         return fields
@@ -115,6 +115,13 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_field_proyecto(self, model):
+        nombreProy = ""
+        if not model.codproyecto:
+            return nombreProy
+        nombreProy = model.codproyecto.nombre
+        return nombreProy
+
     def __init__(self, context=None):
         super(gesttare, self).__init__(context)
 
@@ -156,6 +163,9 @@ class gesttare(interna):
 
     def queryGrid_calendarioTareas_initFilter(self):
         return self.ctx.gesttare_queryGrid_calendarioTareas_initFilter()
+
+    def field_proyecto(self, model):
+        return self.ctx.gesttare_field_proyecto(model)
 
 
 # @class_declaration head #
