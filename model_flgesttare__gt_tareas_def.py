@@ -122,6 +122,23 @@ class gesttare(interna):
         nombreProy = model.codproyecto.nombre
         return nombreProy
 
+    def gesttare_uploadFile(self, model, oParam):
+        print("aqui insertamos comentario", oParam)
+        print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
+        # TODO De donde sacamos idusuario, al crear usuario en aplicacion acreamos gt_usuario?
+        nombreUsuario = qsatype.FLUtil.nameUser()
+        print("Usuario: ", nombreUsuario)
+        idUsuario = qsatype.FLUtil.sqlSelect(u"usuarios", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
+        print("idusuario: ", idUsuario)
+        if not idUsuario:
+            print("No existe el usuario")
+            return False
+        # idUsuario = "ANDRES"
+        if not qsatype.FLUtil.sqlInsert(u"gt_comentarios", ["idtarea", "fecha", "hora", "comentario", "hdedicadas", "costehora", "coste", "idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 0, 0, 0, idUsuario]):
+            print("algo salio mal?")
+            return False
+        return True
+
     def __init__(self, context=None):
         super(gesttare, self).__init__(context)
 
@@ -166,6 +183,9 @@ class gesttare(interna):
 
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
+
+    def uploadFile(self, model, oParam):
+        return self.ctx.gesttare_uploadFile(model, oParam)
 
 
 # @class_declaration head #

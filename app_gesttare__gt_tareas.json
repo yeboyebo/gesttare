@@ -103,6 +103,7 @@
                                         "width": "300px"
                                     },
                                     "action": "uploadFile",
+                                    "autoUpload": false,
                                     "fields": {
                                         "field_comentario": {
                                             "componente": "YBFieldDB",

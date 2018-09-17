@@ -49,8 +49,6 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def uploadFile(self, oParam):
-        print("upload file")
-        return True
         return form.iface.uploadFile(self, oParam)
 
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
