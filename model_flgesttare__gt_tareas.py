@@ -49,6 +49,7 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def uploadFile(self, oParam):
+        print("upload file")
         return True
         return form.iface.uploadFile(self, oParam)
 
@@ -67,7 +68,6 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def field_proyecto(self):
         return form.iface.field_proyecto(self)
-
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):
