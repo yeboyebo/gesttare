@@ -1,5 +1,6 @@
 # @class_declaration interna #
 from YBLEGACY import qsatype
+from YBUTILS import gesDoc
 
 
 class interna(qsatype.objetoBase):
@@ -140,7 +141,7 @@ class gesttare(interna):
         cursor = qsatype.FLSqlCursor(u"gt_comentarios")
         cursor.setModeAccess(cursor.Insert)
         cursor.refreshBuffer()
-        cursor.setValueBuffer(u"codalmacen", model.idtarea)
+        cursor.setValueBuffer(u"idtarea", model.idtarea)
         cursor.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
         cursor.setValueBuffer(u"hora", str(qsatype.Date())[-8:])
         cursor.setValueBuffer(u"comentario", oParam['comentario'])
@@ -153,6 +154,8 @@ class gesttare(interna):
             return False
         print("_____________")
         print(cursor.setValueBuffer("idcomentario"))
+        if not gesDoc.fileUpload("gt_comentarios", cursor.setValueBuffer("idcomentario"), oParam['fileData']):
+            return False
         return True
 
     def __init__(self, context=None):
