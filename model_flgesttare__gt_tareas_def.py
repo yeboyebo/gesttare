@@ -124,7 +124,7 @@ class gesttare(interna):
 
     def gesttare_uploadFile(self, model, oParam):
         print("aqui insertamos comentario", oParam)
-        print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
+        # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
         # TODO De donde sacamos idusuario, al crear usuario en aplicacion acreamos gt_usuario?
         nombreUsuario = qsatype.FLUtil.nameUser()
         print("Usuario: ", nombreUsuario)
@@ -134,9 +134,25 @@ class gesttare(interna):
             print("No existe el usuario")
             return False
         # idUsuario = "ANDRES"
-        if not qsatype.FLUtil.sqlInsert(u"gt_comentarios", ["idtarea", "fecha", "hora", "comentario", "hdedicadas", "costehora", "coste", "idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 0, 0, 0, idUsuario]):
-            print("algo salio mal?")
+        # if not qsatype.FLUtil.sqlInsert(u"gt_comentarios", ["idtarea", "fecha", "hora", "comentario", "hdedicadas", "costehora", "coste", "idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 0, 0, 0, idUsuario]):
+        #     print("algo salio mal?")
+        #     return False
+        cursor = qsatype.FLSqlCursor(u"gt_comentarios")
+        cursor.setModeAccess(cursor.Insert)
+        cursor.refreshBuffer()
+        cursor.setValueBuffer(u"codalmacen", model.idtarea)
+        cursor.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
+        cursor.setValueBuffer(u"hora", str(qsatype.Date())[-8:])
+        cursor.setValueBuffer(u"comentario", oParam['comentario'])
+        cursor.setValueBuffer(u"hdedicadas", 0)
+        cursor.setValueBuffer(u"costehora", 0)
+        cursor.setValueBuffer(u"coste", 0)
+        cursor.setValueBuffer(u"idusuario", idUsuario)
+        if not cursor.commitBuffer():
+            print("algo salio mal")
             return False
+        print("_____________")
+        print(cursor.setValueBuffer("idcomentario"))
         return True
 
     def __init__(self, context=None):
