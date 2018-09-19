@@ -1,5 +1,6 @@
 # @class_declaration interna #
 from YBLEGACY import qsatype
+from YBUTILS import gesDoc
 
 
 class interna(qsatype.objetoBase):
@@ -42,8 +43,10 @@ class gesttare(interna):
         return desc
 
     def gesttare_field_adjunto(self, model):
-        nombre = "bioteruel.png"
-        print(model.pk)
+        nombre = None
+        file = gesDoc.getFiles("gt_comentarios", model.pk)
+        if file:
+            return file["nombre"]
         return nombre
 
     def __init__(self, context=None):

@@ -131,6 +131,12 @@
             "className": "claseGrid",
             "columns": [
                 {"tipo": "field", "key": "idusuario","width": 100, "avatar": true},
+                {
+                    "tipo": "foreignfield",
+                    "key": "adjunto",
+                    "width": 100,
+                    "listpos": "body"
+                },
                 {"tipo": "field", "listpos": "secondaryitem", "key": "fecha","width": 100},
                 {"tipo": "field", "listpos": "subtitle", "key": "comentario", "flex":5},
                 {
@@ -140,6 +146,12 @@
                     "success": [
                         {"slot": "refrescar"}
                     ]
+                },
+                {
+                    "tipo": "act",
+                    "key": "descargar",
+                    "label": "Descargar fichero",
+                    "success": []
                 }
             ],
             "rowclick": ""
@@ -167,6 +179,11 @@
         "nuevaLinea": {
             "action": "newRow",
             "icon": "add_circle"
+        },
+         "imprimir": {
+            "action": "getFiles",
+            "serverAction": "dameFicherosComentario",           
+            "icon": "cloud_download"
         }
     }
 }
