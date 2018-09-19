@@ -124,13 +124,10 @@ class gesttare(interna):
         return nombreProy
 
     def gesttare_uploadFile(self, model, oParam):
-        print("aqui insertamos comentario", oParam)
         # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
         # TODO De donde sacamos idusuario, al crear usuario en aplicacion acreamos gt_usuario?
         nombreUsuario = qsatype.FLUtil.nameUser()
-        print("Usuario: ", nombreUsuario)
         idUsuario = qsatype.FLUtil.sqlSelect(u"usuarios", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
-        print("idusuario: ", idUsuario)
         if not idUsuario:
             print("No existe el usuario")
             return False
@@ -152,9 +149,7 @@ class gesttare(interna):
         if not cursor.commitBuffer():
             print("algo salio mal")
             return False
-        print("_____________")
-        print(cursor.setValueBuffer("idcomentario"))
-        if not gesDoc.fileUpload("gt_comentarios", cursor.setValueBuffer("idcomentario"), oParam['fileData']):
+        if not gesDoc.fileUpload("gt_comentarios", cursor.valueBuffer("idcomentario"), oParam['FILES']):
             return False
         return True
 
