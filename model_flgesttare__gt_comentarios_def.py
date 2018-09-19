@@ -34,11 +34,17 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
+        fields = [{'verbose_name': 'adjunto', 'func': 'field_adjunto'}]
         return fields
 
     def gesttare_getDesc(self):
         desc = None
         return desc
+
+    def gesttare_field_adjunto(self, model):
+        nombre = "bioteruel.png"
+        print(model.pk)
+        return nombre
 
     def __init__(self, context=None):
         super(gesttare, self).__init__(context)
@@ -60,6 +66,10 @@ class gesttare(interna):
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
+
+    def field_adjunto(self, model):
+        return self.ctx.gesttare_field_adjunto(model)
+
 
 
 # @class_declaration head #

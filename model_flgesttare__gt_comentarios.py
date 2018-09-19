@@ -36,6 +36,9 @@ class gesttare_gt_comentarios(interna_gt_comentarios, helpers.MixinConAcciones):
     def getDesc():
         return form.iface.getDesc()
 
+    def field_adjunto(self):
+        return form.iface.field_adjunto(self)
+
 
 # @class_declaration gt_comentarios #
 class gt_comentarios(gesttare_gt_comentarios, helpers.MixinConAcciones):
