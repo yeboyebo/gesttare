@@ -180,7 +180,7 @@
             "action": "newRow",
             "icon": "add_circle"
         },
-         "imprimir": {
+        "descargar": {
             "action": "getFiles",
             "serverAction": "dameFicherosComentario",           
             "icon": "cloud_download"
