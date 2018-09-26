@@ -97,7 +97,7 @@
                                     "prefix": "otros",
                                     "className": "",
                                     "key": "adjunto",
-                                    "label": "Adjunto",
+                                    "label": "Comentar",
                                     "tipo": 1,
                                     "style": {
                                         "width": "300px"
@@ -135,6 +135,7 @@
                     "tipo": "foreignfield",
                     "key": "adjunto",
                     "width": 100,
+                    "file": true,
                     "listpos": "body"
                 },
                 {"tipo": "field", "listpos": "secondaryitem", "key": "fecha","width": 100},
