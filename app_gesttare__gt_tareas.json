@@ -96,7 +96,7 @@
                                     "label": "Comentar",
                                     "tipo": 1,
                                     "style": {
-                                        "width": "300px"
+                                        "width": "100%"
                                     },
                                     "action": "uploadFile",
                                     "autoUpload": false,
