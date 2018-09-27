@@ -143,12 +143,6 @@
                     "success": [
                         {"slot": "refrescar"}
                     ]
-                },
-                {
-                    "tipo": "act",
-                    "key": "descargar",
-                    "label": "Descargar fichero",
-                    "success": []
                 }
             ],
             "rowclick": ""
@@ -176,11 +170,6 @@
         "nuevaLinea": {
             "action": "newRow",
             "icon": "add_circle"
-        },
-        "descargar": {
-            "action": "getFiles",
-            "serverAction": "dameFicherosComentario",           
-            "icon": "cloud_download"
         }
     }
 }
