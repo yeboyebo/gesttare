@@ -21,12 +21,8 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "",
-            "style": {
-                "width": "66%",
-                "marginLeft": "auto",
-                "marginRight": "auto"
-            },
+            "className": "gbTareas",
+            "style": {},
             "layout": {
                 "articuosForm": {
                     "prefix": "gt_tareas",
