@@ -14,11 +14,11 @@
                     "title": "",
                     "fields": {
                     	"nombre": {},
-                        "codproyecto": {},
-                        "descripcion": {},
+                    	"descripcion": {},
+                        "codproyecto": {"combolimit": 1},
                         "fechavencimiento": {},
                         "codestado": {},
-                        "idusuario": {}
+                        "idusuario": {"combolimit": 1}
                     }
                 }
             },

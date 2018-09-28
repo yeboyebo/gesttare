@@ -14,7 +14,8 @@
                     "title": "",
                     "fields": {
                         "idusuario": {
-                        	"auto_name": "Partipante"
+                        	"auto_name": "Partipante",
+                        	"combolimit": 1
                         }
                     }
                 }

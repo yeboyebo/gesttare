@@ -13,11 +13,11 @@
                 "gb__": {
                     "title": "",
                     "fields": {
-                        "codproyecto": {},
+                        "codproyecto": {"disabled": true},
                         "nombre": {},
                         "descripcion": {},
                         "estado": {},
-                        "codcliente": {}
+                        "codcliente": {"combolimit": 1}
                     }
                 }
             },
