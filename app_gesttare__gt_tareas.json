@@ -35,17 +35,18 @@
                         "gb__titulo": {
                             "title": "",
                             "fields": {
-                                "descripcion": {}
+                                "nombre": {}
                             }
                         },
                         "gb__body": {
                             "title": "",
                             "fields": {
-                                "codproyecto": {},
+                                "descripcion": {},
+                                "codproyecto": {"combolimit": 1},
                                 "fechavencimiento": {},
                                 "resuelta": {},
                                 "codestado": {},
-                                "idusuario": {}
+                                "idusuario": {"combolimit": 1}
                             }
                         }
                     },

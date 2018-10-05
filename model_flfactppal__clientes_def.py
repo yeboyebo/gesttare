@@ -37,7 +37,7 @@ class gesttare(interna):
         return fields
 
     def gesttare_getDesc(self):
-        desc = None
+        desc = "nombre"
         return desc
 
     def __init__(self, context=None):
