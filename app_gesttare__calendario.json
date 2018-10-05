@@ -26,7 +26,7 @@
                 "extract(month from gt_tareas.fechavencimiento)": null
             },
             "format": {
-                "title": "gt_tareas.descripcion",
+                "title": "gt_tareas.nombre",
                 "date": "gt_tareas.fechavencimiento"
             }
         }
