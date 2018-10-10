@@ -2,7 +2,7 @@
     "querystring": {
         "p_l": 50,
         "p_c": true,
-        "o_1": "idtarea"
+        "o_1": "-idtarea"
     },
     "schema": {
         "gt_tareas":{
