@@ -26,13 +26,13 @@
                 }
             },
             "columns": [
-                {"tipo": "field", "listpos": "subtitle", "key": "nombre", "width": 200},
+                {"tipo": "field", "listpos": "subtitle", "key": "nombre", "width": 200, "link": true},
                 {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 50},
                 {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
                 {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "width": 100},
                 {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
             ],
-            "rowclick": "link"
+            "rowclick": ""
         },
         "newRecordTarea": {
             "componente": "YBNewRecord",
