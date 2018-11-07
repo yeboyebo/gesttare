@@ -2,7 +2,8 @@
     "querystring": {
         "p_l": 50,
         "p_c": true,
-        "o_1": "-idtarea"
+        "o_1": "-idtarea",
+        "s_resuelta__exact": false
     },
     "schema": {
         "gt_tareas":{
@@ -13,7 +14,6 @@
         "masterTareas": {
             "componente": "YBTable",
             "prefix": "gt_tareas",
-            "multiselectable": true,
             "customfilter": true,
             "filter": {
                 "codproyecto": null,
@@ -23,9 +23,18 @@
                 },
                 "fechavencimiento":  {
                     "filterType": "interval"
-                }
+                },
+                "resuelta": null
             },
             "columns": [
+            	{
+                    "tipo": "act",
+                    "key": "delete",
+                    "label": "Borrar Linea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
                 {"tipo": "field", "listpos": "subtitle", "key": "nombre", "width": 200, "link": true},
                 {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 50},
                 {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},

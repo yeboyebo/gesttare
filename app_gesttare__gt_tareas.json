@@ -126,8 +126,9 @@
             "componente": "YBList",
             "prefix": "gt_comentarios",
             "className": "claseGrid",
+            "avatar": false,
             "columns": [
-                {"tipo": "field", "key": "idusuario","width": 100, "avatar": true},
+                {"tipo": "field", "listpos": "title", "key": "idusuario","width": 100},
                 {
                     "tipo": "foreignfield",
                     "key": "adjunto",
