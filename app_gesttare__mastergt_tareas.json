@@ -21,7 +21,8 @@
                 "idusuario": null,
                 "fechavencimiento":  {
                     "filterType": "interval"
-                }
+                },
+                "resuelta": null
             },
             "columns": [
                 {"tipo": "field", "listpos": "subtitle", "key": "nombre", "width": 200, "link": true},
