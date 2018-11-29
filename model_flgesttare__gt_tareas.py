@@ -67,6 +67,24 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def field_proyecto(self):
         return form.iface.field_proyecto(self)
 
+    @helpers.decoradores.csr()
+    def login(oParam):
+        return form.iface.login(oParam)
+
+    @helpers.decoradores.csr()
+    def damepryus(oParam):
+        return form.iface.damepryus(oParam)
+
+    @helpers.decoradores.csr()
+    def creartarea(oParam):
+        return form.iface.creartarea(oParam)
+
+    def dameProyectos():
+        return form.iface.dameProyectos()
+
+    def dameUsuarios():
+        return form.iface.dameUsuarios()
+
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):
     pass

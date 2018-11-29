@@ -2,6 +2,10 @@
 from YBLEGACY import qsatype
 from YBUTILS import gesDoc
 
+from models.flfactppal.usuarios import usuarios
+
+import hashlib
+
 
 class interna(qsatype.objetoBase):
 
@@ -153,6 +157,100 @@ class gesttare(interna):
             return False
         return True
 
+    def gesttare_login(self, oParam):
+        data = []
+        username = oParam["user"]
+        password = oParam["pass"]
+        usuario = usuarios.objects.filter(idusuario__exact=username)
+        if len(usuario) == 0:
+            data.append({"result": False})
+            data.append({"error": "No existe el usuario"})
+            return data
+        usuario = usuarios.objects.get(idusuario=username)
+        md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
+        if usuario.password != md5passwd:
+            data.append({"result": False})
+            data.append({"error": "Error en autenticación"})
+            return data
+        data.append({"result": True})
+        return data
+
+    def gesttare_damepryus(self, oParam):
+        _i = self.iface
+        data = []
+        if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            proyectos = _i.dameProyectos()
+            usuarios = _i.dameUsuarios()
+            data.append({"projects": proyectos})
+            data.append({"users": usuarios})
+        else:
+            data.append({"result": False})
+            data.append({"error": "Error en autenticación"})
+
+        return data
+
+    def gesttare_dameProyectos(self):
+        proyectos = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos")
+        q.setSelect("codproyecto, descripcion")
+        q.setFrom("gt_proyectos")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+
+        while q.next():
+            proyectos.append({"codigo": str(q.value(0)), "descripcion": str(q.value(1))})
+
+        return proyectos
+
+    def gesttare_dameUsuarios(self):
+        usuarios = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_usuarios")
+        q.setSelect("iduser, nombre")
+        q.setFrom("gt_usuarios")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+
+        while q.next():
+            usuarios.append({"codigo": str(q.value(0)), "nombre": str(q.value(1))})
+
+        return usuarios
+
+    def gesttare_creartarea(self, oParam):
+        data = []
+        usuario = usuarios.objects.filter(idusuario__exact=oParam["person"])
+        if len(usuario) == 0:
+            data.append({"result": False})
+            data.append({"error": "No existe el usuario"})
+            return data
+        if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            curTarea = qsatype.FLSqlCursor(u"gt_tareas")
+            curTarea.setModeAccess(curTarea.Insert)
+            curTarea.refreshBuffer()
+            curTarea.setActivatedBufferCommited(True)
+            curTarea.setValueBuffer(u"codproyecto", oParam["project"])
+            curTarea.setValueBuffer(u"codestado", oParam["state"])
+            curTarea.setValueBuffer(u"nombre", oParam["name"])
+            curTarea.setValueBuffer(u"idusuario", oParam["person"])
+            curTarea.setValueBuffer(u"descripcion", oParam["description"])
+            curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
+
+            if not curTarea.commitBuffer():
+                data.append({"result": False})
+                data.append({"error": "Error en commit"})
+            else:
+                data.append({"result": True})
+                data.append({"ok": "Tarea creada correctamente"})
+        else:
+            data.append({"result": False})
+            data.append({"error": "Error en autenticación"})
+        return data
+
     def __init__(self, context=None):
         super(gesttare, self).__init__(context)
 
@@ -200,6 +298,21 @@ class gesttare(interna):
 
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)
+
+    def login(self, oParam):
+        return self.ctx.gesttare_login(oParam)
+
+    def damepryus(self, oParam):
+        return self.ctx.gesttare_damepryus(oParam)
+
+    def dameProyectos(self):
+        return self.ctx.gesttare_dameProyectos()
+
+    def dameUsuarios(self):
+        return self.ctx.gesttare_dameUsuarios()
+
+    def creartarea(self, oParam):
+        return self.ctx.gesttare_creartarea(oParam)
 
 
 # @class_declaration head #
