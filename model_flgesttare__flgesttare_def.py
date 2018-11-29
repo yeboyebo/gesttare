@@ -10,7 +10,7 @@ class interna(qsatype.objetoBase):
         self.ctx = context
 
 
-# @class_declaration sanhigia #
+# @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from YBUTILS.viewREST import cacheController
 import time
