@@ -238,7 +238,8 @@ class gesttare(interna):
             curTarea.setValueBuffer(u"nombre", oParam["name"])
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
             curTarea.setValueBuffer(u"descripcion", oParam["description"])
-            curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
+            if oParam["date"] and oParam["date"] != u"undefined":
+                curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
 
             if not curTarea.commitBuffer():
                 data.append({"result": False})
