@@ -122,9 +122,12 @@ class gesttare(interna):
 
     def gesttare_field_proyecto(self, model):
         nombreProy = ""
-        if not model.codproyecto:
-            return nombreProy
-        nombreProy = model.codproyecto.nombre
+        try:
+            if not model.codproyecto:
+                return nombreProy
+            nombreProy = model.codproyecto.nombre
+        except Exception:
+            pass
         return nombreProy
 
     def gesttare_uploadFile(self, model, oParam):
