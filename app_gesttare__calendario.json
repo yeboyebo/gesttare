@@ -18,8 +18,8 @@
             "type": "query",
             "customfilter": true,
             "filter": {
-                "gt_tareas.codproyecto": null,
-                "gt_tareas.idusuario": null,
+                "gt_tareas.codproyecto": {"label": "Proyecto"},
+                "gt_tareas.idusuario": {"label": "Usuario"},
                 "gt_tareas.codestado": null
             },
             "monthFilter": {
