@@ -85,6 +85,18 @@
                     "usuarios": null
                 }
             }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/flfactppal",
+            "value": {
+                "flcolagedo": {
+                    "gd_config": null,
+                    "gd_documentos": null,
+                    "gd_versionesdoc": null,
+                    "gd_objetosdoc": null
+                }
+            }
         }
     ]
 }
