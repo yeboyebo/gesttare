@@ -14,7 +14,7 @@
             "componente": "YBTable",
             "prefix": "gt_tareas",
             "multiselectable": true,
-            "customfilter": true,
+            "cansavefilter": true,
             "filter": {
                 "codproyecto": null,
                 "codestado": null,
