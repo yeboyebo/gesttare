@@ -57,7 +57,8 @@
                     "className": "",
                     "layout": {
                         "participantesGrid": {
-                            "label": "Usuarios",
+                            "label": "Participantes",
+                            "icon": "group",
                             "componente": "YBGrid",
                             "prefix": "gt_partictarea",
                             "className": "claseGrid",
