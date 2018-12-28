@@ -229,38 +229,6 @@
             {
                 "name": "app_gesttare____init__.py",
                 "path": "apps/gesttare/"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_config.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_config_def.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_documentos.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_documentos_def.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_versionesdoc.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_versionesdoc_def.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_objetosdoc.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_objetosdoc_def.py"
             }
         ],
         "replaceFile": [
