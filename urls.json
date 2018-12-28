@@ -65,16 +65,6 @@
                     "gt_particproyecto": null
                 }
             }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/models/flgesttare",
-            "value": {
-                "flfactppal": {
-                    "clientes": null,
-                    "usuarios": null
-                }
-            }
         }
     ]
 }

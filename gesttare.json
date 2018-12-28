@@ -123,22 +123,6 @@
                 "name": "model_flgesttare__gt_particproyecto_def.py"
             },
             {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__clientes.py"
-            },
-            {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__clientes_def.py"
-            },
-            {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__usuarios.py"
-            },
-            {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__usuarios_def.py"
-            },
-            {
                 "name": "model_flgesttare__flgesttare_def.py",
                 "path": "models/flgesttare/"
             },

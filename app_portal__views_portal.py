@@ -85,7 +85,7 @@ class gesttare(interna):
         return HttpResponseRedirect("/")
 
     def __init__(self, context=None):
-        super(gesttare, self).__init__(context)
+        super().__init__(context)
 
     def auth_login(self, request):
         return self.ctx.gesttare_auth_login(request)
@@ -100,14 +100,14 @@ class gesttare(interna):
 class head(gesttare):
 
     def __init__(self, context=None):
-        super(head, self).__init__(context)
+        super().__init__(context)
 
 
 # @class_declaration ifaceCtx #
 class ifaceCtx(head):
 
     def __init__(self, context=None):
-        super(ifaceCtx, self).__init__(context)
+        super().__init__(context)
 
 
 # @class_declaration FormInternalObj #
