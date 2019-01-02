@@ -4,7 +4,11 @@
     "dependencias": [
         {
             "version": "v1.0",
-            "key": "baseparche"
+            "key": "flfactppal"
+        },
+        {
+            "version": "v1.0",
+            "key": "flcolagedo"
         }
     ]
 }

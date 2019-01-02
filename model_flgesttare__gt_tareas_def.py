@@ -21,22 +21,6 @@ from YBLEGACY.constantes import *
 
 class gesttare(interna):
 
-    def gesttare_initValidation(self, name, data=None):
-        response = True
-        return response
-
-    def gesttare_iniciaValoresLabel(self, model=None, template=None, cursor=None):
-        labels = {}
-        return labels
-
-    def gesttare_bChLabel(self, fN=None, cursor=None):
-        labels = {}
-        return labels
-
-    def gesttare_getFilters(self, model, name, template=None):
-        filters = []
-        return filters
-
     def gesttare_fun_totalDays(self, model):
         return 30
 
@@ -47,8 +31,7 @@ class gesttare(interna):
         return fields
 
     def gesttare_getDesc(self):
-        desc = None
-        return desc
+        return None
 
     def gesttare_actNuevoComentario(self, model, oParam):
         print("aqui insertamos comentario", oParam)
@@ -256,19 +239,7 @@ class gesttare(interna):
         return data
 
     def __init__(self, context=None):
-        super(gesttare, self).__init__(context)
-
-    def initValidation(self, name, data=None):
-        return self.ctx.gesttare_initValidation(name, data=None)
-
-    def iniciaValoresLabel(self, model=None, template=None, cursor=None):
-        return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor)
-
-    def bChLabel(self, fN=None, cursor=None):
-        return self.ctx.gesttare_bChLabel(fN, cursor)
-
-    def getFilters(self, model, name, template=None):
-        return self.ctx.gesttare_getFilters(model, name, template)
+        super().__init__(context)
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
@@ -323,14 +294,14 @@ class gesttare(interna):
 class head(gesttare):
 
     def __init__(self, context=None):
-        super(head, self).__init__(context)
+        super().__init__(context)
 
 
 # @class_declaration ifaceCtx #
 class ifaceCtx(head):
 
     def __init__(self, context=None):
-        super(ifaceCtx, self).__init__(context)
+        super().__init__(context)
 
 
 # @class_declaration FormInternalObj #

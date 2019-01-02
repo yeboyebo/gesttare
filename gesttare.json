@@ -123,22 +123,6 @@
                 "name": "model_flgesttare__gt_particproyecto_def.py"
             },
             {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__clientes.py"
-            },
-            {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__clientes_def.py"
-            },
-            {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__usuarios.py"
-            },
-            {
-                "path": "models/flfactppal/",
-                "name": "model_flfactppal__usuarios_def.py"
-            },
-            {
                 "name": "model_flgesttare__flgesttare_def.py",
                 "path": "models/flgesttare/"
             },
@@ -229,38 +213,6 @@
             {
                 "name": "app_gesttare____init__.py",
                 "path": "apps/gesttare/"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_config.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_config_def.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_documentos.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_documentos_def.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_versionesdoc.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_versionesdoc_def.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_objetosdoc.py"
-            },
-            {
-                "path": "models/flcolagedo/",
-                "name": "model_flcolagedo__gd_objetosdoc_def.py"
             }
         ],
         "replaceFile": [

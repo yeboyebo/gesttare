@@ -11,13 +11,6 @@
                     "gt_partictarea": null
                 }
             }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/flgesttare",
-            "value": {
-                "flfactppal": {}
-            }
         }
     ]
 }

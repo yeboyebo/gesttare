@@ -157,7 +157,7 @@ class gesttare(interna):
         return True
 
     def __init__(self, context=None):
-        super(gesttare, self).__init__(context)
+        super().__init__(context)
 
     def afterCommit_gt_comentarios(self, curComentario=None):
         return self.ctx.gesttare_afterCommit_gt_comentarios(curComentario)
@@ -174,18 +174,19 @@ class gesttare(interna):
     def comprobarUsuarioResponsable(self, curTarea=None):
         return self.ctx.gesttare_comprobarUsuarioResponsable(curTarea)
 
+
 # @class_declaration head #
 class head(gesttare):
 
     def __init__(self, context=None):
-        super(head, self).__init__(context)
+        super().__init__(context)
 
 
 # @class_declaration ifaceCtx #
 class ifaceCtx(head):
 
     def __init__(self, context=None):
-        super(ifaceCtx, self).__init__(context)
+        super().__init__(context)
 
 
 # @class_declaration FormInternalObj #
