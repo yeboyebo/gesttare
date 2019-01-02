@@ -21,7 +21,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas",
+            "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
                 "articuosForm": {
@@ -126,7 +126,7 @@
             "label": "Comentarios",
             "componente": "YBList",
             "prefix": "gt_comentarios",
-            "className": "claseGrid",
+            "className": "claseGrid gbTareasBox",
             "avatar": false,
             "columns": [
                 {"tipo": "field", "listpos": "title", "key": "idusuario","width": 100},
