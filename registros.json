@@ -5,6 +5,8 @@
             "path": "/root",
             "value": {
                 "flgesttare": {
+                    "gt_actualizaciones": null,
+                    "gt_actualizusuario": null,
                     "gt_comentarios": null,
                     "gt_proyectos": null,
                     "gt_tareas": null,
