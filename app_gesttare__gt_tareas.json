@@ -30,7 +30,11 @@
                     "class": "claseGrid",
                     "submit": "update",
                     "return": true,
-                    "success": [{"slot": "return"}],
+                    "success": [
+                        {
+                            "slot": "return"
+                        }
+                    ],
                     "fields": {
                         "gb__titulo": {
                             "title": "",
@@ -42,15 +46,22 @@
                             "title": "",
                             "fields": {
                                 "descripcion": {},
-                                "codproyecto": {"combolimit": 1},
+                                "codproyecto": {
+                                    "combolimit": 1
+                                },
                                 "fechavencimiento": {},
                                 "resuelta": {},
                                 "codestado": {},
-                                "idusuario": {"combolimit": 1}
+                                "idusuario": {
+                                    "combolimit": 1
+                                }
                             }
                         }
                     },
                     "exclude": {}
+                },
+                "separator2": {
+                    "componente": "YBSeparator"
                 },
                 "groupBoxUsuarios": {
                     "componente": "YBGroupBox",
@@ -62,25 +73,37 @@
                             "componente": "YBGrid",
                             "prefix": "gt_partictarea",
                             "className": "claseGrid",
+                            "hideheader": true,
                             "columns": [
-                                {"tipo": "field", "listpos": "title", "key": "idusuario"},
+                                {
+                                    "tipo": "field",
+                                    "listpos": "title",
+                                    "key": "idusuario"
+                                },
                                 {
                                     "tipo": "act",
                                     "key": "delete",
                                     "label": "Borrar Linea",
                                     "success": [
-                                        {"slot": "refrescar"}
+                                        {
+                                            "slot": "refrescar"
+                                        }
                                     ]
                                 }
                             ],
                             "rowclick": "",
-                            "accionesGrid": [{
-                                "key": "nuevaLinea",
-                                "label": "Nuevo",
-                                "success": []
-                            }]
+                            "accionesGrid": [
+                                {
+                                    "key": "nuevaLinea",
+                                    "label": "Nuevo",
+                                    "success": []
+                                }
+                            ]
                         }
                     }
+                },
+                "separator3": {
+                    "componente": "YBSeparator"
                 },
                 "groupBoxComentarios": {
                     "componente": "YBGroupBox",
@@ -129,7 +152,12 @@
             "className": "claseGrid gbTareasBox",
             "avatar": false,
             "columns": [
-                {"tipo": "field", "listpos": "title", "key": "idusuario","width": 100},
+                {
+                    "tipo": "field",
+                    "listpos": "title",
+                    "key": "idusuario",
+                    "width": 100
+                },
                 {
                     "tipo": "foreignfield",
                     "key": "adjunto",
@@ -137,14 +165,26 @@
                     "file": true,
                     "listpos": "body"
                 },
-                {"tipo": "field", "listpos": "secondaryitem", "key": "fecha","width": 100},
-                {"tipo": "field", "listpos": "subtitle", "key": "comentario", "flex":5},
+                {
+                    "tipo": "field",
+                    "listpos": "secondaryitem",
+                    "key": "fecha",
+                    "width": 100
+                },
+                {
+                    "tipo": "field",
+                    "listpos": "subtitle",
+                    "key": "comentario",
+                    "flex": 5
+                },
                 {
                     "tipo": "act",
                     "key": "delete",
                     "label": "Borrar Linea",
                     "success": [
-                        {"slot": "refrescar"}
+                        {
+                            "slot": "refrescar"
+                        }
                     ]
                 }
             ],
