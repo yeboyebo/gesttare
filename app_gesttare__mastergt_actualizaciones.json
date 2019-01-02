@@ -11,7 +11,7 @@
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": "gbTareas",
-            "style": {},
+            "style": { },
             "layout": {
             	"queryGrid_notificacionesUsuario": {
                     "componente": "YBTable",
