@@ -8,29 +8,36 @@
         }
     },
     "layout": {
-    	"queryGrid_notificacionesUsuario": {
-            "componente": "YBTable",
-            "label": "Notificaciones",
-            "prefix": "notificacionesUsuario",
-            "filter": "",
-            "type": "query",
-            "columns": [
-                {"tipo": "field", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 150},
-                {"tipo": "field", "key": "gt_tareas.descripcion", "label": "Desc. tarea", "width": 300},
-                {"tipo": "field", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 150},
-                {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 150},
-                {
-	                "tipo": "act",
-	                "key": "borrarActualizacion",
-	                "label": "borrarActualizacion",
-	                "success": [
-	                    {"slot": "refrescar"}
-	                ]
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas",
+            "style": {},
+            "layout": {
+            	"queryGrid_notificacionesUsuario": {
+                    "componente": "YBTable",
+                    "label": "Notificaciones",
+                    "prefix": "notificacionesUsuario",
+                    "filter": "",
+                    "type": "query",
+                    "columns": [
+                        {"tipo": "field", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 150},
+                        {"tipo": "field", "key": "gt_tareas.descripcion", "label": "Desc. tarea", "width": 300},
+                        {"tipo": "field", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 150},
+                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 150},
+                        {
+        	                "tipo": "act",
+        	                "key": "borrarActualizacion",
+        	                "label": "borrarActualizacion",
+        	                "success": [
+        	                    {"slot": "refrescar"}
+        	                ]
+                        }
+                    ],
+                    "rowclick": "verTarea",
+                    "accionesGrid": []
                 }
-            ],
-            "rowclick": "verTarea",
-            "accionesGrid": []
-        }        
+            }
+        }
     },
     "acciones": {
     	"borrarActualizacion": {
