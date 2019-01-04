@@ -2,27 +2,34 @@
     "querystring": {},
     "schema": {},
     "layout": {
-        "articuosForm": {
-            "prefix": "gt_tareas",
-            "componente": "YBForm",
-            "class": "claseGrid",
-            "submit": "create",
-            "return": true,
-            "success": [{"slot": "return"}],
-            "fields": {
-                "gb__": {
-                    "title": "",
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas",
+            "style": { },
+            "layout": {
+                "articuosForm": {
+                    "prefix": "gt_tareas",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "create",
+                    "return": true,
+                    "success": [{"slot": "return"}],
                     "fields": {
-                    	"nombre": {},
-                    	"descripcion": {},
-                        "codproyecto": {"combolimit": 1},
-                        "fechavencimiento": {},
-                        "codestado": {},
-                        "idusuario": {"combolimit": 1}
-                    }
+                        "gb__": {
+                            "title": "",
+                            "fields": {
+                            	"nombre": {},
+                            	"descripcion": {},
+                                "codproyecto": {"combolimit": 1},
+                                "fechavencimiento": {},
+                                "codestado": {},
+                                "idusuario": {"combolimit": 1}
+                            }
+                        }
+                    },
+                    "exclude": {}
                 }
-            },
-            "exclude": {}
+            }
         }
     },
     "acciones": {}

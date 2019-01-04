@@ -2,26 +2,33 @@
     "querystring": {},
     "schema": {},
     "layout": {
-        "articuosForm": {
-            "prefix": "gt_proyectos",
-            "componente": "YBForm",
-            "class": "claseGrid",
-            "submit": "create",
-            "return": true,
-            "success": [{"slot": "return"}],
-            "fields": {
-                "gb__": {
-                    "title": "",
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas",
+            "style": { },
+            "layout": {
+                "articuosForm": {
+                    "prefix": "gt_proyectos",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "create",
+                    "return": true,
+                    "success": [{"slot": "return"}],
                     "fields": {
-                        "codproyecto": {"disabled": true},
-                        "nombre": {},
-                        "descripcion": {},
-                        "estado": {},
-                        "codcliente": {"combolimit": 1}
-                    }
+                        "gb__": {
+                            "title": "",
+                            "fields": {
+                                "codproyecto": {"disabled": true},
+                                "nombre": {},
+                                "descripcion": {},
+                                "estado": {},
+                                "codcliente": {"combolimit": 1}
+                            }
+                        }
+                    },
+                    "exclude": {}
                 }
-            },
-            "exclude": {}
+            }
         }
     },
     "acciones": {}

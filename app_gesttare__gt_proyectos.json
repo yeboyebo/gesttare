@@ -11,53 +11,62 @@
         }
     },
     "layout": {
-        "proyectosForm": {
-            "prefix": "gt_proyectos",
-            "componente": "YBForm",
-            "class": "claseGrid",
-            "submit": "update",
-            "return": true,
-            "success": [{"slot": "return"}],
-            "fields": {
-                "gb__": {
-                    "title": "",
-                    "fields": {
-                        "codproyecto": {"disabled": true},
-                        "nombre": {},
-                        "descripcion": {},
-                        "estado": {},
-                        "codcliente": {"combolimit": 1}
-                    }
-                }
-            },
-            "exclude": {}
-        },
-        "groupBoxUsuarios": {
+        "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "",
+            "className": "gbTareas gbTareasBox",
+            "style": { },
             "layout": {
-                "participantesGrid": {
-                    "label": "Usuarios",
-                    "componente": "YBGrid",
-                    "prefix": "gt_particproyecto",
-                    "className": "claseGrid",
-                    "columns": [
-                        {"tipo": "field", "listpos": "title", "key": "idusuario"},
-                        {
-                            "tipo": "act",
-                            "key": "delete",
-                            "label": "Borrar Linea",
-                            "success": [
-                                {"slot": "refrescar"}
-                            ]
+                "proyectosForm": {
+                    "prefix": "gt_proyectos",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "update",
+                    "return": true,
+                    "success": [{"slot": "return"}],
+                    "fields": {
+                        "gb__": {
+                            "title": "",
+                            "fields": {
+                                "codproyecto": {"disabled": true},
+                                "nombre": {},
+                                "descripcion": {},
+                                "estado": {},
+                                "codcliente": {"combolimit": 1}
+                            }
                         }
-                    ],
-                    "rowclick": "",
-                    "accionesGrid": [{
-                        "key": "nuevaLinea",
-                        "label": "Nuevo",
-                        "success": []
-                    }]
+                    },
+                    "exclude": {}
+                },
+                "groupBoxUsuarios": {
+                    "componente": "YBGroupBox",
+                    "className": "",
+                    "layout": {
+                        "participantesGrid": {
+                            "label": "Participantes",
+                            "icon": "group",
+                            "componente": "YBGrid",
+                            "prefix": "gt_particproyecto",
+                            "className": "claseGrid",
+                            "hideheader": true,
+                            "columns": [
+                                {"tipo": "field", "listpos": "title", "key": "idusuario"},
+                                {
+                                    "tipo": "act",
+                                    "key": "delete",
+                                    "label": "Borrar Linea",
+                                    "success": [
+                                        {"slot": "refrescar"}
+                                    ]
+                                }
+                            ],
+                            "rowclick": "",
+                            "accionesGrid": [{
+                                "key": "nuevaLinea",
+                                "label": "Nuevo",
+                                "success": []
+                            }]
+                        }
+                    }
                 }
             }
         }

@@ -12,7 +12,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas",
+            "className": "",
             "style": { },
             "layout": {
                 "masterTareas": {
