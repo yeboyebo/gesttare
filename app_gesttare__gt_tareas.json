@@ -109,6 +109,8 @@
                 "groupBoxComentarios": {
                     "componente": "YBGroupBox",
                     "className": "",
+                    "label": "Comentarios",
+                    "icon": "android",
                     "layout": {
                         "groupBoxNuevoComentario": {
                             "componente": "YBGroupBox",
@@ -141,57 +143,52 @@
                                     }
                                 }
                             }
+                        },
+                        "comentariosGrid": {
+                            "componente": "YBList",
+                            "prefix": "gt_comentarios",
+                            "className": "claseGrid gbTareasBox",
+                            "avatar": false,
+                            "columns": [
+                                {
+                                    "tipo": "field",
+                                    "listpos": "title",
+                                    "key": "idusuario",
+                                    "width": 100
+                                },
+                                {
+                                    "tipo": "foreignfield",
+                                    "key": "adjunto",
+                                    "width": 100,
+                                    "file": true,
+                                    "listpos": "body"
+                                },
+                                {
+                                    "tipo": "field",
+                                    "listpos": "secondaryitem",
+                                    "key": "fecha",
+                                    "width": 100
+                                },
+                                {
+                                    "tipo": "field",
+                                    "listpos": "subtitle",
+                                    "key": "comentario",
+                                    "flex": 5
+                                },
+                                {
+                                    "tipo": "act",
+                                    "key": "delete",
+                                    "label": "Borrar Linea",
+                                    "success": [
+                                        {
+                                            "slot": "refrescar"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "rowclick": ""
                         }
                     }
-                },
-                "separator4": {
-                    "componente": "YBSeparator"
-                },
-                "comentariosGrid": {
-                    "label": "Comentarios",
-                    "icon": "android",
-                    "componente": "YBList",
-                    "prefix": "gt_comentarios",
-                    "className": "claseGrid gbTareasBox",
-                    "avatar": false,
-                    "columns": [
-                        {
-                            "tipo": "field",
-                            "listpos": "title",
-                            "key": "idusuario",
-                            "width": 100
-                        },
-                        {
-                            "tipo": "foreignfield",
-                            "key": "adjunto",
-                            "width": 100,
-                            "file": true,
-                            "listpos": "body"
-                        },
-                        {
-                            "tipo": "field",
-                            "listpos": "secondaryitem",
-                            "key": "fecha",
-                            "width": 100
-                        },
-                        {
-                            "tipo": "field",
-                            "listpos": "subtitle",
-                            "key": "comentario",
-                            "flex": 5
-                        },
-                        {
-                            "tipo": "act",
-                            "key": "delete",
-                            "label": "Borrar Linea",
-                            "success": [
-                                {
-                                    "slot": "refrescar"
-                                }
-                            ]
-                        }
-                    ],
-                    "rowclick": ""
                 }
             }
         }

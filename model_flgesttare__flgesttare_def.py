@@ -31,24 +31,13 @@ class gesttare(interna):
 
     def gesttare_afterCommit_gt_tareas(self, curTarea=None):
         _i = self.iface
-        actualizacion = False
-        tipo = ""
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_tareas(curTarea):
             return False
 
         _i.comprobarUsuarioResponsable(curTarea)
         print("gesttare_aftercommit_gt_tareas")
 
-        if curTarea.modeAccess() == curTarea.Edit:
-            if curTarea.valueBuffer(u"codestado") != curTarea.valueBufferCopy(u"codestado"):
-                actualizacion = True
-                tipo = u"Cambio de estado"
-            if curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
-                print("Cambiando fecha en edit")
-                actualizacion = True
-                tipo = u"Cambio de fecha"
-            if actualizacion:
-                _i.crearActualizaciones(tipo, curTarea)
+        # _i.comprobarActualizacionesTareas(curTarea)
 
         return True
 
@@ -58,10 +47,10 @@ class gesttare(interna):
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_partictarea(curPart):
             return False
         # print("partictarea 2")
-        if curPart.modeAccess() == curPart.Insert:
-            print("gesttare_aftercommit_gt_partictarea")
-            if not _i.crearActualizaciones(u"Nuevos asignados", curPart):
-                return False
+        # if curPart.modeAccess() == curPart.Insert:
+        #     print("gesttare_aftercommit_gt_partictarea")
+        #     if not _i.crearActualizaciones(u"Nuevos asignados", curPart):
+        #         return False
 
         return True
 
@@ -156,6 +145,21 @@ class gesttare(interna):
         print("usuario despues: ", curTarea.valueBuffer(u"idusuario"))
         return True
 
+    def gesttare_comprobarActualizacionesTareas(self, curTarea=None):
+        actualizacion = False
+        tipo = ""
+        if curTarea.modeAccess() == curTarea.Edit:
+            if curTarea.valueBuffer(u"codestado") != curTarea.valueBufferCopy(u"codestado"):
+                actualizacion = True
+                tipo = u"Cambio de estado"
+            if curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
+                print("Cambiando fecha en edit")
+                actualizacion = True
+                tipo = u"Cambio de fecha"
+            if actualizacion:
+                _i.crearActualizaciones(tipo, curTarea)
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -173,6 +177,9 @@ class gesttare(interna):
 
     def comprobarUsuarioResponsable(self, curTarea=None):
         return self.ctx.gesttare_comprobarUsuarioResponsable(curTarea)
+
+    def comprobarActualizacionesTareas(self, curTarea=None):
+        return eslf.ctx.gesttare_comprobarActualizacionesTareas(curTarea)
 
 
 # @class_declaration head #
