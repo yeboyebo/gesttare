@@ -22,6 +22,7 @@
                     "class": "claseGrid",
                     "submit": "update",
                     "return": true,
+                    "label": "Información",
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__": {

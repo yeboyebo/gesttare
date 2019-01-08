@@ -17,7 +17,7 @@ from YBLEGACY.constantes import *
 class gesttare(interna):
 
     def gesttare_getDesc(self):
-        desc = "descripcion"
+        desc = "nombre"
         return desc
 
     def __init__(self, context=None):

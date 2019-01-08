@@ -13,13 +13,14 @@
                     "class": "claseGrid",
                     "submit": "create",
                     "return": true,
+                    "label": "Nueva tarea",
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__": {
                             "title": "",
                             "fields": {
-                            	"nombre": {},
-                            	"descripcion": {},
+                                "nombre": {},
+                                "descripcion": {},
                                 "codproyecto": {"combolimit": 1},
                                 "fechavencimiento": {},
                                 "codestado": {},

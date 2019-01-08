@@ -30,7 +30,6 @@
                     "class": "claseGrid",
                     "submit": "update",
                     "label": "tareas",
-                    "icon": "android",
                     "return": true,
                     "success": [
                         {

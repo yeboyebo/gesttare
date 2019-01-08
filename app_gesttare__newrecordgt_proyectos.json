@@ -12,6 +12,7 @@
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "create",
+                    "label": "NUEVO PROYECTO",
                     "return": true,
                     "success": [{"slot": "return"}],
                     "fields": {
