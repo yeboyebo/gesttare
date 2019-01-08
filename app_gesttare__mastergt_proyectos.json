@@ -6,9 +6,14 @@
     "schema": {},
     "layout": {
         "masterFamilias": {
-            "componente": "YBList",
+            "componente": "YBGrid",
             "prefix": "gt_proyectos",
-            "filter": "buscador",
+            "cansavefilter": true,
+            "filter": {
+                "codproyecto": null,
+                "nombre": null,
+                "estado": null
+            },
             "multiselectable": true,
             "columns": [
                 {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 50},

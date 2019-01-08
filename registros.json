@@ -19,6 +19,13 @@
             "type": "deleteNode",
             "path": "/flcolagedo/gd_conexiones",
             "value": null
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/flsisppal/auth_user",
+            "value": {
+                "sis_gridfilter": null
+            }
         }
     ]
 }
