@@ -19,11 +19,20 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return None
 
+    def gesttare_get_model_info(model, data, pag):
+        participantes = "Participantes: "
+        for part in data:
+            participantes = participantes + part["idusuario"] + " "
+        return {"participantesGrid": participantes}
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
+
+    def get_model_info(model, data, pag):
+        return self.ctx.gesttare_get_model_info(model, data, pag)
 
 
 # @class_declaration head #

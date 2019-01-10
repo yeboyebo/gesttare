@@ -18,6 +18,9 @@ class gesttare_gt_partictarea(interna_gt_partictarea, helpers.MixinConAcciones):
     class Meta:
         proxy = True
 
+    def get_model_info(model, data, pag):
+        return form.iface.get_model_info(model, data, pag)
+
 
 # @class_declaration gt_partictarea #
 class gt_partictarea(gesttare_gt_partictarea, helpers.MixinConAcciones):

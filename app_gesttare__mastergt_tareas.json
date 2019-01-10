@@ -34,7 +34,15 @@
                         {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 30},
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
                         {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "width": 80},
-                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
+                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100},
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Borrar Linea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        }
                     ],
                     "rowclick": ""
                 }

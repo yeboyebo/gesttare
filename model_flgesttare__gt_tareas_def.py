@@ -55,9 +55,9 @@ class gesttare(interna):
         existe = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idtarea", ustr(u"extract(month from gt_tareas.fechavencimiento) = ", qsatype.Date().getMonth()))
         if not existe:
             return initFilter
-        initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2018"
+        initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2019"
         initFilter['where'] += u" AND extract(month from gt_tareas.fechavencimiento) = " + str(qsatype.Date().getMonth())
-        initFilter['filter'] = {"s_extract(year from gt_tareas.fechavencimiento)__exact": "2018", "s_extract(month from gt_tareas.fechavencimiento)__exact": str(qsatype.Date().getMonth())}
+        initFilter['filter'] = {"s_extract(year from gt_tareas.fechavencimiento)__exact": "2019", "s_extract(month from gt_tareas.fechavencimiento)__exact": str(qsatype.Date().getMonth())}
         return initFilter
 
     def gesttare_queryGrid_calendarioTareas(self, model):
