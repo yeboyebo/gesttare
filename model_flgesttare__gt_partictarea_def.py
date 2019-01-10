@@ -19,7 +19,7 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return None
 
-    def gesttare_get_model_info(model, data, pag):
+    def gesttare_get_model_info(self, model, data, pag):
         participantes = "Participantes: "
         for part in data:
             participantes = participantes + part["idusuario"] + " "
@@ -31,7 +31,7 @@ class gesttare(interna):
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
 
-    def get_model_info(model, data, pag):
+    def get_model_info(self, model, data, pag):
         return self.ctx.gesttare_get_model_info(model, data, pag)
 
 
