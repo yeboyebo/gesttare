@@ -24,12 +24,15 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
                 "articuosForm": {
                     "prefix": "gt_tareas",
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "update",
-                    "label": "tareas",
+                    "label": "Información",
                     "send": false,
                     "autoCommit": true,
                     "fields": {

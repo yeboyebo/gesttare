@@ -7,6 +7,9 @@
             "className": "gbTareas",
             "style": { },
             "layout": {
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
                 "articuosForm": {
                     "prefix": "gt_proyectos",
                     "componente": "YBForm",

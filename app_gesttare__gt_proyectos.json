@@ -16,6 +16,9 @@
             "className": "gbTareas gbTareasBox",
             "style": { },
             "layout": {
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
                 "proyectosForm": {
                     "prefix": "gt_proyectos",
                     "componente": "YBForm",
@@ -42,6 +45,9 @@
                     "componente": "YBGroupBox",
                     "className": "",
                     "layout": {
+                        "separator1": {
+                            "componente": "YBSeparator"
+                        },
                         "participantesGrid": {
                             "label": "Participantes",
                             "icon": "group",
