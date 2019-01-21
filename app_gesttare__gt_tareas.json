@@ -30,12 +30,8 @@
                     "class": "claseGrid",
                     "submit": "update",
                     "label": "tareas",
-                    "return": true,
-                    "success": [
-                        {
-                            "slot": "return"
-                        }
-                    ],
+                    "send": false,
+                    "autoCommit": true,
                     "fields": {
                         "gb__titulo": {
                             "title": "",
@@ -77,9 +73,9 @@
                             "hideheader": true,
                             "columns": [
                                 {
-                                    "tipo": "field",
+                                    "tipo": "foreignfield",
                                     "listpos": "title",
-                                    "key": "idusuario"
+                                    "key": "nombre"
                                 },
                                 {
                                     "tipo": "act",
@@ -95,9 +91,13 @@
                             "rowclick": "",
                             "accionesGrid": [
                                 {
-                                    "key": "nuevaLinea",
+                                    "key": "actNuevoPartic",
                                     "label": "Nuevo",
-                                    "success": []
+                                    "success": [
+                                        {
+                                            "slot": "refrescar"
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -110,7 +110,7 @@
                     "componente": "YBGroupBox",
                     "className": "",
                     "label": "Comentarios",
-                    "icon": "android",
+                    "icon": "chat",
                     "layout": {
                         "groupBoxNuevoComentario": {
                             "componente": "YBGroupBox",
@@ -208,6 +208,13 @@
                 }
             ]
         },
+        "actNuevoPartic": {
+            "label": "Nuevo comentario",
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "icon": "payment",
+            "serverAction": "actNuevoPartic"
+        },
         "delete": {
             "action": "deleteRow",
             "icon": "delete"
@@ -215,6 +222,9 @@
         "nuevaLinea": {
             "action": "newRow",
             "icon": "add_circle"
+        },
+        "nuevaLineaParams": {
+
         }
     }
 }

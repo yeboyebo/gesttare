@@ -21,7 +21,7 @@
                     "type": "query",
                     "columns": [
                         {"tipo": "field", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 150},
-                        {"tipo": "field", "key": "gt_tareas.descripcion", "label": "Desc. tarea", "width": 300},
+                        {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 300},
                         {"tipo": "field", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 150},
                         {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 150},
                         {

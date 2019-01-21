@@ -238,6 +238,71 @@ class gesttare(interna):
             data.append({"error": "Error en autenticación"})
         return data
 
+    def gesttare_actNuevoPartic(self, oParam, cursor):
+        response = {}
+        if "partic" not in oParam:
+            # idUsuario = cursor.valueBuffer("idusuario")
+            qryUsuarios = qsatype.FLSqlQuery()
+            qryUsuarios.setTablesList(u"usuarios")
+            qryUsuarios.setSelect(u"idusuario, nombre")
+            qryUsuarios.setFrom(ustr(u"usuarios"))
+            # qryUsuarios.setWhere(ustr(u"idusuario <> '", idUsuario, u"'"))
+            qryUsuarios.setWhere(ustr(u"1 = 1"))
+            if not qryUsuarios.exec_():
+                return False
+            opts = []
+            while qryUsuarios.next():
+                tengousuario = qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idusuario", ustr(u"idusuario = '", qryUsuarios.value("idusuario"), u"' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
+                value = False
+                if tengousuario:
+                    value = True
+                opts.append({"key": qryUsuarios.value("idusuario"), "label": qryUsuarios.value("nombre"), "value": value})
+            print("_____________")
+            print(opts)
+            response['status'] = -1
+            response['data'] = {}
+            response['params'] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "gt_tareas",
+                    "style": {
+                        "width": "100%"
+                    },
+                    "tipo": 180,
+                    "verbose_name": "Participantes",
+                    "label": "Participantes",
+                    "key": "partic",
+                    "validaciones": None,
+                    "required": False,
+                    "opts": opts
+                }
+            ]
+            return response
+        else:
+            participantes = json.loads(oParam["partic"])
+            for p in participantes:
+                curPartic = qsatype.FLSqlCursor("gt_partictarea")
+                curPartic.select(ustr("idusuario = '", p, "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
+                curPartic.refreshBuffer()
+                if curPartic.first():
+                    if participantes[p] is False:
+                        # print("vamos a borrar")
+                        curPartic.setModeAccess(cursor.Del)
+                        curPartic.refreshBuffer()
+                        if not curPartic.commitBuffer():
+                            return False
+                else:
+                    if participantes[p] is True:
+                        # print("vamos a crear")
+                        curPartic.setModeAccess(curPartic.Insert)
+                        curPartic.refreshBuffer()
+                        curPartic.setValueBuffer("idusuario", p)
+                        curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
+                        if not curPartic.commitBuffer():
+                            return False
+
+            return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -288,6 +353,9 @@ class gesttare(interna):
 
     def creartarea(self, oParam):
         return self.ctx.gesttare_creartarea(oParam)
+
+    def actNuevoPartic(self, oParam, cursor):
+        return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
 
 
 # @class_declaration head #

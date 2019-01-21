@@ -23,7 +23,7 @@ class gesttare(interna):
         idUsuario = qsatype.FLUtil.nameUser()
         query = {}
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,usuarios")
-        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.descripcion")
+        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN usuarios ON gt_actualizusuario.idusuario = usuarios.idusuario INNER JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
         query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "'")
         print(query["select"])

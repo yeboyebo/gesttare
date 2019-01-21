@@ -22,6 +22,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def actNuevoComentario(self, oParam):
         return form.iface.actNuevoComentario(self, oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def actNuevoPartic(self, oParam, cursor):
+        return form.iface.actNuevoPartic(oParam, cursor)
+
     def queryGrid_calendarioTareas(model):
         return form.iface.queryGrid_calendarioTareas(model)
 
