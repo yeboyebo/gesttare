@@ -24,14 +24,8 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def field_totalformateado(self):
         return form.iface.field_totalformateado(self)
 
-    def field_usuario(self):
-        return form.iface.field_usuario(self)
-
-    def field_tarea(self):
-        return form.iface.field_tarea(self)
-
-    def field_proyecto(self):
-        return form.iface.field_proyecto(self)
+    def queryGrid_mastertimetracking(model):
+        return form.iface.queryGrid_mastertimetracking(model)
 
     class Meta:
         proxy = True

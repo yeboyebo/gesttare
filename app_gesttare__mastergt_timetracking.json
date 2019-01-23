@@ -1,22 +1,45 @@
 {
     "querystring": {
         "p_l": 50,
-        "p_c": true
+        "p_c": true,
+        "o_1": "-fecha",
+        "o_2": "-horainicio"
     },
-    "schema": {},
+    "schema": {
+        "mastertimetracking": {
+            "query": {
+                "p_l": 25
+            }
+        }
+    },
     "layout": {
         "masterTimeTracking": {
             "componente": "YBGrid",
-            "prefix": "gt_timetracking",
-            "filter": "buscador",
+            "type": "query",
+            "prefix": "mastertimetracking",
+            "cansavefilter": true,
+            "filter": {
+                "usuarios.nombre": {
+                    "label": "Usuario"
+                },
+                "gt_tareas.nombre": {
+                    "label": "Tarea"
+                },
+                "gt_proyectos.codproyecto": {
+                    "label": "Proyecto"
+                },
+                "gt_timetracking.fecha": {
+                    "filterType": "desde-hasta"
+                }
+            },
             "columns": [
-                {"tipo": "field", "key": "fecha", "width": 60},
-                {"tipo": "foreignfield", "key": "Hora inicio", "width": 60},
-                {"tipo": "foreignfield", "key": "Hora fin", "width": 60},
-                {"tipo": "foreignfield", "key": "Total tiempo", "width": 60},
-                {"tipo": "foreignfield", "key": "Usuario", "width": 60},
-                {"tipo": "foreignfield", "key": "Tarea", "width": 60},
-                {"tipo": "foreignfield", "key": "Proyecto", "width": 60},
+                {"tipo": "field", "key": "gt_timetracking.fecha", "width": 25},
+                {"tipo": "field", "key": "usuarios.nombre", "label": "Usuario", "width": 20},
+                {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 200},
+                {"tipo": "field", "key": "gt_proyectos.codproyecto", "label": "Proyecto", "width": 10},
+                {"tipo": "foreignfield", "key": "Hora inicio", "width": 5},
+                {"tipo": "foreignfield", "key": "Hora fin", "width": 5},
+                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5},
                 {
                     "tipo": "act",
                     "key": "delete",

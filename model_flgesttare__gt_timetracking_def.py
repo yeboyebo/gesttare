@@ -19,40 +19,31 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return None
 
+    def gesttare_queryGrid_mastertimetracking(self, model):
+        query = {}
+        query["tablesList"] = ("gt_timetracking, gt_tareas, usuarios")
+        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.codproyecto, usuarios.nombre")
+        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario")
+        query["where"] = ("1 = 1")
+        query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
+        return query
+
     def gesttare_getForeignFields(self, model, template=None):
         fields = [
             {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
             {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
-            {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'},
-            {'verbose_name': 'Usuario', 'func': 'field_usuario'},
-            {'verbose_name': 'Tarea', 'func': 'field_tarea'},
-            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'}
+            {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
         ]
         return fields
 
     def gesttare_field_inicioformateado(self, model):
-        return self.seconds_to_time(model.horainicio)
+        return self.seconds_to_time(model["gt_timetracking.horainicio"])
 
     def gesttare_field_finformateado(self, model):
-        return self.seconds_to_time(model.horafin)
+        return self.seconds_to_time(model["gt_timetracking.horafin"])
 
     def gesttare_field_totalformateado(self, model):
-        return self.seconds_to_time(model.totaltiempo)
-
-    def gesttare_field_usuario(self, model):
-        return model.idusuario.nombre
-
-    def gesttare_field_tarea(self, model):
-        return model.idtarea.nombre
-
-    def gesttare_field_proyecto(self, model):
-        # Si sacamos el proyecto de la tarea
-        # if model.idtarea.codproyecto:
-        #     return model.idtarea.codproyecto.codproyecto
-        # return ""
-        if model.codproyecto:
-            return model.codproyecto.codproyecto
-        return ""
+        return self.seconds_to_time(model["gt_timetracking.totaltiempo"])
 
     def gesttare_seconds_to_time(self, seconds):
         if not seconds:
@@ -76,6 +67,9 @@ class gesttare(interna):
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
 
+    def queryGrid_mastertimetracking(self, model):
+        return self.ctx.gesttare_queryGrid_mastertimetracking(model)
+
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
 
@@ -87,15 +81,6 @@ class gesttare(interna):
 
     def field_totalformateado(self, model):
         return self.ctx.gesttare_field_totalformateado(model)
-
-    def field_usuario(self, model):
-        return self.ctx.gesttare_field_usuario(model)
-
-    def field_tarea(self, model):
-        return self.ctx.gesttare_field_tarea(model)
-
-    def field_proyecto(self, model):
-        return self.ctx.gesttare_field_proyecto(model)
 
     def seconds_to_time(self, seconds):
         return self.ctx.gesttare_seconds_to_time(seconds)
