@@ -213,6 +213,18 @@
             {
                 "name": "app_gesttare____init__.py",
                 "path": "apps/gesttare/"
+            },
+            {
+                "name": "app_gesttare__mastergt_timetracking.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "model_flgesttare__gt_timetracking.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "model_flgesttare__gt_timetracking_def.py",
+                "path": "models/flgesttare/"
             }
         ],
         "replaceFile": [

@@ -25,9 +25,14 @@ class gesttare(interna):
         return 30
 
     def gesttare_getForeignFields(self, model, template=None):
-        fields = [{'verbose_name': 'Proyecto', 'func': 'field_proyecto'}]
+        fields = [
+            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+            {'verbose_name': 'Activa', 'func': 'field_activa'}
+        ]
+
         if template == "calendarioTareas":
             return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
+
         return fields
 
     def gesttare_getDesc(self):
@@ -112,6 +117,9 @@ class gesttare(interna):
         except Exception:
             pass
         return nombreProy
+
+    def gesttare_field_activa(self, model):
+        return model.idtarea == qsatype.FLUtil.quickSqlSelect("usuarios", "idtareaactiva", "idusuario = '{}'".format(qsatype.FLUtil.nameUser()))
 
     def gesttare_uploadFile(self, model, oParam):
         # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
@@ -206,6 +214,63 @@ class gesttare(interna):
             usuarios.append({"codigo": str(q.value(0)), "nombre": str(q.value(1))})
 
         return usuarios
+
+    def gesttare_calcula_totaltiempo(self, cursor):
+        return cursor.valueBuffer("horafin") - cursor.valueBuffer("horainicio")
+
+    def gesttare_startstop(self, model, cursor):
+        now = qsatype.Date()
+        user_name = qsatype.FLUtil.nameUser()
+
+        cur_track = qsatype.FLSqlCursor("gt_timetracking")
+
+        cur_user = qsatype.FLSqlCursor("usuarios")
+        cur_user.select("idusuario = '{}'".format(user_name))
+        if not cur_user.first():
+            print("No se encontró el usuario")
+            return False
+
+        cur_user.setModeAccess(cur_user.Edit)
+        cur_user.refreshBuffer()
+
+        if self.field_activa(model):
+            cur_track.select("idusuario = '{}' AND idtarea = {} AND horafin IS NULL".format(user_name, cursor.valueBuffer("idtarea")))
+
+            if not cur_track.first():
+                print("No se encontró el registro de timetracking")
+                return False
+
+            cur_track.setModeAccess(cur_track.Edit)
+            cur_track.refreshBuffer()
+
+            cur_track.setValueBuffer("horafin", int(now.getTime() / 1000))
+            cur_track.setValueBuffer("totaltiempo", self.calcula_totaltiempo(cur_track))
+
+            cur_user.setNull("idtareaactiva")
+        else:
+            if not cur_user.isNull("idtareaactiva"):
+                print("Ya existe una tarea activa")
+                return False
+
+            cur_track.setModeAccess(cur_track.Insert)
+            cur_track.refreshBuffer()
+
+            cur_track.setValueBuffer("fecha", now.toString()[:10])
+            cur_track.setValueBuffer("horainicio", int(now.getTime() / 1000))
+            cur_track.setValueBuffer("idusuario", user_name)
+            cur_track.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
+            cur_track.setValueBuffer("codproyecto", cursor.valueBuffer("codproyecto"))
+
+            cur_user.setValueBuffer("idtareaactiva", cursor.valueBuffer("idtarea"))
+
+        if not cur_track.commitBuffer():
+            print("Ocurrió un error al guardar el registro de gt_timetracking")
+            return False
+        if not cur_user.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea activa")
+            return False
+
+        return True
 
     def gesttare_creartarea(self, oParam):
         data = []
@@ -336,6 +401,9 @@ class gesttare(interna):
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
 
+    def field_activa(self, model):
+        return self.ctx.gesttare_field_activa(model)
+
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)
 
@@ -350,6 +418,12 @@ class gesttare(interna):
 
     def dameUsuarios(self):
         return self.ctx.gesttare_dameUsuarios()
+
+    def startstop(self, model, cursor):
+        return self.ctx.gesttare_startstop(model, cursor)
+
+    def calcula_totaltiempo(self, cursor):
+        return self.ctx.gesttare_calcula_totaltiempo(cursor)
 
     def creartarea(self, oParam):
         return self.ctx.gesttare_creartarea(oParam)

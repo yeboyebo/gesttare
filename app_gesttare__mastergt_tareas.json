@@ -18,7 +18,6 @@
                 "masterTareas": {
                     "componente": "YBTable",
                     "prefix": "gt_tareas",
-                    "multiselectable": true,
                     "cansavefilter": true,
                     "filter": {
                         "codproyecto": null,
@@ -37,8 +36,16 @@
                         {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100},
                         {
                             "tipo": "act",
-                            "key": "delete",
-                            "label": "Borrar Linea",
+                            "key": "complete",
+                            "label": "Completar tarea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "startstop",
+                            "label": "TimeTracking",
                             "success": [
                                 {"slot": "refrescar"}
                             ]
@@ -55,23 +62,17 @@
         }
     },
     "acciones": {
-        "delete": {
-            "action": "deleteRow",
-            "icon": "delete"
+        "startstop": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "startstop",
+            "icon": "alarm"
+        },
+        "complete": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "completar_tarea",
+            "icon": "check"
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -53,6 +53,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def field_proyecto(self):
         return form.iface.field_proyecto(self)
 
+    def field_activa(self):
+        return form.iface.field_activa(self)
+
     @helpers.decoradores.csr()
     def login(oParam):
         return form.iface.login(oParam)
@@ -70,6 +73,11 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def dameUsuarios():
         return form.iface.dameUsuarios()
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def startstop(self, cursor):
+        return form.iface.startstop(self, cursor)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

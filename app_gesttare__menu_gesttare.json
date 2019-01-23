@@ -24,6 +24,14 @@
             "VISIBLE": true
         },
         {
+            "NAME": "gt_timetracking",
+            "TEXT": "timetracking",
+            "URL": "gesttare/gt_timetracking/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)",
+            "VISIBLE": true
+        },
+        {
             "NAME": "calendario",
             "TEXT": "Calendario",
             "URL": "gesttare/gt_tareas/custom/calendario",

@@ -1,0 +1,38 @@
+{
+    "querystring": {
+        "p_l": 50,
+        "p_c": true
+    },
+    "schema": {},
+    "layout": {
+        "masterTimeTracking": {
+            "componente": "YBGrid",
+            "prefix": "gt_timetracking",
+            "filter": "buscador",
+            "columns": [
+                {"tipo": "field", "key": "fecha", "width": 60},
+                {"tipo": "foreignfield", "key": "Hora inicio", "width": 60},
+                {"tipo": "foreignfield", "key": "Hora fin", "width": 60},
+                {"tipo": "foreignfield", "key": "Total tiempo", "width": 60},
+                {"tipo": "foreignfield", "key": "Usuario", "width": 60},
+                {"tipo": "foreignfield", "key": "Tarea", "width": 60},
+                {"tipo": "foreignfield", "key": "Proyecto", "width": 60},
+                {
+                    "tipo": "act",
+                    "key": "delete",
+                    "label": "Borrar línea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                }
+            ],
+            "rowclick": ""
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        }
+    }
+}
