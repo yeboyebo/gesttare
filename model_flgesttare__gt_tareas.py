@@ -53,9 +53,6 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def field_proyecto(self):
         return form.iface.field_proyecto(self)
 
-    def field_activa(self):
-        return form.iface.field_activa(self)
-
     @helpers.decoradores.csr()
     def login(oParam):
         return form.iface.login(oParam)

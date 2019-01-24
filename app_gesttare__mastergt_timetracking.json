@@ -1,10 +1,5 @@
 {
-    "querystring": {
-        "p_l": 50,
-        "p_c": true,
-        "o_1": "-fecha",
-        "o_2": "-horainicio"
-    },
+    "querystring": {},
     "schema": {
         "mastertimetracking": {
             "query": {
@@ -13,6 +8,9 @@
         }
     },
     "layout": {
+        "separator": {
+            "componente": "YBSeparator"
+        },
         "masterTimeTracking": {
             "componente": "YBGrid",
             "type": "query",
