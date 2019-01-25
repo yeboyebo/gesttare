@@ -58,7 +58,10 @@ class gesttare(interna):
 
     def gesttare_seconds_to_time(self, seconds, total=False):
         if not seconds:
-            seconds = 0
+            if total:
+                seconds = 0
+            else:
+                return ""
 
         minutes = seconds // 60
         seconds = int(seconds % 60)
