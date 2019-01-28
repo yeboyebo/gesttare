@@ -26,7 +26,9 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = [
-            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'}
+            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+            {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
+            {'verbose_name': 'Color nombre', 'func': 'color_nombre'}
         ]
 
         if template == "calendarioTareas":
@@ -116,6 +118,19 @@ class gesttare(interna):
         except Exception:
             pass
         return nombreProy
+
+    def gesttare_color_nombre(self, model):
+        username = qsatype.FLUtil.nameUser()
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("usuarios", "idtareaactiva", "idusuario = '{}'".format(username))
+
+        if model.idtarea and tareaactiva and model.idtarea == tareaactiva:
+            return "fcSuccess"
+        return ""
+
+    def gesttare_color_fecha(self, model):
+        if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString():
+            return "fcDanger"
+        return ""
 
     def gesttare_uploadFile(self, model, oParam):
         # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
@@ -392,6 +407,12 @@ class gesttare(interna):
 
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
+
+    def color_fecha(self, model):
+        return self.ctx.gesttare_color_fecha(model)
+
+    def color_nombre(self, model):
+        return self.ctx.gesttare_color_nombre(model)
 
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)
