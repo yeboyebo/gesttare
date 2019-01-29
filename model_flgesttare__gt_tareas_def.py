@@ -3,6 +3,7 @@ from YBLEGACY import qsatype
 from YBUTILS import gesDoc
 
 from models.flfactppal.usuarios import usuarios
+from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 
 import hashlib
 
@@ -38,6 +39,17 @@ class gesttare(interna):
 
     def gesttare_getDesc(self):
         return None
+
+    def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
+        if template == "formRecord":
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea")))
+
+            return {"tiempoTotal": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
+
+        return {}
+
+    def gesttare_seconds_to_time(self, seconds, total=False):
+        return timetracking.getIface().seconds_to_time(seconds, total)
 
     def gesttare_actNuevoComentario(self, model, oParam):
         print("aqui insertamos comentario", oParam)
@@ -128,7 +140,7 @@ class gesttare(interna):
         return ""
 
     def gesttare_color_fecha(self, model):
-        if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString():
+        if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
         return ""
 
@@ -383,6 +395,12 @@ class gesttare(interna):
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
+
+    def iniciaValoresLabel(self, model, template=None, cursor=None, data=None):
+        return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor, data)
+
+    def seconds_to_time(self, seconds, total=False):
+        return self.ctx.gesttare_seconds_to_time(seconds, total)
 
     def actNuevoComentario(self, model, oParam):
         return self.ctx.gesttare_actNuevoComentario(model, oParam)

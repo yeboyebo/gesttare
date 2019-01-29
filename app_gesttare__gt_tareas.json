@@ -24,10 +24,10 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
-                "separator1": {
+                "separator0": {
                     "componente": "YBSeparator"
                 },
-                "articuosForm": {
+                "tareasForm": {
                     "prefix": "gt_tareas",
                     "componente": "YBForm",
                     "class": "claseGrid",
@@ -59,6 +59,21 @@
                         }
                     },
                     "exclude": {}
+                },
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
+                "labelTiempo": {
+                    "componente": "YBLabel",
+                    "className": "YBComponentInfo",
+                    "text": "%yb1",
+                    "style": {
+                        "width": "100%",
+                        "fontWeight": "bold",
+                        "padding": "0px 20px",
+                        "textAlign": "right"
+                    },
+                    "params": [{"type": "calc", "key": "tiempoTotal"}]
                 },
                 "separator2": {
                     "componente": "YBSeparator"
@@ -226,8 +241,6 @@
             "action": "newRow",
             "icon": "add_circle"
         },
-        "nuevaLineaParams": {
-
-        }
+        "nuevaLineaParams": {}
     }
 }
