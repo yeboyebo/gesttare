@@ -10,8 +10,61 @@ class interna(qsatype.objetoBase):
         self.ctx = context
 
 
+# @class_declaration gesttare #
+class gesttare(interna):
+
+    def gesttare_get_app_info(self, model, data):
+        username = qsatype.FLUtil.nameUser()
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("usuarios", "idtareaactiva", "idusuario = '{}'".format(username))
+
+        if not tareaactiva:
+            return None
+
+        nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
+
+        return {
+            "data": [{
+                "pk": tareaactiva,
+                "idtarea": tareaactiva,
+                "nombreactiva": nombre_tarea
+            }],
+            "layout": {
+                "tareaActiva": {
+                    "componente": "YBTable",
+                    "paginacion": False,
+                    "type": "json",
+                    "hideheader": True,
+                    "prefix": "appinfo",
+                    "columns": [
+                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
+                        {
+                            "tipo": "act",
+                            "key": "startstop",
+                            "label": "Timetracking",
+                            "success": [{"slot": "refrescar"}]
+                        }
+                    ]
+                }
+            },
+            "acciones": {
+                "startstop": {
+                    "action": "legacy",
+                    "prefix": "gt_tareas",
+                    "serverAction": "startstop",
+                    "icon": "alarm"
+                }
+            }
+        }
+
+    def __init__(self, context=None):
+        super().__init__(context)
+
+    def get_app_info(self, model, data):
+        return self.ctx.gesttare_get_app_info(model, data)
+
+
 # @class_declaration head #
-class head(interna):
+class head(gesttare):
 
     def __init__(self, context=None):
         super().__init__(context)

@@ -28,6 +28,7 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         fields = [
             {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+            {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
             {'verbose_name': 'Color nombre', 'func': 'color_nombre'}
         ]
@@ -130,6 +131,16 @@ class gesttare(interna):
         except Exception:
             pass
         return nombreProy
+
+    def gesttare_field_usuario(self, model):
+        nombre_usuario = ""
+        try:
+            if not model.idusuario:
+                return nombre_usuario
+            nombre_usuario = model.idusuario.nombre
+        except Exception:
+            pass
+        return nombre_usuario
 
     def gesttare_color_nombre(self, model):
         username = qsatype.FLUtil.nameUser()
@@ -425,6 +436,9 @@ class gesttare(interna):
 
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
+
+    def field_usuario(self, model):
+        return self.ctx.gesttare_field_usuario(model)
 
     def color_fecha(self, model):
         return self.ctx.gesttare_color_fecha(model)

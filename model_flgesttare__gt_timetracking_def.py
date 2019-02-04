@@ -29,29 +29,49 @@ class gesttare(interna):
             return {"masterTimeTracking": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
         return None
 
-    def gesttare_queryGrid_mastertimetracking(self, model):
+    def gesttare_queryGrid_mastertimetracking(self, model, filters):
+        where = "1 = 1"
+
+        if filters:
+            if "[proyecto]" in filters and filters["[proyecto]"] != "":
+                where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
+            if "[tarea]" in filters and filters["[tarea]"] != "":
+                where += " AND gt_tareas.idtarea = {}".format(filters["[tarea]"])
+            if "[usuario]" in filters and filters["[usuario]"] != "":
+                where += " AND usuarios.idusuario = '{}'".format(filters["[usuario]"])
+            if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
+                where += " AND gt_timetracking.fecha >= '{}'".format(filters["[d_fecha]"])
+            if "[h_fecha]" in filters and filters["[h_fecha]"] != "":
+                where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
+            if "[fecha]" in filters and filters["[fecha]"] != "":
+                where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, usuarios")
-        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.codproyecto, usuarios.nombre")
+        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, usuarios.nombre")
         query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario")
-        query["where"] = ("1 = 1")
+        query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
+
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
         if template == "mastertimetracking":
+            # return [
+            #     {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
+            #     {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
+            #     {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
+            # ]
             return [
-                {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
-                {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
                 {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
             ]
         return []
 
-    def gesttare_field_inicioformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.horainicio"])
+    # def gesttare_field_inicioformateado(self, model):
+    #     return self.seconds_to_time(model["gt_timetracking.horainicio"])
 
-    def gesttare_field_finformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.horafin"])
+    # def gesttare_field_finformateado(self, model):
+    #     return self.seconds_to_time(model["gt_timetracking.horafin"])
 
     def gesttare_field_totalformateado(self, model):
         return self.seconds_to_time(model["gt_timetracking.totaltiempo"])
@@ -93,17 +113,17 @@ class gesttare(interna):
     def get_model_info(self, model, data, ident, template, where_filter):
         return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
 
-    def queryGrid_mastertimetracking(self, model):
-        return self.ctx.gesttare_queryGrid_mastertimetracking(model)
+    def queryGrid_mastertimetracking(self, model, filters):
+        return self.ctx.gesttare_queryGrid_mastertimetracking(model, filters)
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
 
-    def field_inicioformateado(self, model):
-        return self.ctx.gesttare_field_inicioformateado(model)
+    # def field_inicioformateado(self, model):
+    #     return self.ctx.gesttare_field_inicioformateado(model)
 
-    def field_finformateado(self, model):
-        return self.ctx.gesttare_field_finformateado(model)
+    # def field_finformateado(self, model):
+    #     return self.ctx.gesttare_field_finformateado(model)
 
     def field_totalformateado(self, model):
         return self.ctx.gesttare_field_totalformateado(model)
