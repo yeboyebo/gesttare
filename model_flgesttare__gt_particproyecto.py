@@ -18,6 +18,12 @@ class gesttare_gt_particproyecto(interna_gt_particproyecto, helpers.MixinConAcci
     class Meta:
         proxy = True
 
+    def get_model_info(model, data, pag):
+        return form.iface.get_model_info(model, data, pag)
+
+    def field_nombre(self):
+        return form.iface.field_nombre(self)
+
 
 # @class_declaration gt_particproyecto #
 class gt_particproyecto(gesttare_gt_particproyecto, helpers.MixinConAcciones):

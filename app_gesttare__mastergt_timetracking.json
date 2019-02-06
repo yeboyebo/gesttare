@@ -57,7 +57,15 @@
                 {"tipo": "field", "key": "usuarios.nombre", "label": "Usuario", "width": 5},
                 {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 250},
                 {"tipo": "field", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
-                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5},
+                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5, "searchField": "gt_timetracking.totaltiempo"},
+                {
+                    "tipo": "act",
+                    "key": "editarTT",
+                    "label": "Editar línea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
                 {
                     "tipo": "act",
                     "key": "delete",
@@ -71,8 +79,15 @@
         }
     },
     "acciones": {
+        "editarTT": {
+            "action": "legacy",
+            "prefix": "gt_timetracking",
+            "serverAction": "editartt",
+            "icon": "edit"
+        },
         "delete": {
             "action": "deleteRow",
+            "prefix": "gt_timetracking",
             "icon": "delete"
         }
     }

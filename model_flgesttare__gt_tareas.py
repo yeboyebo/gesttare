@@ -84,6 +84,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def startstop(self, cursor):
         return form.iface.startstop(self, cursor)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def completar_tarea(self, cursor):
+        return form.iface.completar_tarea(self, cursor)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

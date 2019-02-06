@@ -32,6 +32,7 @@
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "update",
+                    "icon": "info",
                     "label": "Información",
                     "send": false,
                     "autoCommit": true,
@@ -227,10 +228,10 @@
             ]
         },
         "actNuevoPartic": {
-            "label": "Nuevo comentario",
+            "label": "Nuevo participante",
             "action": "legacy",
             "prefix": "gt_tareas",
-            "icon": "payment",
+            "icon": "group",
             "serverAction": "actNuevoPartic"
         },
         "delete": {

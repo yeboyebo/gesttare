@@ -14,7 +14,7 @@
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": "",
-            "style": { },
+            "style": {},
             "layout": {
                 "masterTareas": {
                     "componente": "YBTable",

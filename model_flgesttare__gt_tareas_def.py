@@ -6,6 +6,7 @@ from models.flfactppal.usuarios import usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 
 import hashlib
+import json
 
 
 class interna(qsatype.objetoBase):
@@ -302,6 +303,16 @@ class gesttare(interna):
 
         return True
 
+    def gesttare_completar_tarea(self, model, cursor):
+        resuelta = cursor.valueBuffer("resuelta")
+        cursor.setValueBuffer("resuelta", not resuelta)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea")
+            return False
+
+        return True
+
     def gesttare_creartarea(self, oParam):
         data = []
         usuario = usuarios.objects.filter(idusuario__exact=oParam["person"])
@@ -345,6 +356,7 @@ class gesttare(interna):
             qryUsuarios.setWhere(ustr(u"1 = 1"))
             if not qryUsuarios.exec_():
                 return False
+
             opts = []
             while qryUsuarios.next():
                 tengousuario = qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idusuario", ustr(u"idusuario = '", qryUsuarios.value("idusuario"), u"' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
@@ -352,8 +364,7 @@ class gesttare(interna):
                 if tengousuario:
                     value = True
                 opts.append({"key": qryUsuarios.value("idusuario"), "label": qryUsuarios.value("nombre"), "value": value})
-            print("_____________")
-            print(opts)
+
             response['status'] = -1
             response['data'] = {}
             response['params'] = [
@@ -463,6 +474,9 @@ class gesttare(interna):
 
     def startstop(self, model, cursor):
         return self.ctx.gesttare_startstop(model, cursor)
+
+    def completar_tarea(self, model, cursor):
+        return self.ctx.gesttare_completar_tarea(model, cursor)
 
     def calcula_totaltiempo(self, cursor):
         return self.ctx.gesttare_calcula_totaltiempo(cursor)

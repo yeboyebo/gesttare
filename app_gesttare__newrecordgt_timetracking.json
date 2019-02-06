@@ -4,17 +4,18 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas",
-            "style": { },
+            "className": "",
+            "style": {},
             "layout": {
                 "separator1": {
                     "componente": "YBSeparator"
                 },
-                "articuosForm": {
-                    "prefix": "gt_tareas",
+                "ttForm": {
+                    "prefix": "gt_timetracking",
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "create",
+                    "saveReturn": true,
                     "return": true,
                     "icon": "info",
                     "label": "Información",
@@ -23,12 +24,11 @@
                         "gb__": {
                             "title": "",
                             "fields": {
-                                "nombre": {},
-                                "descripcion": {},
-                                "codproyecto": {"combolimit": 1},
-                                "fechavencimiento": {},
-                                "codestado": {},
-                                "idusuario": {"combolimit": 1}
+                                "fecha": {},
+                                "Hora inicio": {"tipo": 27, "rel": false},
+                                "Hora fin": {"tipo": 27, "rel": false},
+                                "idusuario": {},
+                                "idtarea": {}
                             }
                         }
                     },

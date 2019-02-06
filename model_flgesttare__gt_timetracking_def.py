@@ -57,21 +57,21 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         if template == "mastertimetracking":
-            # return [
-            #     {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
-            #     {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
-            #     {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
-            # ]
             return [
+                {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
+                {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
                 {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
             ]
+            # return [
+            #     {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
+            # ]
         return []
 
-    # def gesttare_field_inicioformateado(self, model):
-    #     return self.seconds_to_time(model["gt_timetracking.horainicio"])
+    def gesttare_field_inicioformateado(self, model):
+        return self.seconds_to_time(model["gt_timetracking.horainicio"])
 
-    # def gesttare_field_finformateado(self, model):
-    #     return self.seconds_to_time(model["gt_timetracking.horafin"])
+    def gesttare_field_finformateado(self, model):
+        return self.seconds_to_time(model["gt_timetracking.horafin"])
 
     def gesttare_field_totalformateado(self, model):
         return self.seconds_to_time(model["gt_timetracking.totaltiempo"])
@@ -104,6 +104,54 @@ class gesttare(interna):
         else:
             return "{}:{}:{}".format(hours, minutes, seconds)
 
+    def gesttare_time_to_seconds(self, time):
+        seconds = 0
+        a_time = time.split(":")
+
+        if len(a_time) > 0:
+            seconds = seconds + int(a_time[0]) * 3600
+        if len(a_time) > 1:
+            seconds = seconds + int(a_time[1]) * 60
+        if len(a_time) > 2:
+            seconds = seconds + int(a_time[2])
+
+        return seconds
+
+    def gesttare_editarTT(self, oParam, cursor):
+        response = {}
+
+        if "tiempototal" not in oParam:
+            response["status"] = -1
+            response["data"] = {}
+            response["params"] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "gt_timetracking",
+                    "style": {
+                        "width": "100%"
+                    },
+                    "value": self.seconds_to_time(cursor.valueBuffer("totaltiempo")),
+                    "tipo": 27,
+                    "verbose_name": "Tiempo total",
+                    "label": "Tiempo total",
+                    "key": "tiempototal",
+                    "validaciones": None,
+                    "required": False
+                }
+            ]
+            return response
+        else:
+            seconds = self.time_to_seconds(oParam["tiempototal"])
+            nuevo_fin = cursor.valueBuffer("horainicio") + seconds
+
+            cursor.setValueBuffer("horafin", nuevo_fin)
+            cursor.setValueBuffer("totaltiempo", seconds)
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar el registro de timetracking")
+                return False
+            return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -119,17 +167,23 @@ class gesttare(interna):
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
 
-    # def field_inicioformateado(self, model):
-    #     return self.ctx.gesttare_field_inicioformateado(model)
+    def field_inicioformateado(self, model):
+        return self.ctx.gesttare_field_inicioformateado(model)
 
-    # def field_finformateado(self, model):
-    #     return self.ctx.gesttare_field_finformateado(model)
+    def field_finformateado(self, model):
+        return self.ctx.gesttare_field_finformateado(model)
 
     def field_totalformateado(self, model):
         return self.ctx.gesttare_field_totalformateado(model)
 
     def seconds_to_time(self, seconds, total=False):
         return self.ctx.gesttare_seconds_to_time(seconds, total)
+
+    def time_to_seconds(self, time):
+        return self.ctx.gesttare_time_to_seconds(time)
+
+    def editarTT(self, oParam, cursor):
+        return self.ctx.gesttare_editarTT(oParam, cursor)
 
 
 # @class_declaration head #

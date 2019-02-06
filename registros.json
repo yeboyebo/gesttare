@@ -12,6 +12,7 @@
                     "gt_proyectos": null,
                     "gt_tareas": null,
                     "gt_partictarea": null,
+                    "gt_particproyecto": null,
                     "gt_timetracking": null
                 }
             }
