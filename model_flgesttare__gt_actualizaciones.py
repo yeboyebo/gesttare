@@ -30,6 +30,9 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
         print(self)
         return form.iface.borrarActualizacion(self, oParam)
 
+    def field_nombreUsuario(self):
+        return form.iface.field_nombreUsuario(self)
+
 
 # @class_declaration gt_actualizaciones #
 class gt_actualizaciones(gesttare_gt_actualizaciones, helpers.MixinConAcciones):
