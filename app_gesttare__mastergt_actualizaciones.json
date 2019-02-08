@@ -24,6 +24,7 @@
                         {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 300},
                         {"tipo": "field", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 150},
                         {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 150},
+                        {"tipo": "field", "key": "nombreUsuario", "label": "U.Origen", "width": 150},
                         {
         	                "tipo": "act",
         	                "key": "borrarActualizacion",
