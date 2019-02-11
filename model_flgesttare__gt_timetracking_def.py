@@ -29,13 +29,30 @@ class gesttare(interna):
             return {"masterTimeTracking": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
         return None
 
-    def gesttare_queryGrid_mastertimetracking(self, model):
+    def gesttare_queryGrid_mastertimetracking(self, model, filters):
+        where = "1 = 1"
+
+        if filters:
+            if "[proyecto]" in filters and filters["[proyecto]"] != "":
+                where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
+            if "[tarea]" in filters and filters["[tarea]"] != "":
+                where += " AND gt_tareas.idtarea = {}".format(filters["[tarea]"])
+            if "[usuario]" in filters and filters["[usuario]"] != "":
+                where += " AND usuarios.idusuario = '{}'".format(filters["[usuario]"])
+            if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
+                where += " AND gt_timetracking.fecha >= '{}'".format(filters["[d_fecha]"])
+            if "[h_fecha]" in filters and filters["[h_fecha]"] != "":
+                where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
+            if "[fecha]" in filters and filters["[fecha]"] != "":
+                where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, usuarios")
-        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.codproyecto, usuarios.nombre")
+        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, usuarios.nombre")
         query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario")
-        query["where"] = ("1 = 1")
+        query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
+
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
@@ -45,6 +62,9 @@ class gesttare(interna):
                 {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
                 {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
             ]
+            # return [
+            #     {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
+            # ]
         return []
 
     def gesttare_field_inicioformateado(self, model):
@@ -58,7 +78,10 @@ class gesttare(interna):
 
     def gesttare_seconds_to_time(self, seconds, total=False):
         if not seconds:
-            seconds = 0
+            if total:
+                seconds = 0
+            else:
+                return ""
 
         minutes = seconds // 60
         seconds = int(seconds % 60)
@@ -81,6 +104,54 @@ class gesttare(interna):
         else:
             return "{}:{}:{}".format(hours, minutes, seconds)
 
+    def gesttare_time_to_seconds(self, time):
+        seconds = 0
+        a_time = time.split(":")
+
+        if len(a_time) > 0:
+            seconds = seconds + int(a_time[0]) * 3600
+        if len(a_time) > 1:
+            seconds = seconds + int(a_time[1]) * 60
+        if len(a_time) > 2:
+            seconds = seconds + int(a_time[2])
+
+        return seconds
+
+    def gesttare_editarTT(self, oParam, cursor):
+        response = {}
+
+        if "tiempototal" not in oParam:
+            response["status"] = -1
+            response["data"] = {}
+            response["params"] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "gt_timetracking",
+                    "style": {
+                        "width": "100%"
+                    },
+                    "value": self.seconds_to_time(cursor.valueBuffer("totaltiempo")),
+                    "tipo": 27,
+                    "verbose_name": "Tiempo total",
+                    "label": "Tiempo total",
+                    "key": "tiempototal",
+                    "validaciones": None,
+                    "required": False
+                }
+            ]
+            return response
+        else:
+            seconds = self.time_to_seconds(oParam["tiempototal"])
+            nuevo_fin = cursor.valueBuffer("horainicio") + seconds
+
+            cursor.setValueBuffer("horafin", nuevo_fin)
+            cursor.setValueBuffer("totaltiempo", seconds)
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar el registro de timetracking")
+                return False
+            return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -90,8 +161,8 @@ class gesttare(interna):
     def get_model_info(self, model, data, ident, template, where_filter):
         return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
 
-    def queryGrid_mastertimetracking(self, model):
-        return self.ctx.gesttare_queryGrid_mastertimetracking(model)
+    def queryGrid_mastertimetracking(self, model, filters):
+        return self.ctx.gesttare_queryGrid_mastertimetracking(model, filters)
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
@@ -107,6 +178,12 @@ class gesttare(interna):
 
     def seconds_to_time(self, seconds, total=False):
         return self.ctx.gesttare_seconds_to_time(seconds, total)
+
+    def time_to_seconds(self, time):
+        return self.ctx.gesttare_time_to_seconds(time)
+
+    def editarTT(self, oParam, cursor):
+        return self.ctx.gesttare_editarTT(oParam, cursor)
 
 
 # @class_declaration head #

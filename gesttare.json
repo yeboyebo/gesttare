@@ -225,6 +225,10 @@
             {
                 "name": "model_flgesttare__gt_timetracking_def.py",
                 "path": "models/flgesttare/"
+            },
+            {
+                "name": "app_gesttare__newrecordgt_timetracking.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [

@@ -5,7 +5,7 @@
     },
     "schema": {},
     "layout": {
-        "masterFamilias": {
+        "masterProyectos": {
             "componente": "YBGrid",
             "prefix": "gt_proyectos",
             "cansavefilter": true,

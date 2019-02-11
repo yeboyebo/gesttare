@@ -24,8 +24,13 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def field_totalformateado(self):
         return form.iface.field_totalformateado(self)
 
-    def queryGrid_mastertimetracking(model):
-        return form.iface.queryGrid_mastertimetracking(model)
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_mastertimetracking(model, filters):
+        return form.iface.queryGrid_mastertimetracking(model, filters)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def editartt(self, oParam, cursor):
+        return form.iface.editarTT(oParam, cursor)
 
     class Meta:
         proxy = True

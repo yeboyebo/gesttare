@@ -3,8 +3,10 @@ from YBLEGACY import qsatype
 from YBUTILS import gesDoc
 
 from models.flfactppal.usuarios import usuarios
+from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 
 import hashlib
+import json
 
 
 class interna(qsatype.objetoBase):
@@ -26,7 +28,10 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = [
-            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'}
+            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+            {'verbose_name': 'Responsable', 'func': 'field_usuario'},
+            {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
+            {'verbose_name': 'Color nombre', 'func': 'color_nombre'}
         ]
 
         if template == "calendarioTareas":
@@ -36,6 +41,17 @@ class gesttare(interna):
 
     def gesttare_getDesc(self):
         return None
+
+    def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
+        if template == "formRecord":
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea")))
+
+            return {"tiempoTotal": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
+
+        return {}
+
+    def gesttare_seconds_to_time(self, seconds, total=False):
+        return timetracking.getIface().seconds_to_time(seconds, total)
 
     def gesttare_actNuevoComentario(self, model, oParam):
         print("aqui insertamos comentario", oParam)
@@ -116,6 +132,29 @@ class gesttare(interna):
         except Exception:
             pass
         return nombreProy
+
+    def gesttare_field_usuario(self, model):
+        nombre_usuario = ""
+        try:
+            if not model.idusuario:
+                return nombre_usuario
+            nombre_usuario = model.idusuario.nombre
+        except Exception:
+            pass
+        return nombre_usuario
+
+    def gesttare_color_nombre(self, model):
+        username = qsatype.FLUtil.nameUser()
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("usuarios", "idtareaactiva", "idusuario = '{}'".format(username))
+
+        if model.idtarea and tareaactiva and model.idtarea == tareaactiva:
+            return "fcSuccess"
+        return ""
+
+    def gesttare_color_fecha(self, model):
+        if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+        return ""
 
     def gesttare_uploadFile(self, model, oParam):
         # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
@@ -264,6 +303,16 @@ class gesttare(interna):
 
         return True
 
+    def gesttare_completar_tarea(self, model, cursor):
+        resuelta = cursor.valueBuffer("resuelta")
+        cursor.setValueBuffer("resuelta", not resuelta)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea")
+            return False
+
+        return True
+
     def gesttare_creartarea(self, oParam):
         data = []
         usuario = usuarios.objects.filter(idusuario__exact=oParam["person"])
@@ -307,6 +356,7 @@ class gesttare(interna):
             qryUsuarios.setWhere(ustr(u"1 = 1"))
             if not qryUsuarios.exec_():
                 return False
+
             opts = []
             while qryUsuarios.next():
                 tengousuario = qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idusuario", ustr(u"idusuario = '", qryUsuarios.value("idusuario"), u"' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
@@ -314,8 +364,7 @@ class gesttare(interna):
                 if tengousuario:
                     value = True
                 opts.append({"key": qryUsuarios.value("idusuario"), "label": qryUsuarios.value("nombre"), "value": value})
-            print("_____________")
-            print(opts)
+
             response['status'] = -1
             response['data'] = {}
             response['params'] = [
@@ -369,6 +418,12 @@ class gesttare(interna):
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
 
+    def iniciaValoresLabel(self, model, template=None, cursor=None, data=None):
+        return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor, data)
+
+    def seconds_to_time(self, seconds, total=False):
+        return self.ctx.gesttare_seconds_to_time(seconds, total)
+
     def actNuevoComentario(self, model, oParam):
         return self.ctx.gesttare_actNuevoComentario(model, oParam)
 
@@ -393,6 +448,15 @@ class gesttare(interna):
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
 
+    def field_usuario(self, model):
+        return self.ctx.gesttare_field_usuario(model)
+
+    def color_fecha(self, model):
+        return self.ctx.gesttare_color_fecha(model)
+
+    def color_nombre(self, model):
+        return self.ctx.gesttare_color_nombre(model)
+
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)
 
@@ -410,6 +474,9 @@ class gesttare(interna):
 
     def startstop(self, model, cursor):
         return self.ctx.gesttare_startstop(model, cursor)
+
+    def completar_tarea(self, model, cursor):
+        return self.ctx.gesttare_completar_tarea(model, cursor)
 
     def calcula_totaltiempo(self, cursor):
         return self.ctx.gesttare_calcula_totaltiempo(cursor)

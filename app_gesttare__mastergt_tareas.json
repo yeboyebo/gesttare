@@ -14,7 +14,7 @@
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": "",
-            "style": { },
+            "style": {},
             "layout": {
                 "masterTareas": {
                     "componente": "YBTable",
@@ -30,10 +30,10 @@
                         "resuelta": null
                     },
                     "columns": [
-                        {"tipo": "field", "listpos": "subtitle", "key": "nombre", "width": 350, "link": true},
-                        {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 30},
+                        {"tipo": "field", "listpos": "subtitle", "key": "nombre", "color": "Color nombre", "width": 350, "link": true},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30},
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
-                        {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "width": 80},
+                        {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
                         {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100},
                         {
                             "tipo": "act",

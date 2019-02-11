@@ -18,6 +18,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     class Meta:
         proxy = True
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def actNuevoPartic(self, oParam, cursor):
+        return form.iface.actNuevoPartic(oParam, cursor)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

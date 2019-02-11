@@ -22,11 +22,12 @@
                 "proyectosForm": {
                     "prefix": "gt_proyectos",
                     "componente": "YBForm",
+                    "icon": "info",
                     "class": "claseGrid",
                     "submit": "update",
-                    "return": true,
                     "label": "Información",
-                    "success": [{"slot": "return"}],
+                    "send": false,
+                    "autoCommit": true,
                     "fields": {
                         "gb__": {
                             "title": "",
@@ -56,7 +57,11 @@
                             "className": "claseGrid",
                             "hideheader": true,
                             "columns": [
-                                {"tipo": "field", "listpos": "title", "key": "idusuario"},
+                                {
+                                    "tipo": "foreignfield",
+                                    "listpos": "title",
+                                    "key": "nombre"
+                                },
                                 {
                                     "tipo": "act",
                                     "key": "delete",
@@ -68,9 +73,9 @@
                             ],
                             "rowclick": "",
                             "accionesGrid": [{
-                                "key": "nuevaLinea",
+                                "key": "actNuevoPartic",
                                 "label": "Nuevo",
-                                "success": []
+                                "success": [{"slot": "refrescar"}]
                             }]
                         }
                     }
@@ -83,9 +88,12 @@
             "action": "deleteRow",
             "icon": "delete"
         },
-        "nuevaLinea": {
-            "action": "newRow",
-            "icon": "add_circle"
+        "actNuevoPartic": {
+            "label": "Nuevo participante",
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "icon": "group",
+            "serverAction": "actNuevoPartic"
         }
     }
 }

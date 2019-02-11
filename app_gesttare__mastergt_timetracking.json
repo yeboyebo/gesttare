@@ -15,29 +15,57 @@
             "componente": "YBGrid",
             "type": "query",
             "prefix": "mastertimetracking",
+            "autofilter": false,
             "cansavefilter": true,
             "filter": {
-                "usuarios.nombre": {
-                    "label": "Usuario"
+                "usuario": {
+                    "label": "Usuario",
+                    "filterType": "custom",
+                    "tipo": 55,
+                    "rel": "usuarios",
+                    "key": "idusuario",
+                    "tofield": "idusuario",
+                    "desc": "nombre",
+                    "fN": "usuarios.idusuario"
                 },
-                "gt_tareas.nombre": {
-                    "label": "Tarea"
+                "tarea": {
+                    "label": "Tarea",
+                    "filterType": "custom",
+                    "tipo": 55,
+                    "rel": "gt_tareas",
+                    "key": "idtarea",
+                    "tofield": "idtarea",
+                    "desc": "nombre",
+                    "fN": "gt_tareas.idtarea"
                 },
-                "gt_proyectos.codproyecto": {
-                    "label": "Proyecto"
+                "proyecto": {
+                    "label": "Proyecto",
+                    "filterType": "custom",
+                    "tipo": 55,
+                    "rel": "gt_proyectos",
+                    "key": "codproyecto",
+                    "tofield": "codproyecto",
+                    "desc": "nombre",
+                    "fN": "gt_proyectos.codproyecto"
                 },
-                "gt_timetracking.fecha": {
-                    "filterType": "desde-hasta"
+                "fecha": {
+                    "filterType": "interval"
                 }
             },
             "columns": [
-                {"tipo": "field", "key": "gt_timetracking.fecha", "width": 25},
-                {"tipo": "field", "key": "usuarios.nombre", "label": "Usuario", "width": 20},
-                {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 200},
-                {"tipo": "field", "key": "gt_proyectos.codproyecto", "label": "Proyecto", "width": 10},
-                {"tipo": "foreignfield", "key": "Hora inicio", "width": 5},
-                {"tipo": "foreignfield", "key": "Hora fin", "width": 5},
-                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5},
+                {"tipo": "field", "key": "gt_timetracking.fecha", "width": 5},
+                {"tipo": "field", "key": "usuarios.nombre", "label": "Usuario", "width": 5},
+                {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 250},
+                {"tipo": "field", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
+                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5, "searchField": "gt_timetracking.totaltiempo"},
+                {
+                    "tipo": "act",
+                    "key": "editarTT",
+                    "label": "Editar línea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
                 {
                     "tipo": "act",
                     "key": "delete",
@@ -51,8 +79,15 @@
         }
     },
     "acciones": {
+        "editarTT": {
+            "action": "legacy",
+            "prefix": "gt_timetracking",
+            "serverAction": "editartt",
+            "icon": "edit"
+        },
         "delete": {
             "action": "deleteRow",
+            "prefix": "gt_timetracking",
             "icon": "delete"
         }
     }
