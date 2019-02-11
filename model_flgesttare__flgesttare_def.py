@@ -133,8 +133,6 @@ class gesttare(interna):
             if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = '", curTarea.valueBuffer(u"idusuario"), u"' AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
                 if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
                     return False
-        print("usuario antes: ", curTarea.valueBufferCopy(u"idusuario"))
-        print("usuario despues: ", curTarea.valueBuffer(u"idusuario"))
         return True
 
     def gesttare_comprobarActualizacionesTareas(self, curTarea=None):
