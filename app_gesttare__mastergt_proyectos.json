@@ -16,8 +16,6 @@
             },
             "multiselectable": true,
             "columns": [
-                {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 50},
-                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
                 {
                     "tipo": "act",
                     "key": "delete",
@@ -25,7 +23,9 @@
                     "success": [
                         {"slot": "refrescar"}
                     ]
-                }
+                },
+                {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 50},
+                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100}
             ],
             "rowclick": "link"
         },

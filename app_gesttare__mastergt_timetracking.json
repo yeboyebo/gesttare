@@ -53,11 +53,6 @@
                 }
             },
             "columns": [
-                {"tipo": "field", "key": "gt_timetracking.fecha", "width": 5},
-                {"tipo": "field", "key": "usuarios.nombre", "label": "Usuario", "width": 5},
-                {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 250},
-                {"tipo": "field", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
-                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5, "searchField": "gt_timetracking.totaltiempo"},
                 {
                     "tipo": "act",
                     "key": "editarTT",
@@ -73,7 +68,12 @@
                     "success": [
                         {"slot": "refrescar"}
                     ]
-                }
+                },
+                {"tipo": "field", "key": "gt_timetracking.fecha", "width": 5},
+                {"tipo": "field", "key": "usuarios.nombre", "label": "Usuario", "width": 5},
+                {"tipo": "field", "key": "gt_tareas.nombre", "label": "Tarea", "width": 250},
+                {"tipo": "field", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
+                {"tipo": "foreignfield", "key": "Total tiempo", "width": 5, "searchField": "gt_timetracking.totaltiempo"}
             ],
             "rowclick": ""
         }

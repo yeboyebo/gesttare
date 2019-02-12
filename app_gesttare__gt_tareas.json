@@ -92,11 +92,6 @@
                             "hideheader": true,
                             "columns": [
                                 {
-                                    "tipo": "foreignfield",
-                                    "listpos": "title",
-                                    "key": "nombre"
-                                },
-                                {
                                     "tipo": "act",
                                     "key": "delete",
                                     "label": "Borrar Linea",
@@ -105,6 +100,11 @@
                                             "slot": "refrescar"
                                         }
                                     ]
+                                },
+                                {
+                                    "tipo": "foreignfield",
+                                    "listpos": "title",
+                                    "key": "nombre"
                                 }
                             ],
                             "rowclick": "",

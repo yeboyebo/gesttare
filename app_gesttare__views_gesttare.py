@@ -36,13 +36,13 @@ class gesttare(interna):
                     "hideheader": True,
                     "prefix": "appinfo",
                     "columns": [
-                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
                         {
                             "tipo": "act",
                             "key": "startstop",
                             "label": "Timetracking",
                             "success": [{"slot": "refrescar"}]
-                        }
+                        },
+                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"}
                     ]
                 }
             },
