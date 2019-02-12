@@ -88,6 +88,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def completar_tarea(self, cursor):
         return form.iface.completar_tarea(self, cursor)
 
+    def bChCursor(fN, cursor):
+        return form.iface.bChCursor(fN, cursor)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

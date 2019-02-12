@@ -409,6 +409,20 @@ class gesttare(interna):
 
             return True
 
+    def gesttare_bChCursor(self, fN, cursor):
+        if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(curPedido):
+            return False
+        curPartic = qsatype.FLSqlCursor("gt_partictarea")
+        curPartic.select(ustr("idusuario = '", cursor.valueBuffer("idusuario"), "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
+        curPartic.refreshBuffer()
+        if not curPartic.first():
+            curPartic.setModeAccess(curPartic.Insert)
+            curPartic.refreshBuffer()
+            curPartic.setValueBuffer("idusuario", cursor.valueBuffer("idusuario"))
+            curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
+            if not curPartic.commitBuffer():
+                return False
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -486,6 +500,9 @@ class gesttare(interna):
 
     def actNuevoPartic(self, oParam, cursor):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
+
+    def bChCursor(self, fN, cursor):
+        return self.ctx.tele_omega_bChCursor(fN, cursor)
 
 
 # @class_declaration head #
