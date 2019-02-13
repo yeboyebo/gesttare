@@ -2,26 +2,6 @@
     "modifications": [
         {
             "type": "insertAfterNode",
-            "path": "/portal/root",
-            "value": {
-                "authentication": {
-                    "url": "^login/$",
-                    "func": "auth_login"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/authentication",
-            "value": {
-                "account": {
-                    "url": "^account/$",
-                    "func": "account_request"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
             "path": "/portal",
             "value": {
                 "gesttare": {

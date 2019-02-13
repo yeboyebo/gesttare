@@ -143,10 +143,6 @@
                 "path": "apps/portal/templates/portal/"
             },
             {
-                "name": "app_portal__views_portal.py",
-                "path": "apps/portal/viewset/"
-            },
-            {
                 "name": "app_gesttare__menu_gesttare.json",
                 "path": "apps/gesttare/templates/gesttare/"
             },
