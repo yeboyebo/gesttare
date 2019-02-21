@@ -423,6 +423,16 @@ class gesttare(interna):
             if not curPartic.commitBuffer():
                 return False
 
+    def gesttare_getFilters(self, model, name, template=None):
+        filters = []
+        # if name == 'proyectosusuario': 
+        #     usuario = qsatype.FLUtil.nameUser()
+        #     return [{'criterio': 'codagente__exact', 'valor': codagente}]
+        return filters
+
+    def getFilters(self, model, name, template=None):
+        return self.ctx.gesttare_getFilters(model, name, template)
+
     def __init__(self, context=None):
         super().__init__(context)
 

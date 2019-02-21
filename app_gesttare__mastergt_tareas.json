@@ -3,7 +3,8 @@
         "p_l": 50,
         "p_c": true,
         "o_1": "-idtarea",
-        "s_resuelta__exact": false
+        "s_resuelta__exact": false,
+        "f_proyectosusuario": null
     },
     "schema": {
         "gt_tareas":{
