@@ -14,7 +14,8 @@
                 "nombre": null,
                 "estado": null
             },
-            "multiselectable": true,
+            "multiselectable": false,
+            "avatar": false,
             "columns": [
                 {
                     "tipo": "act",
@@ -24,8 +25,8 @@
                         {"slot": "refrescar"}
                     ]
                 },
-                {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 50},
-                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100}
+                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50}
             ],
             "rowclick": "link"
         },

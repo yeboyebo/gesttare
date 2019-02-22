@@ -35,8 +35,7 @@
                                 "codproyecto": {"disabled": true},
                                 "nombre": {},
                                 "descripcion": {},
-                                "estado": {},
-                                "codcliente": {"combolimit": 1}
+                                "estado": {}
                             }
                         }
                     },
