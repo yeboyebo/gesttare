@@ -31,6 +31,17 @@ class gesttare(interna):
 
     def gesttare_queryGrid_mastertimetracking(self, model, filters):
         where = "1 = 1"
+        usuario = qsatype.FLUtil.nameUser()
+        curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+        curProyectos.select("idusuario = '" + str(usuario) + "'")
+        proin = "("
+        while curProyectos.next():
+            curProyectos.setModeAccess(curProyectos.Browse)
+            curProyectos.refreshBuffer()
+            # proin.append(curProyectos.valueBuffer("codproyecto"))
+            proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+        proin = proin + " null)"
+        where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
         if filters:
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
