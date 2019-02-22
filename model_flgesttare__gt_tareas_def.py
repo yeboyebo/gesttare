@@ -256,6 +256,7 @@ class gesttare(interna):
     def gesttare_startstop(self, model, cursor):
         now = qsatype.Date()
         user_name = qsatype.FLUtil.nameUser()
+        msg = ""
 
         cur_track = qsatype.FLSqlCursor("gt_timetracking")
         cur_track.select("idusuario = '{}' AND horafin IS NULL".format(user_name))
@@ -281,8 +282,10 @@ class gesttare(interna):
         cur_user.refreshBuffer()
 
         if cur_track.valueBuffer("idtarea") == cursor.valueBuffer("idtarea"):
+            msg += "Para tarea activa"
             cur_user.setNull("idtareaactiva")
         else:
+            msg += "Inicia tarea nueva"
             cur_track.setModeAccess(cur_track.Insert)
             cur_track.refreshBuffer()
 
@@ -300,8 +303,10 @@ class gesttare(interna):
         if not cur_user.commitBuffer():
             print("Ocurrió un error al actualizar la tarea activa del usuario")
             return False
-
-        return True
+        response = {}
+        response["resul"] = True
+        response["msg"] = msg
+        return response
 
     def gesttare_completar_tarea(self, model, cursor):
         resuelta = cursor.valueBuffer("resuelta")
