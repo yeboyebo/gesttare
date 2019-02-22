@@ -34,8 +34,6 @@
                     "submit": "update",
                     "icon": "info",
                     "label": "Información",
-                    "send": false,
-                    "autoCommit": true,
                     "fields": {
                         "gb__titulo": {
                             "title": "",
