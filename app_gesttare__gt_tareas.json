@@ -102,7 +102,7 @@
                                 },
                                 {
                                     "tipo": "foreignfield",
-                                    "listpos": "title",
+                                    "listpos": "title",button
                                     "key": "nombre"
                                 }
                             ],

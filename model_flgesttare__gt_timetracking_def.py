@@ -56,6 +56,8 @@ class gesttare(interna):
                 where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
             if "[fecha]" in filters and filters["[fecha]"] != "":
                 where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+            if "[buscador]" in filters and filters["[buscador]"] != "":
+                where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(usuarios.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, usuarios")
