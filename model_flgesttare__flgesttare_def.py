@@ -129,7 +129,7 @@ class gesttare(interna):
         return True
 
     def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
-        if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario"):
+        if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or curTarea.modeAccess() == curTarea.Insert:
             if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = '", curTarea.valueBuffer(u"idusuario"), u"' AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
                 if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
                     return False
