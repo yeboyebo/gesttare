@@ -20,8 +20,7 @@
             "TEXT": "proyectos",
             "URL": "gesttare/gt_proyectos/master",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)",
-            "VISIBLE": true
+            "COLOR": "rgb(7, 180, 7)"
         },
         {
             "NAME": "gt_timetracking",
@@ -29,14 +28,15 @@
             "URL": "gesttare/gt_timetracking/master",
             "ICON": "widgets",
             "COLOR": "rgb(7, 180, 7)",
-            "VISIBLE": true
+            "RESPONSIVE": false
         },
         {
             "NAME": "calendario",
             "TEXT": "Calendario",
             "URL": "gesttare/gt_tareas/custom/calendario",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)"
+            "COLOR": "rgb(7, 180, 7)",
+            "RESPONSIVE": false
         }
     ]
 }
