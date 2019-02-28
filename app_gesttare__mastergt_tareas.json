@@ -53,7 +53,8 @@
                         {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
                         {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
                     ],
-                    "rowclick": ""
+                    "rowclick": "",
+                    "rowlistclick": "link"
                 }
             }
         },

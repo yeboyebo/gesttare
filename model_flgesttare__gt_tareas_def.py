@@ -46,7 +46,7 @@ class gesttare(interna):
         if template == "formRecord":
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea")))
 
-            return {"tiempoTotal": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
+            return {"tiempoTotal": "Tiempo total: {}".format(tiempototal)}
 
         return {}
 

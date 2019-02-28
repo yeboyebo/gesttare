@@ -15,15 +15,6 @@ class interna_gt_timetracking(modelos.mtd_gt_timetracking, helpers.MixinConAccio
 class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones):
     pass
 
-    def field_inicioformateado(self):
-        return form.iface.field_inicioformateado(self)
-
-    def field_finformateado(self):
-        return form.iface.field_finformateado(self)
-
-    def field_totalformateado(self):
-        return form.iface.field_totalformateado(self)
-
     @helpers.decoradores.accion(aqparam=["oParam"])
     def queryGrid_mastertimetracking(model, filters):
         return form.iface.queryGrid_mastertimetracking(model, filters)

@@ -26,7 +26,7 @@ class gesttare(interna):
 
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario", "SUM(totaltiempo)", where_filter)
 
-            return {"masterTimeTracking": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
+            return {"masterTimeTracking": "Tiempo total: {}".format(tiempototal)}
         return None
 
     def gesttare_queryGrid_mastertimetracking(self, model, filters):
@@ -69,25 +69,7 @@ class gesttare(interna):
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
-        if template == "mastertimetracking":
-            return [
-                {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
-                {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
-                {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
-            ]
-            # return [
-            #     {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
-            # ]
         return []
-
-    def gesttare_field_inicioformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.horainicio"])
-
-    def gesttare_field_finformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.horafin"])
-
-    def gesttare_field_totalformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.totaltiempo"])
 
     def gesttare_seconds_to_time(self, seconds, total=False):
         if not seconds:
@@ -179,15 +161,6 @@ class gesttare(interna):
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
-
-    def field_inicioformateado(self, model):
-        return self.ctx.gesttare_field_inicioformateado(model)
-
-    def field_finformateado(self, model):
-        return self.ctx.gesttare_field_finformateado(model)
-
-    def field_totalformateado(self, model):
-        return self.ctx.gesttare_field_totalformateado(model)
 
     def seconds_to_time(self, seconds, total=False):
         return self.ctx.gesttare_seconds_to_time(seconds, total)
