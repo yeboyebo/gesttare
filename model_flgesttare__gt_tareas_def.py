@@ -430,13 +430,20 @@ class gesttare(interna):
 
     def gesttare_getFilters(self, model, name, template=None):
         filters = []
-        # if name == 'proyectosusuario': 
-        #     usuario = qsatype.FLUtil.nameUser()
-        #     return [{'criterio': 'codagente__exact', 'valor': codagente}]
+        if name == 'proyectosusuario':
+            # proin = "("
+            proin = []
+            usuario = qsatype.FLUtil.nameUser()
+            curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            curProyectos.select("idusuario = '" + str(usuario) + "'")
+            while curProyectos.next():
+                curProyectos.setModeAccess(curProyectos.Browse)
+                curProyectos.refreshBuffer()
+                proin.append(curProyectos.valueBuffer("codproyecto"))
+                # proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+            # proin = proin + " null)"
+            return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
-
-    def getFilters(self, model, name, template=None):
-        return self.ctx.gesttare_getFilters(model, name, template)
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -518,6 +525,9 @@ class gesttare(interna):
 
     def bChCursor(self, fN, cursor):
         return self.ctx.tele_omega_bChCursor(fN, cursor)
+
+    def getFilters(self, model, name, template=None):
+        return self.ctx.gesttare_getFilters(model, name, template)
 
 
 # @class_declaration head #
