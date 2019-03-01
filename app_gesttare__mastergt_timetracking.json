@@ -75,10 +75,19 @@
                 {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
                 {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}
             ],
-            "rowclick": ""
+            "rowclick": "gototimetracking"
+        },
+        "newRecordTT": {
+            "componente": "YBNewRecord",
+            "class": "info",
+            "icon": "add"
         }
     },
     "acciones": {
+        "gototimetracking": {
+            "action": "goto",
+            "template": "form"
+        },
         "editarTT": {
             "action": "legacy",
             "prefix": "gt_timetracking",

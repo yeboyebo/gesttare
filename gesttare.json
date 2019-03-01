@@ -225,6 +225,10 @@
             {
                 "name": "app_gesttare__newrecordgt_timetracking.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "app_gesttare__gt_timetracking.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [
