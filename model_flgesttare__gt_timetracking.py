@@ -23,6 +23,9 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def editartt(self, oParam, cursor):
         return form.iface.editarTT(oParam, cursor)
 
+    def iniciaValoresCursor(cursor=None):
+        return form.iface.iniciaValoresCursor(cursor)
+
     class Meta:
         proxy = True
 

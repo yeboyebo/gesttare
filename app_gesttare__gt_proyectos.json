@@ -90,6 +90,7 @@
             "action": "legacy",
             "prefix": "gt_proyectos",
             "icon": "group",
+            "title": "Participantes",
             "serverAction": "actNuevoPartic"
         }
     }

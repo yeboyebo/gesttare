@@ -231,6 +231,7 @@
             "action": "legacy",
             "prefix": "gt_tareas",
             "icon": "group",
+            "title": "Participantes",
             "serverAction": "actNuevoPartic"
         },
         "delete": {

@@ -147,8 +147,18 @@ class gesttare(interna):
                 return False
             return True
 
+    def gesttare_iniciaValoresCursor(self, cursor=None):
+        usuario = qsatype.FLUtil.nameUser()
+        cursor.setValueBuffer(u"idusuario", usuario)
+
+        qsatype.FactoriaModulos.get('formRecordgt_timetrackin').iface.iniciaValoresCursor(cursor)
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
+
+    def iniciaValoresCursor(self, cursor=None):
+        return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()

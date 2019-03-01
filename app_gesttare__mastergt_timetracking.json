@@ -75,7 +75,12 @@
                 {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
                 {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}
             ],
-            "rowclick": "gototimetracking"
+            "rowclick": "gototimetracking",
+            "accionesGrid": [{
+                "key": "getReport",
+                "label": "Genera XLS",
+                "success": []
+            }]
         },
         "newRecordTT": {
             "componente": "YBNewRecord",
@@ -84,6 +89,11 @@
         }
     },
     "acciones": {
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "save"
+        },
         "gototimetracking": {
             "action": "goto",
             "template": "form"
