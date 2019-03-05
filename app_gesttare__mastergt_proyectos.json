@@ -40,7 +40,8 @@
     "acciones": {
         "delete": {
             "action": "deleteRow",
-            "icon": "delete"
+            "icon": "delete",
+            "msg": "Se eliminarán todas las tareas asociadas"
         }
     }
 }

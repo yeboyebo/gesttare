@@ -7,9 +7,6 @@
             "className": "",
             "style": {},
             "layout": {
-                "separator1": {
-                    "componente": "YBSeparator"
-                },
                 "ttForm": {
                     "prefix": "gt_timetracking",
                     "componente": "YBForm",
@@ -26,7 +23,7 @@
                                 "fecha": {},
                                 "horainicio": {},
                                 "horafin": {},
-                                "totaltiempo": {}
+                                "totaltiempo": {"disabled": true}
                             }
                         }
                     },

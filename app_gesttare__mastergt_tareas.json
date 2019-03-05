@@ -47,6 +47,14 @@
                                 {"slot": "refrescar"}
                             ]
                         },
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Borrar Linea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "width": 350, "link": true},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "avatar": true},
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
@@ -65,6 +73,11 @@
         }
     },
     "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete",
+            "msg": "Se eliminaran todos los comentarios y registros de tiempo"
+        },
         "startstop": {
             "action": "legacy",
             "prefix": "gt_tareas",

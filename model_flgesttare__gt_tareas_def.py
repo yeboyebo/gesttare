@@ -4,6 +4,7 @@ from YBUTILS import gesDoc
 
 from models.flfactppal.usuarios import usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
+from datetime import datetime
 
 import hashlib
 import json
@@ -251,7 +252,12 @@ class gesttare(interna):
         return usuarios
 
     def gesttare_calcula_totaltiempo(self, cursor):
-        return cursor.valueBuffer("horafin") - cursor.valueBuffer("horainicio")
+        formato = "%H:%M:%S"
+        hfin = datetime.strptime(str(cursor.valueBuffer("horafin")), formato)
+        hinicio = datetime.strptime(str(cursor.valueBuffer("horainicio")), formato)
+        totaltiempo = hfin - hinicio
+        print(totaltiempo)
+        return str(totaltiempo)
 
     def gesttare_startstop(self, model, cursor):
         now = qsatype.Date()
@@ -265,7 +271,7 @@ class gesttare(interna):
             cur_track.setModeAccess(cur_track.Edit)
             cur_track.refreshBuffer()
 
-            cur_track.setValueBuffer("horafin", int(now.getTime() / 1000))
+            cur_track.setValueBuffer("horafin", now.toString()[-8:])
             cur_track.setValueBuffer("totaltiempo", self.calcula_totaltiempo(cur_track))
 
             if not cur_track.commitBuffer():
@@ -290,7 +296,7 @@ class gesttare(interna):
             cur_track.refreshBuffer()
 
             cur_track.setValueBuffer("fecha", now.toString()[:10])
-            cur_track.setValueBuffer("horainicio", int(now.getTime() / 1000))
+            cur_track.setValueBuffer("horainicio", now.toString()[-8:])
             cur_track.setValueBuffer("idusuario", user_name)
             cur_track.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
 
