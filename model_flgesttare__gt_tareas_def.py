@@ -41,7 +41,7 @@ class gesttare(interna):
         return fields
 
     def gesttare_getDesc(self):
-        return None
+        return "nombre"
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
         if template == "formRecord":
@@ -451,6 +451,27 @@ class gesttare(interna):
             return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
+    def gesttare_getTareasUsuario(self, model, oParam):
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_tareas, gt_particproyecto")
+        q.setSelect(u"t.idtarea, t.nombre, p.codproyecto")
+        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "'  ORDER BY t.nombre LIMIT 7")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"idtarea": q.value(0), "nombre": q.value(1)})
+
+        return data
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -535,6 +556,8 @@ class gesttare(interna):
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)
 
+    def getTareasUsuario(self, model, oParam):
+        return self.ctx.gesttare_getTareasUsuario(model, oParam)
 
 # @class_declaration head #
 class head(gesttare):

@@ -112,6 +112,16 @@ class gesttare(interna):
 
         return seconds
 
+    def gesttare_calcula_totaltiempo(self, cursor):
+        formato = "%H:%M:%S"
+        hfin = datetime.strptime(str(cursor.valueBuffer("horafin")), formato)
+        hinicio = datetime.strptime(str(cursor.valueBuffer("horainicio")), formato)
+        totaltiempo = hfin - hinicio
+        totaltiempo = str(totaltiempo)
+        if len(totaltiempo) < 8:
+            totaltiempo = "0" + totaltiempo
+        return totaltiempo
+
     def gesttare_editarTT(self, oParam, cursor):
         response = {}
 
@@ -154,6 +164,13 @@ class gesttare(interna):
         qsatype.FactoriaModulos.get('formRecordgt_timetrackin').iface.iniciaValoresCursor(cursor)
         return True
 
+    def gesttare_bChCursor(self, fN, cursor):
+        # if not qsatype.FactoriaModulos.get('formRecordgt_timetracking').iface.bChCursor(fN, cursor):
+        #     return False
+        if fN == "horainicio" or fN == "horafin":
+            totaltiempo = self.calcula_totaltiempo(cursor)
+            cursor.setValueBuffer("totaltiempo", totaltiempo)
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -180,6 +197,12 @@ class gesttare(interna):
 
     def editarTT(self, oParam, cursor):
         return self.ctx.gesttare_editarTT(oParam, cursor)
+
+    def bChCursor(self, fN, cursor):
+        return self.ctx.gesttare_bChCursor(fN, cursor)
+
+    def calcula_totaltiempo(self, cursor):
+        return self.ctx.gesttare_calcula_totaltiempo(cursor)
 
 
 # @class_declaration head #

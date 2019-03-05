@@ -24,11 +24,12 @@
                         "gb__": {
                             "title": "",
                             "fields": {
-                                "idtarea": {"disabled": true},
+                                "idtarea": {"function": "getTareasUsuario"},
                                 "idusuario": {"disabled": true},
                                 "fecha": {},
                                 "horainicio": {},
-                                "horafin": {}
+                                "horafin": {},
+                                "totaltiempo": {"disabled": true}
                             }
                         }
                     },
