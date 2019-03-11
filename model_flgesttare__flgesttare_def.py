@@ -24,7 +24,6 @@ class gesttare(interna):
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_comentarios(curComentario):
             return False
         if curComentario.modeAccess() == curComentario.Insert:
-            print("gesttare_aftercommit_gt_comentarios")
             if not _i.crearActualizaciones(u"Nuevo comentario", curComentario):
                 return False
         return True
@@ -43,12 +42,10 @@ class gesttare(interna):
 
     def gesttare_afterCommit_gt_partictarea(self, curPart=None):
         _i = self.iface
-        print("partictarea")
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_partictarea(curPart):
             return False
         # print("partictarea 2")
         if curPart.modeAccess() == curPart.Insert:
-            print("gesttare_aftercommit_gt_partictarea")
             if not _i.crearActualizaciones(u"Nuevos asignados", curPart):
                 return False
 

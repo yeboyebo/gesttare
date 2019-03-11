@@ -171,6 +171,37 @@ class gesttare(interna):
             totaltiempo = self.calcula_totaltiempo(cursor)
             cursor.setValueBuffer("totaltiempo", totaltiempo)
 
+    def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
+        if template == "accion":
+            if accion == "delete":
+                curTracking = qsatype.FLSqlCursor("gt_timetracking")
+                curTracking.select(ustr("idtracking = '", pk, "'"))
+                curTracking.refreshBuffer()
+                if curTracking.first():
+                    curTracking.setModeAccess(curTracking.Browse)
+                    curTracking.refreshBuffer()
+                    idusuario = curTracking.valueBuffer("idusuario")
+                    usuario = qsatype.FLUtil.nameUser()
+                    if not idusuario == usuario:
+                        return False
+
+        if template == "formRecord":
+            curTracking = qsatype.FLSqlCursor("gt_timetracking")
+            curTracking.select(ustr("idtracking = '", pk, "'"))
+            curTracking.refreshBuffer()
+            if curTracking.first():
+                curTracking.setModeAccess(curTracking.Browse)
+                curTracking.refreshBuffer()
+                idtarea = curTracking.valueBuffer("idtarea")
+                codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
+                nombreUsuario = qsatype.FLUtil.nameUser()
+                pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+                if not pertenece:
+                    return False
+            else:
+                return False
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -203,6 +234,9 @@ class gesttare(interna):
 
     def calcula_totaltiempo(self, cursor):
         return self.ctx.gesttare_calcula_totaltiempo(cursor)
+
+    def check_permissions(self, model, prefix, pk, template, acl, accion=None):
+        return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
 
 
 # @class_declaration head #

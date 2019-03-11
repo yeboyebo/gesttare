@@ -55,14 +55,6 @@
             "columns": [
                 {
                     "tipo": "act",
-                    "key": "editarTT",
-                    "label": "Editar línea",
-                    "success": [
-                        {"slot": "refrescar"}
-                    ]
-                },
-                {
-                    "tipo": "act",
                     "key": "delete",
                     "label": "Borrar línea",
                     "success": [

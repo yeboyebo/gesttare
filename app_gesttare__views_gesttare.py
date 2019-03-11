@@ -34,6 +34,7 @@ class gesttare(interna):
                     "paginacion": False,
                     "type": "json",
                     "hideheader": True,
+                    "border": False,
                     "prefix": "appinfo",
                     "columns": [
                         {
