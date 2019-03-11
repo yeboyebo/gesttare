@@ -18,7 +18,7 @@
             "style": {},
             "layout": {
                 "masterTareas": {
-                    "componente": "YBTable",
+                    "componente": "YBGrid",
                     "prefix": "gt_tareas",
                     "cansavefilter": true,
                     "filter": {

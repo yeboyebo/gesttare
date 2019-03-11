@@ -106,6 +106,14 @@ class gesttare(interna):
             return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
+    def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
+        if template == "formRecord":
+            nombreUsuario = qsatype.FLUtil.nameUser()
+            pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", pk, "'"))
+            if not pertenece:
+                return False
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -118,6 +126,8 @@ class gesttare(interna):
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)
 
+    def check_permissions(self, model, prefix, pk, template, acl, accion=None):
+        return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
 
 # @class_declaration head #
 class head(gesttare):
