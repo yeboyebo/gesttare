@@ -451,7 +451,7 @@ class gesttare(interna):
             return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
-    def gesttare_getTareasUsuario(self, model, oParam):
+    def gesttare_getTareasUsuario(self, oParam):
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_tareas, gt_particproyecto")
@@ -573,8 +573,8 @@ class gesttare(interna):
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)
 
-    def getTareasUsuario(self, model, oParam):
-        return self.ctx.gesttare_getTareasUsuario(model, oParam)
+    def getTareasUsuario(self, oParam):
+        return self.ctx.gesttare_getTareasUsuario(oParam)
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)

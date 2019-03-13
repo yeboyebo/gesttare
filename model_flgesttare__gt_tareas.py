@@ -91,6 +91,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def getTareasUsuario(self, oParam):
+        return form.iface.getTareasUsuario(oParam)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

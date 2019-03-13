@@ -114,6 +114,27 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_getProyectosUsuario(self, oParam):
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos, gt_particproyecto")
+        q.setSelect(u"p.codproyecto, t.nombre")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "'  ORDER BY t.nombre LIMIT 7")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"idtarea": q.value(0), "nombre": q.value(1)})
+
+        return data
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -128,6 +149,10 @@ class gesttare(interna):
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def getProyectosUsuario(self, oParam):
+        return self.ctx.gesttare_getProyectosUsuario(oParam)
+
 
 # @class_declaration head #
 class head(gesttare):
