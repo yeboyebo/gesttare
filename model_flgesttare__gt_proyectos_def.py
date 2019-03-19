@@ -120,7 +120,7 @@ class gesttare(interna):
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
         q.setSelect(u"p.codproyecto, t.nombre")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "'  ORDER BY t.nombre LIMIT 7")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
             print("Error inesperado")
@@ -131,7 +131,7 @@ class gesttare(interna):
 
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
-            data.append({"idtarea": q.value(0), "nombre": q.value(1)})
+            data.append({"codproyecto": q.value(0), "nombre": q.value(1)})
 
         return data
 

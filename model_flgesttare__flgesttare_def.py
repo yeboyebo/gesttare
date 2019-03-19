@@ -28,6 +28,16 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_afterCommit_gt_proyectos(self, curProyecto=None):
+        _i = self.iface
+        # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
+        #     return False
+
+        _i.comprobarUsuarioResponsableProyecto(curProyecto)
+        print("gesttare_aftercommit_gt_proyectos")
+
+        return True
+
     def gesttare_afterCommit_gt_tareas(self, curTarea=None):
         _i = self.iface
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_tareas(curTarea):
@@ -125,6 +135,13 @@ class gesttare(interna):
         print("Termina")
         return True
 
+    def gesttare_comprobarUsuarioResponsableProyecto(self, curProyecto):
+        if curProyecto.modeAccess() == curProyecto.Insert:
+            idUsuario = qsatype.FLUtil.nameUser()
+            if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
+                return False
+        return True
+
     def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
         if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or curTarea.modeAccess() == curTarea.Insert:
             if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = '", curTarea.valueBuffer(u"idusuario"), u"' AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
@@ -173,6 +190,12 @@ class gesttare(interna):
 
     def comprobarActualizacionesTareas(self, curTarea=None):
         return self.ctx.gesttare_comprobarActualizacionesTareas(curTarea)
+
+    def afterCommit_gt_proyectos(self, curProyecto=None):
+        return self.ctx.gesttare_afterCommit_gt_proyectos(curProyecto)
+
+    def comprobarUsuarioResponsableProyecto(self, curProyecto=None):
+        return self.ctx.gesttare_comprobarUsuarioResponsableProyecto(curProyecto)
 
 
 # @class_declaration head #

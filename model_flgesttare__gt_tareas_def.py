@@ -238,9 +238,9 @@ class gesttare(interna):
     def gesttare_dameUsuarios(self):
         usuarios = []
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"gt_usuarios")
-        q.setSelect("iduser, nombre")
-        q.setFrom("gt_usuarios")
+        q.setTablesList(u"usuarios")
+        q.setSelect("idusuario, nombre")
+        q.setFrom("usuarios")
 
         if not q.exec_():
             print("Error inesperado")
@@ -340,6 +340,7 @@ class gesttare(interna):
             curTarea.setValueBuffer(u"nombre", oParam["name"])
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
             curTarea.setValueBuffer(u"descripcion", oParam["description"])
+            curTarea.setValueBuffer(u"resuelta", False)
             if oParam["date"] and oParam["date"] != u"undefined":
                 curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
 
@@ -457,7 +458,7 @@ class gesttare(interna):
         q.setTablesList(u"gt_tareas, gt_particproyecto")
         q.setSelect(u"t.idtarea, t.nombre, p.codproyecto")
         q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "'  ORDER BY t.nombre LIMIT 7")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) LIKE UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
             print("Error inesperado")
