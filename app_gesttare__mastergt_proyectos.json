@@ -29,7 +29,12 @@
                 {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
                 {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50}
             ],
-            "rowclick": "link"
+            "rowclick": "link",
+            "accionesGrid": [{
+                "key": "getReport",
+                "label": "Genera XLS",
+                "success": []
+            }]
         },
         "newRecordProyectos": {
             "componente": "YBNewRecord",
@@ -38,6 +43,11 @@
         }
     },
     "acciones": {
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "save"
+        },
         "delete": {
             "action": "deleteRow",
             "icon": "delete",

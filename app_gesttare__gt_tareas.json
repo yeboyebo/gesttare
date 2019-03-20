@@ -24,6 +24,17 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
+                "borrarTareaButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "label": "Borrar tarea",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "borrarTarea",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -62,6 +73,17 @@
                 },
                 "separator1": {
                     "componente": "YBSeparator"
+                },
+                "nuevoTimeTrackingButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "label": "Gestionar tiempo",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "gestionarTiempo",
+                        "success": [{"slot": "return"}]
+                    }
                 },
                 "labelTiempo": {
                     "componente": "YBLabel",
@@ -225,6 +247,16 @@
                     "validaciones": null
                 }
             ]
+        },
+        "borrarTarea": {
+            "label": "Borrar tarea",
+            "action": "legacy",
+            "serverAction": "borrar_tarea"
+        },
+        "gestionarTiempo": {
+            "action": "goto",
+            "prefix": "gt_tareas",
+            "serverAction": "gotoGestionarTiempo"
         },
         "actNuevoPartic": {
             "label": "Nuevo participante",

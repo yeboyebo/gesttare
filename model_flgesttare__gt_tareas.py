@@ -95,6 +95,14 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def getTareasUsuario(self, oParam):
         return form.iface.getTareasUsuario(oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def borrar_tarea(self, oParam, cursor):
+        return form.iface.borrar_tarea(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def gotoGestionarTiempo(self, cursor):
+        return form.iface.gotoGestionarTiempo(self, cursor)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

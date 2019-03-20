@@ -490,6 +490,23 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_borrar_tarea(self, model, oParam, cursor):
+        resul = {}
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+            cursor.setModeAccess(cursor.Del)
+            cursor.refreshBuffer()
+            if not cursor.commitBuffer():
+                return False
+            resul["return_data"] = False
+            resul["msg"] = "Correcto"
+        else:
+            resul['status'] = 2
+            resul['confirm'] = "Seguro que quieres eliminar"
+        return resul
+
+    def gesttare_gotoGestionarTiempo(self, model, cursor):
+        return "/gesttare/gt_timetracking/newRecord?p_idtarea=" + str(cursor.valueBuffer("idtarea"))
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -579,6 +596,13 @@ class gesttare(interna):
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def borrar_tarea(self, model, oParam, cursor):
+        return self.ctx.gesttare_borrar_tarea(model, oParam, cursor)
+
+    def gotoGestionarTiempo(self, model, cursor):
+        return self.ctx.gesttare_gotoGestionarTiempo(model, cursor)
+
 
 # @class_declaration head #
 class head(gesttare):
