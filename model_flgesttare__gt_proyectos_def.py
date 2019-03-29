@@ -24,7 +24,7 @@ class gesttare(interna):
 
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
-        if "partic" not in oParam:
+        if "idusuario" not in oParam:
             # idUsuario = cursor.valueBuffer("idusuario")
             qryUsuarios = qsatype.FLSqlQuery()
             qryUsuarios.setTablesList(u"usuarios")
@@ -49,14 +49,16 @@ class gesttare(interna):
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
-                    "prefix": "gt_proyectos",
+                    "prefix": "otros",
+                    "rel": "usuarios",
                     "style": {
                         "width": "100%"
                     },
                     "tipo": 180,
                     "verbose_name": "Participantes",
                     "label": "Participantes",
-                    "key": "partic",
+                    "key": "idusuario",
+                    "desc": "nombre",
                     "validaciones": None,
                     "required": False,
                     "opts": opts
@@ -64,7 +66,7 @@ class gesttare(interna):
             ]
             return response
         else:
-            participantes = json.loads(oParam["partic"])
+            participantes = json.loads(oParam["idusuario"])
             for p in participantes:
                 curPartic = qsatype.FLSqlCursor("gt_particproyecto")
                 curPartic.select("idusuario = '{}' AND codproyecto = '{}'".format(p, cursor.valueBuffer("codproyecto")))

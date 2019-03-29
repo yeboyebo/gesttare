@@ -1,17 +1,25 @@
 {
     "format": "navBarMenu",
+    "logo": true,
+    "actions": {
+        "gotoNotificacions": {
+            "action": "goto",
+            "icon": "notifications",
+            "url": "/gesttare/gt_actualizaciones/master"
+        }
+    },
     "items": [
-        {
-            "NAME": "gt_proyectos",
-            "TEXT": "proyectos",
-            "URL": "gesttare/gt_proyectos/master",
-            "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)"
-        },
         {
             "NAME": "tareas",
             "TEXT": "tareas",
             "URL": "gesttare/gt_tareas/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)"
+        },
+        {
+            "NAME": "gt_proyectos",
+            "TEXT": "proyectos",
+            "URL": "gesttare/gt_proyectos/master",
             "ICON": "widgets",
             "COLOR": "rgb(7, 180, 7)"
         },
@@ -28,7 +36,8 @@
             "TEXT": "Notificaciones",
             "URL": "gesttare/gt_actualizaciones/master",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)"
+            "COLOR": "rgb(7, 180, 7)",
+            "VISIBLE": false
         },
         {
             "NAME": "gt_timetracking",

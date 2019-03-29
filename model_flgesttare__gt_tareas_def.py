@@ -45,7 +45,7 @@ class gesttare(interna):
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
         if template == "formRecord":
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea")))
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
 
             return {"tiempoTotal": "Tiempo total: {}".format(tiempototal)}
 
@@ -357,7 +357,7 @@ class gesttare(interna):
 
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
-        if "partic" not in oParam:
+        if "idusuario" not in oParam:
             # idUsuario = cursor.valueBuffer("idusuario")
             qryUsuarios = qsatype.FLSqlQuery()
             qryUsuarios.setTablesList(u"usuarios")
@@ -381,14 +381,16 @@ class gesttare(interna):
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
-                    "prefix": "gt_tareas",
+                    "prefix": "otros",
+                    "rel": "usuarios",
                     "style": {
                         "width": "100%"
                     },
                     "tipo": 180,
                     "verbose_name": "Participantes",
                     "label": "Participantes",
-                    "key": "partic",
+                    "key": "idusuario",
+                    "desc": "nombre",
                     "validaciones": None,
                     "required": False,
                     "opts": opts
@@ -396,7 +398,7 @@ class gesttare(interna):
             ]
             return response
         else:
-            participantes = json.loads(oParam["partic"])
+            participantes = json.loads(oParam["idusuario"])
             for p in participantes:
                 curPartic = qsatype.FLSqlCursor("gt_partictarea")
                 curPartic.select(ustr("idusuario = '", p, "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))

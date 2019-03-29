@@ -73,11 +73,6 @@
                 "label": "Genera XLS",
                 "success": []
             }]
-        },
-        "newRecordTT": {
-            "componente": "YBNewRecord",
-            "class": "info",
-            "icon": "add"
         }
     },
     "acciones": {
