@@ -97,7 +97,7 @@
                     "componente": "YBButton",
                     "prefix": "gt_tareas",
                     "label": "Gestionar tiempo",
-                    "className": "floatRight",
+                    "className": "floatLeft",
                     "buttonType": "raised",
                     "action": {
                         "key": "gestionarTiempo",
@@ -106,7 +106,7 @@
                 },
                 "labelTiempo": {
                     "componente": "YBLabel",
-                    "className": "YBComponentInfo",
+                    "className": "YBComponentInfo floatRight",
                     "text": "%yb1",
                     "style": {
                         "fontWeight": "bold",
