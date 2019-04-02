@@ -24,12 +24,31 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
-                "borrarTareaButton": {
+                "volverButton": {
                     "componente": "YBButton",
                     "prefix": "gt_tareas",
-                    "label": "Borrar tarea",
+                    "icon": "close",
                     "className": "floatRight",
-                    "buttonType": "raised",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "borrarTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_tareas",
+                    "icon": "delete",
+                    "className": "floatRight",
+                    "buttonType": "icon",
                     "action": {
                         "key": "borrarTarea",
                         "success": [{"slot": "return"}]
@@ -90,7 +109,6 @@
                     "className": "YBComponentInfo",
                     "text": "%yb1",
                     "style": {
-                        "width": "100%",
                         "fontWeight": "bold",
                         "padding": "0px 20px",
                         "textAlign": "right"
@@ -234,6 +252,9 @@
         }
     },
     "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
         "actNuevoComentario": {
             "label": "Nuevo comentario",
             "action": "legacy",
