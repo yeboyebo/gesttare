@@ -449,8 +449,19 @@ class gesttare(interna):
                 curProyectos.setModeAccess(curProyectos.Browse)
                 curProyectos.refreshBuffer()
                 proin.append(curProyectos.valueBuffer("codproyecto"))
-                # proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
-            # proin = proin + " null)"
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            # q.setSelect(u"t.codproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.idcompania = 1")
+
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
+
+            # while q.next():
+            #     proin.append(q.value("codproyecto"))
             return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 

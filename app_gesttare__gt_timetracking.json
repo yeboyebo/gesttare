@@ -4,7 +4,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "",
+            "className": "gbTareas",
             "style": {},
             "layout": {
                 "ttForm": {

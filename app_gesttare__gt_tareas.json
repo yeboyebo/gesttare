@@ -77,7 +77,8 @@
                             "fields": {
                                 "descripcion": {},
                                 "codproyecto": {
-                                    "combolimit": 1
+                                    "combolimit": 1, 
+                                    "function": "getProyectosUsuario"
                                 },
                                 "fechavencimiento": {},
                                 "resuelta": {},

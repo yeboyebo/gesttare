@@ -105,6 +105,19 @@ class gesttare(interna):
                 proin.append(curProyectos.valueBuffer("codproyecto"))
                 # proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
             # proin = proin + " null)"
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            # q.setSelect(u"t.codproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.idcompania = 1")
+
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
+
+            # while q.next():
+            #     proin.append(q.value("codproyecto"))
             return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
@@ -123,6 +136,7 @@ class gesttare(interna):
         q.setSelect(u"p.codproyecto, t.nombre")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
         q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
+        # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
             print("Error inesperado")

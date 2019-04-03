@@ -25,7 +25,7 @@
                             "fields": {
                                 "nombre": {},
                                 "descripcion": {},
-                                "codproyecto": {"combolimit": 1},
+                                "codproyecto": {"combolimit": 1, "function": "getProyectosUsuario"},
                                 "fechavencimiento": {},
                                 "codestado": {},
                                 "idusuario": {"combolimit": 1}
