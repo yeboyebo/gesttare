@@ -229,6 +229,14 @@
             {
                 "name": "app_gesttare__gt_timetracking.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "model_flgesttare__gt_companias.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "model_flgesttare__gt_companias_def.py",
+                "path": "models/flgesttare/"
             }
         ],
         "replaceFile": [

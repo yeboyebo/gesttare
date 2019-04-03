@@ -39,7 +39,8 @@
                     "gt_usuarios": null,
                     "gt_estadostarea": null,
                     "gt_particproyecto": null,
-                    "gt_timetracking": null
+                    "gt_timetracking": null,
+                    "gt_companias": null
                 }
             }
         }
