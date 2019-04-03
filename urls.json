@@ -14,9 +14,11 @@
         },
         {
             "type": "insertAfterNode",
-            "path": "/models/flsisppal/auth_user",
+            "path": "/models/flfactppal",
             "value": {
-                "sis_gridfilter": null
+                "flsisppal": {
+                    "sis_gridfilter": null
+                }
             }
         },
         {
