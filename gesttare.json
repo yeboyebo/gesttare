@@ -127,18 +127,6 @@
                 "path": "models/flgesttare/"
             },
             {
-                "name": "app_portal____init__.py",
-                "path": "apps/portal/"
-            },
-            {
-                "name": "app_portal__index.html",
-                "path": "apps/portal/templates/portal/"
-            },
-            {
-                "name": "app_portal__login.html",
-                "path": "apps/portal/templates/portal/"
-            },
-            {
                 "name": "app_portal__menu_portal.json",
                 "path": "apps/portal/templates/portal/"
             },
