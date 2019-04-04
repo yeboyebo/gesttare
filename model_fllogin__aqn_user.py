@@ -3,14 +3,29 @@ import importlib
 
 from YBUTILS.viewREST import helpers
 
-from models.fllogin import models as modelos
+from YBLEGACY.FLUtil import FLUtil
+from YBLEGACY import baseraw
 
 
-class interna_aqn_user(modelos.mtd_aqn_user, helpers.MixinConAcciones):
+class mtd_aqn_user(baseraw.RawModel):
+    id = baseraw.AutoField(db_column="id", verbose_name=FLUtil.translate(u"Identificador", u"MetaData"), primary_key=True)._miextend(visiblegrid=False, OLDTIPO="SERIAL")
+    password = baseraw.CharField(max_length=128)._miextend(OLDTIPO="STRING")
+    last_login = baseraw.DateTimeField(blank=True, null=True)._miextend(OLDTIPO="DATE")
+    usuario = baseraw.CharField(max_length=30)._miextend(OLDTIPO="STRING")
+    nombre = baseraw.CharField(max_length=30)._miextend(OLDTIPO="STRING")
+    apellidos = baseraw.CharField(max_length=30)._miextend(OLDTIPO="STRING")
+    email = baseraw.CharField(unique=True, max_length=254)._miextend(OLDTIPO="STRING")
+    idcompania = baseraw.ForeignKey("mtd_gt_companias", db_column="idcompania", verbose_name=FLUtil.translate(u"Compañia", u"MetaData"), blank=True, null=True, to_field="idcompania", on_delete=FLUtil.deleteCascade, related_name="aqn_user_idcompania__fk__gt_companias_idcompania")._miextend(visiblegrid=False, OLDTIPO="UINT")
+
+    class Meta:
+        abstract = True
+
+
+class interna_aqn_user(mtd_aqn_user, helpers.MixinConAcciones):
     pass
 
     class Meta:
-        proxy = True
+        abstract = True
 
 
 # @class_declaration gesttare_aqn_user #
@@ -18,7 +33,7 @@ class gesttare_aqn_user(interna_aqn_user, helpers.MixinConAcciones):
     pass
 
     class Meta:
-        proxy = True
+        abstract = True
 
 
 # @class_declaration aqn_user #
@@ -26,7 +41,9 @@ class aqn_user(gesttare_aqn_user, helpers.MixinConAcciones):
     pass
 
     class Meta:
-        proxy = True
+        managed = True
+        verbose_name = "Usuarios"
+        db_table = 'aqn_user'
 
     def getIface(self=None):
         return form.iface
