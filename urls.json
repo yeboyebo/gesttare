@@ -45,13 +45,6 @@
                     "gt_companias": null
                 }
             }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/models/fllogin/auth_group",
-            "value": {
-                "aqn_user": null
-            }
         }
     ]
 }
