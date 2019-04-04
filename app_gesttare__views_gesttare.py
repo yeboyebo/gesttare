@@ -34,15 +34,16 @@ class gesttare(interna):
                     "paginacion": False,
                     "type": "json",
                     "hideheader": True,
+                    "border": False,
                     "prefix": "appinfo",
                     "columns": [
-                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
                         {
                             "tipo": "act",
                             "key": "startstop",
                             "label": "Timetracking",
                             "success": [{"slot": "refrescar"}]
-                        }
+                        },
+                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"}
                     ]
                 }
             },

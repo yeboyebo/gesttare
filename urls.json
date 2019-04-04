@@ -2,26 +2,6 @@
     "modifications": [
         {
             "type": "insertAfterNode",
-            "path": "/portal/root",
-            "value": {
-                "authentication": {
-                    "url": "^login/$",
-                    "func": "auth_login"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/authentication",
-            "value": {
-                "account": {
-                    "url": "^account/$",
-                    "func": "account_request"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
             "path": "/portal",
             "value": {
                 "gesttare": {
@@ -34,9 +14,11 @@
         },
         {
             "type": "insertAfterNode",
-            "path": "/models/flsisppal/auth_user",
+            "path": "/models/flfactppal",
             "value": {
-                "sis_gridfilter": null
+                "flsisppal": {
+                    "sis_gridfilter": null
+                }
             }
         },
         {
@@ -59,7 +41,8 @@
                     "gt_usuarios": null,
                     "gt_estadostarea": null,
                     "gt_particproyecto": null,
-                    "gt_timetracking": null
+                    "gt_timetracking": null,
+                    "gt_companias": null
                 }
             }
         }

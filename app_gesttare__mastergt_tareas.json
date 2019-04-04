@@ -3,7 +3,8 @@
         "p_l": 50,
         "p_c": true,
         "o_1": "-idtarea",
-        "s_resuelta__exact": false
+        "s_resuelta__exact": false,
+        "f_proyectosusuario": null
     },
     "schema": {
         "gt_tareas":{
@@ -17,7 +18,7 @@
             "style": {},
             "layout": {
                 "masterTareas": {
-                    "componente": "YBTable",
+                    "componente": "YBGrid",
                     "prefix": "gt_tareas",
                     "cansavefilter": true,
                     "filter": {
@@ -30,11 +31,6 @@
                         "resuelta": null
                     },
                     "columns": [
-                        {"tipo": "field", "listpos": "subtitle", "key": "nombre", "color": "Color nombre", "width": 350, "link": true},
-                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
-                        {"tipo": "field", "listpos": "title", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
-                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100},
                         {
                             "tipo": "act",
                             "key": "complete",
@@ -50,9 +46,28 @@
                             "success": [
                                 {"slot": "refrescar"}
                             ]
-                        }
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Borrar Linea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 350, "link": true},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "avatar": true},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
+                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
                     ],
-                    "rowclick": ""
+                    "rowclick": "",
+                    "rowlistclick": "link",
+                    "accionesGrid": [{
+                        "key": "getReport",
+                        "label": "Genera XLS",
+                        "success": []
+                    }]
                 }
             }
         },
@@ -63,6 +78,16 @@
         }
     },
     "acciones": {
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "save"
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete",
+            "msg": "Se eliminaran todos los comentarios y registros de tiempo"
+        },
         "startstop": {
             "action": "legacy",
             "prefix": "gt_tareas",

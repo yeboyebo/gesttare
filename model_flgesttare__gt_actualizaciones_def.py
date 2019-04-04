@@ -19,16 +19,29 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return None
 
+    def gesttare_getForeignFields(self, model, template=None):
+        fields = []
+        if template == "notificacionesUsuario":
+            return [{'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}]
+
+        return fields
+
+    def gesttare_field_nombreUsuario(self, model):
+        nombre_usuario = ""
+        try:
+            print(model['gt_actualizaciones.idusuarioorigen'])
+            nombre_usuario = qsatype.FLUtil.sqlSelect(u"usuarios", u"nombre", ustr(u"idusuario = '", model['gt_actualizaciones.idusuarioorigen'], "'"))
+        except Exception:
+            pass
+        return nombre_usuario
+
     def gesttare_queryGrid_notificacionesUsuario(self, model):
         idUsuario = qsatype.FLUtil.nameUser()
         query = {}
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,usuarios")
-        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre")
+        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN usuarios ON gt_actualizusuario.idusuario = usuarios.idusuario INNER JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
         query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "'")
-        print(query["select"])
-        print(query["from"])
-        print(query["where"])
         return query
 
     def gesttare_visualizarTarea(self, model):
@@ -57,6 +70,12 @@ class gesttare(interna):
 
     def __init__(self, context=None):
         super().__init__(context)
+
+    def getForeignFields(self, model, template=None):
+        return self.ctx.gesttare_getForeignFields(model, template)
+
+    def field_nombreUsuario(self, model):
+        return self.ctx.gesttare_field_nombreUsuario(model)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()

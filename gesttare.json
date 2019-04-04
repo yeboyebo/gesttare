@@ -131,10 +131,6 @@
                 "path": "apps/portal/templates/portal/"
             },
             {
-                "name": "app_portal__views_portal.py",
-                "path": "apps/portal/viewset/"
-            },
-            {
                 "name": "app_gesttare__menu_gesttare.json",
                 "path": "apps/gesttare/templates/gesttare/"
             },
@@ -217,6 +213,18 @@
             {
                 "name": "app_gesttare__newrecordgt_timetracking.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "app_gesttare__gt_timetracking.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "model_flgesttare__gt_companias.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "model_flgesttare__gt_companias_def.py",
+                "path": "models/flgesttare/"
             }
         ],
         "replaceFile": [

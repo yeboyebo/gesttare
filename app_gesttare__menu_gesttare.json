@@ -1,5 +1,13 @@
 {
     "format": "navBarMenu",
+    "logo": true,
+    "actions": {
+        "gotoNotificacions": {
+            "action": "goto",
+            "icon": "notifications",
+            "url": "/gesttare/gt_actualizaciones/master"
+        }
+    },
     "items": [
         {
             "NAME": "tareas",
@@ -9,34 +17,35 @@
             "COLOR": "rgb(7, 180, 7)"
         },
         {
-            "NAME": "gt_actualizaciones",
-            "TEXT": "Notificaciones",
-            "URL": "gesttare/gt_actualizaciones/master",
-            "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)"
-        },
-        {
             "NAME": "gt_proyectos",
             "TEXT": "proyectos",
             "URL": "gesttare/gt_proyectos/master",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)",
-            "VISIBLE": true
-        },
-        {
-            "NAME": "gt_timetracking",
-            "TEXT": "timetracking",
-            "URL": "gesttare/gt_timetracking/master",
-            "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)",
-            "VISIBLE": true
+            "COLOR": "rgb(7, 180, 7)"
         },
         {
             "NAME": "calendario",
             "TEXT": "Calendario",
             "URL": "gesttare/gt_tareas/custom/calendario",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)"
+            "COLOR": "rgb(7, 180, 7)",
+            "RESPONSIVE": false
+        },
+        {
+            "NAME": "gt_actualizaciones",
+            "TEXT": "Notificaciones",
+            "URL": "gesttare/gt_actualizaciones/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)",
+            "VISIBLE": false
+        },
+        {
+            "NAME": "gt_timetracking",
+            "TEXT": "time tracking",
+            "URL": "gesttare/gt_timetracking/master",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)",
+            "RESPONSIVE": false
         }
     ]
 }

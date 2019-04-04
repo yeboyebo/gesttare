@@ -4,6 +4,7 @@ from YBUTILS import gesDoc
 
 from models.flfactppal.usuarios import usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
+from datetime import datetime
 
 import hashlib
 import json
@@ -40,13 +41,13 @@ class gesttare(interna):
         return fields
 
     def gesttare_getDesc(self):
-        return None
+        return "nombre"
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
         if template == "formRecord":
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea")))
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
 
-            return {"tiempoTotal": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
+            return {"tiempoTotal": "Tiempo total: {}".format(tiempototal)}
 
         return {}
 
@@ -237,9 +238,9 @@ class gesttare(interna):
     def gesttare_dameUsuarios(self):
         usuarios = []
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"gt_usuarios")
-        q.setSelect("iduser, nombre")
-        q.setFrom("gt_usuarios")
+        q.setTablesList(u"usuarios")
+        q.setSelect("idusuario, nombre")
+        q.setFrom("usuarios")
 
         if not q.exec_():
             print("Error inesperado")
@@ -251,11 +252,16 @@ class gesttare(interna):
         return usuarios
 
     def gesttare_calcula_totaltiempo(self, cursor):
-        return cursor.valueBuffer("horafin") - cursor.valueBuffer("horainicio")
+        formato = "%H:%M:%S"
+        hfin = datetime.strptime(str(cursor.valueBuffer("horafin")), formato)
+        hinicio = datetime.strptime(str(cursor.valueBuffer("horainicio")), formato)
+        totaltiempo = hfin - hinicio
+        return str(totaltiempo)
 
     def gesttare_startstop(self, model, cursor):
         now = qsatype.Date()
         user_name = qsatype.FLUtil.nameUser()
+        msg = ""
 
         cur_track = qsatype.FLSqlCursor("gt_timetracking")
         cur_track.select("idusuario = '{}' AND horafin IS NULL".format(user_name))
@@ -264,7 +270,7 @@ class gesttare(interna):
             cur_track.setModeAccess(cur_track.Edit)
             cur_track.refreshBuffer()
 
-            cur_track.setValueBuffer("horafin", int(now.getTime() / 1000))
+            cur_track.setValueBuffer("horafin", now.toString()[-8:])
             cur_track.setValueBuffer("totaltiempo", self.calcula_totaltiempo(cur_track))
 
             if not cur_track.commitBuffer():
@@ -281,13 +287,15 @@ class gesttare(interna):
         cur_user.refreshBuffer()
 
         if cur_track.valueBuffer("idtarea") == cursor.valueBuffer("idtarea"):
+            msg += "Para tarea activa"
             cur_user.setNull("idtareaactiva")
         else:
+            msg += "Inicia tarea nueva"
             cur_track.setModeAccess(cur_track.Insert)
             cur_track.refreshBuffer()
 
             cur_track.setValueBuffer("fecha", now.toString()[:10])
-            cur_track.setValueBuffer("horainicio", int(now.getTime() / 1000))
+            cur_track.setValueBuffer("horainicio", now.toString()[-8:])
             cur_track.setValueBuffer("idusuario", user_name)
             cur_track.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
 
@@ -300,8 +308,10 @@ class gesttare(interna):
         if not cur_user.commitBuffer():
             print("Ocurrió un error al actualizar la tarea activa del usuario")
             return False
-
-        return True
+        response = {}
+        response["resul"] = True
+        response["msg"] = msg
+        return response
 
     def gesttare_completar_tarea(self, model, cursor):
         resuelta = cursor.valueBuffer("resuelta")
@@ -330,6 +340,7 @@ class gesttare(interna):
             curTarea.setValueBuffer(u"nombre", oParam["name"])
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
             curTarea.setValueBuffer(u"descripcion", oParam["description"])
+            curTarea.setValueBuffer(u"resuelta", False)
             if oParam["date"] and oParam["date"] != u"undefined":
                 curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
 
@@ -346,7 +357,7 @@ class gesttare(interna):
 
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
-        if "partic" not in oParam:
+        if "idusuario" not in oParam:
             # idUsuario = cursor.valueBuffer("idusuario")
             qryUsuarios = qsatype.FLSqlQuery()
             qryUsuarios.setTablesList(u"usuarios")
@@ -370,14 +381,16 @@ class gesttare(interna):
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
-                    "prefix": "gt_tareas",
+                    "prefix": "otros",
+                    "rel": "usuarios",
                     "style": {
                         "width": "100%"
                     },
                     "tipo": 180,
                     "verbose_name": "Participantes",
                     "label": "Participantes",
-                    "key": "partic",
+                    "key": "idusuario",
+                    "desc": "nombre",
                     "validaciones": None,
                     "required": False,
                     "opts": opts
@@ -385,7 +398,7 @@ class gesttare(interna):
             ]
             return response
         else:
-            participantes = json.loads(oParam["partic"])
+            participantes = json.loads(oParam["idusuario"])
             for p in participantes:
                 curPartic = qsatype.FLSqlCursor("gt_partictarea")
                 curPartic.select(ustr("idusuario = '", p, "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
@@ -408,6 +421,104 @@ class gesttare(interna):
                             return False
 
             return True
+
+    def gesttare_bChCursor(self, fN, cursor):
+        if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, curPedido):
+            return False
+        if fN == "idusuario":
+            curPartic = qsatype.FLSqlCursor("gt_partictarea")
+            curPartic.select(ustr("idusuario = '", cursor.valueBuffer("idusuario"), "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
+            curPartic.refreshBuffer()
+            if not curPartic.first():
+                curPartic.setModeAccess(curPartic.Insert)
+                curPartic.refreshBuffer()
+                curPartic.setValueBuffer("idusuario", cursor.valueBuffer("idusuario"))
+                curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
+                if not curPartic.commitBuffer():
+                    return False
+
+    def gesttare_getFilters(self, model, name, template=None):
+        filters = []
+        if name == 'proyectosusuario':
+            # proin = "("
+            proin = []
+            usuario = qsatype.FLUtil.nameUser()
+            curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            curProyectos.select("idusuario = '" + str(usuario) + "'")
+            while curProyectos.next():
+                curProyectos.setModeAccess(curProyectos.Browse)
+                curProyectos.refreshBuffer()
+                proin.append(curProyectos.valueBuffer("codproyecto"))
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            # q.setSelect(u"t.codproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.idcompania = 1")
+
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
+
+            # while q.next():
+            #     proin.append(q.value("codproyecto"))
+            return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
+        return filters
+
+    def gesttare_getTareasUsuario(self, oParam):
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_tareas, gt_particproyecto")
+        q.setSelect(u"t.idtarea, t.nombre, p.codproyecto")
+        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) LIKE UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"idtarea": q.value(0), "nombre": q.value(1)})
+
+        return data
+
+    def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
+        if template == "formRecord":
+            curTarea = qsatype.FLSqlCursor("gt_tareas")
+            curTarea.select(ustr("idtarea = '", pk, "'"))
+            curTarea.refreshBuffer()
+            if curTarea.first():
+                curTarea.setModeAccess(curTarea.Browse)
+                curTarea.refreshBuffer()
+                codproyecto = curTarea.valueBuffer("codproyecto")
+                nombreUsuario = qsatype.FLUtil.nameUser()
+                pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+                if not pertenece:
+                    return False
+            else:
+                return False
+        return True
+
+    def gesttare_borrar_tarea(self, model, oParam, cursor):
+        resul = {}
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+            cursor.setModeAccess(cursor.Del)
+            cursor.refreshBuffer()
+            if not cursor.commitBuffer():
+                return False
+            resul["return_data"] = False
+            resul["msg"] = "Correcto"
+        else:
+            resul['status'] = 2
+            resul['confirm'] = "Seguro que quieres eliminar"
+        return resul
+
+    def gesttare_gotoGestionarTiempo(self, model, cursor):
+        return "/gesttare/gt_timetracking/newRecord?p_idtarea=" + str(cursor.valueBuffer("idtarea"))
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -486,6 +597,24 @@ class gesttare(interna):
 
     def actNuevoPartic(self, oParam, cursor):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
+
+    def bChCursor(self, fN, cursor):
+        return self.ctx.tele_omega_bChCursor(fN, cursor)
+
+    def getFilters(self, model, name, template=None):
+        return self.ctx.gesttare_getFilters(model, name, template)
+
+    def getTareasUsuario(self, oParam):
+        return self.ctx.gesttare_getTareasUsuario(oParam)
+
+    def check_permissions(self, model, prefix, pk, template, acl, accion=None):
+        return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def borrar_tarea(self, model, oParam, cursor):
+        return self.ctx.gesttare_borrar_tarea(model, oParam, cursor)
+
+    def gotoGestionarTiempo(self, model, cursor):
+        return self.ctx.gesttare_gotoGestionarTiempo(model, cursor)
 
 
 # @class_declaration head #

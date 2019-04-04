@@ -22,6 +22,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def actNuevoPartic(self, oParam, cursor):
         return form.iface.actNuevoPartic(oParam, cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def getProyectosUsuario(self, oParam):
+        return form.iface.getProyectosUsuario(oParam)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

@@ -24,7 +24,7 @@ class gesttare(interna):
 
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
-        if "partic" not in oParam:
+        if "idusuario" not in oParam:
             # idUsuario = cursor.valueBuffer("idusuario")
             qryUsuarios = qsatype.FLSqlQuery()
             qryUsuarios.setTablesList(u"usuarios")
@@ -49,14 +49,16 @@ class gesttare(interna):
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
-                    "prefix": "gt_proyectos",
+                    "prefix": "otros",
+                    "rel": "usuarios",
                     "style": {
                         "width": "100%"
                     },
                     "tipo": 180,
                     "verbose_name": "Participantes",
                     "label": "Participantes",
-                    "key": "partic",
+                    "key": "idusuario",
+                    "desc": "nombre",
                     "validaciones": None,
                     "required": False,
                     "opts": opts
@@ -64,7 +66,7 @@ class gesttare(interna):
             ]
             return response
         else:
-            participantes = json.loads(oParam["partic"])
+            participantes = json.loads(oParam["idusuario"])
             for p in participantes:
                 curPartic = qsatype.FLSqlCursor("gt_particproyecto")
                 curPartic.select("idusuario = '{}' AND codproyecto = '{}'".format(p, cursor.valueBuffer("codproyecto")))
@@ -89,6 +91,66 @@ class gesttare(interna):
 
             return True
 
+    def gesttare_getFilters(self, model, name, template=None):
+        filters = []
+        if name == 'proyectosusuario':
+            # proin = "("
+            proin = []
+            usuario = qsatype.FLUtil.nameUser()
+            curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            curProyectos.select("idusuario = '" + str(usuario) + "'")
+            while curProyectos.next():
+                curProyectos.setModeAccess(curProyectos.Browse)
+                curProyectos.refreshBuffer()
+                proin.append(curProyectos.valueBuffer("codproyecto"))
+                # proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+            # proin = proin + " null)"
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            # q.setSelect(u"t.codproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.idcompania = 1")
+
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
+
+            # while q.next():
+            #     proin.append(q.value("codproyecto"))
+            return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
+        return filters
+
+    def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
+        if template == "formRecord":
+            nombreUsuario = qsatype.FLUtil.nameUser()
+            pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", pk, "'"))
+            if not pertenece:
+                return False
+        return True
+
+    def gesttare_getProyectosUsuario(self, oParam):
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos, gt_particproyecto")
+        q.setSelect(u"p.codproyecto, t.nombre")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
+        # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"codproyecto": q.value(0), "nombre": q.value(1)})
+
+        return data
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -97,6 +159,15 @@ class gesttare(interna):
 
     def actNuevoPartic(self, oParam, cursor):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
+
+    def getFilters(self, model, name, template=None):
+        return self.ctx.gesttare_getFilters(model, name, template)
+
+    def check_permissions(self, model, prefix, pk, template, acl, accion=None):
+        return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def getProyectosUsuario(self, oParam):
+        return self.ctx.gesttare_getProyectosUsuario(oParam)
 
 
 # @class_declaration head #

@@ -24,6 +24,36 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "icon": "close",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "borrarTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_tareas",
+                    "icon": "delete",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "borrarTarea",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -34,8 +64,7 @@
                     "submit": "update",
                     "icon": "info",
                     "label": "Información",
-                    "send": false,
-                    "autoCommit": true,
+                    "return": true,
                     "fields": {
                         "gb__titulo": {
                             "title": "",
@@ -48,7 +77,8 @@
                             "fields": {
                                 "descripcion": {},
                                 "codproyecto": {
-                                    "combolimit": 1
+                                    "combolimit": 1, 
+                                    "function": "getProyectosUsuario"
                                 },
                                 "fechavencimiento": {},
                                 "resuelta": {},
@@ -64,12 +94,22 @@
                 "separator1": {
                     "componente": "YBSeparator"
                 },
+                "nuevoTimeTrackingButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "label": "Gestionar tiempo",
+                    "className": "floatLeft",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "gestionarTiempo",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "labelTiempo": {
                     "componente": "YBLabel",
-                    "className": "YBComponentInfo",
+                    "className": "YBComponentInfo floatRight",
                     "text": "%yb1",
                     "style": {
-                        "width": "100%",
                         "fontWeight": "bold",
                         "padding": "0px 20px",
                         "textAlign": "right"
@@ -92,11 +132,6 @@
                             "hideheader": true,
                             "columns": [
                                 {
-                                    "tipo": "foreignfield",
-                                    "listpos": "title",
-                                    "key": "nombre"
-                                },
-                                {
                                     "tipo": "act",
                                     "key": "delete",
                                     "label": "Borrar Linea",
@@ -105,6 +140,11 @@
                                             "slot": "refrescar"
                                         }
                                     ]
+                                },
+                                {
+                                    "tipo": "foreignfield",
+                                    "listpos": "title",
+                                    "key": "nombre"
                                 }
                             ],
                             "rowclick": "",
@@ -213,6 +253,9 @@
         }
     },
     "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
         "actNuevoComentario": {
             "label": "Nuevo comentario",
             "action": "legacy",
@@ -227,11 +270,22 @@
                 }
             ]
         },
+        "borrarTarea": {
+            "label": "Borrar tarea",
+            "action": "legacy",
+            "serverAction": "borrar_tarea"
+        },
+        "gestionarTiempo": {
+            "action": "goto",
+            "prefix": "gt_tareas",
+            "serverAction": "gotoGestionarTiempo"
+        },
         "actNuevoPartic": {
             "label": "Nuevo participante",
             "action": "legacy",
             "prefix": "gt_tareas",
             "icon": "group",
+            "title": "Participantes",
             "serverAction": "actNuevoPartic"
         },
         "delete": {

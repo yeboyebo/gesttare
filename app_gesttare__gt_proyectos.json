@@ -26,8 +26,6 @@
                     "class": "claseGrid",
                     "submit": "update",
                     "label": "Información",
-                    "send": false,
-                    "autoCommit": true,
                     "fields": {
                         "gb__": {
                             "title": "",
@@ -35,8 +33,7 @@
                                 "codproyecto": {"disabled": true},
                                 "nombre": {},
                                 "descripcion": {},
-                                "estado": {},
-                                "codcliente": {"combolimit": 1}
+                                "estado": {}
                             }
                         }
                     },
@@ -93,6 +90,7 @@
             "action": "legacy",
             "prefix": "gt_proyectos",
             "icon": "group",
+            "title": "Participantes",
             "serverAction": "actNuevoPartic"
         }
     }

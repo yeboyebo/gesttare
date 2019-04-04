@@ -1,7 +1,8 @@
 {
     "querystring": {
         "p_l": 50,
-        "p_c": true
+        "p_c": true,
+        "f_proyectosusuario": null
     },
     "schema": {},
     "layout": {
@@ -14,10 +15,9 @@
                 "nombre": null,
                 "estado": null
             },
-            "multiselectable": true,
+            "multiselectable": false,
+            "avatar": false,
             "columns": [
-                {"tipo": "field", "listpos": "subtitle", "key": "codproyecto", "width": 50},
-                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
                 {
                     "tipo": "act",
                     "key": "delete",
@@ -25,9 +25,16 @@
                     "success": [
                         {"slot": "refrescar"}
                     ]
-                }
+                },
+                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50}
             ],
-            "rowclick": "link"
+            "rowclick": "link",
+            "accionesGrid": [{
+                "key": "getReport",
+                "label": "Genera XLS",
+                "success": []
+            }]
         },
         "newRecordProyectos": {
             "componente": "YBNewRecord",
@@ -36,9 +43,15 @@
         }
     },
     "acciones": {
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "save"
+        },
         "delete": {
             "action": "deleteRow",
-            "icon": "delete"
+            "icon": "delete",
+            "msg": "Se eliminarán todas las tareas asociadas"
         }
     }
 }

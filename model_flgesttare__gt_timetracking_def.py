@@ -24,13 +24,24 @@ class gesttare(interna):
             if not where_filter:
                 where_filter = "1 = 1"
 
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario", "SUM(totaltiempo)", where_filter)
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario", "SUM(totaltiempo)", where_filter) or 0
 
-            return {"masterTimeTracking": "Tiempo total: {}".format(self.seconds_to_time(tiempototal, total=True))}
+            return {"masterTimeTracking": "Tiempo total: {}".format(tiempototal)}
         return None
 
     def gesttare_queryGrid_mastertimetracking(self, model, filters):
         where = "1 = 1"
+        usuario = qsatype.FLUtil.nameUser()
+        curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+        curProyectos.select("idusuario = '" + str(usuario) + "'")
+        proin = "("
+        while curProyectos.next():
+            curProyectos.setModeAccess(curProyectos.Browse)
+            curProyectos.refreshBuffer()
+            # proin.append(curProyectos.valueBuffer("codproyecto"))
+            proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+        proin = proin + " null)"
+        where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
         if filters:
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
@@ -45,6 +56,8 @@ class gesttare(interna):
                 where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
             if "[fecha]" in filters and filters["[fecha]"] != "":
                 where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+            if "[buscador]" in filters and filters["[buscador]"] != "":
+                where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(usuarios.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, usuarios")
@@ -56,25 +69,7 @@ class gesttare(interna):
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
-        if template == "mastertimetracking":
-            return [
-                {'verbose_name': 'Hora inicio', 'func': 'field_inicioformateado'},
-                {'verbose_name': 'Hora fin', 'func': 'field_finformateado'},
-                {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
-            ]
-            # return [
-            #     {'verbose_name': 'Total tiempo', 'func': 'field_totalformateado'}
-            # ]
         return []
-
-    def gesttare_field_inicioformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.horainicio"])
-
-    def gesttare_field_finformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.horafin"])
-
-    def gesttare_field_totalformateado(self, model):
-        return self.seconds_to_time(model["gt_timetracking.totaltiempo"])
 
     def gesttare_seconds_to_time(self, seconds, total=False):
         if not seconds:
@@ -117,6 +112,16 @@ class gesttare(interna):
 
         return seconds
 
+    def gesttare_calcula_totaltiempo(self, cursor):
+        formato = "%H:%M:%S"
+        hfin = datetime.strptime(str(cursor.valueBuffer("horafin")), formato)
+        hinicio = datetime.strptime(str(cursor.valueBuffer("horainicio")), formato)
+        totaltiempo = hfin - hinicio
+        totaltiempo = str(totaltiempo)
+        if len(totaltiempo) < 8:
+            totaltiempo = "0" + totaltiempo
+        return totaltiempo
+
     def gesttare_editarTT(self, oParam, cursor):
         response = {}
 
@@ -152,8 +157,56 @@ class gesttare(interna):
                 return False
             return True
 
+    def gesttare_iniciaValoresCursor(self, cursor=None):
+        usuario = qsatype.FLUtil.nameUser()
+        cursor.setValueBuffer(u"idusuario", usuario)
+
+        qsatype.FactoriaModulos.get('formRecordgt_timetrackin').iface.iniciaValoresCursor(cursor)
+        return True
+
+    def gesttare_bChCursor(self, fN, cursor):
+        # if not qsatype.FactoriaModulos.get('formRecordgt_timetracking').iface.bChCursor(fN, cursor):
+        #     return False
+        if fN == "horainicio" or fN == "horafin":
+            totaltiempo = self.calcula_totaltiempo(cursor)
+            cursor.setValueBuffer("totaltiempo", totaltiempo)
+
+    def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
+        if template == "accion":
+            if accion == "delete":
+                curTracking = qsatype.FLSqlCursor("gt_timetracking")
+                curTracking.select(ustr("idtracking = '", pk, "'"))
+                curTracking.refreshBuffer()
+                if curTracking.first():
+                    curTracking.setModeAccess(curTracking.Browse)
+                    curTracking.refreshBuffer()
+                    idusuario = curTracking.valueBuffer("idusuario")
+                    usuario = qsatype.FLUtil.nameUser()
+                    if not idusuario == usuario:
+                        return False
+
+        if template == "formRecord":
+            curTracking = qsatype.FLSqlCursor("gt_timetracking")
+            curTracking.select(ustr("idtracking = '", pk, "'"))
+            curTracking.refreshBuffer()
+            if curTracking.first():
+                curTracking.setModeAccess(curTracking.Browse)
+                curTracking.refreshBuffer()
+                idtarea = curTracking.valueBuffer("idtarea")
+                codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
+                nombreUsuario = qsatype.FLUtil.nameUser()
+                pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+                if not pertenece:
+                    return False
+            else:
+                return False
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
+
+    def iniciaValoresCursor(self, cursor=None):
+        return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
@@ -167,15 +220,6 @@ class gesttare(interna):
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
 
-    def field_inicioformateado(self, model):
-        return self.ctx.gesttare_field_inicioformateado(model)
-
-    def field_finformateado(self, model):
-        return self.ctx.gesttare_field_finformateado(model)
-
-    def field_totalformateado(self, model):
-        return self.ctx.gesttare_field_totalformateado(model)
-
     def seconds_to_time(self, seconds, total=False):
         return self.ctx.gesttare_seconds_to_time(seconds, total)
 
@@ -184,6 +228,15 @@ class gesttare(interna):
 
     def editarTT(self, oParam, cursor):
         return self.ctx.gesttare_editarTT(oParam, cursor)
+
+    def bChCursor(self, fN, cursor):
+        return self.ctx.gesttare_bChCursor(fN, cursor)
+
+    def calcula_totaltiempo(self, cursor):
+        return self.ctx.gesttare_calcula_totaltiempo(cursor)
+
+    def check_permissions(self, model, prefix, pk, template, acl, accion=None):
+        return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
 
 
 # @class_declaration head #

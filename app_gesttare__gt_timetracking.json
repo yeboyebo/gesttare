@@ -7,24 +7,18 @@
             "className": "gbTareas",
             "style": {},
             "layout": {
-                "separator1": {
-                    "componente": "YBSeparator"
-                },
                 "ttForm": {
                     "prefix": "gt_timetracking",
                     "componente": "YBForm",
                     "class": "claseGrid",
-                    "submit": "create",
+                    "submit": "update",
                     "saveReturn": true,
                     "return": true,
-                    "icon": "info",
-                    "label": "Información",
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__": {
                             "title": "",
                             "fields": {
-                                "idtarea": {"function": "getTareasUsuario"},
                                 "idusuario": {"disabled": true},
                                 "fecha": {},
                                 "horainicio": {},
