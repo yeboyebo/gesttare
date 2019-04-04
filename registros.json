@@ -31,6 +31,13 @@
                     "sis_gridfilter": null
                 }
             }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/fllogin/auth_user",
+            "value": {
+                "aqn_user": null
+            }
         }
     ]
 }

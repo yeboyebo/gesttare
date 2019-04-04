@@ -237,6 +237,14 @@
             {
                 "name": "model_flgesttare__gt_companias_def.py",
                 "path": "models/flgesttare/"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__aqn_user.py"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__aqn_user_def.py"
             }
         ],
         "replaceFile": [
@@ -256,6 +264,11 @@
                 "name": "registros.json"
             }
         ],
-        "patchScript": []
+        "patchScript": [
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__models.py"
+            }
+        ]
     }
 }
