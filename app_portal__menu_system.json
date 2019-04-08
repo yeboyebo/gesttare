@@ -1,0 +1,9 @@
+{
+    "modifications": [
+        {
+            "type": "updateNode",
+            "path": "/items[usuarios]/URL",
+            "value": "system/usuarios/master"
+        }
+    ]
+}
