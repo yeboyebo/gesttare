@@ -56,7 +56,7 @@ class gesttare(interna):
             return False
         # print("partictarea 2")
         if curPart.modeAccess() == curPart.Insert:
-            if not _i.crearActualizaciones(u"Nuevos asignados", curPart):
+            if not _i.crearActualizaciones(u"Añadido participante", curPart):
                 return False
 
         return True

@@ -1,8 +1,8 @@
 {
     "querystring": {
-        "p_l": 50,
+        "p_l": 40,
         "p_c": true,
-        "s_username__ne": "admin"
+        "s_idusuario__ne": "admin"
     },
     "schema": {},
     "layout": {

@@ -23,6 +23,17 @@ class gesttare(interna):
         if template == "mastertimetracking":
             if not where_filter:
                 where_filter = "1 = 1"
+                usuario = qsatype.FLUtil.nameUser()
+                curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+                curProyectos.select("idusuario = '" + str(usuario) + "'")
+                proin = "("
+                while curProyectos.next():
+                    curProyectos.setModeAccess(curProyectos.Browse)
+                    curProyectos.refreshBuffer()
+                    # proin.append(curProyectos.valueBuffer("codproyecto"))
+                    proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+                proin = proin + " null)"
+                where_filter += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario", "SUM(totaltiempo)", where_filter) or 0
 

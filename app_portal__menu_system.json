@@ -4,6 +4,13 @@
             "type": "updateNode",
             "path": "/items[usuarios]/URL",
             "value": "system/usuarios/master"
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/items[grupos]/ICON",
+            "value": {
+                "VISIBLE": false
+            }
         }
     ]
 }
