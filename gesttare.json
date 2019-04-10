@@ -229,12 +229,20 @@
             {
                 "path": "apps/portal/templates/portal/plantillas/",
                 "name": "app_portal__masterusuarios.json"
+            },
+            {
+                "path": "assets/dist/img/logo/",
+                "name": "gesttarelogo.png"
             }
         ],
         "replaceFile": [
             {
                 "path": "config/",
                 "name": "dependencias.json"
+            },
+            {
+                "path": "assets/dist/img/logo/",
+                "name": "logo.png"
             }
         ],
         "deleteFile": [],

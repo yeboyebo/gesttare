@@ -17,6 +17,7 @@
             "prefix": "mastertimetracking",
             "autofilter": false,
             "cansavefilter": true,
+            "buscador": false,
             "filter": {
                 "usuario": {
                     "label": "Usuario",

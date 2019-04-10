@@ -17,6 +17,7 @@
             },
             "multiselectable": false,
             "avatar": false,
+            "buscador": false,
             "columns": [
                 {
                     "tipo": "act",

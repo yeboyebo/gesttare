@@ -14,7 +14,7 @@
             "style": { },
             "layout": {
             	"queryGrid_notificacionesUsuario": {
-                    "componente": "YBTable",
+                    "componente": "YBGrid",
                     "prefix": "notificacionesUsuario",
                     "filter": "",
                     "type": "query",
