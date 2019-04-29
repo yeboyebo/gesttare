@@ -1,7 +1,7 @@
 {
     "querystring": {},
     "schema": {
-    	"notificacionesUsuario": {
+        "notificacionesUsuario": {
             "query": {
                 "p_l": 20
             }
@@ -13,22 +13,21 @@
             "className": "",
             "style": { },
             "layout": {
-            	"queryGrid_notificacionesUsuario": {
+                "queryGrid_notificacionesUsuario": {
                     "componente": "YBGrid",
                     "prefix": "notificacionesUsuario",
                     "filter": "",
                     "type": "query",
                     "columns": [
                         {
-        	                "tipo": "act",
-        	                "key": "borrarActualizacion",
-        	                "label": "borrarActualizacion",
-        	                "success": [
-        	                    {"slot": "refrescar"}
-        	                ]
+                            "tipo": "act",
+                            "key": "borrarActualizacion",
+                            "label": "borrarActualizacion",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
                         },
-                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 150},
-                        {"tipo": "field", "listpos":"title", "key": "gt_tareas.nombre", "label": "Tarea", "width": 300},
+                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 250},
                         {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 150},
                         {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 150},
                         {"tipo": "field", "key": "nombreUsuario", "label": "U.Origen", "width": 150}
@@ -40,14 +39,14 @@
         }
     },
     "acciones": {
-    	"borrarActualizacion": {
- 			"label": "borrarActualizacion",
+        "borrarActualizacion": {
+            "label": "borrarActualizacion",
             "action": "legacy",
             "serverAction": "borrarActualizacion",
             "prefix": "gt_actualizaciones",
             "icon": "delete"
         },
-    	"verTarea": {
+        "verTarea": {
             "action": "goto",
             "serverAction": "visualizarTarea",
             "prefix": "gt_actualizaciones"

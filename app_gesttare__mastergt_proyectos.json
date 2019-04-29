@@ -11,9 +11,14 @@
             "prefix": "gt_proyectos",
             "cansavefilter": true,
             "filter": {
-                "codproyecto": null,
                 "nombre": null,
-                "estado": null
+                "estado": null,
+                "fechainicio": {
+                    "filterType": "interval"
+                },
+                "fechaterminado": {
+                    "filterType": "interval"
+                }
             },
             "multiselectable": false,
             "avatar": false,
@@ -28,7 +33,9 @@
                     ]
                 },
                 {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50}
+                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50},
+                {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 100},
+                {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 100}
             ],
             "rowclick": "link",
             "accionesGrid": [{
@@ -52,7 +59,7 @@
         "delete": {
             "action": "deleteRow",
             "icon": "delete",
-            "msg": "Se eliminarán todas las tareas asociadas"
+            "msg": "El proyecto seŕa eliminado y se eliminarán todas las tareas asociadas"
         }
     }
 }

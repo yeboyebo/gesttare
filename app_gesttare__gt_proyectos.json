@@ -16,6 +16,21 @@
             "className": "gbTareas gbTareasBox",
             "style": { },
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "icon": "close",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -33,7 +48,9 @@
                                 "codproyecto": {"disabled": true},
                                 "nombre": {},
                                 "descripcion": {},
-                                "estado": {}
+                                "estado": {},
+                                "fechainicio": {},
+                                "fechaterminado": {}
                             }
                         }
                     },
@@ -81,6 +98,9 @@
         }
     },
     "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
         "delete": {
             "action": "deleteRow",
             "icon": "delete"

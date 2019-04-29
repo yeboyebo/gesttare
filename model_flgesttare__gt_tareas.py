@@ -59,6 +59,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def color_fecha(self):
         return form.iface.color_fecha(self)
 
+    def color_fechaentrega(self):
+        return form.iface.color_fechaentrega(self)
+
     def color_nombre(self):
         return form.iface.color_nombre(self)
 

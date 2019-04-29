@@ -56,31 +56,44 @@ class gesttare(interna):
             return False
         # print("partictarea 2")
         if curPart.modeAccess() == curPart.Insert:
-            if not _i.crearActualizaciones(u"Añadido participante", curPart):
+            nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curPart.valueBuffer(u"idtarea"), ""))
+            if not _i.crearActualizaciones(u"Añadido participante tarea " + nombreTarea, curPart):
+                return False
+
+        return True
+
+    def gesttare_afterCommit_gt_particproyecto(self, curPart=None):
+        _i = self.iface
+        # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_particproyecto(curPart):
+        #     return False
+
+        if curPart.modeAccess() == curPart.Insert:
+            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'"))
+            if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto, curPart):
                 return False
 
         return True
 
     def gesttare_crearActualizaciones(self, tipo, cursor=None):
-        _i = self.iface
+        # _i = self.iface
         idUsuario = qsatype.FLUtil.nameUser()
         idComentario = u""
+        if cursor.table() == "gt_comentarios" or cursor.table() == "gt_partictarea":
+            qryParticipantes = qsatype.FLSqlQuery()
+            qryParticipantes.setTablesList(u"gt_partictarea")
+            qryParticipantes.setSelect(u"idparticipante,idusuario")
+            qryParticipantes.setFrom(ustr(u"gt_partictarea"))
+            qryParticipantes.setWhere(ustr(u"idtarea = ", cursor.valueBuffer(u"idtarea"), u" AND idusuario <> '", idUsuario, u"'"))
+            try:
+                qryParticipantes.setForwardOnly(True)
+            except Exception:
+                qsatype.Object()
 
-        qryParticipantes = qsatype.FLSqlQuery()
-        qryParticipantes.setTablesList(u"gt_partictarea")
-        qryParticipantes.setSelect(u"idparticipante,idusuario")
-        qryParticipantes.setFrom(ustr(u"gt_partictarea"))
-        qryParticipantes.setWhere(ustr(u"idtarea = ", cursor.valueBuffer(u"idtarea"), u" AND idusuario <> '", idUsuario, u"'"))
-        try:
-            qryParticipantes.setForwardOnly(True)
-        except Exception:
-            qsatype.Object()
+            if not qryParticipantes.exec_():
+                return False
 
-        if not qryParticipantes.exec_():
-            return False
-
-        if qryParticipantes.size() == 0:
-            return True
+            if qryParticipantes.size() == 0:
+                return True
 
         if cursor.table() == u"gt_comentarios":
             idComentario = cursor.valueBuffer(u"idcomentario")
@@ -98,7 +111,24 @@ class gesttare(interna):
                     return False
             else:
                 print("insertando con hora")
-                if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idtarea", u"idcomentario", u"fecha", u"hora", u"idusuarioorigen"]), qsatype.Array([tipo, u"tarea", cursor.valueBuffer(u"idtarea"), idComentario, datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idtarea", u"idcomentario", u"fecha", u"hora", u"idusuarioorigen"]), qsatype.Array([tipo, u"comentario", cursor.valueBuffer(u"idtarea"), idComentario, datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
+                    return False
+        elif cursor.table() == u"gt_particproyecto":
+            idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", ustr(u"idobjeto = '", str(cursor.valueBuffer(u"codproyecto")), "' AND tipo = '", tipo, "'"))
+            if idActualizacion:
+                if not qsatype.FLUtil.sqlUpdate(u"gt_actualizaciones", u"tipo", tipo, ustr(u"idactualizacion = ", idActualizacion)):
+                    return False
+                if not qsatype.FLUtil.sqlUpdate(u"gt_actualizaciones", u"fecha", datetime.date.today(), ustr(u"idactualizacion = ", idActualizacion)):
+                    return False
+                if not qsatype.FLUtil.sqlUpdate(u"gt_actualizaciones", u"hora", time.strftime('%H:%M:%S'), ustr(u"idactualizacion = ", idActualizacion)):
+                    return False
+                if not qsatype.FLUtil.sqlUpdate(u"gt_actualizaciones", u"idusuarioorigen", idUsuario, ustr(u"idactualizacion = ", idActualizacion)):
+                    return False
+            else:
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idobjeto", u"fecha", u"hora", "idusuarioorigen"]), qsatype.Array([tipo, u"proyecto", str(cursor.valueBuffer(u"codproyecto")), datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
+                    return False
+                idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", ustr(u"idobjeto = '", str(cursor.valueBuffer(u"codproyecto")), "' AND tipo = '", tipo, "'"))
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, cursor.valueBuffer("idusuario"), False])):
                     return False
         else:
             idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", ustr(u"idtarea = ", cursor.valueBuffer(u"idtarea"), " AND tipo = '", tipo, "'"))
@@ -126,11 +156,13 @@ class gesttare(interna):
             print("sale por algun false?")
             return False
 
-        while qryParticipantes.next():
-            if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = '", qryParticipantes.value(1), u"' AND idactualizacion = ", idActualizacion)):
-                continue
-            if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, qryParticipantes.value(1), False])):
-                return False
+        if cursor.table() == "gt_comentarios" or cursor.table() == "gt_partictarea":
+
+            while qryParticipantes.next():
+                if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = '", qryParticipantes.value(1), u"' AND idactualizacion = ", idActualizacion)):
+                    continue
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, qryParticipantes.value(1), False])):
+                    return False
 
         print("Termina")
         return True
@@ -181,6 +213,9 @@ class gesttare(interna):
 
     def afterCommit_gt_partictarea(self, curPart=None):
         return self.ctx.gesttare_afterCommit_gt_partictarea(curPart)
+
+    def afterCommit_gt_particproyecto(self, curPart=None):
+        return self.ctx.gesttare_afterCommit_gt_particproyecto(curPart)
 
     def crearActualizaciones(self, tipo, cursor=None):
         return self.ctx.gesttare_crearActualizaciones(tipo, cursor)

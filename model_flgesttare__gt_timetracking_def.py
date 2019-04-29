@@ -12,6 +12,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from datetime import datetime
 
 
 class gesttare(interna):
@@ -125,12 +126,20 @@ class gesttare(interna):
 
     def gesttare_calcula_totaltiempo(self, cursor):
         formato = "%H:%M:%S"
-        hfin = datetime.strptime(str(cursor.valueBuffer("horafin")), formato)
-        hinicio = datetime.strptime(str(cursor.valueBuffer("horainicio")), formato)
+        horainicio = str(cursor.valueBuffer("horainicio"))
+        if len(horainicio) == 5:
+            horainicio += ":00"
+        horafin = str(cursor.valueBuffer("horafin"))
+        if len(horafin) == 5:
+            horafin += ":00"
+        hfin = datetime.strptime(horafin, formato)
+        hinicio = datetime.strptime(horainicio, formato)
         totaltiempo = hfin - hinicio
         totaltiempo = str(totaltiempo)
         if len(totaltiempo) < 8:
             totaltiempo = "0" + totaltiempo
+        if len(totaltiempo) > 8:
+            totaltiempo = totaltiempo[8:]
         return totaltiempo
 
     def gesttare_editarTT(self, oParam, cursor):

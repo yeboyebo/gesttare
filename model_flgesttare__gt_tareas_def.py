@@ -91,13 +91,13 @@ class gesttare(interna):
             curProyectos.refreshBuffer()
             # proin.append(curProyectos.valueBuffer("codproyecto"))
             proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
-            proin = proin + " null)"
+        proin = proin + " null)"
         query = {}
         query["tablesList"] = ("gt_tareas")
         query["select"] = ("gt_tareas.idtarea, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
         query["from"] = ("gt_tareas")
-        query["where"] = ("gt_tareas.fechavencimiento is not null AND gt_tareas.codproyecto IN " + proin + " AND 1=1")
+        query["where"] = ("gt_tareas.fechavencimiento is not null AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
         # query["groupby"] = " articulos.referencia, articulos.descripcion"
         # query["orderby"] = "MAX(pedidoscli.fecha) DESC"
         return query
@@ -164,6 +164,11 @@ class gesttare(interna):
 
     def gesttare_color_fecha(self, model):
         if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+        return ""
+
+    def gesttare_color_fechaentrega(self, model):
+        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
             return "fcDanger"
         return ""
 
@@ -263,10 +268,21 @@ class gesttare(interna):
 
     def gesttare_calcula_totaltiempo(self, cursor):
         formato = "%H:%M:%S"
-        hfin = datetime.strptime(str(cursor.valueBuffer("horafin")), formato)
-        hinicio = datetime.strptime(str(cursor.valueBuffer("horainicio")), formato)
+        horainicio = str(cursor.valueBuffer("horainicio"))
+        if len(horainicio) == 5:
+            horainicio += ":00"
+        horafin = str(cursor.valueBuffer("horafin"))
+        if len(horafin) == 5:
+            horafin += ":00"
+        hfin = datetime.strptime(horafin, formato)
+        hinicio = datetime.strptime(horainicio, formato)
         totaltiempo = hfin - hinicio
-        return str(totaltiempo)
+        totaltiempo = str(totaltiempo)
+        if len(totaltiempo) < 8:
+            totaltiempo = "0" + totaltiempo
+        if len(totaltiempo) > 8:
+            totaltiempo = totaltiempo[8:]
+        return totaltiempo
 
     def gesttare_startstop(self, model, cursor):
         now = qsatype.Date()
@@ -324,6 +340,7 @@ class gesttare(interna):
         return response
 
     def gesttare_completar_tarea(self, model, cursor):
+        response = {}
         resuelta = cursor.valueBuffer("resuelta")
         cursor.setValueBuffer("resuelta", not resuelta)
 
@@ -331,7 +348,12 @@ class gesttare(interna):
             print("Ocurrió un error al actualizar la tarea")
             return False
 
-        return True
+        response["resul"] = True
+        if resuelta:
+            response["msg"] = "Tarea completada"
+        else:
+            response["msg"] = "Tarea abierta"
+        return response
 
     def gesttare_creartarea(self, oParam):
         data = []
@@ -429,8 +451,10 @@ class gesttare(interna):
                         curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
                         if not curPartic.commitBuffer():
                             return False
-
-            return True
+            response = {}
+            response["resul"] = True
+            response["msg"] = "Participante/s añadido/s"
+            return response
 
     def gesttare_bChCursor(self, fN, cursor):
         if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, curPedido):
@@ -574,6 +598,9 @@ class gesttare(interna):
 
     def color_fecha(self, model):
         return self.ctx.gesttare_color_fecha(model)
+
+    def color_fechaentrega(self, model):
+        return self.ctx.gesttare_color_fechaentrega(model)
 
     def color_nombre(self, model):
         return self.ctx.gesttare_color_nombre(model)

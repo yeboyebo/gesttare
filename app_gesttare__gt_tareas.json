@@ -65,6 +65,7 @@
                     "icon": "info",
                     "label": "Información",
                     "return": true,
+                    "successmsg": "Tarea actualizada",
                     "fields": {
                         "gb__titulo": {
                             "title": "",
@@ -81,11 +82,14 @@
                                     "function": "getProyectosUsuario"
                                 },
                                 "fechavencimiento": {},
-                                "resuelta": {},
+                                "fechaentrega": {},
                                 "codestado": {},
                                 "idusuario": {
-                                    "combolimit": 1
-                                }
+                                    "combolimit": 1,
+                                    "function": "getUsuariosProyecto",
+                                    "params": {"codproyecto": "codproyecto"}
+                                },
+                                "resuelta": {}
                             }
                         }
                     },
@@ -97,7 +101,7 @@
                 "nuevoTimeTrackingButton": {
                     "componente": "YBButton",
                     "prefix": "gt_tareas",
-                    "label": "Gestionar tiempo",
+                    "label": "Añadir tiempo",
                     "className": "floatLeft",
                     "buttonType": "raised",
                     "action": {
@@ -133,7 +137,7 @@
                             "columns": [
                                 {
                                     "tipo": "act",
-                                    "key": "delete",
+                                    "key": "deleteParticipante",
                                     "label": "Borrar Linea",
                                     "success": [
                                         {
@@ -236,7 +240,7 @@
                                 },
                                 {
                                     "tipo": "act",
-                                    "key": "delete",
+                                    "key": "deleteComentario",
                                     "label": "Borrar Linea",
                                     "success": [
                                         {
@@ -288,9 +292,15 @@
             "title": "Participantes",
             "serverAction": "actNuevoPartic"
         },
-        "delete": {
+        "deleteComentario": {
             "action": "deleteRow",
-            "icon": "delete"
+            "icon": "delete",
+            "msg": "El comentario será eliminado"
+        },
+        "deleteParticipante": {
+            "action": "deleteRow",
+            "icon": "delete",
+            "msg": "El participante será eliminado"
         },
         "nuevaLinea": {
             "action": "newRow",

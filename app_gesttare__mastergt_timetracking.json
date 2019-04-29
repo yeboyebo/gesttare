@@ -27,7 +27,8 @@
                     "key": "idusuario",
                     "tofield": "idusuario",
                     "desc": "nombre",
-                    "fN": "usuarios.idusuario"
+                    "fN": "usuarios.idusuario",
+                    "function": "getParticProyectosUsu"
                 },
                 "tarea": {
                     "label": "Tarea",
@@ -47,7 +48,8 @@
                     "key": "codproyecto",
                     "tofield": "codproyecto",
                     "desc": "nombre",
-                    "fN": "gt_proyectos.codproyecto"
+                    "fN": "gt_proyectos.codproyecto",
+                    "function": "getProyectosUsuario"
                 },
                 "fecha": {
                     "filterType": "interval"
@@ -95,7 +97,8 @@
         "delete": {
             "action": "deleteRow",
             "prefix": "gt_timetracking",
-            "icon": "delete"
+            "icon": "delete",
+            "msg": "El registro de tiempo será eliminado"
         }
     }
 }

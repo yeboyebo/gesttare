@@ -4,7 +4,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas",
+            "className": "gbTareas gbTareasBox",
             "style": { },
             "layout": {
                 "separator1": {
@@ -26,7 +26,9 @@
                                 "codproyecto": {"disabled": true},
                                 "nombre": {},
                                 "descripcion": {},
-                                "estado": {}
+                                "estado": {},
+                                "fechainicio": {},
+                                "fechaterminado": {}
                             }
                         }
                     },

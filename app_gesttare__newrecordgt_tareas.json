@@ -4,7 +4,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas",
+            "className": "gbTareas gbTareasBox",
             "style": { },
             "layout": {
                 "separator1": {
@@ -18,6 +18,7 @@
                     "return": true,
                     "icon": "info",
                     "label": "Información",
+                    "successmsg": "Tarea creada",
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__": {
@@ -27,8 +28,13 @@
                                 "descripcion": {},
                                 "codproyecto": {"combolimit": 1, "function": "getProyectosUsuario"},
                                 "fechavencimiento": {},
+                                "fechaentrega": {},
                                 "codestado": {},
-                                "idusuario": {"combolimit": 1}
+                                "idusuario": {
+                                    "combolimit": 1,
+                                    "function": "getUsuariosProyecto",
+                                    "params": {"codproyecto": "codproyecto"}
+                                }
                             }
                         }
                     },

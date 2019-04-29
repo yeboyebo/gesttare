@@ -22,10 +22,16 @@
                     "prefix": "gt_tareas",
                     "cansavefilter": true,
                     "filter": {
-                        "codproyecto": null,
+                        "nombre": null,
+                        "codproyecto": {"function": "getProyectosUsuario"},
                         "codestado": null,
-                        "idusuario": null,
+                        "idusuario": {
+                                        "function": "getParticProyectosUsu"
+                                     },
                         "fechavencimiento":  {
+                            "filterType": "interval"
+                        },
+                        "fechaentrega": {
                             "filterType": "interval"
                         },
                         "resuelta": null
@@ -59,6 +65,7 @@
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "avatar": true},
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
                         {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
+                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 80},
                         {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
                     ],
                     "rowclick": "",
