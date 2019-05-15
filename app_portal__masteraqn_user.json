@@ -1,0 +1,42 @@
+{
+    "querystring": {
+        "p_l": 40,
+        "p_c": true,
+        "s_usuario__ne": "admin"
+    },
+    "schema": {},
+    "layout": {
+        "masterUsuarios": {
+            "componente": "YBGrid",
+            "label": "Usuarios",
+            "prefix": "aqn_user",
+            "filter": "buscador",
+            "columns": [
+                {
+                    "tipo": "act",
+                    "key": "delete",
+                    "label": "Borrar Linea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
+                {"tipo": "field", "listpos": "subtitle", "key": "nombre", "avatar": true},
+                {"tipo": "field", "listpos": "title", "key": "email"},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "usuario"}
+            ],
+            "rowclick": "link"
+        },
+        "newRecordTelest": {
+            "componente": "YBNewRecordGoTo",
+            "class": "info",
+            "icon": "add",
+            "goto": "/signup"
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        }
+    }
+}

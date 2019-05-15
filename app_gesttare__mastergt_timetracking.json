@@ -23,11 +23,11 @@
                     "label": "Usuario",
                     "filterType": "custom",
                     "tipo": 55,
-                    "rel": "usuarios",
+                    "rel": "aqn_user",
                     "key": "idusuario",
                     "tofield": "idusuario",
                     "desc": "nombre",
-                    "fN": "usuarios.idusuario",
+                    "fN": "aqn_user.idusuario",
                     "function": "getParticProyectosUsu"
                 },
                 "tarea": {

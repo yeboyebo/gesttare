@@ -233,6 +233,14 @@
             {
                 "path": "assets/dist/img/logo/",
                 "name": "gesttarelogo.png"
+            },
+            {
+                "name": "app_portal__masteraqn_user.json",
+                "path": "apps/portal/templates/portal/plantillas/"
+            },
+            {
+                "name": "app_portal__aqn_user.json",
+                "path": "apps/portal/templates/portal/plantillas/"
             }
         ],
         "replaceFile": [
@@ -260,6 +268,11 @@
                 "name": "app_portal__menu_system.json"
             }
         ],
-        "patchScript": []
+        "patchScript": [
+            {
+                "name": "app_portal__views_portal.py",
+                "path": "apps/portal/viewset/"
+            }
+        ]
     }
 }

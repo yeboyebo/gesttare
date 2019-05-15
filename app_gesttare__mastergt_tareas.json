@@ -2,7 +2,7 @@
     "querystring": {
         "p_l": 50,
         "p_c": true,
-        "o_1": "-idtarea",
+        "o_1": "fechavencimiento",
         "s_resuelta__exact": false,
         "f_proyectosusuario": null
     },
@@ -21,6 +21,7 @@
                     "componente": "YBGrid",
                     "prefix": "gt_tareas",
                     "cansavefilter": true,
+                    "buscador": false,
                     "filter": {
                         "nombre": null,
                         "codproyecto": {"function": "getProyectosUsuario"},
@@ -49,14 +50,6 @@
                             "tipo": "act",
                             "key": "startstop",
                             "label": "TimeTracking",
-                            "success": [
-                                {"slot": "refrescar"}
-                            ]
-                        },
-                        {
-                            "tipo": "act",
-                            "key": "delete",
-                            "label": "Borrar Linea",
                             "success": [
                                 {"slot": "refrescar"}
                             ]

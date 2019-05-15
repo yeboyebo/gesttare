@@ -33,7 +33,8 @@
                     },
                     "format": {
                         "title": "gt_tareas.nombre",
-                        "date": "gt_tareas.fechavencimiento"
+                        "date": "gt_tareas.fechavencimiento",
+                        "user": "aqn_user.email"
                     }
                 }
             }

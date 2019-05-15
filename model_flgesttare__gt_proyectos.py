@@ -26,6 +26,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def getProyectosUsuario(self, oParam):
         return form.iface.getProyectosUsuario(oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def dameEmailCreaTarea(self, oParam, cursor):
+        return form.iface.dameEmailCreaTarea(oParam, cursor)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

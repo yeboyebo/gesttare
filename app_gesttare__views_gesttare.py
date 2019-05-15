@@ -15,7 +15,7 @@ class gesttare(interna):
 
     def gesttare_get_app_info(self, model, data):
         username = qsatype.FLUtil.nameUser()
-        tareaactiva = qsatype.FLUtil.quickSqlSelect("usuarios", "idtareaactiva", "idusuario = '{}'".format(username))
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
 
         if not tareaactiva:
             return None

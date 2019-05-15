@@ -86,6 +86,7 @@
                                 "codestado": {},
                                 "idusuario": {
                                     "combolimit": 1,
+                                    "showpk": false,
                                     "function": "getUsuariosProyecto",
                                     "params": {"codproyecto": "codproyecto"}
                                 },
@@ -234,7 +235,7 @@
                                 },
                                 {
                                     "tipo": "field",
-                                    "listpos": "subtitle",
+                                    "listpos": "body",
                                     "key": "comentario",
                                     "flex": 5
                                 },

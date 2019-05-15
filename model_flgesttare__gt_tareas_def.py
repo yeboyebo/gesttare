@@ -73,9 +73,9 @@ class gesttare(interna):
 
     def gesttare_queryGrid_calendarioTareas_initFilter(self):
         initFilter = {}
-        existe = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idtarea", ustr(u"extract(month from gt_tareas.fechavencimiento) = ", qsatype.Date().getMonth()))
-        if not existe:
-            return initFilter
+        # existe = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idtarea", ustr(u"extract(month from gt_tareas.fechavencimiento) = ", qsatype.Date().getMonth()))
+        # if not existe:
+        #     return initFilter
         initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2019"
         initFilter['where'] += u" AND extract(month from gt_tareas.fechavencimiento) = " + str(qsatype.Date().getMonth())
         initFilter['filter'] = {"s_extract(year from gt_tareas.fechavencimiento)__exact": "2019", "s_extract(month from gt_tareas.fechavencimiento)__exact": str(qsatype.Date().getMonth())}
@@ -93,10 +93,10 @@ class gesttare(interna):
             proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
         proin = proin + " null)"
         query = {}
-        query["tablesList"] = ("gt_tareas")
-        query["select"] = ("gt_tareas.idtarea, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
+        query["tablesList"] = ("gt_tareas, aqn_user")
+        query["select"] = ("gt_tareas.idtarea, aqn_user.email, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
-        query["from"] = ("gt_tareas")
+        query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario")
         query["where"] = ("gt_tareas.fechavencimiento is not null AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
         # query["groupby"] = " articulos.referencia, articulos.descripcion"
         # query["orderby"] = "MAX(pedidoscli.fecha) DESC"
@@ -392,11 +392,15 @@ class gesttare(interna):
         if "idusuario" not in oParam:
             # idUsuario = cursor.valueBuffer("idusuario")
             qryUsuarios = qsatype.FLSqlQuery()
-            qryUsuarios.setTablesList(u"usuarios")
-            qryUsuarios.setSelect(u"idusuario, nombre")
-            qryUsuarios.setFrom(ustr(u"usuarios"))
-            # qryUsuarios.setWhere(ustr(u"idusuario <> '", idUsuario, u"'"))
-            qryUsuarios.setWhere(ustr(u"1 = 1"))
+            usuario = qsatype.FLUtil.nameUser()
+            # qryUsuarios.setTablesList(u"aqn_user")
+            # qryUsuarios.setSelect(u"idusuario, nombre")
+            # qryUsuarios.setFrom(ustr(u"aqn_user"))
+            # qryUsuarios.setWhere(ustr(u"1 = 1"))
+            qryUsuarios.setTablesList(u"gt_partictarea, aqn_user")
+            qryUsuarios.setSelect(u"DISTINCT(p.idusuario), u.nombre")
+            qryUsuarios.setFrom(u"gt_partictarea p INNER JOIN aqn_user u ON p.idusuario = u.idusuario")
+            qryUsuarios.setWhere(u"p.idtarea in (select p.idtarea from gt_partictarea p INNER JOIN aqn_user u  ON p.idusuario = u.idusuario where p.idusuario = '" + str(usuario) + "')")
             if not qryUsuarios.exec_():
                 return False
 
@@ -414,7 +418,7 @@ class gesttare(interna):
                 {
                     "componente": "YBFieldDB",
                     "prefix": "otros",
-                    "rel": "usuarios",
+                    "rel": "aqn_user",
                     "style": {
                         "width": "100%"
                     },
@@ -422,6 +426,7 @@ class gesttare(interna):
                     "verbose_name": "Participantes",
                     "label": "Participantes",
                     "key": "idusuario",
+                    "function": "getParticProyectosUsu",
                     "desc": "nombre",
                     "validaciones": None,
                     "required": False,

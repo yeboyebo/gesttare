@@ -151,6 +151,34 @@ class gesttare(interna):
 
         return data
 
+    def gesttare_dameEmailCreaTarea(self, oParam, cursor):
+        response = {}
+        if "email" not in oParam:
+            val = str(cursor.valueBuffer("codproyecto")) + "@convert.dailyjob.io"
+            response['status'] = -1
+            response['data'] = {}
+            response['params'] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "rel": "gt_proyectos",
+                    "style": {
+                        "width": "100%"
+                    },
+                    "tipo": 3,
+                    "verbose_name": "Email",
+                    "label": "Email",
+                    "key": "idusuario",
+                    "disabled": True,
+                    "value": val,
+                    "validaciones": None,
+                    "required": False
+                }
+            ]
+            return response
+        else:
+            return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -168,6 +196,9 @@ class gesttare(interna):
 
     def getProyectosUsuario(self, oParam):
         return self.ctx.gesttare_getProyectosUsuario(oParam)
+
+    def dameEmailCreaTarea(self, oParam, cursor):
+        return self.ctx.gesttare_dameEmailCreaTarea(oParam, cursor)
 
 
 # @class_declaration head #
