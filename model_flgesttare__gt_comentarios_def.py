@@ -1,6 +1,5 @@
 # @class_declaration interna #
 from YBLEGACY import qsatype
-from YBUTILS import gesDoc
 
 
 class interna(qsatype.objetoBase):
@@ -13,13 +12,14 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from YBUTILS import gesDoc
 
 
 class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
-        fields = [{'verbose_name': 'adjunto', 'func': 'field_adjunto'}]
+        fields = [{'verbose_name': 'adjunto', 'func': 'field_adjunto'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}]
         return fields
 
     def gesttare_getDesc(self):
@@ -30,6 +30,11 @@ class gesttare(interna):
         file = gesDoc.getFiles("gt_comentarios", model.pk)
         if file:
             return file["nombre"]
+        return nombre
+
+    def gesttare_field_nombreUsuario(self, model):
+        # nombre = qsatype.FLUtil.quickSqlSelect("aqn_user", "email", "idusuario = {}".format(model.idusuario.idusuario)) or ""
+        nombre = model.idusuario.usuario
         return nombre
 
     def __init__(self, context=None):
@@ -43,6 +48,9 @@ class gesttare(interna):
 
     def field_adjunto(self, model):
         return self.ctx.gesttare_field_adjunto(model)
+
+    def field_nombreUsuario(self, model):
+        return self.ctx.gesttare_field_nombreUsuario(model)
 
 
 # @class_declaration head #

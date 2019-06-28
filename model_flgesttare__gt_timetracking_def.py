@@ -13,6 +13,7 @@ class interna(qsatype.objetoBase):
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from datetime import datetime
+from models.flgesttare import flgesttare_def
 
 
 class gesttare(interna):
@@ -36,8 +37,8 @@ class gesttare(interna):
                 proin = proin + " null)"
                 where_filter += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario", "SUM(totaltiempo)", where_filter) or 0
-
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
+            print(tiempototal)
             return {"masterTimeTracking": "Tiempo total: {}".format(tiempototal)}
         return None
 
@@ -61,7 +62,7 @@ class gesttare(interna):
             if "[tarea]" in filters and filters["[tarea]"] != "":
                 where += " AND gt_tareas.idtarea = {}".format(filters["[tarea]"])
             if "[usuario]" in filters and filters["[usuario]"] != "":
-                where += " AND usuarios.idusuario = '{}'".format(filters["[usuario]"])
+                where += " AND aqn_user.idusuario = '{}'".format(filters["[usuario]"])
             if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
                 where += " AND gt_timetracking.fecha >= '{}'".format(filters["[d_fecha]"])
             if "[h_fecha]" in filters and filters["[h_fecha]"] != "":
@@ -69,19 +70,29 @@ class gesttare(interna):
             if "[fecha]" in filters and filters["[fecha]"] != "":
                 where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
             if "[buscador]" in filters and filters["[buscador]"] != "":
-                where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(usuarios.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
+                where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
         query = {}
-        query["tablesList"] = ("gt_timetracking, gt_tareas, usuarios")
-        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, usuarios.nombre")
-        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN usuarios ON gt_timetracking.idusuario = usuarios.idusuario")
+        query["tablesList"] = ("gt_timetracking, gt_tareas, aqn_user")
+        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, aqn_user.usuario, aqn_user.nombre")
+        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
         query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
 
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
+        # if template == "mastertimetracking":
+            # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
         return []
+
+    def gesttare_field_nombre(self, model):
+        nombre = ""
+        try:
+            nombre = model.idusuario.usuario
+        except Exception as e:
+            print(e)
+        return nombre
 
     def gesttare_seconds_to_time(self, seconds, total=False):
         if not seconds:
@@ -191,6 +202,11 @@ class gesttare(interna):
             totaltiempo = self.calcula_totaltiempo(cursor)
             cursor.setValueBuffer("totaltiempo", totaltiempo)
 
+        if fN == u"costehora" or fN == u"totaltiempo":
+            cursor.setValueBuffer(u"coste", flgesttare_def.iface.calcula_costetiempo("timetracking", cursor))
+
+        return True
+
     def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
         if template == "accion":
             if accion == "delete":
@@ -202,7 +218,7 @@ class gesttare(interna):
                     curTracking.refreshBuffer()
                     idusuario = curTracking.valueBuffer("idusuario")
                     usuario = qsatype.FLUtil.nameUser()
-                    if not idusuario == usuario:
+                    if not str(idusuario) == usuario:
                         return False
 
         if template == "formRecord":
@@ -210,15 +226,21 @@ class gesttare(interna):
             curTracking.select(ustr("idtracking = '", pk, "'"))
             curTracking.refreshBuffer()
             if curTracking.first():
+                usuario = qsatype.FLUtil.nameUser()
                 curTracking.setModeAccess(curTracking.Browse)
                 curTracking.refreshBuffer()
-                idtarea = curTracking.valueBuffer("idtarea")
-                codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
-                nombreUsuario = qsatype.FLUtil.nameUser()
-                pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+                # idtarea = curTracking.valueBuffer("idtarea")
+                # codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
+                # nombreUsuario = qsatype.FLUtil.nameUser()
+                # pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+                pertenece = str(curTracking.valueBuffer("idusuario")) == str(usuario)
+                print(usuario)
+                print(curTracking.valueBuffer("idusuario"))
                 if not pertenece:
+                    print("sale por aqui 1")
                     return False
             else:
+                print("sale por aqui 2")
                 return False
         return True
 
@@ -257,6 +279,9 @@ class gesttare(interna):
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def field_nombre(self, model):
+        return self.ctx.gesttare_field_nombre(model)
 
 
 # @class_declaration head #

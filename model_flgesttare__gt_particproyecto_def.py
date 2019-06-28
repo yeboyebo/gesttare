@@ -27,13 +27,19 @@ class gesttare(interna):
         participantes = "Participantes: "
         participantes = ""
         for part in data:
-            user = qsatype.FLUtil.sqlSelect("usuarios", "nombre", "idusuario = '{}'".format(part["idusuario"]))
-            participantes = participantes + user + ", "
+            user = qsatype.FLUtil.sqlSelect("aqn_user", "usuario", "idusuario = '{}'".format(part["idusuario"]))
+            if user:
+                participantes = participantes + user + ", "
         participantes = participantes[:len(participantes) - 2]
         return {"participantesGrid": participantes}
 
     def gesttare_field_nombre(self, model):
-        return model.idusuario.nombre
+        usuario = ""
+        try:
+            usuario = model.idusuario.usuario
+        except Exception:
+            pass
+        return usuario
 
     def __init__(self, context=None):
         super().__init__(context)

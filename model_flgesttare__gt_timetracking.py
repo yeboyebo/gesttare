@@ -29,6 +29,9 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)
 
+    def field_nombre(self):
+        return form.iface.field_nombre(self)
+
     class Meta:
         proxy = True
 

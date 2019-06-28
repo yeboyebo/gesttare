@@ -69,19 +69,25 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def login(oParam):
         return form.iface.login(oParam)
 
+    def getpryus(appid, email):
+        return form.iface.getpryus(appid, email)
+
     @helpers.decoradores.csr()
     def damepryus(oParam):
-        return form.iface.damepryus(oParam)
+        return form.iface.damepryus(oParam["appid"], oParam["email"])
 
     @helpers.decoradores.csr()
     def creartarea(oParam):
         return form.iface.creartarea(oParam)
 
-    def dameProyectos():
-        return form.iface.dameProyectos()
+    def createtask(oParam):
+        return form.iface.createtask(oParam)
 
-    def dameUsuarios():
-        return form.iface.dameUsuarios()
+    def dameProyectos(email):
+        return form.iface.dameProyectos(email)
+
+    def dameUsuarios(email):
+        return form.iface.dameUsuarios(email)
 
     @helpers.decoradores.accion(aqparam=["cursor"])
     def startstop(self, cursor):

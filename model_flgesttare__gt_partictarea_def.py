@@ -27,7 +27,7 @@ class gesttare(interna):
         participantes = "Participantes: "
         participantes = ""
         for part in data:
-            user = qsatype.FLUtil.sqlSelect(u"aqn_user", u"nombre", ustr(u"idusuario = '", part["idusuario"], "'"))
+            user = qsatype.FLUtil.sqlSelect(u"aqn_user", u"usuario", ustr(u"idusuario = '", part["idusuario"], "'"))
             participantes = participantes + user + ", "
         participantes = participantes[:len(participantes) - 2]
         return {"participantesGrid": participantes}
@@ -35,7 +35,7 @@ class gesttare(interna):
     def gesttare_field_nombre(self, model):
         nombre = ""
         try:
-            nombre = model.idusuario.nombre
+            nombre = model.idusuario.usuario
         except Exception as e:
             print(e)
         return nombre

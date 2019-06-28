@@ -1,8 +1,8 @@
 # @class_declaration interna #
 from YBLEGACY import qsatype
 from YBUTILS import gesDoc
-
-from models.flfactppal.usuarios import usuarios
+# from models.flfactppal.usuarios import usuarios
+from models.fllogin.aqn_user import aqn_user as usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 from datetime import datetime
 
@@ -60,7 +60,7 @@ class gesttare(interna):
         # TODO De donde sacamos idusuario, al crear usuario en aplicacion acreamos gt_usuario?
         nombreUsuario = qsatype.FLUtil.nameUser()
         print("Usuario: ", nombreUsuario)
-        idUsuario = qsatype.FLUtil.sqlSelect(u"usuarios", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
+        idUsuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
         print("idusuario: ", idUsuario)
         if not idUsuario:
             print("No existe el usuario")
@@ -94,10 +94,11 @@ class gesttare(interna):
         proin = proin + " null)"
         query = {}
         query["tablesList"] = ("gt_tareas, aqn_user")
-        query["select"] = ("gt_tareas.idtarea, aqn_user.email, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
+        query["select"] = ("gt_tareas.idtarea, aqn_user.email, aqn_user.usuario, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
         query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario")
         query["where"] = ("gt_tareas.fechavencimiento is not null AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
+        query["limit"] = 100
         # query["groupby"] = " articulos.referencia, articulos.descripcion"
         # query["orderby"] = "MAX(pedidoscli.fecha) DESC"
         return query
@@ -127,7 +128,6 @@ class gesttare(interna):
 
     def gesttare_cambiarFecha(self, model, oParam, cursor):
         nuevaFecha = oParam["fechavencimiento"]
-        print("cambiar fecha ", nuevaFecha)
         if nuevaFecha:
             cursor.setValueBuffer("fechavencimiento", nuevaFecha)
             if not cursor.commitBuffer():
@@ -149,14 +149,14 @@ class gesttare(interna):
         try:
             if not model.idusuario:
                 return nombre_usuario
-            nombre_usuario = model.idusuario.nombre
+            nombre_usuario = model.idusuario.usuario
         except Exception:
             pass
         return nombre_usuario
 
     def gesttare_color_nombre(self, model):
         username = qsatype.FLUtil.nameUser()
-        tareaactiva = qsatype.FLUtil.quickSqlSelect("usuarios", "idtareaactiva", "idusuario = '{}'".format(username))
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
 
         if model.idtarea and tareaactiva and model.idtarea == tareaactiva:
             return "fcSuccess"
@@ -175,11 +175,11 @@ class gesttare(interna):
     def gesttare_uploadFile(self, model, oParam):
         # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
         # TODO De donde sacamos idusuario, al crear usuario en aplicacion acreamos gt_usuario?
-        nombreUsuario = qsatype.FLUtil.nameUser()
-        idUsuario = qsatype.FLUtil.sqlSelect(u"usuarios", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
-        if not idUsuario:
-            print("No existe el usuario")
-            return False
+        idUsuario = qsatype.FLUtil.nameUser()
+        # idUsuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
+        # if not idUsuario:
+        #     print("No existe el usuario")
+        #     return False
         # idUsuario = "ANDRES"
         # if not qsatype.FLUtil.sqlInsert(u"gt_comentarios", ["idtarea", "fecha", "hora", "comentario", "hdedicadas", "costehora", "coste", "idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 0, 0, 0, idUsuario]):
         #     print("algo salio mal?")
@@ -220,12 +220,38 @@ class gesttare(interna):
         data.append({"result": True})
         return data
 
-    def gesttare_damepryus(self, oParam):
+    def gesttare_getpryus(self, appid, email):
         _i = self.iface
+        idusuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", u"email = '" + str(email) + u"'")
+        response = {}
+        if not idusuario:
+            response["result"] = False
+            response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear tareas en el proyecto"
+            response["nombreProyecto"] = " "
+            response["username"] = email
+            return response
+        if appid == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            proyectos = _i.dameProyectos(idusuario)
+            usuarios = _i.dameUsuarios(idusuario)
+            response["projects"] = proyectos
+            response["users"] = usuarios
+        else:
+            response["result"] = False
+            response["error"] = "Error en autenticación"
+
+        return response
+
+    def gesttare_damepryus(self, appid, email):
+        _i = self.iface
+        idusuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", u"email = '" + str(email) + u"'")
         data = []
-        if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
-            proyectos = _i.dameProyectos()
-            usuarios = _i.dameUsuarios()
+        if not idusuario:
+            data.append({"result": False})
+            data.append({"error": "No existe el usuario de dailyjob, por tanto no tienes permisos para crear tareas en el proyecto"})
+            return data
+        if appid == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            proyectos = _i.dameProyectos(idusuario)
+            usuarios = _i.dameUsuarios(idusuario)
             data.append({"projects": proyectos})
             data.append({"users": usuarios})
         else:
@@ -234,12 +260,13 @@ class gesttare(interna):
 
         return data
 
-    def gesttare_dameProyectos(self):
+    def gesttare_dameProyectos(self, idusuario):
         proyectos = []
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"gt_proyectos")
-        q.setSelect("codproyecto, descripcion")
-        q.setFrom("gt_proyectos")
+        q.setTablesList(u"gt_proyectos, gt_particproyecto")
+        q.setSelect("gt_proyectos.codproyecto, gt_proyectos.nombre")
+        q.setFrom("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.codproyecto = gt_particproyecto.codproyecto")
+        q.setWhere(u"idusuario = '" + str(idusuario) + "'")
 
         if not q.exec_():
             print("Error inesperado")
@@ -250,19 +277,21 @@ class gesttare(interna):
 
         return proyectos
 
-    def gesttare_dameUsuarios(self):
+    def gesttare_dameUsuarios(self, idusuario):
         usuarios = []
+        idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", u"idusuario = '" + str(idusuario) + u"'")
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"usuarios")
-        q.setSelect("idusuario, nombre")
-        q.setFrom("usuarios")
+        q.setTablesList(u"aqn_user")
+        q.setSelect("idusuario, email, nombre, apellidos")
+        q.setFrom("aqn_user")
+        q.setWhere(u"idcompany = '" + str(idcompany) + "'")
 
         if not q.exec_():
             print("Error inesperado")
             return []
-
         while q.next():
-            usuarios.append({"codigo": str(q.value(0)), "nombre": str(q.value(1))})
+            nombre = str(q.value(2) or "") + " " + str(q.value(3) or "")
+            usuarios.append({"codigo": str(q.value(0)), "email": str(q.value(1)), "nombre": str(nombre)})
 
         return usuarios
 
@@ -303,7 +332,7 @@ class gesttare(interna):
                 print("Ocurrió un error al actualizar el registro de gt_timetracking")
                 return False
 
-        cur_user = qsatype.FLSqlCursor("usuarios")
+        cur_user = qsatype.FLSqlCursor("aqn_user")
         cur_user.select("idusuario = '{}'".format(user_name))
         if not cur_user.first():
             print("No se encontró el usuario")
@@ -357,10 +386,20 @@ class gesttare(interna):
 
     def gesttare_creartarea(self, oParam):
         data = []
-        usuario = usuarios.objects.filter(idusuario__exact=oParam["person"])
-        if len(usuario) == 0:
+        if "project" not in oParam or not oParam["project"]:
+            data.append({"result": False})
+            data.append({"error": "No perteneces al proyecto consulta reponsable"})
+            return data
+        # usuario = usuarios.objects.filter(idusuario__exact=oParam["person"])
+        usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"idusuario = '", oParam["person"], u"'"))
+        if not usuario:
             data.append({"result": False})
             data.append({"error": "No existe el usuario"})
+            return data
+        pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"codproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND codproyecto = '", oParam["project"], "'"))
+        if not pertenece:
+            data.append({"result": False})
+            data.append({"error": "No perteneces al proyecto consulta reponsable"})
             return data
         if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
             curTarea = qsatype.FLSqlCursor(u"gt_tareas")
@@ -387,6 +426,60 @@ class gesttare(interna):
             data.append({"error": "Error en autenticación"})
         return data
 
+    def gesttare_createtask(self, oParam):
+        response = {}
+        if "project" not in oParam or not oParam["project"]:
+            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(oParam["project"]), u"'"))
+            response["result"] = False
+            response["error"] = "No tienes permisos para crear tareas en el proyecto"
+            response["nombreProyecto"] = nombreProyecto
+            response["username"] = oParam["person"]
+            return response
+        # usuario = usuarios.objects.filter(idusuario__exact=oParam["person"])
+        usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"usuario", ustr(u"idusuario = '", oParam["person"], u"'"))
+        if not usuario:
+            response["result"] = False
+            response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear tareas en el proyecto"
+            response["nombreProyecto"] = " "
+            response["username"] = oParam["person"]
+        pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"codproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND codproyecto = '", oParam["project"], "'"))
+        if not pertenece:
+            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", oParam["project"], u"'"))
+            response["result"] = False
+            response["error"] = "No tienes permisos para crear tareas en el proyecto"
+            response["nombreProyecto"] = nombreProyecto
+            response["username"] = usuario
+            return response
+        if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            curTarea = qsatype.FLSqlCursor(u"gt_tareas")
+            curTarea.setModeAccess(curTarea.Insert)
+            curTarea.refreshBuffer()
+            curTarea.setActivatedBufferCommited(True)
+            curTarea.setValueBuffer(u"codproyecto", oParam["project"])
+            curTarea.setValueBuffer(u"codestado", oParam["state"])
+            curTarea.setValueBuffer(u"nombre", oParam["name"])
+            curTarea.setValueBuffer(u"idusuario", oParam["person"])
+            curTarea.setValueBuffer(u"descripcion", oParam["description"])
+            curTarea.setValueBuffer(u"resuelta", False)
+            if oParam["date"] and oParam["date"] != u"undefined":
+                curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
+
+            if not curTarea.commitBuffer():
+                response["result"] = False
+                response["error"] = "Error en commit"
+            else:
+                response["result"] = True
+                response["ok"] = "Tarea creada correctamente"
+        else:
+            response["result"] = False
+            response["error"] = "Error en autenticación"
+        response["username"] = usuario
+        nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", oParam["project"], u"'"))
+        response["nombreTarea"] = oParam["name"]
+        response["nombreProyecto"] = nombreProyecto
+        response["urlTarea"] = "https://demo.dailyjob.io/gesttare/gt_tareas/" + str(curTarea.valueBuffer("idtarea"))
+        return response
+
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
         if "idusuario" not in oParam:
@@ -398,7 +491,7 @@ class gesttare(interna):
             # qryUsuarios.setFrom(ustr(u"aqn_user"))
             # qryUsuarios.setWhere(ustr(u"1 = 1"))
             qryUsuarios.setTablesList(u"gt_partictarea, aqn_user")
-            qryUsuarios.setSelect(u"DISTINCT(p.idusuario), u.nombre")
+            qryUsuarios.setSelect(u"DISTINCT(p.idusuario), u.usuario, u.nombre")
             qryUsuarios.setFrom(u"gt_partictarea p INNER JOIN aqn_user u ON p.idusuario = u.idusuario")
             qryUsuarios.setWhere(u"p.idtarea in (select p.idtarea from gt_partictarea p INNER JOIN aqn_user u  ON p.idusuario = u.idusuario where p.idusuario = '" + str(usuario) + "')")
             if not qryUsuarios.exec_():
@@ -427,7 +520,7 @@ class gesttare(interna):
                     "label": "Participantes",
                     "key": "idusuario",
                     "function": "getParticProyectosUsu",
-                    "desc": "nombre",
+                    "desc": "usuario",
                     "validaciones": None,
                     "required": False,
                     "opts": opts
@@ -616,14 +709,17 @@ class gesttare(interna):
     def login(self, oParam):
         return self.ctx.gesttare_login(oParam)
 
-    def damepryus(self, oParam):
-        return self.ctx.gesttare_damepryus(oParam)
+    def getpryus(self, appid, email):
+        return self.ctx.gesttare_getpryus(appid, email)
 
-    def dameProyectos(self):
-        return self.ctx.gesttare_dameProyectos()
+    def damepryus(self, appid, email):
+        return self.ctx.gesttare_damepryus(appid, email)
 
-    def dameUsuarios(self):
-        return self.ctx.gesttare_dameUsuarios()
+    def dameProyectos(self, idusuario):
+        return self.ctx.gesttare_dameProyectos(idusuario)
+
+    def dameUsuarios(self, idusuario):
+        return self.ctx.gesttare_dameUsuarios(idusuario)
 
     def startstop(self, model, cursor):
         return self.ctx.gesttare_startstop(model, cursor)
@@ -636,6 +732,9 @@ class gesttare(interna):
 
     def creartarea(self, oParam):
         return self.ctx.gesttare_creartarea(oParam)
+
+    def createtask(self, oParam):
+        return self.ctx.gesttare_createtask(oParam)
 
     def actNuevoPartic(self, oParam, cursor):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
