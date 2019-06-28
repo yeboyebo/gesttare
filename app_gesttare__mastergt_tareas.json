@@ -14,7 +14,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "",
+            "className": " ",
             "style": {},
             "layout": {
                 "masterTareas": {
@@ -24,9 +24,13 @@
                     "buscador": false,
                     "filter": {
                         "nombre": null,
-                        "codproyecto": {"function": "getProyectosUsuario"},
+                        "codproyecto": {
+                                        "showpk": false, 
+                                        "function": "getProyectosUsuario"
+                                    },
                         "codestado": null,
                         "idusuario": {
+                                        "showpk": false,
                                         "function": "getParticProyectosUsu"
                                      },
                         "fechavencimiento":  {
@@ -78,6 +82,12 @@
         }
     },
     "acciones": {
+        "changefechavencimiento": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "changefechavencimiento",
+            "icon": "alarm"
+        },
         "getReport": {
             "label" : "",
             "action": "onexport",

@@ -4,7 +4,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas gbTareasBox",
+            "className": "gbTareas gbTareasBox ",
             "style": {},
             "layout": {
                 "separator1": {

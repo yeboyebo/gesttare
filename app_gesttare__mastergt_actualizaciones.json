@@ -10,7 +10,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "",
+            "className": " ",
             "style": { },
             "layout": {
                 "queryGrid_notificacionesUsuario": {

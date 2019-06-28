@@ -9,6 +9,7 @@
             "componente": "YBList",
             "prefix": "gt_usuarios",
             "filter": "buscador",
+            "className": "",
             "multiselectable": true,
             "columns": [
                 {"tipo": "field", "listpos": "subtitle", "key": "idusuario", "width": 50, "avatar": true},

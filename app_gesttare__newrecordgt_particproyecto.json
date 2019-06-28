@@ -5,7 +5,7 @@
         "participanteForm": {
             "prefix": "gt_particproyecto",
             "componente": "YBForm",
-            "class": "claseGrid",
+            "class": "claseGrid ",
             "submit": "create",
             "return": true,
             "success": [{"slot": "return"}],

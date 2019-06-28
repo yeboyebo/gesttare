@@ -17,6 +17,7 @@
             "prefix": "mastertimetracking",
             "autofilter": false,
             "cansavefilter": true,
+            "className": "",
             "buscador": false,
             "filter": {
                 "usuario": {
@@ -26,8 +27,9 @@
                     "rel": "aqn_user",
                     "key": "idusuario",
                     "tofield": "idusuario",
-                    "desc": "nombre",
+                    "desc": "usuario",
                     "fN": "aqn_user.idusuario",
+                    "showpk": false,
                     "function": "getParticProyectosUsu"
                 },
                 "tarea": {
@@ -38,6 +40,7 @@
                     "key": "idtarea",
                     "tofield": "idtarea",
                     "desc": "nombre",
+                    "showpk": false,
                     "fN": "gt_tareas.idtarea"
                 },
                 "proyecto": {
@@ -49,6 +52,7 @@
                     "tofield": "codproyecto",
                     "desc": "nombre",
                     "fN": "gt_proyectos.codproyecto",
+                    "showpk": false,
                     "function": "getProyectosUsuario"
                 },
                 "fecha": {
@@ -65,7 +69,7 @@
                     ]
                 },
                 {"tipo": "field", "listpos": "secondaryitem", "key": "gt_timetracking.fecha", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "usuarios.nombre", "label": "Usuario", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "aqn_user.usuario", "label": "Usuario", "width": 5},
                 {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "width": 250},
                 {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 150},
                 {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}

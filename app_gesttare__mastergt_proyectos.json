@@ -2,7 +2,9 @@
     "querystring": {
         "p_l": 50,
         "p_c": true,
-        "f_proyectosusuario": null
+        "f_proyectosusuario": null,
+        "o_1": "fechaterminado",
+        "o_2": "nombre"
     },
     "schema": {},
     "layout": {
@@ -10,6 +12,7 @@
             "componente": "YBGrid",
             "prefix": "gt_proyectos",
             "cansavefilter": true,
+            "className": "",
             "filter": {
                 "nombre": null,
                 "estado": null,

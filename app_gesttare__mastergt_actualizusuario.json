@@ -13,6 +13,7 @@
             "label": "Notificaciones",
             "prefix": "notificacionesUsuario",
             "filter": "",
+            "className": "",
             "type": "query",
             "columns": [
                 {"tipo": "field", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "width": 150},

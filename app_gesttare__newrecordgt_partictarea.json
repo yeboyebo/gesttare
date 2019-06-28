@@ -2,10 +2,10 @@
     "querystring": {},
     "schema": {},
     "layout": {
-        "articuosForm": {
+        "partictareaForm": {
             "prefix": "gt_partictarea",
             "componente": "YBForm",
-            "class": "claseGrid",
+            "class": "claseGrid ",
             "submit": "create",
             "return": true,
             "success": [{"slot": "return"}],

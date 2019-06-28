@@ -31,6 +31,21 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "copiarEmailButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_proyectos",
+                    "icon": "email",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "actionEmail",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -42,21 +57,37 @@
                     "submit": "update",
                     "label": "Información",
                     "fields": {
-                        "gb__": {
+                        "gb__proyectos": {
                             "title": "",
                             "fields": {
-                                "codproyecto": {"disabled": true},
                                 "nombre": {},
                                 "descripcion": {},
                                 "estado": {},
                                 "fechainicio": {},
-                                "fechaterminado": {}
+                                "fechaterminado": {},
+                                "presupuesto": {},
+                                "rentabilidad": {"disabled": true},
+                                "costetotal": {"disabled": true}
                             }
                         }
                     },
                     "exclude": {}
                 },
-                "groupBoxUsuarios": {
+                "separator2": {
+                    "componente": "YBSeparator"
+                },
+                "nuevoParticipanteExterno": {
+                    "componente": "YBButton",
+                    "prefix": "gt_proyectos",
+                    "label": "Añadir externo",
+                    "className": "floatLeft",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "actInvitarExterno",
+                        "success": [{"slot": "refrescar"}]
+                    }
+                },
+                "groupBoxUsuariosC": {
                     "componente": "YBGroupBox",
                     "className": "",
                     "layout": {
@@ -86,11 +117,13 @@
                                 }
                             ],
                             "rowclick": "",
-                            "accionesGrid": [{
-                                "key": "actNuevoPartic",
-                                "label": "Nuevo",
-                                "success": [{"slot": "refrescar"}]
-                            }]
+                            "accionesGrid": [
+                                {
+                                    "key": "actNuevoPartic",
+                                    "label": "Nuevo",
+                                    "success": [{"slot": "refrescar"}]
+                                }
+                            ]
                         }
                     }
                 }
@@ -100,6 +133,10 @@
     "acciones": {
         "acctionVolver": {
             "action": "return"
+        },
+        "actionEmail": {
+            "action": "legacy",
+            "serverAction": "dameEmailCreaTarea"
         },
         "delete": {
             "action": "deleteRow",
@@ -112,6 +149,32 @@
             "icon": "group",
             "title": "Participantes",
             "serverAction": "actNuevoPartic"
+        },
+        "actInvitarExterno": {
+            "title": "Invitación de usuarios externos",
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "icon": "send",
+            "serverAction": "actInvitarExterno",
+            "params": [
+                {
+                    "tipo": 3,
+                    "verbose_name": "email",
+                    "key": "email",
+                    "validaciones": null,
+                    "select": true,
+                    "style": {
+                        "width": "100%"
+                    }
+                }
+            ]    
+        }
+    },
+    "drawIf": {
+        "gb__proyectos": {
+            "presupuesto": "checkProyectosFormDraw",
+            "rentabilidadh": "checkProyectosFormDraw",
+            "costetotal": "checkProyectosFormDraw"
         }
     }
 }

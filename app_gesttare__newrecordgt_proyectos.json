@@ -10,10 +10,10 @@
                 "separator1": {
                     "componente": "YBSeparator"
                 },
-                "articuosForm": {
+                "proyectosForm": {
                     "prefix": "gt_proyectos",
                     "componente": "YBForm",
-                    "class": "claseGrid",
+                    "class": "claseGrid ",
                     "submit": "create",
                     "icon": "info",
                     "label": "Información",

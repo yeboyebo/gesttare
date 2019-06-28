@@ -57,118 +57,137 @@
                 "separator0": {
                     "componente": "YBSeparator"
                 },
-                "tareasForm": {
-                    "prefix": "gt_tareas",
-                    "componente": "YBForm",
-                    "class": "claseGrid",
-                    "submit": "update",
-                    "icon": "info",
-                    "label": "Información",
-                    "return": true,
-                    "successmsg": "Tarea actualizada",
-                    "fields": {
-                        "gb__titulo": {
-                            "title": "",
-                            "fields": {
-                                "nombre": {}
-                            }
-                        },
-                        "gb__body": {
-                            "title": "",
-                            "fields": {
-                                "descripcion": {},
-                                "codproyecto": {
-                                    "combolimit": 1, 
-                                    "function": "getProyectosUsuario"
-                                },
-                                "fechavencimiento": {},
-                                "fechaentrega": {},
-                                "codestado": {},
-                                "idusuario": {
-                                    "combolimit": 1,
-                                    "showpk": false,
-                                    "function": "getUsuariosProyecto",
-                                    "params": {"codproyecto": "codproyecto"}
-                                },
-                                "resuelta": {}
-                            }
-                        }
-                    },
-                    "exclude": {}
-                },
-                "separator1": {
-                    "componente": "YBSeparator"
-                },
-                "nuevoTimeTrackingButton": {
-                    "componente": "YBButton",
-                    "prefix": "gt_tareas",
-                    "label": "Añadir tiempo",
-                    "className": "floatLeft",
-                    "buttonType": "raised",
-                    "action": {
-                        "key": "gestionarTiempo",
-                        "success": [{"slot": "return"}]
-                    }
-                },
-                "labelTiempo": {
-                    "componente": "YBLabel",
-                    "className": "YBComponentInfo floatRight",
-                    "text": "%yb1",
-                    "style": {
-                        "fontWeight": "bold",
-                        "padding": "0px 20px",
-                        "textAlign": "right"
-                    },
-                    "params": [{"type": "calc", "key": "tiempoTotal"}]
-                },
-                "separator2": {
-                    "componente": "YBSeparator"
-                },
-                "groupBoxUsuarios": {
+                "groupBoxLeft": {
                     "componente": "YBGroupBox",
                     "className": "",
+                    "style": {},
                     "layout": {
-                        "participantesGrid": {
-                            "label": "Participantes",
-                            "icon": "group",
-                            "componente": "YBGrid",
-                            "prefix": "gt_partictarea",
-                            "className": "claseGrid",
-                            "hideheader": true,
-                            "columns": [
-                                {
-                                    "tipo": "act",
-                                    "key": "deleteParticipante",
-                                    "label": "Borrar Linea",
-                                    "success": [
-                                        {
-                                            "slot": "refrescar"
-                                        }
-                                    ]
+                        "tareasForm": {
+                            "prefix": "gt_tareas",
+                            "componente": "YBForm",
+                            "class": "claseGrid",
+                            "submit": "update",
+                            "icon": "info",
+                            "label": "Información",
+                            "return": true,
+                            "successmsg": "Tarea actualizada",
+                            "fields": {
+                                "gb__titulo": {
+                                    "title": "",
+                                    "fields": {
+                                        "nombre": {}
+                                    }
                                 },
-                                {
-                                    "tipo": "foreignfield",
-                                    "listpos": "title",
-                                    "key": "nombre"
+                                "gb__body": {
+                                    "title": "",
+                                    "fields": {
+                                        "descripcion": {},
+                                        "codproyecto": {
+                                            "combolimit": 1, 
+                                            "showpk": false,
+                                            "function": "getProyectosUsuario"
+                                        },
+                                        "fechavencimiento": {},
+                                        "fechaentrega": {},
+                                        "codestado": {},
+                                        "idusuario": {
+                                            "combolimit": 1,
+                                            "showpk": false,
+                                            "function": "getUsuariosProyecto",
+                                            "params": {"codproyecto": "codproyecto"}
+                                        },
+                                        "resuelta": {}
+                                    }
                                 }
-                            ],
-                            "rowclick": "",
-                            "accionesGrid": [
-                                {
-                                    "key": "actNuevoPartic",
-                                    "label": "Nuevo",
-                                    "success": [
+                            },
+                            "exclude": {}
+                        },
+                        "separator1": {
+                            "componente": "YBSeparator"
+                        },
+                        "nuevoTimeTrackingButton": {
+                            "componente": "YBButton",
+                            "prefix": "gt_tareas",
+                            "label": "Añadir tiempo",
+                            "className": "floatLeft",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "gestionarTiempo",
+                                "success": [{"slot": "return"}]
+                            }
+                        },
+                        "iniciarTrackingButton": {
+                            "componente": "YBButton",
+                            "prefix": "gt_tareas",
+                            "label": "Iniciar tarea",
+                            "className": "floatLeft",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "iniciarTimeTracking",
+                                "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "labelTiempo": {
+                            "componente": "YBLabel",
+                            "className": "YBComponentInfo floatRight",
+                            "text": "%yb1",
+                            "style": {
+                                "fontWeight": "bold",
+                                "padding": "0px 20px",
+                                "textAlign": "right"
+                            },
+                            "params": [{"type": "calc", "key": "tiempoTotal"}]
+                        },
+                        "separator2": {
+                            "componente": "YBSeparator"
+                        },
+                        "groupBoxUsuarios": {
+                            "componente": "YBGroupBox",
+                            "className": "",
+                            "layout": {
+                                "participantesGrid": {
+                                    "label": "Participantes",
+                                    "icon": "group",
+                                    "componente": "YBGrid",
+                                    "prefix": "gt_partictarea",
+                                    "className": "claseGrid",
+                                    "hideheader": true,
+                                    "columns": [
                                         {
-                                            "slot": "refrescar"
+                                            "tipo": "act",
+                                            "key": "deleteParticipante",
+                                            "label": "Borrar Linea",
+                                            "success": [
+                                                {
+                                                    "slot": "refrescar"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tipo": "foreignfield",
+                                            "listpos": "title",
+                                            "key": "nombre"
+                                        }
+                                    ],
+                                    "rowclick": "",
+                                    "accionesGrid": [
+                                        {
+                                            "key": "actNuevoPartic",
+                                            "label": "Nuevo",
+                                            "success": [
+                                                {
+                                                    "slot": "refrescar"
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
-                            ]
+                            }
+                        },
+                        "separator3": {
+                            "componente": "YBSeparator"
                         }
                     }
-                },
-                "separator3": {
-                    "componente": "YBSeparator"
                 },
                 "groupBoxComentarios": {
                     "componente": "YBGroupBox",
@@ -215,9 +234,9 @@
                             "avatar": false,
                             "columns": [
                                 {
-                                    "tipo": "field",
+                                    "tipo": "foreignfield",
                                     "listpos": "title",
-                                    "key": "idusuario",
+                                    "key": "nombreUsuario",
                                     "width": 100
                                 },
                                 {
@@ -284,6 +303,12 @@
             "action": "goto",
             "prefix": "gt_tareas",
             "serverAction": "gotoGestionarTiempo"
+        },
+        "iniciarTimeTracking": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "startstop",
+            "icon": "alarm"
         },
         "actNuevoPartic": {
             "label": "Nuevo participante",

@@ -33,7 +33,7 @@
                 "success": []
             }]
         },
-        "tareasGrid": {
+        "tareasGridC": {
             "label": "Tareas",
         	"componente": "YBTable",
         	"prefix": "gt_tareas",

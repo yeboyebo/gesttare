@@ -10,6 +10,7 @@
             "componente": "YBList",
             "prefix": "gt_espaciostrabajo",
             "filter": "buscador",
+            "className": "",
             "multiselectable": true,
             "columns": [
                 {"tipo": "field", "listpos": "subtitle", "key": "codespacio", "width": 50},

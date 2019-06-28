@@ -5,7 +5,9 @@
     },
     "schema": {
         "calendarioTareas": {
-            "query": {},
+            "query": {
+                "p_l": 300
+            },
             "customfilter": true
         }
     },
@@ -17,7 +19,7 @@
             "className": "gbTareasBox",
             "style": { },
             "layout": {
-                "calendario": {
+                "Ccalendario": {
                     "componente": "YBCalendar",
                     "prefix": "calendarioTareas",
                     "type": "query",
@@ -34,7 +36,7 @@
                     "format": {
                         "title": "gt_tareas.nombre",
                         "date": "gt_tareas.fechavencimiento",
-                        "user": "aqn_user.email"
+                        "user": "aqn_user.usuario"
                     }
                 }
             }
