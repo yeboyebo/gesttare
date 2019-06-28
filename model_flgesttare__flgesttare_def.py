@@ -155,7 +155,20 @@ class gesttare(interna):
                     return False
             else:
                 print("insertando con hora")
-                if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idtarea", u"idcomentario", u"fecha", u"hora", u"idusuarioorigen"]), qsatype.Array([tipo, u"comentario", cursor.valueBuffer(u"idtarea"), idComentario, datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
+                # if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idtarea", u"idcomentario", u"fecha", u"hora", u"idusuarioorigen"]), qsatype.Array([tipo, u"comentario", cursor.valueBuffer(u"idtarea"), idComentario, datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
+                #     return False
+                curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+                curActualiz.setModeAccess(curActualiz.Insert)
+                curActualiz.refreshBuffer()
+                curActualiz.setValueBuffer(u"tipo", tipo)
+                curActualiz.setValueBuffer(u"tipobjeto", "comentario")
+                curActualiz.setValueBuffer(u"idtarea", cursor.valueBuffer(u"idtarea"))
+                curActualiz.setValueBuffer(u"idcomentario", idComentario)
+                curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+                curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+                curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
+                if not curActualiz.commitBuffer():
+                    print("algo salio mal")
                     return False
         elif cursor.table() == u"gt_particproyecto":
             idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", "idobjeto = '{}' AND tipo = '{}'".format(str(cursor.valueBuffer(u"codproyecto")), tipo))
@@ -191,8 +204,8 @@ class gesttare(interna):
                 if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idtarea", u"fecha", u"hora", "idusuarioorigen"]), qsatype.Array([tipo, u"tarea", cursor.valueBuffer(u"idtarea"), datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
                     return False
 
-        if cursor.table() == u"gt_comentarios":
-            idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", ustr(u"idcomentario = ", idComentario, " AND tipo = '", tipo, "'"))
+        if cursor.table() == u"gt_comentarios" and not idActualizacion:
+            idActualizacion = curActualiz.valueBuffer("idactualizacion")
         if (cursor.table() == u"gt_tareas") or (cursor.table() == u"gt_partictarea"):
             idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", "idtarea = '{}' AND tipo = '{}'".format(cursor.valueBuffer(u"idtarea"), tipo))
 
