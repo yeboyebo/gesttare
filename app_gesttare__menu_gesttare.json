@@ -1,5 +1,5 @@
 {
-    "format": "navBarMenu",
+    "format": "sideBarMenu",
     "logo": true,
     "actions": {
         "gotoNotificacions": {

@@ -1,0 +1,27 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "aqnuserForm": {
+            "prefix": "aqn_user",
+            "componente": "YBForm",
+            "class": "claseGrid",
+            "submit": "create",
+            "return": true,
+            "success": [{"slot": "return"}],
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "email": {"disabled": true},
+                        "nombre": {},
+                        "apellidos":{},
+                        "usuario": {}
+                    }
+                }
+            },
+            "exclude": {}
+        }
+    },
+    "acciones": {}
+}

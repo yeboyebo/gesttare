@@ -31,6 +31,27 @@
                     "sis_gridfilter": null
                 }
             }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/fllogin/auth_user",
+            "value": {
+                "aqn_user": null
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/fllogin/aqn_user",
+            "value": {
+                "aqn_companies": null
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/fllogin/aqn_companies",
+            "value": {
+                "aqn_invitations": null
+            }
         }
     ]
 }
