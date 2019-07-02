@@ -1,0 +1,80 @@
+html, #parent-container{
+    background-color: #fff;
+    min-height: 100vh;
+}
+.YBTableHeaderRow{
+    background-color: #fff;
+    background-image: none;
+    border-bottom: 2px solid #ccc;
+}
+
+.btn-info {
+    background-color: #2D95C1!important;
+}
+
+.YBButtonSecondary.YBButtonRaised {
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    background-color: #2d95c1;
+    border: 1px solid #2d95c1;
+    color: #fff;
+}
+
+.YBButtonSecondary.YBButtonFlat {
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    background-color: white;
+    border: 1px solid #2D95C1;
+    color: #2D95C1;
+
+}.YBButtonPrimary.YBButtonRaised {
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    background-color: #47B7D8;
+    border: 1px solid #47B7D8;
+    color: white;
+}
+
+.YBButtonSecondary.YBButtonRaised:hover {
+    background-color: #2d95c1;
+    opacity: 0.3;
+}
+
+.YBButtonPrimary.YBButtonRaised:hover {
+    opacity: 0.8;
+}
+
+
+.gbTareasLeft {
+    width: 50%;
+    position: relative;
+    float: left;
+}
+
+.gbTareasRight {
+    width: 50%;
+    position: relative;
+    float: left;
+}
+
+/*.comentariosGrid {
+    min-height: 710px;
+    max-height: : 710px;
+    overflow: auto;
+}
+
+.navbar-dashboard-img{
+    margin-top:0;
+    margin-left: 15px;
+}
+
+#YBSideBar{
+    display: block !important;
+    border-right: 2px solid #ccc;
+}
+#YBSideBarBlank{
+    display: none !important;
+}
+#componentContainer{
+    margin-left: 215px;
+}
+.YBSideBarTitle{
+    border-bottom: none;
+}*/

@@ -477,7 +477,7 @@ class gesttare(interna):
         nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", oParam["project"], u"'"))
         response["nombreTarea"] = oParam["name"]
         response["nombreProyecto"] = nombreProyecto
-        response["urlTarea"] = "https://demo.dailyjob.io/gesttare/gt_tareas/" + str(curTarea.valueBuffer("idtarea"))
+        response["urlTarea"] = "https://app.dailyjob.io/gesttare/gt_tareas/" + str(curTarea.valueBuffer("idtarea"))
         return response
 
     def gesttare_actNuevoPartic(self, oParam, cursor):

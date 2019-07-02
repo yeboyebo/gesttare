@@ -251,7 +251,7 @@ class gesttare(interna):
         else:
             nombreCompania = ""
         username = qsatype.FLUtil.sqlSelect(u"aqn_user", u"usuario", u"email = '" + str(email) + u"'")
-        urlJoin = "https://demo.dailyjob.io/cooperate/" + hashcode
+        urlJoin = "https://app.dailyjob.io/cooperate/" + hashcode
         # urlJoin = "http://127.0.0.1:8000/cooperate/" + hashcode
         # cuerpo = "<img src='https://app.dailyjob.io/static/dist/img/logo/logo.png'/>"
         # cuerpo += "<br><a href='" + urlJoin + "''>Unirse DailyJob</a>"

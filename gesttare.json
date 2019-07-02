@@ -273,6 +273,10 @@
             {
                 "name": "model_fllogin__aqn_invitations_def.py",
                 "path": "models/fllogin/"
+            },
+            {
+                "path": "assets/dist/css/",
+                "name": "client.css"
             }
         ],
         "replaceFile": [
