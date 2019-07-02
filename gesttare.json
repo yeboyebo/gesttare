@@ -239,16 +239,8 @@
                 "path": "controllers/api/mailtask/pryus/"
             },
             {
-                "name": "ctrl_api_mailtask_pryus__get.cpython-35.pyc",
-                "path": "controllers/api/mailtask/pryus/__pycache__/"
-            },
-            {
                 "name": "ctrl_api_iebs_users__create.py",
                 "path": "controllers/api/iebs/users/"
-            },
-            {
-                "name": "ctrl_api_iebs_users__create.cpython-35.pyc",
-                "path": "controllers/api/iebs/users/__pycache__/"
             },
             {
                 "name": "app_gesttare__newrecordaqn_user.json",
