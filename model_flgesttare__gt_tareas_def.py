@@ -5,6 +5,7 @@ from YBUTILS import gesDoc
 from models.fllogin.aqn_user import aqn_user as usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 from datetime import datetime
+from models.flgesttare import flgesttare_def
 
 import hashlib
 import json
@@ -327,6 +328,7 @@ class gesttare(interna):
 
             cur_track.setValueBuffer("horafin", now.toString()[-8:])
             cur_track.setValueBuffer("totaltiempo", self.calcula_totaltiempo(cur_track))
+            cur_track.setValueBuffer(u"coste", flgesttare_def.iface.calcula_costetiempo("timetracking", cur_track))
 
             if not cur_track.commitBuffer():
                 print("Ocurrió un error al actualizar el registro de gt_timetracking")

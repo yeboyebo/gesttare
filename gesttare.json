@@ -227,20 +227,8 @@
                 "path": "models/flgesttare/"
             },
             {
-                "path": "apps/portal/templates/portal/plantillas/",
-                "name": "app_portal__masterusuarios.json"
-            },
-            {
                 "path": "assets/dist/img/logo/",
                 "name": "gesttarelogo.png"
-            },
-            {
-                "name": "app_portal__masteraqn_user.json",
-                "path": "apps/portal/templates/portal/plantillas/"
-            },
-            {
-                "name": "app_portal__aqn_user.json",
-                "path": "apps/portal/templates/portal/plantillas/"
             },
             {
                 "name": "ctrl_api_mailtask_tasks__create.py",
@@ -267,14 +255,6 @@
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
             },
             {
-                "name": "model_fllogin__aqn_invitations.py",
-                "path": "models/fllogin/"
-            },
-            {
-                "name": "model_fllogin__aqn_invitations_def.py",
-                "path": "models/fllogin/"
-            },
-            {
                 "path": "assets/dist/css/",
                 "name": "client.css"
             }
@@ -298,17 +278,8 @@
             {
                 "path": "config/",
                 "name": "registros.json"
-            },
-            {
-                "path": "apps/portal/templates/portal/",
-                "name": "app_portal__menu_system.json"
             }
         ],
-        "patchScript": [
-            {
-                "name": "app_portal__views_portal.py",
-                "path": "apps/portal/viewset/"
-            }
-        ]
+        "patchScript": []
     }
 }
