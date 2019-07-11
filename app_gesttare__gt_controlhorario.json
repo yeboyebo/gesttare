@@ -1,0 +1,38 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "separator1": {
+            "componente": "YBSeparator"
+        },
+        "formInfo": {
+            "prefix": "gt_controlhorario",
+            "componente": "YBForm",
+            "icon": "info",
+            "class": "claseGrid",
+            "label": "Información",
+            "submit": "update",
+            "saveReturn": true,
+            "return": true,
+            "fields": {
+                "gb__info": {
+                    "title": "",
+                    "fields": {
+                        "horainicio": {},
+                        "horafin": {},
+                        "idusuario": {"disabled": true},
+                        "totaltiempo": {"disabled": true}
+                    }
+                }
+            },
+            "exclude": {}
+        }
+    },
+    "acciones": {},
+    "drawIf": {
+        "gb__info": {
+            "horainicio": "drawif_horaeditable",
+            "horafin": "drawif_horaeditable"
+        }
+    }
+}

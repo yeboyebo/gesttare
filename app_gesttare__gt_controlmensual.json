@@ -1,0 +1,113 @@
+{
+    "querystring": {},
+    "schema": {
+        "gt_controldiario": {
+            "rel": "idc_mensual",
+            "querystring": {
+                "p_l": 50,
+                "o_1": "fecha"
+            }
+        }
+    },
+    "layout": {
+        "separator1": {
+            "componente": "YBSeparator"
+        },
+        "formInfo": {
+            "prefix": "gt_controlmensual",
+            "componente": "YBForm",
+            "icon": "info",
+            "class": "claseGrid",
+            "label": "Información",
+            "submit": "update",
+            "send": false,
+            "return": true,
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "Razón social": {"disabled": true},
+                        "CIF": {"disabled": true},
+                        "CCC": {"disabled": true},
+                        "NombreAP": {"label": "Trabajador", "disabled": true},
+                        "NIF": {"disabled": true},
+                        "NAF": {"disabled": true},
+                        "mesanyo": {"label": "Mes", "disabled": true},
+                        "totaltiempo": {"disabled": true},
+                        "horasextra": {"disabled": true},
+                        "validado_user": {"disabled": true},
+                        "validado_admin": {"disabled": true}
+                    }
+                }
+            },
+            "exclude": {}
+        },
+        "separator2": {
+            "componente": "YBSeparator"
+        },
+        "controldiario": {
+            "componente": "YBGrid",
+            "prefix": "gt_controldiario",
+            "icon": "timer",
+            "label": "Registros diarios",
+            "className": "",
+            "buscador": false,
+            "columns": [
+                {"tipo": "field", "listpos": "body", "key": "fecha", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "horaentrada", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "horasalida", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "totaltiempo", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "horasextra", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "validado", "width": 5}
+            ],
+            "rowclick": "link"
+        },
+        "botonera": {
+            "componente": "YBGroupBox",
+            "className": "actionGB",
+            "style": {"zIndex": 3, "position": "relative"},
+            "layout": {
+                "validarUser": {
+                    "componente": "YBButton",
+                    "prefix": "gt_controlmensual",
+                    "label": "Validar como trabajador",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "validar_user",
+                        "success": [{"slot": "refrescar"}]
+                    }
+                },
+                "validarAdmin": {
+                    "componente": "YBButton",
+                    "prefix": "gt_controlmensual",
+                    "label": "Validar como organizador",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "validar_admin",
+                        "success": [{"slot": "refrescar"}]
+                    }
+                }
+            }
+        }
+    },
+    "acciones": {
+        "validar_user": {
+            "action": "legacy",
+            "serverAction": "validar_user",
+            "icon": "icon"
+        },
+        "validar_admin": {
+            "action": "legacy",
+            "serverAction": "validar_admin",
+            "icon": "icon"
+        }
+    },
+    "drawIf": {
+        "botonera": {
+            "validarUser": "drawif_validar_user",
+            "validarAdmin": "drawif_validar_admin"
+        }
+    }
+}

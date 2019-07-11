@@ -3,9 +3,9 @@
     "logo": true,
     "actions": {
         "gotoNotificacions": {
-            "action": "goto",
+            "action": "url",
             "icon": "notifications",
-            "url": "/gesttare/gt_actualizaciones/master"
+            "url": "gesttare/gt_actualizaciones/master"
         }
     },
     "items": [

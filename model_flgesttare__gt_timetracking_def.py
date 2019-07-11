@@ -38,7 +38,8 @@ class gesttare(interna):
                 where_filter += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
-            print(tiempototal)
+
+            tiempototal = self.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTracking": "Tiempo total: {}".format(tiempototal)}
         return None
 
@@ -94,7 +95,7 @@ class gesttare(interna):
             print(e)
         return nombre
 
-    def gesttare_seconds_to_time(self, seconds, total=False):
+    def gesttare_seconds_to_time(self, seconds, total=False, all_in_hours=False):
         if not seconds:
             if total:
                 seconds = 0
@@ -103,13 +104,17 @@ class gesttare(interna):
 
         minutes = seconds // 60
         seconds = int(seconds % 60)
-        hours = minutes // 60
+        hours = int(minutes // 60)
         minutes = int(minutes % 60)
 
-        days = hours // 24
-        hours = int(hours % 24)
-        years = days // 365
-        days = int(days % 365)
+        days = None
+        years = None
+
+        if not all_in_hours:
+            days = hours // 24
+            hours = int(hours % 24)
+            years = days // 365
+            days = int(days % 365)
 
         seconds = str(seconds) if seconds >= 10 else "0{}".format(seconds)
         minutes = str(minutes) if minutes >= 10 else "0{}".format(minutes)
@@ -192,7 +197,7 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         cursor.setValueBuffer(u"idusuario", usuario)
 
-        qsatype.FactoriaModulos.get('formRecordgt_timetrackin').iface.iniciaValoresCursor(cursor)
+        qsatype.FactoriaModulos.get('formRecordgt_timetracking').iface.iniciaValoresCursor(cursor)
         return True
 
     def gesttare_bChCursor(self, fN, cursor):
@@ -262,8 +267,8 @@ class gesttare(interna):
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
 
-    def seconds_to_time(self, seconds, total=False):
-        return self.ctx.gesttare_seconds_to_time(seconds, total)
+    def seconds_to_time(self, seconds, total=False, all_in_hours=False):
+        return self.ctx.gesttare_seconds_to_time(seconds, total, all_in_hours)
 
     def time_to_seconds(self, time):
         return self.ctx.gesttare_time_to_seconds(time)

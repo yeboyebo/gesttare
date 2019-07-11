@@ -12,7 +12,6 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
-from YBUTILS.viewREST import cacheController
 import time
 from models.flgesttare.gt_proyectos import gt_proyectos as proyectos
 import datetime
@@ -127,7 +126,8 @@ class gesttare(interna):
             qryParticipantes.setTablesList(u"gt_partictarea")
             qryParticipantes.setSelect(u"idparticipante,idusuario")
             qryParticipantes.setFrom(ustr(u"gt_partictarea"))
-            qryParticipantes.setWhere(ustr(u"idtarea = ", cursor.valueBuffer(u"idtarea"), u" AND idusuario <> '", idUsuario, u"'"))
+            qryParticipantes.setWhere("idtarea = {} AND idusuario <> {}".format(cursor.valueBuffer(u"idtarea"). idUsuario))
+
             try:
                 qryParticipantes.setForwardOnly(True)
             except Exception:
@@ -216,7 +216,7 @@ class gesttare(interna):
         if cursor.table() == "gt_comentarios" or cursor.table() == "gt_partictarea":
 
             while qryParticipantes.next():
-                if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = '", qryParticipantes.value(1), u"' AND idactualizacion = ", idActualizacion)):
+                if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = ", qryParticipantes.value(1), u" AND idactualizacion = ", idActualizacion)):
                     continue
                 if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, qryParticipantes.value(1), False])):
                     return False
@@ -233,7 +233,7 @@ class gesttare(interna):
 
     def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
         if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or (curTarea.modeAccess() == curTarea.Insert and curTarea.valueBuffer(u"idusuario")):
-            if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = '", curTarea.valueBuffer(u"idusuario"), u"' AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
+            if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curTarea.valueBuffer(u"idusuario"), u" AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
                 if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
                     return False
         return True
@@ -328,6 +328,139 @@ class gesttare(interna):
 
         return seconds
 
+    def gesttare_beforeCommit_gt_controlhorario(self, cursor=None):
+        _i = self.iface
+
+        if not cursor.valueBuffer("idc_diario"):
+            now = str(qsatype.Date())
+            fecha = now[:10]
+            hora = cursor.valueBuffer("horainicio")
+            user_name = cursor.valueBuffer("idusuario")
+
+            idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, fecha))
+
+            if not idc_diario:
+                if not qsatype.FLUtil().sqlInsert("gt_controldiario", ["fecha", "horaentrada", "idusuario"], [fecha, hora, user_name]):
+                    print("Error al crear el registro diario")
+                    return False
+
+                idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, fecha))
+
+            cursor.setValueBuffer("idc_diario", idc_diario)
+
+        cursor.setValueBuffer("totaltiempo", self.iface.calcula_totaltiempo_horario(cursor))
+
+        return True
+
+    def gesttare_beforeCommit_gt_controldiario(self, cursor=None):
+        _i = self.iface
+
+        if cursor.modeAccess() != cursor.Insert:
+            return True
+
+        fecha = cursor.valueBuffer("fecha")
+        year = fecha[:4]
+        month = fecha[5:7]
+        user_name = cursor.valueBuffer("idusuario")
+
+        idc_mensual = qsatype.FLUtil().quickSqlSelect("gt_controlmensual", "idc_mensual", "idusuario = '{}' AND mes = '{}' AND anyo = '{}'".format(user_name, month, year))
+
+        if not idc_mensual:
+            if not qsatype.FLUtil().sqlInsert("gt_controlmensual", ["mes", "anyo", "idusuario"], [month, year, user_name]):
+                print("Error al crear el registro mensual")
+                return False
+
+            idc_mensual = qsatype.FLUtil().quickSqlSelect("gt_controlmensual", "idc_mensual", "idusuario = '{}' AND mes = '{}' AND anyo = '{}'".format(user_name, month, year))
+
+        cursor.setValueBuffer("idc_mensual", idc_mensual)
+
+        return True
+
+    def gesttare_afterCommit_gt_controlhorario(self, cursor=None):
+        _i = self.iface
+
+        idc_diario = cursor.valueBuffer("idc_diario")
+
+        cur_diario = qsatype.FLSqlCursor("gt_controldiario")
+        cur_diario.select("idc_diario = {}".format(idc_diario))
+
+        if not cur_diario.first():
+            print("No se encontró el registro diario")
+            return False
+
+        cur_diario.setModeAccess(cur_diario.Edit)
+        cur_diario.refreshBuffer()
+
+        cur_diario.setValueBuffer("horaentrada", str(self.iface.calcula_horaentrada(idc_diario)))
+        cur_diario.setValueBuffer("horasalida", str(self.iface.calcula_horasalida(idc_diario)))
+        cur_diario.setValueBuffer("totaltiempo", str(self.iface.calcula_totaltiempo_diario(idc_diario)))
+
+        if not cur_diario.commitBuffer():
+            print("Ocurrió un error al actualizar el registro diario")
+            return False
+
+        return True
+
+    def gesttare_afterCommit_gt_controldiario(self, cursor=None):
+        _i = self.iface
+
+        idc_mensual = cursor.valueBuffer("idc_mensual")
+
+        cur_mensual = qsatype.FLSqlCursor("gt_controlmensual")
+        cur_mensual.select("idc_mensual = {}".format(idc_mensual))
+
+        if not cur_mensual.first():
+            print("No se encontró el registro mensual")
+            return False
+
+        cur_mensual.setModeAccess(cur_mensual.Edit)
+        cur_mensual.refreshBuffer()
+
+        cur_mensual.setValueBuffer("totaltiempo", str(self.iface.calcula_totaltiempo_mensual(idc_mensual)))
+        cur_mensual.setValueBuffer("horasextra", str(self.iface.calcula_horasextra_mensual(idc_mensual)))
+
+        if not cur_mensual.commitBuffer():
+            print("Ocurrió un error al actualizar el registro mensual")
+            return False
+
+        return True
+
+    def gesttare_calcula_totaltiempo_horario(self, cursor):
+        if not cursor.valueBuffer("horainicio") or not cursor.valueBuffer("horafin"):
+            return None
+
+        formato = "%H:%M:%S"
+        horainicio = str(cursor.valueBuffer("horainicio"))
+        if len(horainicio) == 5:
+            horainicio += ":00"
+        horafin = str(cursor.valueBuffer("horafin"))
+        if len(horafin) == 5:
+            horafin += ":00"
+        hfin = datetime.datetime.strptime(horafin, formato)
+        hinicio = datetime.datetime.strptime(horainicio, formato)
+        totaltiempo = hfin - hinicio
+        totaltiempo = str(totaltiempo)
+        if len(totaltiempo) < 8:
+            totaltiempo = "0" + totaltiempo
+        if len(totaltiempo) > 8:
+            totaltiempo = totaltiempo[8:]
+        return totaltiempo
+
+    def gesttare_calcula_totaltiempo_diario(self, idc_diario):
+        return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+
+    def gesttare_calcula_horaentrada(self, idc_diario):
+        return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "MIN(horainicio)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+
+    def gesttare_calcula_horasalida(self, idc_diario):
+        return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "MAX(horafin)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+
+    def gesttare_calcula_totaltiempo_mensual(self, idc_mensual):
+        return qsatype.FLUtil().quickSqlSelect("gt_controldiario", "SUM(totaltiempo)", "idc_mensual = {}".format(idc_mensual)) or "00:00:00"
+
+    def gesttare_calcula_horasextra_mensual(self, idc_mensual):
+        return qsatype.FLUtil().quickSqlSelect("gt_controldiario", "SUM(horasextra)", "idc_mensual = {}".format(idc_mensual)) or "00:00:00"
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -384,6 +517,36 @@ class gesttare(interna):
 
     def desasignarTareasProyecto(self, curPart):
         return self.ctx.gesttare_desasignarTareasProyecto(curPart)
+
+    def beforeCommit_gt_controlhorario(self, cursor=None):
+        return self.ctx.gesttare_beforeCommit_gt_controlhorario(cursor)
+
+    def beforeCommit_gt_controldiario(self, cursor=None):
+        return self.ctx.gesttare_beforeCommit_gt_controldiario(cursor)
+
+    def afterCommit_gt_controlhorario(self, cursor=None):
+        return self.ctx.gesttare_afterCommit_gt_controlhorario(cursor)
+
+    def afterCommit_gt_controldiario(self, cursor=None):
+        return self.ctx.gesttare_afterCommit_gt_controldiario(cursor)
+
+    def calcula_totaltiempo_horario(self, cursor):
+        return self.ctx.gesttare_calcula_totaltiempo_horario(cursor)
+
+    def calcula_totaltiempo_diario(self, idc_diario):
+        return self.ctx.gesttare_calcula_totaltiempo_diario(idc_diario)
+
+    def calcula_horaentrada(self, idc_diario):
+        return self.ctx.gesttare_calcula_horaentrada(idc_diario)
+
+    def calcula_horasalida(self, idc_diario):
+        return self.ctx.gesttare_calcula_horasalida(idc_diario)
+
+    def calcula_totaltiempo_mensual(self, idc_mensual):
+        return self.ctx.gesttare_calcula_totaltiempo_mensual(idc_mensual)
+
+    def calcula_horasextra_mensual(self, idc_mensual):
+        return self.ctx.gesttare_calcula_horasextra_mensual(idc_mensual)
 
 
 # @class_declaration head #

@@ -1,61 +1,6 @@
 {
     "modifications": [
         {
-            "type": "updateNode",
-            "path": "/portal/account/func",
-            "value": "account"
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/account",
-            "value": {
-                "join": {
-                    "url": "join/(?P<hashparam>\\w+)$",
-                    "func": "join_request"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/join",
-            "value": {
-                "cooperate": {
-                    "url": "cooperate/(?P<hashparam>\\w+)$",
-                    "func": "cooperate_request"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/cooperate",
-            "value": {
-                "forgetPassword": {
-                    "url": "forgetPassword$",
-                    "func": "forgetPassword_request"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/forgetPassword",
-            "value": {
-                "changepasswordparam": {
-                    "url": "changepassword/(?P<hashparam>\\w+)$",
-                    "func": "changepassword_request_param"
-                }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/portal/changepasswordparam",
-            "value": {
-                "changepassword": {
-                    "url": "changepassword/$",
-                    "func": "changepassword_request"
-                }
-            }
-        },
-        {
             "type": "insertAfterNode",
             "path": "/portal",
             "value": {
@@ -106,6 +51,9 @@
                     "gt_estadostarea": null,
                     "gt_particproyecto": null,
                     "gt_timetracking": null,
+                    "gt_controlhorario": null,
+                    "gt_controldiario": null,
+                    "gt_controlmensual": null,
                     "gt_companias": null
                 }
             }
@@ -115,20 +63,6 @@
             "path": "/models/fllogin/auth_group",
             "value": {
                 "aqn_user": null
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/models/fllogin/aqn_user",
-            "value": {
-                "aqn_companies": null
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/models/fllogin/aqn_companies",
-            "value": {
-                "aqn_invitations": null
             }
         }
     ]

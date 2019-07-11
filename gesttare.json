@@ -249,6 +249,50 @@
             {
                 "path": "assets/dist/css/",
                 "name": "client.css"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_controlhorario.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_controlhorario_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_controldiario.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_controldiario_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_controlmensual.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_controlmensual_def.py"
+            },
+            {
+                "path": "apps/gesttare/templates/gesttare/plantillas/",
+                "name": "app_gesttare__control_horario.json"
+            },
+            {
+                "path": "apps/gesttare/templates/gesttare/plantillas/",
+                "name": "app_gesttare__gt_controldiario.json"
+            },
+            {
+                "path": "apps/gesttare/templates/gesttare/plantillas/",
+                "name": "app_gesttare__gt_controlhorario.json"
+            },
+            {
+                "path": "apps/gesttare/templates/gesttare/plantillas/",
+                "name": "app_gesttare__gt_controlmensual.json"
+            },
+            {
+                "path": "apps/gesttare/templates/gesttare/plantillas/",
+                "name": "app_gesttare__newrecordgt_controlhorario.json"
             }
         ],
         "replaceFile": [
@@ -272,6 +316,15 @@
                 "name": "registros.json"
             }
         ],
-        "patchScript": []
+        "patchScript": [
+            {
+                "name": "model_fllogin__aqn_user_def.py",
+                "path": "models/fllogin/"
+            },
+            {
+                "name": "model_fllogin__aqn_user.py",
+                "path": "models/fllogin/"
+            }
+        ]
     }
 }

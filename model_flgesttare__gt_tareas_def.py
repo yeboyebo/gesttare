@@ -48,12 +48,13 @@ class gesttare(interna):
         if template == "formRecord":
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
 
+            tiempototal = self.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"tiempoTotal": "Tiempo total: {}".format(tiempototal)}
 
         return {}
 
-    def gesttare_seconds_to_time(self, seconds, total=False):
-        return timetracking.getIface().seconds_to_time(seconds, total)
+    def gesttare_seconds_to_time(self, seconds, total=False, all_in_hours=False):
+        return timetracking.getIface().seconds_to_time(seconds, total, all_in_hours)
 
     def gesttare_actNuevoComentario(self, model, oParam):
         print("aqui insertamos comentario", oParam)
@@ -666,8 +667,8 @@ class gesttare(interna):
     def iniciaValoresLabel(self, model, template=None, cursor=None, data=None):
         return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor, data)
 
-    def seconds_to_time(self, seconds, total=False):
-        return self.ctx.gesttare_seconds_to_time(seconds, total)
+    def seconds_to_time(self, seconds, total=False, all_in_hours=False):
+        return self.ctx.gesttare_seconds_to_time(seconds, total, all_in_hours)
 
     def actNuevoComentario(self, model, oParam):
         return self.ctx.gesttare_actNuevoComentario(model, oParam)

@@ -1,0 +1,41 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox ",
+            "style": {},
+            "layout": {
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
+                "chForm": {
+                    "prefix": "gt_controlhorario",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "create",
+                    "saveReturn": true,
+                    "return": true,
+                    "icon": "info",
+                    "label": "Información",
+                    "success": [{"slot": "return"}],
+                    "fields": {
+                        "gb__": {
+                            "title": "",
+                            "fields": {
+                                "idusuario": {"visible": false},
+                                "idc_diario": {"visible": false},
+                                "horainicio": {},
+                                "horafin": {},
+                                "totaltiempo": {"visible": false}
+                            }
+                        }
+                    },
+                    "exclude": {}
+                }
+            }
+        }
+    },
+    "acciones": {}
+}

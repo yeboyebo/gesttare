@@ -1,0 +1,133 @@
+{
+    "querystring": {},
+    "schema": {
+        "gt_controlhorario": {
+            "rel": "idc_diario",
+            "querystring": {
+                "p_l": 25,
+                "o_1": "-horainicio"
+            },
+            "extrarel": [
+                {"rel": "idusuario", "fieldRelation": "idusuario"}
+            ]
+        }
+    },
+    "layout": {
+        "botonera": {
+            "componente": "YBGroupBox",
+            "className": "actionGB",
+            "style": {"zIndex": 3, "position": "relative"},
+            "layout": {
+                "validar": {
+                    "componente": "YBButton",
+                    "prefix": "gt_controldiario",
+                    "label": "Validar",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "validar",
+                        "success": [{"slot": "refrescar"}]
+                    }
+                }
+            }
+        },
+        "separator1": {
+            "componente": "YBSeparator"
+        },
+        "formInfo": {
+            "prefix": "gt_controldiario",
+            "componente": "YBForm",
+            "icon": "info",
+            "class": "claseGrid",
+            "label": "Información",
+            "submit": "update",
+            "autoCommit": true,
+            "send": false,
+            "return": true,
+            "fields": {
+                "gb__": {
+                    "title": "",
+                    "fields": {
+                        "fecha": {"disabled": true},
+                        "idusuario": {"disabled": true},
+                        "totaltiempo": {"disabled": true},
+                        "horaentrada": {"disabled": true},
+                        "horasalida": {"disabled": true},
+                        "horasextra": {},
+                        "validado": {"disabled": true}
+                    }
+                }
+            },
+            "exclude": {}
+        },
+        "separator2": {
+            "componente": "YBSeparator"
+        },
+        "controlhorario": {
+            "componente": "YBGrid",
+            "prefix": "gt_controlhorario",
+            "icon": "timer",
+            "label": "Registros horarios",
+            "className": "",
+            "buscador": false,
+            "columns": [
+                {
+                    "tipo": "act",
+                    "key": "delete",
+                    "label": "Borrar línea",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
+                {"tipo": "field", "listpos": "body", "key": "horainicio", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "horafin", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "totaltiempo", "width": 5}
+            ],
+            "rowclick": "link",
+            "accionesGrid": [{
+                "key": "nuevotramo",
+                "label": "Nuevo",
+                "success": [{ "slot": "refrescar"}]
+            }]
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "prefix": "gt_controlhorario",
+            "icon": "delete",
+            "msg": "El registro horario será eliminado"
+        },
+        "validar": {
+            "action": "legacy",
+            "serverAction": "validar",
+            "icon": "icon"
+        },
+        "nuevotramo": {
+            "label": "Nuevo",
+            "action": "newRow",
+            "icon": "add_circle"
+        }
+    },
+    "drawIf": {
+        "botonera": {
+            "validar": "drawif_validar"
+        },
+        "controlhorario": {
+            "delete": {
+                "tipo": "hidden",
+                "condiciones": [
+                    {
+                        "tipo": "==",
+                        "campo": "validado",
+                        "valor": true
+                    }
+                ]
+            },
+            "nuevotramo": "drawif_nuevotramo"
+        },
+        "gb__": {
+            "horasextra": "drawif_horasextra"
+        }
+    }
+}

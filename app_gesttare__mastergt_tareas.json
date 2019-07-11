@@ -25,15 +25,15 @@
                     "filter": {
                         "nombre": null,
                         "codproyecto": {
-                                        "showpk": false, 
-                                        "function": "getProyectosUsuario"
-                                    },
+                            "showpk": false, 
+                            "function": "getProyectosUsuario"
+                        },
                         "codestado": null,
                         "idusuario": {
-                                        "showpk": false,
-                                        "function": "getParticProyectosUsu"
-                                     },
-                        "fechavencimiento":  {
+                            "showpk": false,
+                            "function": "getParticProyectosUsu"
+                        },
+                        "fechavencimiento": {
                             "filterType": "interval"
                         },
                         "fechaentrega": {

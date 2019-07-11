@@ -14,6 +14,9 @@
                     "gt_partictarea": null,
                     "gt_particproyecto": null,
                     "gt_timetracking": null,
+                    "gt_controlhorario": null,
+                    "gt_controldiario": null,
+                    "gt_controlmensual": null,
                     "gt_companias": null
                 }
             }
@@ -30,27 +33,6 @@
                 "flsisppal": {
                     "sis_gridfilter": null
                 }
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/fllogin/auth_user",
-            "value": {
-                "aqn_user": null
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/fllogin/aqn_user",
-            "value": {
-                "aqn_companies": null
-            }
-        },
-        {
-            "type": "insertAfterNode",
-            "path": "/fllogin/aqn_companies",
-            "value": {
-                "aqn_invitations": null
             }
         }
     ]
