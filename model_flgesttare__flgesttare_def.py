@@ -34,9 +34,9 @@ class gesttare(interna):
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
         #     return False
 
+        print("gesttare_aftercommit_gt_proyectos")
         if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
             return False
-        print("gesttare_aftercommit_gt_proyectos")
 
         return True
 
@@ -46,7 +46,7 @@ class gesttare(interna):
         #     return False
 
         _i.comprobarUsuarioResponsable(curTarea)
-        print("gesttare_aftercommit_gt_tareas")
+        # print("gesttare_aftercommit_gt_tareas")
 
         _i.comprobarActualizacionesTareas(curTarea)
 
@@ -102,9 +102,9 @@ class gesttare(interna):
             if not _i.desasignarTareasProyecto(curPart):
                 return False
 
-            count = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"count(*)", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), u"'"))
-            if count == 0:
-                return False
+            # count = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"count(*)", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), u"'"))
+            # if count == 0:
+            #     return False
 
         if curPart.modeAccess() == curPart.Insert:
             nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'"))

@@ -316,6 +316,13 @@ class gesttare(interna):
             print(valor)
         return valor
 
+    def gesttare_iniciaValoresCursor(self, cursor=None):
+        usuario = qsatype.FLUtil.nameUser()
+        idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
+        cursor.setValueBuffer(u"idcompany", idcompany)
+
+        qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(cursor)
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -349,6 +356,9 @@ class gesttare(interna):
 
     def commonCalculateField(self, fN, cursor):
         return self.ctx.gesttare_commonCalculateField(fN, cursor)
+
+    def iniciaValoresCursor(self, cursor=None):
+        return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
 
 # @class_declaration head #

@@ -40,6 +40,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def commonCalculateField(fN, curP):
         return form.iface.commonCalculateField(fN, curP)
 
+    def iniciaValoresCursor(cursor=None):
+        return form.iface.iniciaValoresCursor(cursor)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):
