@@ -24,6 +24,9 @@ class gesttare_gt_particproyecto(interna_gt_particproyecto, helpers.MixinConAcci
     def field_nombre(self):
         return form.iface.field_nombre(self)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def borrarPartic(self, oParam, cursor):
+        return form.iface.borrarPartic(oParam, cursor)
 
 # @class_declaration gt_particproyecto #
 class gt_particproyecto(gesttare_gt_particproyecto, helpers.MixinConAcciones):

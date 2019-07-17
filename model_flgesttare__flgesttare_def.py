@@ -126,7 +126,7 @@ class gesttare(interna):
             qryParticipantes.setTablesList(u"gt_partictarea")
             qryParticipantes.setSelect(u"idparticipante,idusuario")
             qryParticipantes.setFrom(ustr(u"gt_partictarea"))
-            qryParticipantes.setWhere("idtarea = {} AND idusuario <> {}".format(cursor.valueBuffer(u"idtarea"). idUsuario))
+            qryParticipantes.setWhere("idtarea = {} AND idusuario <> {}".format(cursor.valueBuffer(u"idtarea"), idUsuario))
 
             try:
                 qryParticipantes.setForwardOnly(True)

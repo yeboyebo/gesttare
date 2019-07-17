@@ -41,6 +41,13 @@ class gesttare(interna):
             pass
         return usuario
 
+    def gesttare_borrarPartic(self, oParam, cursor):
+        cursor.setModeAccess(cursor.Del)
+        cursor.refreshBuffer()
+        if not cursor.commitBuffer():
+            return False
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -55,6 +62,9 @@ class gesttare(interna):
 
     def field_nombre(self, model):
         return self.ctx.gesttare_field_nombre(model)
+
+    def borrarPartic(self, oParam, cursor):
+        return self.ctx.gesttare_borrarPartic(oParam, cursor)
 
 
 # @class_declaration head #

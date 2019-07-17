@@ -103,17 +103,17 @@
                             "hideheader": true,
                             "columns": [
                                 {
-                                    "tipo": "foreignfield",
-                                    "listpos": "title",
-                                    "key": "nombre"
-                                },
-                                {
                                     "tipo": "act",
-                                    "key": "delete",
+                                    "key": "borrarPartic",
                                     "label": "Borrar Linea",
                                     "success": [
                                         {"slot": "refrescar"}
                                     ]
+                                },
+                                {
+                                    "tipo": "foreignfield",
+                                    "listpos": "title",
+                                    "key": "nombre"
                                 }
                             ],
                             "rowclick": "",
@@ -137,6 +137,11 @@
         "actionEmail": {
             "action": "legacy",
             "serverAction": "dameEmailCreaTarea"
+        },
+        "borrarPartic": {
+            "action": "legacy",
+            "serverAction": "borrarPartic",
+            "icon": "delete"
         },
         "delete": {
             "action": "deleteRow",
