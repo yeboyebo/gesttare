@@ -6,6 +6,18 @@
             "action": "url",
             "icon": "notifications",
             "url": "gesttare/gt_actualizaciones/master"
+        },
+        "startControlHorario": {
+            "action": "legacy",
+            "icon": "play_arrow",
+            "prefix": "gt_controlhorario",
+            "serverAction": "start"
+        },
+        "pauseControlHorario": {
+            "action": "legacy",
+            "icon": "pause",
+            "prefix": "gt_controlhorario",
+            "serverAction": "pause"
         }
     },
     "items": [

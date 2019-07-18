@@ -461,6 +461,38 @@ class gesttare(interna):
     def gesttare_calcula_horasextra_mensual(self, idc_mensual):
         return qsatype.FLUtil().quickSqlSelect("gt_controldiario", "SUM(horasextra)", "idc_mensual = {}".format(idc_mensual)) or "00:00:00"
 
+    def gesttare_seconds_to_time(self, seconds, total=False, all_in_hours=False):
+        if not seconds:
+            if total:
+                seconds = 0
+            else:
+                return ""
+
+        minutes = seconds // 60
+        seconds = int(seconds % 60)
+        hours = int(minutes // 60)
+        minutes = int(minutes % 60)
+
+        days = None
+        years = None
+
+        if not all_in_hours:
+            days = hours // 24
+            hours = int(hours % 24)
+            years = days // 365
+            days = int(days % 365)
+
+        seconds = str(seconds) if seconds >= 10 else "0{}".format(seconds)
+        minutes = str(minutes) if minutes >= 10 else "0{}".format(minutes)
+        hours = str(hours) if hours >= 10 else "0{}".format(hours)
+
+        if total:
+            years = "" if not years else "{} años, ".format(years)
+            days = "" if not days else "{} días, ".format(days)
+            return "{}{}{}:{}:{}".format(years, days, hours, minutes, seconds)
+        else:
+            return "{}:{}:{}".format(hours, minutes, seconds)
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -547,6 +579,9 @@ class gesttare(interna):
 
     def calcula_horasextra_mensual(self, idc_mensual):
         return self.ctx.gesttare_calcula_horasextra_mensual(idc_mensual)
+
+    def seconds_to_time(self, seconds, total=False, all_in_hours=False):
+        return self.ctx.gesttare_seconds_to_time(seconds, total, all_in_hours)
 
 
 # @class_declaration head #

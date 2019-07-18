@@ -15,6 +15,7 @@ from datetime import datetime
 
 from YBLEGACY.constantes import *
 from YBUTILS.viewREST import cacheController
+from models.flgesttare import flgesttare_def
 
 
 class gesttare(interna):
@@ -144,6 +145,23 @@ class gesttare(interna):
 
     def set_estado(self, estado):
         return self.ctx.gesttare_set_estado(estado)
+
+    def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        if template == "control_horario":
+            usuario = qsatype.FLUtil.nameUser()
+            cursorCD = qsatype.FLSqlCursor("gt_controldiario")
+            cursorCD.select("idusuario = '" + str(usuario) + "'")
+            if cursorCD.next():
+                cursorCD.setModeAccess(cursorCD.Browse)
+                cursorCD.refreshBuffer()
+                tiempototal = cursorCD.valueBuffer("totaltiempo")
+            # tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
+            # "controlmensual"
+            return {"controldiario": "Control Diario. Tiempo total: {}".format(tiempototal)}
+        return None
+
+    def get_model_info(self, model, data, ident, template, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
 
 
 # @class_declaration head #
