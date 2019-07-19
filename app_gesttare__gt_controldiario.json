@@ -50,6 +50,7 @@
                     "fields": {
                         "fecha": {"disabled": true},
                         "idusuario": {"disabled": true},
+                        "horasordinarias": {"disabled": true},
                         "totaltiempo": {"disabled": true},
                         "horaentrada": {"disabled": true},
                         "horasalida": {"disabled": true},

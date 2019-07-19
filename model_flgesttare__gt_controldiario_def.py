@@ -96,8 +96,8 @@ class gesttare(interna):
         if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
             return "disabled"
 
-        if not cursor.valueBuffer("horasextra"):
-            return "disabled"
+        # if not cursor.valueBuffer("horasextra"):
+        #     return "disabled"
 
         if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idc_diario = {} AND horafin IS NULL".format(cursor.valueBuffer("idc_diario"))):
             return "disabled"

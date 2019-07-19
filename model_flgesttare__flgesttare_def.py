@@ -394,6 +394,7 @@ class gesttare(interna):
         cur_diario.setValueBuffer("horaentrada", str(self.iface.calcula_horaentrada(idc_diario)))
         cur_diario.setValueBuffer("horasalida", str(self.iface.calcula_horasalida(idc_diario)))
         cur_diario.setValueBuffer("totaltiempo", str(self.iface.calcula_totaltiempo_diario(idc_diario)))
+        cur_diario.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(idc_diario)))
 
         if not cur_diario.commitBuffer():
             print("Ocurrió un error al actualizar el registro diario")
@@ -448,6 +449,24 @@ class gesttare(interna):
 
     def gesttare_calcula_totaltiempo_diario(self, idc_diario):
         return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+
+    def gesttare_calcula_horasordinarias_diario(self, idc_diario):
+        formato = "%H:%M:%S"
+        totaltiempo = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "totaltiempo", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+        horasextra = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "horasextra", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+        print(totaltiempo)
+        print(horasextra)
+        if totaltiempo and horasextra:
+            print(totaltiempo > horasextra)
+        else:
+            print("aun no tengo extra")
+        # if len(totaltiempo) < 8:
+        #     totaltiempo = "0" + totaltiempo
+        # totaltiempo = datetime.datetime.strptime(totaltiempo, formato)
+        # horasextra = datetime.datetime.strptime(str(horasextra), formato)
+        # horasordinarias = totaltiempo - horasextra
+        # horasordinarias = str(horasordinarias)
+        return "00:00:00"
 
     def gesttare_calcula_horaentrada(self, idc_diario):
         return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "MIN(horainicio)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
@@ -567,6 +586,9 @@ class gesttare(interna):
 
     def calcula_totaltiempo_diario(self, idc_diario):
         return self.ctx.gesttare_calcula_totaltiempo_diario(idc_diario)
+
+    def calcula_horasordinarias_diario(self, idc_diario):
+        return self.ctx.gesttare_calcula_horasordinarias_diario(idc_diario)
 
     def calcula_horaentrada(self, idc_diario):
         return self.ctx.gesttare_calcula_horaentrada(idc_diario)

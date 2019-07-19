@@ -39,7 +39,7 @@ class gesttare(interna):
 
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
 
-            tiempototal = self.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
+            tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTracking": "Tiempo total: {}".format(tiempototal)}
         return None
 
