@@ -18,7 +18,13 @@ class gesttare(interna):
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
 
         if not tareaactiva:
-            return None
+            return {
+                    "appConfiguration": [{
+                        "key": "controlhorario",
+                        "text": "Control horario",
+                        "href": "/gesttare/gt_controlhorario/custom/control_horario"
+                    }]
+                }
 
         nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
 
@@ -54,14 +60,44 @@ class gesttare(interna):
                     "serverAction": "startstop",
                     "icon": "alarm"
                 }
-            }
+            },
+            "appConfiguration": [{
+                "key": "controlhorario",
+                "text": "Control horario",
+                "href": "/gesttare/gt_controlhorario/custom/control_horario"
+            }]
         }
+
+    def gesttare_get_app_drawIf(self, drawIf, pk):
+        return {"YBNavBarActions": {"pauseControlHorario": "drawIfPauseControl", "startControlHorario": "drawIfstartControl"}}
+
+    def gesttare_drawIfPauseControl(self, cursor):
+        usuario = qsatype.FLUtil.nameUser() 
+        tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario))
+        if not tramoactivo:
+            return "hidden"
+        return True
+
+    def gesttare_drawIfstartControl(self, cursor):
+        usuario = qsatype.FLUtil.nameUser() 
+        if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario)):
+            return "hidden"
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)
 
     def get_app_info(self, model, data):
         return self.ctx.gesttare_get_app_info(model, data)
+
+    def get_app_drawIf(self, drawIf, pk):
+        return self.ctx.gesttare_get_app_drawIf(drawIf, pk)
+
+    def drawIfPauseControl(self, cursor):
+        return self.ctx.gesttare_drawIfPauseControl(cursor)
+
+    def drawIfstartControl(self, cursor):
+        return self.ctx.gesttare_drawIfstartControl(cursor)
 
 
 # @class_declaration head #

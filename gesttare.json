@@ -293,6 +293,10 @@
             {
                 "path": "apps/gesttare/templates/gesttare/plantillas/",
                 "name": "app_gesttare__newrecordgt_controlhorario.json"
+            },
+            {
+                "path": "/",
+                "name": "iniciaValoresBBDD.sql"
             }
         ],
         "replaceFile": [

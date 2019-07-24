@@ -340,7 +340,7 @@ class gesttare(interna):
             idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, fecha))
 
             if not idc_diario:
-                if not qsatype.FLUtil().sqlInsert("gt_controldiario", ["fecha", "horaentrada", "idusuario"], [fecha, hora, user_name]):
+                if not qsatype.FLUtil().sqlInsert("gt_controldiario", ["fecha", "horaentrada", "horasextra", "idusuario"], [fecha, hora, "00:00:00", user_name]):
                     print("Error al crear el registro diario")
                     return False
 
@@ -390,11 +390,11 @@ class gesttare(interna):
 
         cur_diario.setModeAccess(cur_diario.Edit)
         cur_diario.refreshBuffer()
-
+        totaltiempo = self.iface.calcula_totaltiempo_diario(idc_diario)
         cur_diario.setValueBuffer("horaentrada", str(self.iface.calcula_horaentrada(idc_diario)))
         cur_diario.setValueBuffer("horasalida", str(self.iface.calcula_horasalida(idc_diario)))
-        cur_diario.setValueBuffer("totaltiempo", str(self.iface.calcula_totaltiempo_diario(idc_diario)))
-        cur_diario.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(idc_diario)))
+        cur_diario.setValueBuffer("totaltiempo", str(totaltiempo))
+        cur_diario.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(cur_diario)))
 
         if not cur_diario.commitBuffer():
             print("Ocurrió un error al actualizar el registro diario")
@@ -448,25 +448,33 @@ class gesttare(interna):
         return totaltiempo
 
     def gesttare_calcula_totaltiempo_diario(self, idc_diario):
-        return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
+        totaltiempo = str(qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario))) or "00:00:00"
+        if len(totaltiempo) < 8:
+            totaltiempo = "0" + totaltiempo
+        if len(totaltiempo) > 8:
+            totaltiempo = totaltiempo[8:]
+        return totaltiempo
 
-    def gesttare_calcula_horasordinarias_diario(self, idc_diario):
+    def gesttare_calcula_horasordinarias_diario(self, cur_diario):
+        if not cur_diario.valueBuffer("totaltiempo") or not cur_diario.valueBuffer("horasextra"):
+            return "00:00:00"
+
         formato = "%H:%M:%S"
-        totaltiempo = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "totaltiempo", "idc_diario = {}".format(idc_diario)) or "00:00:00"
-        horasextra = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "horasextra", "idc_diario = {}".format(idc_diario)) or "00:00:00"
-        print(totaltiempo)
-        print(horasextra)
-        if totaltiempo and horasextra:
-            print(totaltiempo > horasextra)
-        else:
-            print("aun no tengo extra")
-        # if len(totaltiempo) < 8:
-        #     totaltiempo = "0" + totaltiempo
-        # totaltiempo = datetime.datetime.strptime(totaltiempo, formato)
-        # horasextra = datetime.datetime.strptime(str(horasextra), formato)
-        # horasordinarias = totaltiempo - horasextra
-        # horasordinarias = str(horasordinarias)
-        return "00:00:00"
+        totaltiempo = str(cur_diario.valueBuffer("totaltiempo"))
+        if len(totaltiempo) == 5:
+            totaltiempo += ":00"
+        horasextra = str(cur_diario.valueBuffer("horasextra"))
+        if len(horasextra) == 5:
+            horasextra += ":00"
+        horasextra = datetime.datetime.strptime(horasextra, formato)
+        totaltiempo = datetime.datetime.strptime(totaltiempo, formato)
+        horasordinarias = totaltiempo - horasextra
+        horasordinarias = str(horasordinarias)
+        if len(horasordinarias) < 8:
+            horasordinarias = "0" + horasordinarias
+        if len(horasordinarias) > 8:
+            horasordinarias = horasordinarias[8:]
+        return horasordinarias
 
     def gesttare_calcula_horaentrada(self, idc_diario):
         return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "MIN(horainicio)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
@@ -587,8 +595,8 @@ class gesttare(interna):
     def calcula_totaltiempo_diario(self, idc_diario):
         return self.ctx.gesttare_calcula_totaltiempo_diario(idc_diario)
 
-    def calcula_horasordinarias_diario(self, idc_diario):
-        return self.ctx.gesttare_calcula_horasordinarias_diario(idc_diario)
+    def calcula_horasordinarias_diario(self, cur_diario):
+        return self.ctx.gesttare_calcula_horasordinarias_diario(cur_diario)
 
     def calcula_horaentrada(self, idc_diario):
         return self.ctx.gesttare_calcula_horaentrada(idc_diario)

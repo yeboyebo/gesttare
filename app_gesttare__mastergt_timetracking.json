@@ -41,7 +41,8 @@
                     "tofield": "idtarea",
                     "desc": "nombre",
                     "showpk": false,
-                    "fN": "gt_tareas.idtarea"
+                    "fN": "gt_tareas.idtarea",
+                    "function": "getTareasUsuario"
                 },
                 "proyecto": {
                     "label": "Proyecto",

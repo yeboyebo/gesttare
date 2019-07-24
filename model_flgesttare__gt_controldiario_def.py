@@ -12,6 +12,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from models.flgesttare import flgesttare_def
 
 
 class gesttare(interna):
@@ -91,7 +92,7 @@ class gesttare(interna):
 
     def gesttare_drawif_validar(self, cursor):
         if cursor.valueBuffer("validado"):
-            return "disabled"
+            return "hidden"
 
         if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
             return "disabled"
@@ -116,7 +117,10 @@ class gesttare(interna):
         if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
             return "disabled"
 
-    def gesttare_validar(self, model, cursor):
+    def gesttare_validar(self, model, oParam, cursor):
+        resul = {}
+        resul['status'] = 2
+        resul['confirm'] = "Seguro que quieres eliminar"
         if cursor.valueBuffer("validado"):
             return True
 
@@ -125,6 +129,11 @@ class gesttare(interna):
             return False
 
         return True
+
+    def gesttare_bChCursor(self, fN, cursor):
+        if fN == "horasextra":
+            horasordinarias = str(flgesttare_def.iface.calcula_horasordinarias_diario(cursor))
+            cursor.setValueBuffer("horasordinarias", horasordinarias)
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -153,9 +162,11 @@ class gesttare(interna):
     def drawif_horasextra(self, cursor):
         return self.ctx.gesttare_drawif_horasextra(cursor)
 
-    def validar(self, model, cursor):
-        return self.ctx.gesttare_validar(model, cursor)
+    def validar(self, model, oParam, cursor):
+        return self.ctx.gesttare_validar(model, oParam, cursor)
 
+    def bChCursor(self, fN, cursor):
+        return self.ctx.gesttare_bChCursor(fN, cursor)
 
 # @class_declaration head #
 class head(gesttare):

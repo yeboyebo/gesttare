@@ -32,9 +32,12 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     def drawif_horasextra(cursor):
         return form.iface.drawif_horasextra(cursor)
 
-    @helpers.decoradores.accion(aqparam=["cursor"])
-    def validar(self, cursor):
-        return form.iface.validar(self, cursor)
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def validar(self, oParam, cursor):
+        return form.iface.validar(self, oParam, cursor)
+
+    def bChCursor(fN, cursor):
+        return form.iface.bChCursor(fN, cursor)
 
 
 # @class_declaration gt_controldiario #

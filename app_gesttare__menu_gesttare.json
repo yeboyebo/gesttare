@@ -11,13 +11,15 @@
             "action": "legacy",
             "icon": "play_arrow",
             "prefix": "gt_controlhorario",
-            "serverAction": "start"
+            "serverAction": "start",
+            "success": [{"slot": "refrescar"}]
         },
         "pauseControlHorario": {
             "action": "legacy",
             "icon": "pause",
             "prefix": "gt_controlhorario",
-            "serverAction": "pause"
+            "serverAction": "pause",
+            "success": [{"slot": "refrescar"}]
         }
     },
     "items": [
