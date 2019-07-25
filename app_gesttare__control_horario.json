@@ -59,7 +59,10 @@
             "prefix": "gt_controldiario",
             "buscador": false,
             "filter": {
-                "idusuario": null,
+                "idusuario": {
+                    "showpk": false,
+                    "function": "getParticProyectosUsu"
+                },
                 "fecha": {
                     "filterType": "interval"
                 },
@@ -82,7 +85,10 @@
             "prefix": "gt_controlmensual",
             "buscador": false,
             "filter": {
-                "idusuario": null,
+                "idusuario": {
+                    "showpk": false,
+                    "function": "getParticProyectosUsu"
+                },
                 "anyo": null,
                 "mes": {
                     "filterType": "combo",
@@ -136,6 +142,12 @@
         "botonera": {
             "vistadiaria": "drawif_botondiario",
             "vistamensual": "drawif_botonmensual"
+        },
+        "controldiario": {
+            "filter_idusuario": "drawif_idusuariofilter"
+        },
+        "controlmensual": {
+            "filter_idusuario": "drawif_idusuariofilter"
         }
     }
 }

@@ -110,6 +110,13 @@ class gesttare(interna):
         if qsatype.FLUtil().quickSqlSelect("gt_controldiario", "validado", "idc_diario = {}".format(cursor.valueBuffer("idc_diario"))):
             return "disabled"
 
+    def gesttare_drawif_idusuariofilter(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        isSuperuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(usuario))
+        if not isSuperuser:
+            return "hidden"
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -140,6 +147,9 @@ class gesttare(interna):
     def drawif_horaeditable(self, cursor):
         return self.ctx.gesttare_drawif_horaeditable(cursor)
 
+    def drawif_idusuariofilter(self, cursor):
+        return self.ctx.gesttare_drawif_idusuariofilter(cursor)
+
     def get_estado(self):
         return self.ctx.gesttare_get_estado()
 
@@ -148,6 +158,7 @@ class gesttare(interna):
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
         if template == "control_horario":
+            tiempototal = "00:00:00"
             usuario = qsatype.FLUtil.nameUser()
             cursorCD = qsatype.FLSqlCursor("gt_controldiario")
             cursorCD.select("idusuario = '" + str(usuario) + "'")

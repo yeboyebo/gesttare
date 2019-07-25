@@ -449,6 +449,8 @@ class gesttare(interna):
 
     def gesttare_calcula_totaltiempo_diario(self, idc_diario):
         totaltiempo = str(qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario))) or "00:00:00"
+        if not totaltiempo or totaltiempo == "None":
+            return "00:00:00"
         if len(totaltiempo) < 8:
             totaltiempo = "0" + totaltiempo
         if len(totaltiempo) > 8:
@@ -456,7 +458,7 @@ class gesttare(interna):
         return totaltiempo
 
     def gesttare_calcula_horasordinarias_diario(self, cur_diario):
-        if not cur_diario.valueBuffer("totaltiempo") or not cur_diario.valueBuffer("horasextra"):
+        if not cur_diario.valueBuffer("totaltiempo") or not cur_diario.valueBuffer("horasextra") or cur_diario.valueBuffer("totaltiempo") == "None" or cur_diario.valueBuffer("horasextra") == "None":
             return "00:00:00"
 
         formato = "%H:%M:%S"

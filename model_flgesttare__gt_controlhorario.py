@@ -43,6 +43,9 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     def drawif_horaeditable(cursor):
         return form.iface.drawif_horaeditable(cursor)
 
+    def drawif_idusuariofilter(cursor):
+        return form.iface.drawif_idusuariofilter(cursor)
+
     @helpers.decoradores.accion(aqparam=[])
     def set_estado_diario(self):
         return form.iface.set_estado("diario")
