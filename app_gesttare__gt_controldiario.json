@@ -28,6 +28,17 @@
                         "key": "validar",
                         "success": [{"slot": "refrescar"}]
                     }
+                },
+                "desbloquear": {
+                    "componente": "YBButton",
+                    "prefix": "gt_controldiario",
+                    "label": "desbloquear",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "desbloquear",
+                        "success": [{"slot": "refrescar"}]
+                    }
                 }
             }
         },
@@ -104,6 +115,11 @@
             "serverAction": "validar",
             "icon": "icon"
         },
+        "desbloquear": {
+            "action": "legacy",
+            "serverAction": "desbloquear",
+            "icon": "icon"
+        },
         "nuevotramo": {
             "label": "Nuevo",
             "action": "newRow",
@@ -112,7 +128,8 @@
     },
     "drawIf": {
         "botonera": {
-            "validar": "drawif_validar"
+            "validar": "drawif_validar",
+            "desbloquear": "drawif_desbloquear"
         },
         "controlhorario": {
             "delete": {

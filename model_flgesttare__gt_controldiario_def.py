@@ -103,6 +103,18 @@ class gesttare(interna):
         if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idc_diario = {} AND horafin IS NULL".format(cursor.valueBuffer("idc_diario"))):
             return "disabled"
 
+    def gesttare_drawif_desbloquear(self, cursor):
+        if cursor.valueBuffer("validado"):
+            return True
+
+        if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
+            return "hidden"
+
+        if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idc_diario = {} AND horafin IS NULL".format(cursor.valueBuffer("idc_diario"))):
+            return "hidden"
+
+        return "hidden"
+
     def gesttare_drawif_nuevotramo(self, cursor):
         if cursor.valueBuffer("validado"):
             return "hidden"
@@ -118,15 +130,34 @@ class gesttare(interna):
             return "disabled"
 
     def gesttare_validar(self, model, oParam, cursor):
-        resul = {}
-        resul['status'] = 2
-        resul['confirm'] = "Seguro que quieres eliminar"
-        if cursor.valueBuffer("validado"):
-            return True
+        if "confirmacion" not in oParam:
+            resul = {}
+            resul['status'] = 2
+            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            return resul
+        else:
+            if cursor.valueBuffer("validado"):
+                return True
 
-        cursor.setValueBuffer("validado", True)
-        if not cursor.commitBuffer():
-            return False
+            cursor.setValueBuffer("validado", True)
+            if not cursor.commitBuffer():
+                return False
+
+        return True
+
+    def gesttare_desbloquear(self, model, oParam, cursor):
+        if "confirmacion" not in oParam:
+            resul = {}
+            resul['status'] = 2
+            resul['confirm'] = "Vas a desbloquear el día"
+            return resul
+        else:
+            if not cursor.valueBuffer("validado"):
+                return True
+
+            cursor.setValueBuffer("validado", False)
+            if not cursor.commitBuffer():
+                return False
 
         return True
 
@@ -156,6 +187,9 @@ class gesttare(interna):
     def drawif_validar(self, cursor):
         return self.ctx.gesttare_drawif_validar(cursor)
 
+    def drawif_desbloquear(self, cursor):
+        return self.ctx.gesttare_drawif_desbloquear(cursor)
+
     def drawif_nuevotramo(self, cursor):
         return self.ctx.gesttare_drawif_nuevotramo(cursor)
 
@@ -164,6 +198,9 @@ class gesttare(interna):
 
     def validar(self, model, oParam, cursor):
         return self.ctx.gesttare_validar(model, oParam, cursor)
+
+    def desbloquear(self, model, oParam, cursor):
+        return self.ctx.gesttare_desbloquear(model, oParam, cursor)
 
     def bChCursor(self, fN, cursor):
         return self.ctx.gesttare_bChCursor(fN, cursor)

@@ -191,7 +191,7 @@ class gesttare(interna):
 
         im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
         if not im_superuser:
-            return "disabled"
+            return "hidden"
 
         reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))
         my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))

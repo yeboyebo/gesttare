@@ -26,6 +26,9 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     def drawif_validar(cursor):
         return form.iface.drawif_validar(cursor)
 
+    def drawif_desbloquear(cursor):
+        return form.iface.drawif_desbloquear(cursor)
+
     def drawif_nuevotramo(cursor):
         return form.iface.drawif_nuevotramo(cursor)
 
@@ -35,6 +38,10 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def validar(self, oParam, cursor):
         return form.iface.validar(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def desbloquear(self, oParam, cursor):
+        return form.iface.desbloquear(self, oParam, cursor)
 
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)

@@ -81,7 +81,7 @@
                 "validarAdmin": {
                     "componente": "YBButton",
                     "prefix": "gt_controlmensual",
-                    "label": "Validar como organizador",
+                    "label": "Validar como responsable",
                     "className": "floatRight",
                     "buttonType": "raised",
                     "action": {
