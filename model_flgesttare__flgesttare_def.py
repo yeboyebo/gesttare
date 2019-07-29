@@ -419,6 +419,7 @@ class gesttare(interna):
 
         cur_mensual.setValueBuffer("totaltiempo", str(self.iface.calcula_totaltiempo_mensual(idc_mensual)))
         cur_mensual.setValueBuffer("horasextra", str(self.iface.calcula_horasextra_mensual(idc_mensual)))
+        cur_mensual.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(cur_mensual)))
 
         if not cur_mensual.commitBuffer():
             print("Ocurrió un error al actualizar el registro mensual")

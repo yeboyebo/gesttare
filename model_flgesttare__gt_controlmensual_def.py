@@ -123,10 +123,10 @@ class gesttare(interna):
             if not im_superuser:
                 return False
 
-            my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
-            reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
-            if my_company == reg_company:
-                return True
+            # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
+            # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
+            # if my_company == reg_company:
+            #     return True
 
             return False
 
@@ -170,46 +170,56 @@ class gesttare(interna):
 
     def gesttare_drawif_validar_user(self, cursor):
         if cursor.valueBuffer("validado_user"):
-            return "disabled"
+            return "hidden"
 
         if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
-            return "disabled"
+            return "hidden"
 
         if qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idc_mensual = {} AND NOT validado".format(cursor.valueBuffer("idc_mensual"))):
-            return "disabled"
+            return "hidden"
 
     def gesttare_drawif_validar_admin(self, cursor):
-        if not cursor.valueBuffer("validado_user"):
-            return "disabled"
-
-        if cursor.valueBuffer("validado_admin"):
-            return "disabled"
-
         my_name = qsatype.FLUtil.nameUser()
-        if my_name == "admin":
-            return ""
-
         im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
         if not im_superuser:
             return "hidden"
 
-        reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))
-        my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
-        reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
-        if my_company != reg_company:
-            return "disabled"
+        if not cursor.valueBuffer("validado_user"):
+            if my_name == "admin" or im_superuser:
+                return "disabled"
+            else:
+                return "hidden"
 
-    def gesttare_validar_user(self, model, cursor):
+        if cursor.valueBuffer("validado_admin"):
+            return "hidden"
+
+        # reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))
+        # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
+        # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
+        # if my_company != reg_company:
+        #     return "hidden"
+
+    def gesttare_validar_user(self, model, oParam, cursor):
         if cursor.valueBuffer("validado_user"):
             return True
 
-        cursor.setValueBuffer("validado_user", True)
-        if not cursor.commitBuffer():
-            return False
+        if "confirmacion" not in oParam:
+            resul = {}
+            if cursor.valueBuffer("horasordinarias") < cursor.valueBuffer("horasextra"):
+                resul["status"] = 1
+                resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
+                return resul
+            resul['status'] = 2
+            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            return resul
+        else:
+            cursor.setValueBuffer("validado_user", True)
+            if not cursor.commitBuffer():
+                return False
 
         return True
 
-    def gesttare_validar_admin(self, model, cursor):
+    def gesttare_validar_admin(self, model, oParam, cursor):
         if cursor.valueBuffer("validado_admin"):
             return True
 
@@ -217,6 +227,62 @@ class gesttare(interna):
 
         cursor.setValueBuffer("idadmin", idadmin)
         cursor.setValueBuffer("validado_admin", True)
+        if not cursor.commitBuffer():
+            return False
+
+        return True
+
+    def gesttare_drawif_desbloquear_user(self, cursor):
+        print("pasa por aqu", cursor.valueBuffer("validado_user"))
+        if cursor.valueBuffer("validado_admin"):
+            return "disabled"
+
+        if not cursor.valueBuffer("validado_user"):
+            return "hidden"
+
+        if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
+            return "hidden"
+
+        if qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idc_mensual = {} AND NOT validado".format(cursor.valueBuffer("idc_mensual"))):
+            return "hidden"
+
+    def gesttare_drawif_desbloquear_admin(self, cursor):
+        my_name = qsatype.FLUtil.nameUser()
+        im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
+        if not im_superuser:
+            return "hidden"
+
+        if not cursor.valueBuffer("validado_user"):
+            return "hidden"
+
+        if cursor.valueBuffer("validado_admin"):
+            if my_name == "admin" or im_superuser:
+                return ""
+
+        # reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))
+        # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
+        # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
+        # if my_company != reg_company:
+        #     return "hidden"
+
+    def gesttare_desbloquear_user(self, model, cursor):
+        if not cursor.valueBuffer("validado_user"):
+            return True
+
+        cursor.setValueBuffer("validado_user", False)
+        if not cursor.commitBuffer():
+            return False
+
+        return True
+
+    def gesttare_desbloquear_admin(self, model, cursor):
+        if not cursor.valueBuffer("validado_admin"):
+            return True
+
+        idadmin = qsatype.FLUtil.nameUser()
+
+        cursor.setValueBuffer("idadmin", idadmin)
+        cursor.setValueBuffer("validado_admin", False)
         if not cursor.commitBuffer():
             return False
 
@@ -270,11 +336,23 @@ class gesttare(interna):
     def drawif_validar_admin(self, cursor):
         return self.ctx.gesttare_drawif_validar_admin(cursor)
 
-    def validar_user(self, model, cursor):
-        return self.ctx.gesttare_validar_user(model, cursor)
+    def validar_user(self, model, oParam, cursor):
+        return self.ctx.gesttare_validar_user(model, oParam, cursor)
 
-    def validar_admin(self, model, cursor):
-        return self.ctx.gesttare_validar_admin(model, cursor)
+    def validar_admin(self, model, oParam, cursor):
+        return self.ctx.gesttare_validar_admin(model, oParam, cursor)
+
+    def drawif_desbloquear_user(self, cursor):
+        return self.ctx.gesttare_drawif_desbloquear_user(cursor)
+
+    def drawif_desbloquear_admin(self, cursor):
+        return self.ctx.gesttare_drawif_desbloquear_admin(cursor)
+
+    def desbloquear_user(self, model, cursor):
+        return self.ctx.gesttare_desbloquear_user(model, cursor)
+
+    def desbloquear_admin(self, model, cursor):
+        return self.ctx.gesttare_desbloquear_admin(model, cursor)
 
 
 # @class_declaration head #

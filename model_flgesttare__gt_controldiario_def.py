@@ -53,10 +53,10 @@ class gesttare(interna):
             if not im_superuser:
                 return False
 
-            my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
-            reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
-            if my_company == reg_company:
-                return True
+            # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
+            # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
+            # if my_company == reg_company:
+            #     return True
 
             return False
 
@@ -132,8 +132,12 @@ class gesttare(interna):
     def gesttare_validar(self, model, oParam, cursor):
         if "confirmacion" not in oParam:
             resul = {}
+            if cursor.valueBuffer("horasordinarias") < cursor.valueBuffer("horasextra"):
+                resul["status"] = 1
+                resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
+                return resul
             resul['status'] = 2
-            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
             return resul
         else:
             if cursor.valueBuffer("validado"):

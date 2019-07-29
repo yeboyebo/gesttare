@@ -24,13 +24,24 @@ class gesttare(interna):
         return None
 
     def gesttare_start(self, model):
-        now = str(qsatype.Date())
-        hora = now[-8:]
         user_name = qsatype.FLUtil.nameUser()
+        now = str(qsatype.Date())
+        fecha = now[:10]
+        hora = now[-8:]
 
+        mes = str(fecha).split("-")[1]
         response = {}
         response["resul"] = False
         response["msg"] = ""
+        if qsatype.FLUtil().quickSqlSelect("gt_controldiario", "validado", "fecha = '{}' AND idusuario = '{}'".format(now[:10], user_name)):
+            response["status"] = 1
+            response["msg"] = "El dia ya esta validado"
+            return response
+
+        if qsatype.FLUtil().quickSqlSelect("gt_controlmensual", "validado_user", "mes = '{}' AND idusuario = '{}'".format(mes, user_name)):
+            response["status"] = 1
+            response["msg"] = "El mes ya esta validado por el usuario"
+            return response
 
         if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = '{}' AND horafin IS NULL".format(user_name)):
             response["msg"] = "Ya existe un tramo iniciado"

@@ -50,13 +50,27 @@ class gesttare_gt_controlmensual(interna_gt_controlmensual, helpers.MixinConAcci
     def drawif_validar_admin(cursor):
         return form.iface.drawif_validar_admin(cursor)
 
-    @helpers.decoradores.accion(aqparam=["cursor"])
-    def validar_user(self, cursor):
-        return form.iface.validar_user(self, cursor)
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def validar_user(self, oParam, cursor):
+        return form.iface.validar_user(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def validar_admin(self, oParam, cursor):
+        return form.iface.validar_admin(self, oParam, cursor)
+
+    def drawif_desbloquear_user(cursor):
+        return form.iface.drawif_desbloquear_user(cursor)
+
+    def drawif_desbloquear_admin(cursor):
+        return form.iface.drawif_desbloquear_admin(cursor)
 
     @helpers.decoradores.accion(aqparam=["cursor"])
-    def validar_admin(self, cursor):
-        return form.iface.validar_admin(self, cursor)
+    def desbloquear_user(self, cursor):
+        return form.iface.desbloquear_user(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def desbloquear_admin(self, cursor):
+        return form.iface.desbloquear_admin(self, cursor)
 
 
 # @class_declaration gt_controlmensual #

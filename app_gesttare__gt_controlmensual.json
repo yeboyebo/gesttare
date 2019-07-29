@@ -34,6 +34,7 @@
                         "NAF": {"disabled": true},
                         "mesanyo": {"label": "Mes", "disabled": true},
                         "totaltiempo": {"disabled": true},
+                        "horasordinarias": {"disabled": true},
                         "horasextra": {"disabled": true},
                         "validado_user": {"disabled": true},
                         "validado_admin": {"disabled": true}
@@ -57,6 +58,7 @@
                 {"tipo": "field", "listpos": "body", "key": "horaentrada", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasalida", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "totaltiempo", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "horasordinarias", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasextra", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "validado", "width": 5}
             ],
@@ -78,6 +80,17 @@
                         "success": [{"slot": "refrescar"}]
                     }
                 },
+                "desbloquearUser": {
+                    "componente": "YBButton",
+                    "prefix": "gt_controlmensual",
+                    "label": "Editar como trabajador",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "desbloquear_user",
+                        "success": [{"slot": "refrescar"}]
+                    }
+                },
                 "validarAdmin": {
                     "componente": "YBButton",
                     "prefix": "gt_controlmensual",
@@ -88,26 +101,49 @@
                         "key": "validar_admin",
                         "success": [{"slot": "refrescar"}]
                     }
+                },
+                "desbloquearAdmin": {
+                    "componente": "YBButton",
+                    "prefix": "gt_controlmensual",
+                    "label": "Editar como responsable",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "desbloquear_admin",
+                        "success": [{"slot": "refrescar"}]
+                    }
                 }
             }
         }
     },
     "acciones": {
+        "validar_admin": {
+            "action": "legacy",
+            "serverAction": "validar_admin",
+            "icon": "icon"
+        },
+        "desbloquear_admin": {
+            "action": "legacy",
+            "serverAction": "desbloquear_admin",
+            "icon": "icon"
+        },
         "validar_user": {
             "action": "legacy",
             "serverAction": "validar_user",
             "icon": "icon"
         },
-        "validar_admin": {
+        "desbloquear_user": {
             "action": "legacy",
-            "serverAction": "validar_admin",
+            "serverAction": "desbloquear_user",
             "icon": "icon"
         }
     },
     "drawIf": {
         "botonera": {
             "validarUser": "drawif_validar_user",
-            "validarAdmin": "drawif_validar_admin"
+            "validarAdmin": "drawif_validar_admin",
+            "desbloquearUser": "drawif_desbloquear_user",
+            "desbloquearAdmin": "drawif_desbloquear_admin"
         }
     }
 }
