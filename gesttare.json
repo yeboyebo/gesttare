@@ -330,6 +330,10 @@
             {
                 "path": "apps/portal/templates/portal/plantillas/",
                 "name": "app_portal__masteraqn_companies.json"
+            },
+            {
+                "path": "apps/portal/templates/portal/plantillas/",
+                "name": "app_portal__aqn_user.json"
             }
         ],
         "patchScript": [

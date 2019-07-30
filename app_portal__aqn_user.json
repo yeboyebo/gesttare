@@ -1,0 +1,18 @@
+{
+    "modifications": [
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/fields/apellidos",
+            "value": {
+                "nif": {}
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/fields/nif",
+            "value": {
+                "naf": {}
+            }
+        }
+    ]
+}
