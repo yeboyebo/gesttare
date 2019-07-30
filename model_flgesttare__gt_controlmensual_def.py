@@ -120,8 +120,8 @@ class gesttare(interna):
                 return True
 
             im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
-            if not im_superuser:
-                return False
+            if im_superuser:
+                return True
 
             # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
             # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
@@ -210,7 +210,7 @@ class gesttare(interna):
                 resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
                 return resul
             resul['status'] = 2
-            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            resul['confirm'] = "Vas a validar el mes con los siguientes datos: " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
             return resul
         else:
             cursor.setValueBuffer("validado_user", True)
@@ -223,12 +223,23 @@ class gesttare(interna):
         if cursor.valueBuffer("validado_admin"):
             return True
 
-        idadmin = qsatype.FLUtil.nameUser()
+        if "confirmacion" not in oParam:
+            resul = {}
+            if cursor.valueBuffer("horasordinarias") < cursor.valueBuffer("horasextra"):
+                resul["status"] = 1
+                resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
+                return resul
+            nombre = qsatype.FLUtil().quickSqlSelect("aqn_user", "concat(nombre, ' ', apellidos)", "idusuario = {}".format(cursor.valueBuffer("idusuario")))
+            resul['status'] = 2
+            resul['confirm'] = "Vas a validar el mes de " + nombre + " con los siguientes datos: " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            return resul
+        else:
+            idadmin = qsatype.FLUtil.nameUser()
 
-        cursor.setValueBuffer("idadmin", idadmin)
-        cursor.setValueBuffer("validado_admin", True)
-        if not cursor.commitBuffer():
-            return False
+            cursor.setValueBuffer("idadmin", idadmin)
+            cursor.setValueBuffer("validado_admin", True)
+            if not cursor.commitBuffer():
+                return False
 
         return True
 
@@ -249,6 +260,9 @@ class gesttare(interna):
     def gesttare_drawif_desbloquear_admin(self, cursor):
         my_name = qsatype.FLUtil.nameUser()
         im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
+        if not cursor.valueBuffer("validado_admin"):
+            return "hidden"
+
         if not im_superuser:
             return "hidden"
 

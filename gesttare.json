@@ -297,6 +297,10 @@
             {
                 "path": "/",
                 "name": "iniciaValoresBBDD.sql"
+            },
+            {
+                "path": "apps/portal/templates/portal/plantillas/",
+                "name": "app_portal__aqn_companies.json"
             }
         ],
         "replaceFile": [
@@ -318,6 +322,14 @@
             {
                 "path": "config/",
                 "name": "registros.json"
+            },
+            {
+                "path": "apps/portal/templates/portal/",
+                "name": "app_portal__menu_system.json"
+            },
+            {
+                "path": "apps/portal/templates/portal/plantillas/",
+                "name": "app_portal__masteraqn_companies.json"
             }
         ],
         "patchScript": [
@@ -328,6 +340,14 @@
             {
                 "name": "model_fllogin__aqn_user.py",
                 "path": "models/fllogin/"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__aqn_companies_def.py"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__aqn_companies.py"
             }
         ]
     }

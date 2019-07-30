@@ -52,8 +52,8 @@
             "class": "claseGrid",
             "label": "Información",
             "submit": "update",
-            "autoCommit": true,
-            "send": false,
+            "autoCommit": false,
+            "send": true,
             "return": true,
             "fields": {
                 "gb__": {

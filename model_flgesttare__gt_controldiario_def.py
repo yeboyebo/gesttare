@@ -13,7 +13,7 @@ class interna(qsatype.objetoBase):
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from models.flgesttare import flgesttare_def
-
+from datetime import datetime, timedelta
 
 class gesttare(interna):
 
@@ -50,8 +50,8 @@ class gesttare(interna):
                 return True
 
             im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
-            if not im_superuser:
-                return False
+            if im_superuser:
+                return True
 
             # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
             # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
@@ -170,6 +170,44 @@ class gesttare(interna):
             horasordinarias = str(flgesttare_def.iface.calcula_horasordinarias_diario(cursor))
             cursor.setValueBuffer("horasordinarias", horasordinarias)
 
+    def sumar_hora(hora1,hora2):
+        formato = "%H:%M:%S"
+        lista = hora2.split(":")
+        hora=int(lista[0])
+        minuto=int(lista[1])
+        segundo=int(lista[2])
+        h1 = datetime.strptime(hora1, formato)
+        dh = timedelta(hours=hora) 
+        dm = timedelta(minutes=minuto)          
+        ds = timedelta(seconds=segundo) 
+        resultado1 =h1 + ds
+        resultado2 = resultado1 + dm
+        resultado = resultado2 + dh
+        resultado=resultado.strftime(formato)
+        return str(resultado)
+
+    def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        print("getmodelinfo controlhorario")
+        # if template == "control_horario":
+        formato = "%H:%M:%S"
+        totalhoras = "00:00:0"
+        for p in data:
+            hora2 = p["horasordinarias"]
+            lista = hora2.split(":")
+            hora=int(lista[0])
+            minuto=int(lista[1])
+            segundo=int(lista[2])
+            h1 = datetime.strptime(totalhoras, formato)
+            dh = timedelta(hours=hora) 
+            dm = timedelta(minutes=minuto)          
+            ds = timedelta(seconds=segundo) 
+            resultado1 = h1 + ds
+            resultado2 = resultado1 + dm
+            resultado = resultado2 + dh
+            totalhoras = resultado.strftime(formato)
+        return {"controldiario": "Control Diario. Tiempo total: {}".format(totalhoras)}
+        return None
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -208,6 +246,9 @@ class gesttare(interna):
 
     def bChCursor(self, fN, cursor):
         return self.ctx.gesttare_bChCursor(fN, cursor)
+
+    def get_model_info(self, model, data, ident, template, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
 
 # @class_declaration head #
 class head(gesttare):

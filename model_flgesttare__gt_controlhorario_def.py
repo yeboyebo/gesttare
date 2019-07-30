@@ -84,6 +84,10 @@ class gesttare(interna):
             if my_name == str(reg_name):
                 return True
 
+            im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
+            if im_superuser:
+                return True
+
             return False
 
         return True
@@ -129,23 +133,23 @@ class gesttare(interna):
         return True
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
-        print("__________________", template)
+        print("__________________", data)
         if template == "newrecord":
             fecha = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = {}".format(data["idc_diario"]))
             formateaFecha = str(fecha).split("-")
             return {"chForm": "Nuevo registro para " + formateaFecha[2] + "-" + formateaFecha[1] + "-" + formateaFecha[0]}
-        if template == "control_horario":
-            tiempototal = "00:00:00"
-            usuario = qsatype.FLUtil.nameUser()
-            cursorCD = qsatype.FLSqlCursor("gt_controldiario")
-            cursorCD.select("idusuario = '" + str(usuario) + "'")
-            if cursorCD.next():
-                cursorCD.setModeAccess(cursorCD.Browse)
-                cursorCD.refreshBuffer()
-                tiempototal = cursorCD.valueBuffer("totaltiempo")
-            # tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
-            # "controlmensual"
-            return {"controldiario": "Control Diario. Tiempo total: {}".format(tiempototal)}
+        # if template == "control_horario":
+        #     tiempototal = "00:00:00"
+        #     usuario = qsatype.FLUtil.nameUser()
+        #     cursorCD = qsatype.FLSqlCursor("gt_controldiario")
+        #     cursorCD.select("idusuario = '" + str(usuario) + "'")
+        #     if cursorCD.next():
+        #         cursorCD.setModeAccess(cursorCD.Browse)
+        #         cursorCD.refreshBuffer()
+        #         tiempototal = cursorCD.valueBuffer("totaltiempo")
+        #     # tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
+        #     # "controlmensual"
+        #     return {"controldiario": "Control Diario. Tiempo total: {}".format(tiempototal)}
         return None
 
     def __init__(self, context=None):

@@ -58,6 +58,7 @@
             "componente": "YBGrid",
             "prefix": "gt_controldiario",
             "buscador": false,
+            "cansavefilter": true,
             "filter": {
                 "idusuario": {
                     "showpk": false,

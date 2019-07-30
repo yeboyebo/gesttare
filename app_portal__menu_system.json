@@ -1,0 +1,14 @@
+{
+    "modifications": [
+        {
+            "type": "insertAfterItem",
+            "path": "/items[usuarios]",
+            "value": {
+                "NAME": "empresa",
+                "TEXT": "EMPRESA",
+                "URL": "system/aqn_companies/master",
+                "ICON": "insert_chart"
+            }
+        }
+    ]
+}
