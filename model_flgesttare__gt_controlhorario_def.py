@@ -133,7 +133,6 @@ class gesttare(interna):
         return True
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
-        print("__________________", data)
         if template == "newrecord":
             fecha = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = {}".format(data["idc_diario"]))
             formateaFecha = str(fecha).split("-")

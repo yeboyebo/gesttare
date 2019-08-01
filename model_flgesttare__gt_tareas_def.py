@@ -33,7 +33,8 @@ class gesttare(interna):
             {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
-            {'verbose_name': 'Color nombre', 'func': 'color_nombre'}
+            {'verbose_name': 'Color nombre', 'func': 'color_nombre'},
+            {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'}
         ]
 
         if template == "calendarioTareas":
@@ -167,11 +168,15 @@ class gesttare(interna):
     def gesttare_color_fecha(self, model):
         if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
+        if model.fechavencimiento and model.fechaentrega and model.fechaentrega < model.fechavencimiento:
+            return "fcWarning"
         return ""
 
     def gesttare_color_fechaentrega(self, model):
         if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
             return "fcDanger"
+        if model.fechavencimiento and model.fechaentrega and model.fechaentrega < model.fechavencimiento:
+            return "fcWarning"
         return ""
 
     def gesttare_uploadFile(self, model, oParam):

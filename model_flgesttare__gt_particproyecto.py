@@ -18,8 +18,8 @@ class gesttare_gt_particproyecto(interna_gt_particproyecto, helpers.MixinConAcci
     class Meta:
         proxy = True
 
-    def get_model_info(model, data, pag):
-        return form.iface.get_model_info(model, data, pag)
+    def get_model_info(model, data, pag, where_filter):
+        return form.iface.get_model_info(model, data, pag, where_filter)
 
     def field_nombre(self):
         return form.iface.field_nombre(self)

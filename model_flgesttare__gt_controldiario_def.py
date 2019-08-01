@@ -150,12 +150,19 @@ class gesttare(interna):
         return True
 
     def gesttare_desbloquear(self, model, oParam, cursor):
+        mesvalid = qsatype.FLUtil.sqlSelect("gt_controlmensual", "validado_user", "idc_mensual = {}".format(cursor.valueBuffer("idc_mensual")))
+        if mesvalid:
+            resul = {}
+            resul['status'] = 1
+            resul['msg'] = "Error. Debes desbloquear primero el mes"
+            return resul
         if "confirmacion" not in oParam:
             resul = {}
             resul['status'] = 2
             resul['confirm'] = "Vas a desbloquear el día"
             return resul
         else:
+
             if not cursor.valueBuffer("validado"):
                 return True
 
@@ -190,7 +197,9 @@ class gesttare(interna):
         print("getmodelinfo controlhorario")
         # if template == "control_horario":
         formato = "%H:%M:%S"
-        totalhoras = "00:00:0"
+        totalhoras = "00:00:00"
+        if not isinstance(data, list):
+            return None
         for p in data:
             hora2 = p["horasordinarias"]
             lista = hora2.split(":")

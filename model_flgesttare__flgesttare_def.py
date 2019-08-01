@@ -102,6 +102,9 @@ class gesttare(interna):
             if not _i.desasignarTareasProyecto(curPart):
                 return False
 
+            if not _i.eliminarNotificacionesProyecto(curPart):
+                return False
+
             # count = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"count(*)", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), u"'"))
             # if count == 0:
             #     return False
@@ -111,6 +114,10 @@ class gesttare(interna):
             if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
                 return False
 
+        return True
+
+    def gesttare_eliminarNotificacionesProyecto(self, curPart):
+        # qsatype.FLSqlQuery().execSql("DELETE FROM gt_partictarea where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idtarea IN (SELECT idtarea from gt_tareas where codproyecto = '" + curPart.valueBuffer("codproyecto") + "')")
         return True
 
     def gesttare_desasignarTareasProyecto(self, curPart):
@@ -579,6 +586,9 @@ class gesttare(interna):
 
     def desasignarTareasProyecto(self, curPart):
         return self.ctx.gesttare_desasignarTareasProyecto(curPart)
+
+    def eliminarNotificacionesProyecto(self, curPart):
+        return self.ctx.gesttare_eliminarNotificacionesProyecto(curPart)
 
     def beforeCommit_gt_controlhorario(self, cursor=None):
         return self.ctx.gesttare_beforeCommit_gt_controlhorario(cursor)

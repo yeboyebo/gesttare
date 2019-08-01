@@ -85,6 +85,7 @@
             "componente": "YBGrid",
             "prefix": "gt_controlmensual",
             "buscador": false,
+            "cansavefilter": true,
             "filter": {
                 "idusuario": {
                     "showpk": false,

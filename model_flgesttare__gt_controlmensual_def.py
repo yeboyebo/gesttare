@@ -176,7 +176,7 @@ class gesttare(interna):
             return "hidden"
 
         if qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idc_mensual = {} AND NOT validado".format(cursor.valueBuffer("idc_mensual"))):
-            return "hidden"
+            return "disabled"
 
     def gesttare_drawif_validar_admin(self, cursor):
         my_name = qsatype.FLUtil.nameUser()

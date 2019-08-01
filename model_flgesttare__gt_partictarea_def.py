@@ -23,7 +23,7 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return "nombre"
 
-    def gesttare_get_model_info(self, model, data, pag):
+    def gesttare_get_model_info(self, model, data, pag, where_filter):
         participantes = "Participantes: "
         participantes = ""
         for part in data:
@@ -49,8 +49,8 @@ class gesttare(interna):
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
 
-    def get_model_info(self, model, data, pag):
-        return self.ctx.gesttare_get_model_info(model, data, pag)
+    def get_model_info(self, model, data, pag, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, pag, where_filter)
 
     def field_nombre(self, model):
         return self.ctx.gesttare_field_nombre(model)
