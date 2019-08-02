@@ -24,6 +24,10 @@ class gesttare(interna):
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_comentarios(curComentario):
             return False
         if curComentario.modeAccess() == curComentario.Insert:
+            if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curComentario.valueBuffer(u"idusuario"), u" AND idtarea = ", curComentario.valueBuffer(u"idtarea"))):
+                if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curComentario.valueBuffer(u"idusuario"), curComentario.valueBuffer(u"idtarea")])):
+                    return False
+
             nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curComentario.valueBuffer(u"idtarea"), ""))
             if not _i.crearActualizaciones(u"Nuevo comentario a " + nombreTarea.replace("'", ""), curComentario):
                 return False
