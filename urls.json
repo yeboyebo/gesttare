@@ -64,6 +64,20 @@
             "value": {
                 "aqn_user": null
             }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/fllogin/aqn_invitations",
+            "value": {
+                "aqn_modules": null
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/fllogin/aqn_modules",
+            "value": {
+                "aqn_modulescompanies": null
+            }
         }
     ]
 }

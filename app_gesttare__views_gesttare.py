@@ -16,8 +16,12 @@ class gesttare(interna):
     def gesttare_get_app_info(self, model, data):
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
+        idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+        tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
 
         if not tareaactiva:
+            if not tengomodulo:
+                return {}
             return {
                     "appConfiguration": [{
                         "key": "controlhorario",
@@ -28,7 +32,7 @@ class gesttare(interna):
 
         nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
 
-        return {
+        appinfo = {
             "data": [{
                 "pk": tareaactiva,
                 "idtarea": tareaactiva,
@@ -60,13 +64,18 @@ class gesttare(interna):
                     "serverAction": "startstop",
                     "icon": "alarm"
                 }
-            },
-            "appConfiguration": [{
-                "key": "controlhorario",
-                "text": "Control horario",
-                "href": "/gesttare/gt_controlhorario/custom/control_horario"
-            }]
+            }
         }
+
+
+        if tengomodulo:
+            appinfo["appConfiguration"] =  [{
+                    "key": "controlhorario",
+                    "text": "Control horario",
+                    "href": "/gesttare/gt_controlhorario/custom/control_horario"
+                }]
+
+        return appinfo
 
     def gesttare_get_app_drawIf(self, drawIf, pk):
         return {"YBNavBarActions": {"pauseControlHorario": "drawIfPauseControl", "startControlHorario": "drawIfstartControl"}}
@@ -74,12 +83,20 @@ class gesttare(interna):
     def gesttare_drawIfPauseControl(self, cursor):
         usuario = qsatype.FLUtil.nameUser() 
         tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario))
+        idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
+        tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
+        if not tengomodulo:
+            return "hidden"
         if not tramoactivo:
             return "hidden"
         return True
 
     def gesttare_drawIfstartControl(self, cursor):
         usuario = qsatype.FLUtil.nameUser() 
+        idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
+        tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
+        if not tengomodulo:
+            return "hidden"
         if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario)):
             return "hidden"
         return True
