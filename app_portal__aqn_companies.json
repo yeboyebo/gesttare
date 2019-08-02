@@ -23,7 +23,7 @@
                         "gb__principal": {
                             "title": "",
                             "fields": {
-                                "descripcion": {},
+                                "descripcion": {"label": "Razón social"},
                                 "ccc": {},
                                 "cif": {}
                             }
