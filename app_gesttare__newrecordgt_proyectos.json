@@ -28,7 +28,8 @@
                                 "descripcion": {},
                                 "estado": {},
                                 "fechainicio": {},
-                                "fechaterminado": {}
+                                "fechaterminado": {},
+                                "responsable": {}
                             }
                         }
                     },

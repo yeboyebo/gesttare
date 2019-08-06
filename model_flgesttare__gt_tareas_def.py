@@ -48,7 +48,8 @@ class gesttare(interna):
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
         if template == "formRecord":
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
-
+            if not tiempototal:
+                return {"tiempoTotal": "Tiempo total: 00:00:00"}
             tiempototal = self.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"tiempoTotal": "Tiempo total: {}".format(tiempototal)}
 

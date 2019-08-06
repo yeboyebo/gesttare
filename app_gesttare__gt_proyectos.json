@@ -65,6 +65,7 @@
                                 "estado": {},
                                 "fechainicio": {},
                                 "fechaterminado": {},
+                                "responsable": {},
                                 "presupuesto": {},
                                 "rentabilidad": {"disabled": true},
                                 "costetotal": {"disabled": true}
