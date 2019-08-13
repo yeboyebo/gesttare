@@ -29,7 +29,7 @@
             "columns": [
                 {
                     "tipo": "act",
-                    "key": "delete",
+                    "key": "borrarProyecto",
                     "label": "Borrar Linea",
                     "success": [
                         {"slot": "refrescar"}
@@ -58,6 +58,12 @@
             "label" : "",
             "action": "onexport",
             "icon": "save"
+        },
+        "borrarProyecto": {
+            "label": "Borrar proyecto",
+            "action": "legacy",
+            "serverAction": "borrar_proyecto",
+            "icon": "delete"
         },
         "delete": {
             "action": "deleteRow",

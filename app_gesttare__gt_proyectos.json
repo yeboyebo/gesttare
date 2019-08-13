@@ -8,6 +8,9 @@
                 "p_c": 1,
                 "o_1": "idusuario"
             }
+        },
+        "grafico": {
+            "custom": "getRentabilidadGraphic"
         }
     },
     "layout": {
@@ -65,7 +68,11 @@
                                 "estado": {},
                                 "fechainicio": {},
                                 "fechaterminado": {},
-                                "responsable": {},
+                                "idresponsable": {
+                                    "combolimit": 1,
+                                    "showpk": false,
+                                    "function": "getParticCompaniaUsu"
+                                },
                                 "presupuesto": {},
                                 "rentabilidad": {"disabled": true},
                                 "costetotal": {"disabled": true}
@@ -127,6 +134,21 @@
                             ]
                         }
                     }
+                },
+                "groupBoxGraphic": {
+                    "componente": "YBGroupBox",
+                    "className": "",
+                    "layout": {
+                        "graphicSeparator": {
+                            "componente": "YBSeparator"
+                        },
+                        "pruebagrafico": {
+                            "label": "Rentabilidad",
+                            "componente": "YBChart",
+                            "d3": "pieChart",
+                            "prefix": "grafico"
+                        }
+                    }
                 }
             }
         }
@@ -180,7 +202,8 @@
         "gb__proyectos": {
             "presupuesto": "checkProyectosFormDraw",
             "rentabilidadh": "checkProyectosFormDraw",
-            "costetotal": "checkProyectosFormDraw"
+            "costetotal": "checkProyectosFormDraw",
+            "idresponsable": "checkResponsableDraw"
         }
     }
 }

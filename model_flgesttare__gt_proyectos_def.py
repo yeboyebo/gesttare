@@ -267,12 +267,23 @@ class gesttare(interna):
         if not response:
             return False
         return True
+
     def gesttare_checkProyectosFormDraw(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
         if not is_superuser:
             return "hidden"
         return True
+
+    def gesttare_checkResponsableDraw(self, cursor):
+        print("????")
+        usuario = qsatype.FLUtil.nameUser()
+        if cursor.valueBuffer("idresponsable") == usuario:
+            return True
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if is_superuser:
+            return True
+        return "hidden"
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         _i = self.iface
@@ -324,11 +335,20 @@ class gesttare(interna):
         qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(cursor)
         return True
 
+    def gesttare_borrar_proyecto(self, cursor):
+        return True
+
+    def gesttare_getRentabilidadGraphic(self, template):
+        return [{"type": "pieDonutChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True}]
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def checkProyectosFormDraw(self, cursor):
         return self.ctx.gesttare_checkProyectosFormDraw(cursor)
+
+    def checkResponsableDraw(self, cursor):
+        return self.ctx.gesttare_checkResponsableDraw(cursor)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
@@ -359,6 +379,12 @@ class gesttare(interna):
 
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
+
+    def borrar_proyecto(self, cursor):
+        return self.ctx.gesttare_borrar_proyecto(cursor)
+
+    def getRentabilidadGraphic(self, template):
+        return self.ctx.gesttare_getRentabilidadGraphic(template)
 
 
 # @class_declaration head #

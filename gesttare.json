@@ -317,6 +317,10 @@
             {
                 "name": "model_fllogin__aqn_modulescompanies_def.py",
                 "path": "models/fllogin/"
+            },
+            {
+                "path": "apps/portal/templates/portal/plantillas/",
+                "name": "app_portal__aqn_modulescompanies.json"
             }
         ],
         "replaceFile": [

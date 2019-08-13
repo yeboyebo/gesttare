@@ -29,7 +29,11 @@
                                 "estado": {},
                                 "fechainicio": {},
                                 "fechaterminado": {},
-                                "responsable": {}
+                                "idresponsable": {
+                                    "combolimit": 1,
+                                    "showpk": false,
+                                    "function": "getParticCompaniaUsu"
+                                }
                             }
                         }
                     },

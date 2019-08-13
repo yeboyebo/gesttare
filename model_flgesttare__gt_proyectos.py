@@ -30,6 +30,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def dameEmailCreaTarea(self, oParam, cursor):
         return form.iface.dameEmailCreaTarea(oParam, cursor)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def borrar_proyecto(self, cursor):
+        return form.iface.borrar_proyecto(cursor)
+
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def actInvitarExterno(self, oParam, cursor):
         return form.iface.actInvitarExterno(oParam, cursor)
@@ -37,12 +41,17 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def checkProyectosFormDraw(cursor):
         return form.iface.checkProyectosFormDraw(cursor)
 
+    def checkResponsableDraw(cursor):
+        return form.iface.checkResponsableDraw(cursor)
+
     def commonCalculateField(fN, curP):
         return form.iface.commonCalculateField(fN, curP)
 
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
 
+    def getRentabilidadGraphic(self, template):
+        return form.iface.getRentabilidadGraphic(template)
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

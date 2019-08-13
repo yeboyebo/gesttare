@@ -1,0 +1,37 @@
+{
+    "querystring": {},
+    "schema": {
+    },
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox",
+            "style": {},
+            "layout": {
+                "separator0": {
+                    "componente": "YBSeparator"
+                },
+                "formRecordAuthUser": {
+                    "prefix": "aqn_modulescompanies",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "update",
+                    "success": [],
+                    "groupbox": "acordeon",
+                    "return": true,
+                    "fields": {
+                        "gb__principal": {
+                            "title": "",
+                            "fields": {
+                                "idcompany": {},
+                                "idmodule": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "acciones": {},
+    "drawIf": {}
+}
