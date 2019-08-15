@@ -34,7 +34,7 @@
                         "NAF": {"disabled": true},
                         "mesanyo": {"label": "Mes", "disabled": true},
                         "totaltiempo": {"disabled": true},
-                        "horasordinarias": {"disabled": true},
+                        "horasordinariasstring": {"disabled": true},
                         "horasextra": {"disabled": true},
                         "validado_user": {"disabled": true},
                         "validado_admin": {"disabled": true}

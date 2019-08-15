@@ -341,7 +341,6 @@ class gesttare(interna):
 
     def gesttare_beforeCommit_gt_controlhorario(self, cursor=None):
         _i = self.iface
-
         if not cursor.valueBuffer("idc_diario"):
             now = str(qsatype.Date())
             fecha = now[:10]
@@ -356,11 +355,11 @@ class gesttare(interna):
                     return False
 
                 idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, fecha))
-
             cursor.setValueBuffer("idc_diario", idc_diario)
-
-        cursor.setValueBuffer("totaltiempo", self.iface.calcula_totaltiempo_horario(cursor))
-
+        totaltiempo = self.iface.calcula_totaltiempo_horario(cursor)
+        if totaltiempo:
+            cursor.setValueBuffer("totaltiempo", totaltiempo)
+            cursor.setValueBuffer("totaltiempostring", self.iface.seconds_to_time(int(totaltiempo), all_in_hours=True))
         return True
 
     def gesttare_beforeCommit_gt_controldiario(self, cursor=None):
@@ -389,7 +388,7 @@ class gesttare(interna):
 
     def gesttare_afterCommit_gt_controlhorario(self, cursor=None):
         _i = self.iface
-
+        print("aftercommit gt_controlhorario")
         idc_diario = cursor.valueBuffer("idc_diario")
 
         cur_diario = qsatype.FLSqlCursor("gt_controldiario")
@@ -404,13 +403,19 @@ class gesttare(interna):
         totaltiempo = self.iface.calcula_totaltiempo_diario(idc_diario)
         cur_diario.setValueBuffer("horaentrada", str(self.iface.calcula_horaentrada(idc_diario)))
         cur_diario.setValueBuffer("horasalida", str(self.iface.calcula_horasalida(idc_diario)))
-        cur_diario.setValueBuffer("totaltiempo", str(totaltiempo))
-        cur_diario.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(cur_diario)))
+        if totaltiempo:
+            print(totaltiempo)
+            cur_diario.setValueBuffer("totaltiempo", totaltiempo)
+            cur_diario.setValueBuffer("totaltiempostring", self.iface.seconds_to_time(int(totaltiempo), all_in_hours=True))
+        horasordinarias = self.iface.calcula_horasordinarias_diario(cur_diario)
+        if horasordinarias:
+            print(horasordinarias)
+            cur_diario.setValueBuffer("horasordinarias", horasordinarias)
+            cur_diario.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(int(horasordinarias), all_in_hours=True))
 
         if not cur_diario.commitBuffer():
             print("Ocurrió un error al actualizar el registro diario")
             return False
-
         return True
 
     def gesttare_afterCommit_gt_controldiario(self, cursor=None):
@@ -428,10 +433,14 @@ class gesttare(interna):
         cur_mensual.setModeAccess(cur_mensual.Edit)
         cur_mensual.refreshBuffer()
 
-        # cur_mensual.setValueBuffer("totaltiempo", str(self.iface.calcula_totaltiempo_mensual(idc_mensual)))
+        totaltiempo = self.iface.calcula_totaltiempo_mensual(idc_mensual)
+        cur_mensual.setValueBuffer("totaltiempo", totaltiempo)
+        cur_mensual.setValueBuffer("totaltiempostring", self.iface.seconds_to_time(int(totaltiempo), all_in_hours=True))
         cur_mensual.setValueBuffer("horasextra", str(self.iface.calcula_horasextra_mensual(idc_mensual)))
-        cur_mensual.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(cur_mensual)))
-
+        # cur_mensual.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(cur_mensual)))
+        horasordinarias = self.iface.calcula_horasordinarias_diario(cur_mensual)
+        cur_mensual.setValueBuffer("horasordinarias", horasordinarias)
+        cur_mensual.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(int(horasordinarias), all_in_hours=True))
         if not cur_mensual.commitBuffer():
             print("Ocurrió un error al actualizar el registro mensual")
             return False
@@ -442,64 +451,82 @@ class gesttare(interna):
         if not cursor.valueBuffer("horainicio") or not cursor.valueBuffer("horafin"):
             return None
 
-        formato = "%H:%M:%S"
-        horainicio = str(cursor.valueBuffer("horainicio"))
-        if len(horainicio) == 5:
-            horainicio += ":00"
-        horafin = str(cursor.valueBuffer("horafin"))
-        if len(horafin) == 5:
-            horafin += ":00"
+        # formato = "%H:%M:%S"
+        # horainicio = str(cursor.valueBuffer("horainicio"))
+        # if len(horainicio) == 5:
+        #     horainicio += ":00"
+        # horafin = str(cursor.valueBuffer("horafin"))
+        # if len(horafin) == 5:
+        #     horafin += ":00"
 
-        horafin = horafin.split(":")
-        horainicio = horainicio.split(":")
+        # horafin = horafin.split(":")
+        # horainicio = horainicio.split(":")
 
-        hfin = datetime.timedelta(hours=int(horafin[0]), minutes=int(horafin[1]), seconds=int(horafin[2]))
-        hinicio = datetime.timedelta(hours=int(horainicio[0]), minutes=int(horainicio[1]), seconds=int(horainicio[2]))
-        # hfin = datetime.datetime.strptime(horafin, formato)
-        # hinicio = datetime.datetime.strptime(horainicio, formato)
-        totaltiempo = hfin - hinicio
+        # hfin = datetime.timedelta(hours=int(horafin[0]), minutes=int(horafin[1]), seconds=int(horafin[2]))
+        # hinicio = datetime.timedelta(hours=int(horainicio[0]), minutes=int(horainicio[1]), seconds=int(horainicio[2]))
+        # # hfin = datetime.datetime.strptime(horafin, formato)
+        # # hinicio = datetime.datetime.strptime(horainicio, formato)
+        # totaltiempo = hfin - hinicio
 
-        totaltiempo = str(totaltiempo)
-        if len(totaltiempo) < 8:
-            totaltiempo = "0" + totaltiempo
-        if len(totaltiempo) > 8:
-            totaltiempo = totaltiempo[8:]
-        return totaltiempo
+        # totaltiempo = str(totaltiempo)
+        # if len(totaltiempo) < 8:
+        #     totaltiempo = "0" + totaltiempo
+        # if len(totaltiempo) > 8:
+        #     totaltiempo = totaltiempo[8:]
+
+        try:
+            horainicio = self.iface.time_to_seconds(cursor.valueBuffer("horainicio"))
+            horafin = self.iface.time_to_seconds(cursor.valueBuffer("horafin"))
+            totaltiempo = horafin - horainicio
+            return totaltiempo
+            # print(self.iface.seconds_to_time(auxT, all_in_hours=True))
+        except Exception as e:
+            print(e)
+        return 0
 
     def gesttare_calcula_totaltiempo_diario(self, idc_diario):
-        totaltiempo = str(qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario))) or "00:00:00"
-        if not totaltiempo or totaltiempo == "None":
-            return "00:00:00"
-        if len(totaltiempo) < 8:
-            totaltiempo = "0" + totaltiempo
-        if len(totaltiempo) > 8:
-            totaltiempo = totaltiempo[8:]
+        totaltiempo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "SUM(totaltiempo)", "idc_diario = {}".format(idc_diario)) or 0
+        # if not totaltiempo or totaltiempo == "None":
+        #     return "00:00:00"
+        # if len(totaltiempo) < 8:
+        #     totaltiempo = "0" + totaltiempo
+        # if len(totaltiempo) > 8:
+        #     totaltiempo = totaltiempo[8:]
+        print("totaltiempodiario", totaltiempo)
         return totaltiempo
 
     def gesttare_calcula_horasordinarias_diario(self, cur_diario):
         if not cur_diario.valueBuffer("totaltiempo") or not cur_diario.valueBuffer("horasextra") or cur_diario.valueBuffer("totaltiempo") == "None" or cur_diario.valueBuffer("horasextra") == "None":
-            return "00:00:00"
+            return None
 
-        formato = "%H:%M:%S"
-        totaltiempo = str(cur_diario.valueBuffer("totaltiempo"))
-        if len(totaltiempo) == 5:
-            totaltiempo += ":00"
-        horasextra = str(cur_diario.valueBuffer("horasextra"))
-        if len(horasextra) == 5:
-            horasextra += ":00"
+        # formato = "%H:%M:%S"
+        # # totaltiempo = str(cur_diario.valueBuffer("totaltiempo"))
+        # # if len(totaltiempo) == 5:
+        # #     totaltiempo += ":00"
+        # horasextra = str(cur_diario.valueBuffer("horasextra"))
+        # if len(horasextra) == 5:
+        #     horasextra += ":00"
 
         if str(cur_diario.valueBuffer("horasextra")) == "00:00:00":
-            return str(cur_diario.valueBuffer("totaltiempo"))
+            return cur_diario.valueBuffer("totaltiempo")
 
-        horasextra = datetime.datetime.strptime(horasextra, formato)
-        totaltiempo = datetime.datetime.strptime(totaltiempo, formato)
-        horasordinarias = totaltiempo - horasextra
-        horasordinarias = str(horasordinarias)
-        if len(horasordinarias) < 8:
-            horasordinarias = "0" + horasordinarias
-        if len(horasordinarias) > 8:
-            horasordinarias = horasordinarias[8:]
-        return horasordinarias
+        # horasextra = datetime.datetime.strptime(horasextra, formato)
+        # totaltiempo = datetime.datetime.strptime(totaltiempo, formato)
+        # horasordinarias = totaltiempo - horasextra
+        # horasordinarias = str(horasordinarias)
+        # if len(horasordinarias) < 8:
+        #     horasordinarias = "0" + horasordinarias
+        # if len(horasordinarias) > 8:
+        #     horasordinarias = horasordinarias[8:]
+        try:
+            totaltiempo = cur_diario.valueBuffer("totaltiempo")
+            horasextra = self.iface.time_to_seconds(cur_diario.valueBuffer("horasextra"))
+            horasordinarias = horafin - horainicio
+            return horasordinarias
+            # print(self.iface.seconds_to_time(auxT, all_in_hours=True))
+        except Exception as e:
+            print(e)
+        return 0
 
     def gesttare_calcula_horaentrada(self, idc_diario):
         return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "MIN(horainicio)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
@@ -508,9 +535,9 @@ class gesttare(interna):
         return qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "MAX(horafin)", "idc_diario = {}".format(idc_diario)) or "00:00:00"
 
     def gesttare_calcula_totaltiempo_mensual(self, idc_mensual):
-        tiempototal = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "SUM(totaltiempo)", "idc_mensual = {}".format(idc_mensual)) or "00:00:00"
-        print(tiempototal)
-        return self.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
+        tiempototal = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "SUM(totaltiempo)", "idc_mensual = {}".format(idc_mensual)) or 0
+        return tiempototal
+        # return self.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
 
     def gesttare_calcula_horasextra_mensual(self, idc_mensual): 
         tiempototal = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "SUM(horasextra)", "idc_mensual = {}".format(idc_mensual)) or "00:00:00"
@@ -525,7 +552,7 @@ class gesttare(interna):
                 seconds = 0
             else:
                 return ""
-
+        print("seconds_to_time", seconds)
         minutes = seconds // 60
         seconds = int(seconds % 60)
         hours = int(minutes // 60)
@@ -543,7 +570,7 @@ class gesttare(interna):
         seconds = str(seconds) if seconds >= 10 else "0{}".format(seconds)
         minutes = str(minutes) if minutes >= 10 else "0{}".format(minutes)
         hours = str(hours) if hours >= 10 else "0{}".format(hours)
-
+        print(hours, minutes, seconds)
         if total:
             years = "" if not years else "{} años, ".format(years)
             days = "" if not days else "{} días, ".format(days)

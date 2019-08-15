@@ -147,7 +147,7 @@ class gesttare(interna):
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
         q.setSelect(u"p.codproyecto, t.nombre")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND NOT archivado  ORDER BY t.nombre LIMIT 7")
         # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
@@ -276,7 +276,6 @@ class gesttare(interna):
         return True
 
     def gesttare_checkResponsableDraw(self, cursor):
-        print("????")
         usuario = qsatype.FLUtil.nameUser()
         if cursor.valueBuffer("idresponsable") == usuario:
             return True
@@ -336,6 +335,20 @@ class gesttare(interna):
         return True
 
     def gesttare_borrar_proyecto(self, cursor):
+        response = {}
+        usuario = qsatype.FLUtil.nameUser()
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        print("deberia entrar aqui?", cursor.valueBuffer("idresponsable"), usuario)
+        if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+            cursor.setModeAccess(cursor.Edit)
+            cursor.refreshBuffer()
+            cursor.setValueBuffer("archivado", not cursor.valueBuffer("archivado"))
+            if not cursor.commitBuffer():
+                return False
+        else:
+            response["status"] = 1
+            response["msg"] = "No se puede archivar el proyecto"
+            return response
         return True
 
     def gesttare_getRentabilidadGraphic(self, template):

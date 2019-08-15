@@ -75,7 +75,7 @@
                 {"tipo": "foreignfield", "listpos": "subtitle", "key": "usuario", "label": "Usuario", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horaentrada", "label": "H.Entrada", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasalida", "label": "H.Salida", "width": 5},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "totaltiempo", "label": "T.Tiempo", "width": 5},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "totaltiempostring", "label": "T.Tiempo", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasextra", "label": "H.Extra", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "validado", "label": "Validado", "width": 5, "avatar": true}
             ],
@@ -116,7 +116,7 @@
             "columns": [
                 {"tipo": "foreignfield", "listpos": "title", "key": "mesanyo", "label": "Mes", "width": 10},
                 {"tipo": "foreignfield", "listpos": "subtitle", "key": "usuario", "label": "Usuario", "width": 5},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "totaltiempo", "label": "T.Tiempo", "width": 5},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "totaltiempostring", "label": "T.Tiempo", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasextra", "label": "H.Extra", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "validado_user", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "validado_admin", "width": 5, "avatar": true}

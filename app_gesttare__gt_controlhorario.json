@@ -21,7 +21,7 @@
                         "horainicio": {},
                         "horafin": {},
                         "idusuario": {"disabled": true},
-                        "totaltiempo": {"disabled": true}
+                        "totaltiempostring": {"disabled": true}
                     }
                 }
             },

@@ -61,8 +61,8 @@
                     "fields": {
                         "fecha": {"disabled": true},
                         "idusuario": {"disabled": true},
-                        "horasordinarias": {"disabled": true},
-                        "totaltiempo": {"disabled": true},
+                        "horasordinariasstring": {"disabled": true},
+                        "totaltiempostring": {"disabled": true},
                         "horaentrada": {"disabled": true},
                         "horasalida": {"disabled": true},
                         "horasextra": {},
@@ -93,7 +93,7 @@
                 },
                 {"tipo": "field", "listpos": "body", "key": "horainicio", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horafin", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "totaltiempo", "width": 5}
+                {"tipo": "field", "listpos": "body", "key": "totaltiempostring", "width": 5}
             ],
             "rowclick": "link",
             "accionesGrid": [{

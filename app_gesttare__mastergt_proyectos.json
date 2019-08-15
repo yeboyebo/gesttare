@@ -3,6 +3,7 @@
         "p_l": 50,
         "p_c": true,
         "f_proyectosusuario": null,
+        "s_archivado__exact": false,
         "o_1": "fechaterminado",
         "o_2": "nombre"
     },
@@ -21,7 +22,8 @@
                 },
                 "fechaterminado": {
                     "filterType": "interval"
-                }
+                },
+                "archivado": null
             },
             "multiselectable": false,
             "avatar": false,
