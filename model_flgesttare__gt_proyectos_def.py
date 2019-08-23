@@ -330,29 +330,57 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
         cursor.setValueBuffer(u"idcompany", idcompany)
+        cursor.setValueBuffer("idresponsable", usuario)
 
         qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(cursor)
         return True
 
-    def gesttare_borrar_proyecto(self, cursor):
+    def gesttare_borrar_proyecto(self, oParam, cursor):
         response = {}
-        usuario = qsatype.FLUtil.nameUser()
-        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
-        print("deberia entrar aqui?", cursor.valueBuffer("idresponsable"), usuario)
-        if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
-            cursor.setModeAccess(cursor.Edit)
-            cursor.refreshBuffer()
-            cursor.setValueBuffer("archivado", not cursor.valueBuffer("archivado"))
-            if not cursor.commitBuffer():
-                return False
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+            usuario = qsatype.FLUtil.nameUser()
+            is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+            print("deberia entrar aqui?", cursor.valueBuffer("idresponsable"), usuario)
+            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+                cursor.setModeAccess(cursor.Edit)
+                cursor.refreshBuffer()
+                cursor.setValueBuffer("archivado", not cursor.valueBuffer("archivado"))
+                if not cursor.commitBuffer():
+                    return False
+            else:
+                response["status"] = 1
+                response["msg"] = "No se puede archivar el proyecto"
+                return response
         else:
-            response["status"] = 1
-            response["msg"] = "No se puede archivar el proyecto"
+            response['status'] = 2
+            if cursor.valueBuffer("archivado"):
+                msg = "¿Seguro que quieres recuperar el proyecto?"
+            else:
+                msg = "¿Seguro que quieres archivar el proyecto?"
+            response['confirm'] = msg
             return response
         return True
 
-    def gesttare_getRentabilidadGraphic(self, template):
-        return [{"type": "pieDonutChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True}]
+    def gesttare_getRentabilidadGraphic(self, model, template):
+        return []
+        # return [
+        #     {"type": "pieDonutChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True, "size": 90},
+        #     {"type": "pieChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True},
+        #     {"type": "horizontalBarChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True}]
+
+    def gesttare_queryGrid_proyectosarchivados(self, model, filters):
+        where = "gt_proyectos.archivado"
+        usuario = qsatype.FLUtil.nameUser()
+        isadmin = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if not isadmin:
+            where = where + " AND gt_particproyecto.idusuario = " + str(usuario)
+        query = {}
+        query["tablesList"] = ("gt_proyectos, gt_particproyecto")
+        query["select"] = ("gt_proyectos.codproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.fechainicio, gt_proyectos.fechaterminado")
+        query["from"] = ("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.codproyecto = gt_particproyecto.codproyecto")
+        query["where"] = (where)
+        query["groupby"] = ("gt_proyectos.codproyecto")
+        return query
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -393,11 +421,14 @@ class gesttare(interna):
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
-    def borrar_proyecto(self, cursor):
-        return self.ctx.gesttare_borrar_proyecto(cursor)
+    def borrar_proyecto(self, oParam, cursor):
+        return self.ctx.gesttare_borrar_proyecto(oParam, cursor)
 
-    def getRentabilidadGraphic(self, template):
-        return self.ctx.gesttare_getRentabilidadGraphic(template)
+    def getRentabilidadGraphic(self, model, template):
+        return self.ctx.gesttare_getRentabilidadGraphic(model, template)
+
+    def queryGrid_proyectosarchivados(self, model, filters):
+        return self.ctx.gesttare_queryGrid_proyectosarchivados(model, filters)
 
 
 # @class_declaration head #

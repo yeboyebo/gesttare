@@ -38,7 +38,6 @@ class gesttare(interna):
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
         #     return False
 
-        print("gesttare_aftercommit_gt_proyectos")
         if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
             return False
 
@@ -70,7 +69,6 @@ class gesttare(interna):
         return True
 
     def gesttare_totalizaCostesProyecto(self, codProyecto=None):
-        print("totalizar costes proyecto")
         _i = self.iface
         curP = qsatype.FLSqlCursor(u"gt_proyectos")
         curP.select(ustr(u"codproyecto = '", codProyecto, u"'"))
@@ -165,7 +163,6 @@ class gesttare(interna):
                 if not qsatype.FLUtil.sqlUpdate(u"gt_actualizaciones", u"idusuarioorigen", idUsuario, ustr(u"idactualizacion = ", idActualizacion)):
                     return False
             else:
-                print("insertando con hora")
                 # if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"idtarea", u"idcomentario", u"fecha", u"hora", u"idusuarioorigen"]), qsatype.Array([tipo, u"comentario", cursor.valueBuffer(u"idtarea"), idComentario, datetime.date.today(), time.strftime('%H:%M:%S'), idUsuario])):
                 #     return False
                 curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
@@ -232,7 +229,6 @@ class gesttare(interna):
                 if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, qryParticipantes.value(1), False])):
                     return False
 
-        print("Termina")
         return True
 
     def gesttare_comprobarUsuarioResponsableProyecto(self, curProyecto):
@@ -323,12 +319,12 @@ class gesttare(interna):
 
     def gesttare_time_to_hours(self, time):
         _i = self.iface
-        hdedicadas = _i.time_to_seconds(time)
+        hdedicadas = _i.time_to_seconds(str(time))
         return hdedicadas / 3600
 
     def gesttare_time_to_seconds(self, time):
         seconds = 0
-        a_time = time.split(":")
+        a_time = str(time).split(":")
 
         if len(a_time) > 0:
             seconds = seconds + int(a_time[0]) * 3600
@@ -388,7 +384,6 @@ class gesttare(interna):
 
     def gesttare_afterCommit_gt_controlhorario(self, cursor=None):
         _i = self.iface
-        print("aftercommit gt_controlhorario")
         idc_diario = cursor.valueBuffer("idc_diario")
 
         cur_diario = qsatype.FLSqlCursor("gt_controldiario")
@@ -404,12 +399,10 @@ class gesttare(interna):
         cur_diario.setValueBuffer("horaentrada", str(self.iface.calcula_horaentrada(idc_diario)))
         cur_diario.setValueBuffer("horasalida", str(self.iface.calcula_horasalida(idc_diario)))
         if totaltiempo:
-            print(totaltiempo)
             cur_diario.setValueBuffer("totaltiempo", totaltiempo)
             cur_diario.setValueBuffer("totaltiempostring", self.iface.seconds_to_time(int(totaltiempo), all_in_hours=True))
         horasordinarias = self.iface.calcula_horasordinarias_diario(cur_diario)
         if horasordinarias:
-            print(horasordinarias)
             cur_diario.setValueBuffer("horasordinarias", horasordinarias)
             cur_diario.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(int(horasordinarias), all_in_hours=True))
 
@@ -521,7 +514,7 @@ class gesttare(interna):
         try:
             totaltiempo = cur_diario.valueBuffer("totaltiempo")
             horasextra = self.iface.time_to_seconds(cur_diario.valueBuffer("horasextra"))
-            horasordinarias = horafin - horainicio
+            horasordinarias = totaltiempo - horasextra
             return horasordinarias
             # print(self.iface.seconds_to_time(auxT, all_in_hours=True))
         except Exception as e:
@@ -552,7 +545,7 @@ class gesttare(interna):
                 seconds = 0
             else:
                 return ""
-        print("seconds_to_time", seconds)
+
         minutes = seconds // 60
         seconds = int(seconds % 60)
         hours = int(minutes // 60)
@@ -570,7 +563,7 @@ class gesttare(interna):
         seconds = str(seconds) if seconds >= 10 else "0{}".format(seconds)
         minutes = str(minutes) if minutes >= 10 else "0{}".format(minutes)
         hours = str(hours) if hours >= 10 else "0{}".format(hours)
-        print(hours, minutes, seconds)
+
         if total:
             years = "" if not years else "{} años, ".format(years)
             days = "" if not days else "{} días, ".format(days)

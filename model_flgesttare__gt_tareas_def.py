@@ -281,7 +281,20 @@ class gesttare(interna):
             return []
 
         while q.next():
-            proyectos.append({"codigo": str(q.value(0)), "descripcion": str(q.value(1))})
+            participantes =  []
+            qParticPro = qsatype.FLSqlQuery()
+            qParticPro.setTablesList(u"gt_particproyecto")
+            qParticPro.setSelect("gt_particproyecto.idusuario")
+            qParticPro.setFrom("gt_particproyecto")
+            qParticPro.setWhere(u"codproyecto = '" + str(q.value(0)) + "'")
+
+            if not qParticPro.exec_():
+                print("Error inesperado")
+                return []
+
+            while qParticPro.next():
+                participantes.append(qParticPro.value(0))
+            proyectos.append({"codigo": str(q.value(0)), "descripcion": str(q.value(1)), "participantes": participantes})
 
         return proyectos
 
