@@ -31,6 +31,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
         return form.iface.dameEmailCreaTarea(oParam, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def archivar_proyecto(self, oParam, cursor):
+        return form.iface.archivar_proyecto(oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def borrar_proyecto(self, oParam, cursor):
         return form.iface.borrar_proyecto(oParam, cursor)
 

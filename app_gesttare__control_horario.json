@@ -19,6 +19,11 @@
                 "o_3": "idusuario",
                 "f_regusuario": null
             }
+        },
+        "control_diario": {
+            "query": {
+                "p_l": 25
+            }
         }
     },
     "layout": {
@@ -54,32 +59,33 @@
         "separator": {
             "componente": "YBSeparator"
         },
-        "controldiario": {
+        "queryGridcontroldiario": {
             "componente": "YBGrid",
-            "prefix": "gt_controldiario",
+            "type": "query",
+            "prefix": "control_diario",
             "buscador": false,
             "cansavefilter": true,
             "filter": {
-                "idusuario": {
+                "gt_controldiario.idusuario": {
                     "showpk": false,
                     "function": "getParticProyectosUsu"
                 },
-                "fecha": {
+                "gt_controldiario.fecha": {
                     "filterType": "interval"
                 },
-                "validado": null
+                "gt_controldiario.validado": null
             },
             "className": "",
             "columns": [
-                {"tipo": "field", "listpos": "title", "key": "fecha", "label": "Fecha", "width": 10},
-                {"tipo": "foreignfield", "listpos": "subtitle", "key": "usuario", "label": "Usuario", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horaentrada", "label": "H.Entrada", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horasalida", "label": "H.Salida", "width": 5},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "totaltiempostring", "label": "T.Tiempo", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horasextra", "label": "H.Extra", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "validado", "label": "Validado", "width": 5, "avatar": true}
+                {"tipo": "field", "listpos": "title", "key": "gt_controldiario.fecha", "label": "Fecha", "width": 10},
+                {"tipo": "foreignfield", "listpos": "subtitle", "key": "aqn_user.usuario", "label": "Usuario", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "gt_controldiario.horaentrada", "label": "H.Entrada", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "gt_controldiario.horasalida", "label": "H.Salida", "width": 5},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "gt_controldiario.totaltiempostring", "label": "T.Tiempo", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "gt_controldiario.horasextra", "label": "H.Extra", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "gt_controldiario.validado", "label": "Validado", "width": 5, "avatar": true}
             ],
-            "rowclick": "link"
+            "rowclick": "gotoControlDiario"
         },
         "controlmensual": {
             "componente": "YBGrid",
@@ -134,11 +140,16 @@
             "action": "legacy",
             "serverAction": "set_estado_mensual",
             "icon": "icon"
+        },
+        "gotoControlDiario": {
+            "action": "goto",
+            "prefix": "gt_controldiario",
+            "serverAction": "gotoControlDiario"
         }
     },
     "drawIf": {
         "parentGroupBox": {
-            "controldiario": "drawif_controldiario",
+            "queryGridcontroldiario": "drawif_controldiario",
             "controlmensual": "drawif_controlmensual"
         },
         "botonera": {

@@ -1,0 +1,54 @@
+{
+    "querystring": {},
+    "schema": {
+        "grafico": {
+            "custom": "generaAnalisisGraphic"
+        }
+    },
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox",
+            "style": {},
+            "layout": {
+                "groupBoxGraphic": {
+                    "componente": "YBGroupBox",
+                    "className": "",
+                    "layout": {
+                        "graphicSeparator": {
+                            "componente": "YBSeparator"
+                        },
+                        "pruebagrafico": {
+                            "label": "Análisis",
+                            "componente": "YBChart",
+                            "filter": {
+                                "codproyecto": {
+                                    "filterType": "custom",
+                                    "tipo": 55,
+                                    "tofield": "codproyecto",
+                                    "key": "codproyecto",
+                                    "desc": "nombre",
+                                    "rel": "gt_proyectos",
+                                    "label": "Codproyecto. 1"
+                                },
+                                "idusuario": {
+                                    "filterType": "custom",
+                                    "tipo": 55,
+                                    "tofield": "idusuario",
+                                    "key": "idusuario",
+                                    "desc": "usuario",
+                                    "rel": "aqn_user",
+                                    "label": "Usuario"
+                                }
+                            },
+                            "d3": "pieChart",
+                            "prefix": "grafico"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "acciones": {},
+    "drawIf": {}
+}

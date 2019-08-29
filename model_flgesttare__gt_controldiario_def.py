@@ -176,46 +176,54 @@ class gesttare(interna):
         if fN == "horasextra":
             horasordinarias = str(flgesttare_def.iface.calcula_horasordinarias_diario(cursor))
             cursor.setValueBuffer("horasordinarias", horasordinarias)
+            cursor.setValueBuffer("horasordinariasstring", flgesttare_def.iface.seconds_to_time(int(horasordinarias), all_in_hours=True))
 
-    def sumar_hora(hora1,hora2):
+    def sumar_hora(hora1, hora2):
         formato = "%H:%M:%S"
         lista = hora2.split(":")
-        hora=int(lista[0])
-        minuto=int(lista[1])
-        segundo=int(lista[2])
+        hora = int(lista[0])
+        minuto = int(lista[1])
+        segundo = int(lista[2])
         h1 = datetime.strptime(hora1, formato)
-        dh = timedelta(hours=hora) 
-        dm = timedelta(minutes=minuto)          
-        ds = timedelta(seconds=segundo) 
-        resultado1 =h1 + ds
+        dh = timedelta(hours=hora)
+        dm = timedelta(minutes=minuto)
+        ds = timedelta(seconds=segundo)
+        resultado1 = h1 + ds
         resultado2 = resultado1 + dm
         resultado = resultado2 + dh
-        resultado=resultado.strftime(formato)
+        resultado = resultado.strftime(formato)
         return str(resultado)
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
-        print("getmodelinfo controlhorario")
-        # if template == "control_horario":
-        formato = "%H:%M:%S"
-        totalhoras = "00:00:00"
-        if not isinstance(data, list):
-            return None
-        for p in data:
-            hora2 = p["horasordinarias"]
-            lista = hora2.split(":")
-            hora=int(lista[0])
-            minuto=int(lista[1])
-            segundo=int(lista[2])
-            h1 = datetime.strptime(totalhoras, formato)
-            dh = timedelta(hours=hora) 
-            dm = timedelta(minutes=minuto)          
-            ds = timedelta(seconds=segundo) 
-            resultado1 = h1 + ds
-            resultado2 = resultado1 + dm
-            resultado = resultado2 + dh
-            totalhoras = resultado.strftime(formato)
-        return {"controldiario": "Control Diario. Tiempo total: {}".format(totalhoras)}
+        # print("getmodelinfo controlhorario")
+        # totalhoras = 0
+        # if not isinstance(data, list):
+        #     return None
+        # for p in data:
+        #     horas = p["horasordinarias"]
+        #     # lista = hora2.split(":")
+        #     # hora = int(lista[0])
+        #     # minuto = int(lista[1])
+        #     # segundo = int(lista[2])
+        #     # h1 = datetime.strptime(totalhoras, formato)
+        #     # dh = timedelta(hours=hora)
+        #     # dm = timedelta(minutes=minuto)
+        #     # ds = timedelta(seconds=segundo)
+        #     # resultado1 = h1 + ds
+        #     # resultado2 = resultado1 + dm
+        #     # resultado = resultado2 + dh
+        #     if horas:
+        #         totalhoras = totalhoras + horas
+        # totalhoras = flgesttare_def.iface.seconds_to_time(int(totalhoras), all_in_hours=True)
+        # return {"controldiario": "Control Diario. Tiempo total: {}".format(totalhoras)}
         return None
+
+    def gesttare_gotoControlDiario(self, model):
+        url = '/gesttare/gt_controldiario/' + str(model.idc_diario)
+        return url
+
+    def gotoControlDiario(self, model):
+        return self.ctx.gesttare_gotoControlDiario(model)
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -258,6 +266,7 @@ class gesttare(interna):
 
     def get_model_info(self, model, data, ident, template, where_filter):
         return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
+
 
 # @class_declaration head #
 class head(gesttare):

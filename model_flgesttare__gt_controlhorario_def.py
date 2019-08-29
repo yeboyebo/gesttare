@@ -133,23 +133,56 @@ class gesttare(interna):
         return True
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        if template == "control_diario":
+            user_name = qsatype.FLUtil.nameUser()
+            user_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(user_name))
+            where = "aqn_user.idcompany = " + str(user_company)
+            if where_filter:
+                where += " AND " + where_filter
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_controldiario INNER JOIN aqn_user ON gt_controldiario.idusuario = aqn_user.idusuario", "SUM(horasordinarias)", where) or 0
+            tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal, all_in_hours=True)
+            return {"queryGridcontroldiario": "Tiempo total: {}".format(tiempototal)}
+
         if template == "newrecord":
             fecha = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = {}".format(data["idc_diario"]))
             formateaFecha = str(fecha).split("-")
             return {"chForm": "Nuevo registro para " + formateaFecha[2] + "-" + formateaFecha[1] + "-" + formateaFecha[0]}
-        # if template == "control_horario":
-        #     tiempototal = "00:00:00"
-        #     usuario = qsatype.FLUtil.nameUser()
-        #     cursorCD = qsatype.FLSqlCursor("gt_controldiario")
-        #     cursorCD.select("idusuario = '" + str(usuario) + "'")
-        #     if cursorCD.next():
-        #         cursorCD.setModeAccess(cursorCD.Browse)
-        #         cursorCD.refreshBuffer()
-        #         tiempototal = cursorCD.valueBuffer("totaltiempo")
-        #     # tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
-        #     # "controlmensual"
-        #     return {"controldiario": "Control Diario. Tiempo total: {}".format(tiempototal)}
+
         return None
+
+    def gesttare_queryGrid_control_diario(self, model, filters):
+        where = ""
+        user_name = qsatype.FLUtil.nameUser()
+        user_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(user_name))
+        if qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(user_name)):
+            where += "aqn_user.idcompany = " + str(user_company)
+        else:
+            where += "gt_controldiario.idusuario = '" + str(user_name) + "'"
+
+        # if filters:
+        #     if "[proyecto]" in filters and filters["[proyecto]"] != "":
+        #         where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
+        #     if "[tarea]" in filters and filters["[tarea]"] != "":
+        #         where += " AND gt_tareas.idtarea = {}".format(filters["[tarea]"])
+        #     if "[usuario]" in filters and filters["[usuario]"] != "":
+        #         where += " AND aqn_user.idusuario = '{}'".format(filters["[usuario]"])
+        #     if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
+        #         where += " AND gt_timetracking.fecha >= '{}'".format(filters["[d_fecha]"])
+        #     if "[h_fecha]" in filters and filters["[h_fecha]"] != "":
+        #         where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
+        #     if "[fecha]" in filters and filters["[fecha]"] != "":
+        #         where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+        #     if "[buscador]" in filters and filters["[buscador]"] != "":
+        #         where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
+
+        query = {}
+        query["tablesList"] = ("gt_controldiario, aqn_user")
+        query["select"] = ("gt_controldiario.idc_diario, gt_controldiario.idusuario, gt_controldiario.fecha, aqn_user.usuario, gt_controldiario.horaentrada, gt_controldiario.horasalida, gt_controldiario.totaltiempostring, gt_controldiario.horasextra, gt_controldiario.validado")
+        query["from"] = ("gt_controldiario INNER JOIN aqn_user ON gt_controldiario.idusuario = aqn_user.idusuario")
+        query["where"] = (where)
+        query["orderby"] = ("gt_controldiario.fecha DESC, gt_controldiario.idusuario")
+
+        return query
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -192,6 +225,9 @@ class gesttare(interna):
 
     def get_model_info(self, model, data, ident, template, where_filter):
         return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
+
+    def queryGrid_control_diario(self, model, filters):
+        return self.ctx.gesttare_queryGrid_control_diario(model, filters)
 
 
 # @class_declaration head #

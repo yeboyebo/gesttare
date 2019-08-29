@@ -14,6 +14,7 @@ class interna(qsatype.objetoBase):
 from YBLEGACY.constantes import *
 import time
 from models.flgesttare.gt_proyectos import gt_proyectos as proyectos
+from models.flgesttare.gt_tareas import gt_tareas as tareas
 import datetime
 
 
@@ -76,6 +77,7 @@ class gesttare(interna):
             return False
         curP.setModeAccess(curP.Edit)
         curP.refreshBuffer()
+        curP.setValueBuffer(u"hdedicadas", proyectos.getIface().commonCalculateField(u"hdedicadas", curP))
         curP.setValueBuffer(u"costeinterno", proyectos.getIface().commonCalculateField(u"costeinterno", curP))
         curP.setValueBuffer(u"costetotal", proyectos.getIface().commonCalculateField(u"costetotal", curP))
         curP.setValueBuffer(u"rentabilidad", proyectos.getIface().commonCalculateField(u"rentabilidad", curP))
@@ -294,6 +296,7 @@ class gesttare(interna):
             return False
         curT.setModeAccess(curT.Edit)
         curT.refreshBuffer()
+        curT.setValueBuffer(u"hdedicadas", tareas.getIface().commonCalculateField(u"hdedicadas", curT))
         curT.setValueBuffer(u"coste", _i.calcula_costetiempo("tarea", curT))
         if not curT.commitBuffer():
             return False
@@ -489,8 +492,11 @@ class gesttare(interna):
         return totaltiempo
 
     def gesttare_calcula_horasordinarias_diario(self, cur_diario):
-        if not cur_diario.valueBuffer("totaltiempo") or not cur_diario.valueBuffer("horasextra") or cur_diario.valueBuffer("totaltiempo") == "None" or cur_diario.valueBuffer("horasextra") == "None":
+        if not cur_diario.valueBuffer("totaltiempo") or cur_diario.valueBuffer("totaltiempo") == "None":
             return None
+
+        if not cur_diario.valueBuffer("horasextra") or cur_diario.valueBuffer("horasextra") == "None" or str(cur_diario.valueBuffer("horasextra")) == "00:00:00":
+            return cur_diario.valueBuffer("totaltiempo")
 
         # formato = "%H:%M:%S"
         # # totaltiempo = str(cur_diario.valueBuffer("totaltiempo"))
@@ -499,9 +505,6 @@ class gesttare(interna):
         # horasextra = str(cur_diario.valueBuffer("horasextra"))
         # if len(horasextra) == 5:
         #     horasextra += ":00"
-
-        if str(cur_diario.valueBuffer("horasextra")) == "00:00:00":
-            return cur_diario.valueBuffer("totaltiempo")
 
         # horasextra = datetime.datetime.strptime(horasextra, formato)
         # totaltiempo = datetime.datetime.strptime(totaltiempo, formato)

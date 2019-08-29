@@ -46,6 +46,10 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)
 
+    @helpers.decoradores.accion()
+    def gotoControlDiario(self):
+        return form.iface.gotoControlDiario(self)
+
 
 # @class_declaration gt_controldiario #
 class gt_controldiario(gesttare_gt_controldiario, helpers.MixinConAcciones):

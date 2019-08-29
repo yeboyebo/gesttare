@@ -325,6 +325,10 @@
             {
                 "path": "controllers/api/users/login/",
                 "name": "ctrl_api_users_login__get.py"
+            },
+            {
+                "path": "apps/gesttare/templates/gesttare/plantillas/",
+                "name": "app_gesttare__analisis.json"
             }
         ],
         "replaceFile": [

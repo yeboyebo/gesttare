@@ -36,7 +36,7 @@
             "columns": [
                 {
                     "tipo": "act",
-                    "key": "borrarProyecto",
+                    "key": "archivarProyecto",
                     "label": "Borrar Linea",
                     "success": [
                         {"slot": "refrescar"}
@@ -67,12 +67,22 @@
             "type": "query",
             "prefix": "proyectosarchivados",
             "className": "",
+            "label": "Proyectos archivados",
             "buscador": false,
-            "filter": {},
+            "filter": {
+                "gt_proyectos.nombre": null,
+                "gt_proyectos.estado": null,
+                "gt_proyectos.fechainicio": {
+                    "filterType": "interval"
+                },
+                "gt_proyectos.fechaterminado": {
+                    "filterType": "interval"
+                }
+            },
             "columns": [
                 {
                     "tipo": "act",
-                    "key": "borrarProyecto",
+                    "key": "desarchivarProyecto",
                     "label": "Borrar Linea",
                     "success": [
                         {"slot": "refrescar"}
@@ -92,12 +102,19 @@
             "action": "onexport",
             "icon": "save"
         },
-        "borrarProyecto": {
-            "label": "Borrar proyecto",
+        "archivarProyecto": {
+            "label": "Archivar proyecto",
             "action": "legacy",
             "prefix": "gt_proyectos",
-            "serverAction": "borrar_proyecto",
-            "icon": "delete"
+            "serverAction": "archivar_proyecto",
+            "icon": "archive"
+        },
+        "desarchivarProyecto": {
+            "label": "Archivar proyecto",
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "serverAction": "archivar_proyecto",
+            "icon": "unarchive"
         },
         "delete": {
             "action": "deleteRow",

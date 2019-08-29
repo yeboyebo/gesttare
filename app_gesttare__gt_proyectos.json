@@ -34,6 +34,21 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "borrarTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_proyectos",
+                    "icon": "delete",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "borrarProyecto",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "copiarEmailButton": {
                     "componente": "YBButton",
                     "prefix": "gt_proyectos",
@@ -52,104 +67,98 @@
                 "separator1": {
                     "componente": "YBSeparator"
                 },
-                "proyectosForm": {
-                    "prefix": "gt_proyectos",
-                    "componente": "YBForm",
-                    "icon": "info",
-                    "class": "claseGrid",
-                    "submit": "update",
-                    "label": "Información",
-                    "fields": {
-                        "gb__proyectos": {
-                            "title": "",
-                            "fields": {
-                                "nombre": {},
-                                "descripcion": {},
-                                "estado": {},
-                                "fechainicio": {},
-                                "fechaterminado": {},
-                                "idresponsable": {
-                                    "combolimit": 1,
-                                    "showpk": false,
-                                    "function": "getParticCompaniaUsu"
-                                },
-                                "presupuesto": {},
-                                "rentabilidad": {"disabled": true},
-                                "costetotal": {"disabled": true}
+                "groupBoxRight": {
+                "componente": "YBGroupBox",
+                "className": "gbTareasLefta",
+                "style": { },
+                "layout": {
+                    
+                    "proyectosForm": {
+                        "prefix": "gt_proyectos",
+                        "componente": "YBForm",
+                        "icon": "info",
+                        "class": "claseGrid",
+                        "submit": "update",
+                        "label": "Información",
+                        "fields": {
+                            "gb__proyectos": {
+                                "title": "",
+                                "fields": {
+                                    "nombre": {},
+                                    "descripcion": {},
+                                    "estado": {},
+                                    "fechainicio": {},
+                                    "fechaterminado": {},
+                                    "idresponsable": {
+                                        "combolimit": 1,
+                                        "showpk": false,
+                                        "function": "getParticCompaniaUsu"
+                                    },
+                                    "presupuesto": {},
+                                    "rentabilidad": {"disabled": true},
+                                    "costetotal": {"disabled": true}
+                                }
                             }
+                        },
+                        "exclude": {}
+                    },
+                    "separator2": {
+                        "componente": "YBSeparator"
+                    },
+                    "nuevoParticipanteExterno": {
+                        "componente": "YBButton",
+                        "prefix": "gt_proyectos",
+                        "label": "Añadir externo",
+                        "className": "floatLeft",
+                        "buttonType": "raised",
+                        "action": {
+                            "key": "actInvitarExterno",
+                            "success": [{"slot": "refrescar"}]
                         }
                     },
-                    "exclude": {}
-                },
-                "separator2": {
-                    "componente": "YBSeparator"
-                },
-                "nuevoParticipanteExterno": {
-                    "componente": "YBButton",
-                    "prefix": "gt_proyectos",
-                    "label": "Añadir externo",
-                    "className": "floatLeft",
-                    "buttonType": "raised",
-                    "action": {
-                        "key": "actInvitarExterno",
-                        "success": [{"slot": "refrescar"}]
-                    }
-                },
-                "groupBoxUsuariosC": {
-                    "componente": "YBGroupBox",
-                    "className": "",
-                    "layout": {
-                        "separator1": {
-                            "componente": "YBSeparator"
-                        },
-                        "participantesGrid": {
-                            "label": "Participantes",
-                            "icon": "group",
-                            "componente": "YBGrid",
-                            "prefix": "gt_particproyecto",
-                            "className": "claseGrid",
-                            "hideheader": true,
-                            "columns": [
-                                {
-                                    "tipo": "act",
-                                    "key": "borrarPartic",
-                                    "label": "Borrar Linea",
-                                    "success": [
-                                        {"slot": "refrescar"}
-                                    ]
-                                },
-                                {
-                                    "tipo": "foreignfield",
-                                    "listpos": "title",
-                                    "key": "nombre"
-                                }
-                            ],
-                            "rowclick": "",
-                            "accionesGrid": [
-                                {
-                                    "key": "actNuevoPartic",
-                                    "label": "Nuevo",
-                                    "success": [{"slot": "refrescar"}]
-                                }
-                            ]
-                        }
-                    }
-                },
-                "groupBoxGraphic": {
-                    "componente": "YBGroupBox",
-                    "className": "",
-                    "layout": {
-                        "graphicSeparator": {
-                            "componente": "YBSeparator"
-                        },
-                        "pruebagrafico": {
-                            "label": "Rentabilidad",
-                            "componente": "YBChart",
-                            "d3": "pieChart",
-                            "prefix": "grafico"
+                    "groupBoxUsuariosC": {
+                        "componente": "YBGroupBox",
+                        "className": "",
+                        "layout": {
+                            "separator1": {
+                                "componente": "YBSeparator"
+                            },
+                            "participantesGrid": {
+                                "label": "Participantes",
+                                "icon": "group",
+                                "componente": "YBGrid",
+                                "prefix": "gt_particproyecto",
+                                "className": "claseGrid",
+                                "hideheader": true,
+                                "columns": [
+                                    {
+                                        "tipo": "act",
+                                        "key": "borrarPartic",
+                                        "label": "Borrar Linea",
+                                        "success": [
+                                            {"slot": "refrescar"}
+                                        ]
+                                    },
+                                    {
+                                        "tipo": "foreignfield",
+                                        "listpos": "title",
+                                        "key": "nombre"
+                                    }
+                                ],
+                                "rowclick": "",
+                                "accionesGrid": [
+                                    {
+                                        "key": "actNuevoPartic",
+                                        "label": "Nuevo",
+                                        "success": [{"slot": "refrescar"}]
+                                    }
+                                ]
+                            }
                         }
                     }
                 }
+            }
+                
             }
         }
     },
@@ -165,6 +174,11 @@
             "action": "legacy",
             "serverAction": "borrarPartic",
             "icon": "delete"
+        },
+        "borrarProyecto": {
+            "label": "Borrar proyecto",
+            "action": "legacy",
+            "serverAction": "borrar_proyecto"
         },
         "delete": {
             "action": "deleteRow",

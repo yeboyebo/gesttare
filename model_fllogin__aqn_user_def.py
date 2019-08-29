@@ -1,5 +1,8 @@
 
 # @class_declaration gesttare #
+from models.flgesttare import flgesttare_def
+
+
 class gesttare(yblogin):
 
     def gesttare_getUsuariosProyecto(self, oParam):
@@ -145,6 +148,40 @@ class gesttare(yblogin):
             return False
         return True
 
+    def gesttare_calculaGraficosAnalisis(self, oParam):
+        usuario = qsatype.FLUtil.nameUser()
+        if oParam:
+            usuario = str(oParam["idusuario"])
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_timetracking")
+        q.setSelect(u"t.nombre, t.codproyecto")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
+        q.setWhere(u"u.idusuario = " + usuario + " ORDER BY p.codproyecto LIMIT 20")
+
+        if not q.exec_():
+            return []
+        if q.size() > 100:
+            return []
+
+        while q.next():
+            valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
+            if valor:
+                valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
+                valor = flgesttare_def.iface.time_to_hours(str(valor))
+            else:
+                valor = 0
+            data.append({"name": q.value(0), "value": int(valor)})
+        # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
+        return [{"type": "horizontalBarChart", "data": data, "innerText": True}]
+
+    def gesttare_generaAnalisisGraphic(self, model, template):
+        return self.iface.calculaGraficosAnalisis({})
+
+    def gesttare_getAnalisisGraphic(self, oParam):
+        return self.iface.calculaGraficosAnalisis(oParam)
+
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -174,4 +211,13 @@ class gesttare(yblogin):
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def generaAnalisisGraphic(self, model, template):
+        return self.ctx.gesttare_generaAnalisisGraphic(model, template)
+
+    def getAnalisisGraphic(self, oParam):
+        return self.ctx.gesttare_getAnalisisGraphic(oParam)
+
+    def calculaGraficosAnalisis(self, oParam):
+        return self.ctx.gesttare_calculaGraficosAnalisis(oParam)
 

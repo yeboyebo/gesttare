@@ -16,6 +16,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from models.flgesttare import flgesttare_def
 
 
 class gesttare(interna):
@@ -285,17 +286,12 @@ class gesttare(interna):
         return "hidden"
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
-        _i = self.iface
         valor = None
-        # if fN == u"fechaterminado":
-        #     if cursor.valueBufferCopy(u"estado") == u"Abierto" and (cursor.valueBuffer(u"estado") == u"Terminado" or cursor.valueBuffer(u"estado") == u"Facturado" or cursor.valueBuffer(u"estado") == u"Cerrado"):
-        #         valor = qsatype.FactoriaModulos.get('flfactppal').iface.pub_dameFechaActual()
-        #     else:
-        #         if cursor.valueBuffer(u"estado") == u"Abierto":
-        #             valor = u""
-        #         else:
-        #             valor = cursor.valueBuffer(u"fechaterminado")
-
+        if fN == u"hdedicadas":
+            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(hdedicadas)", ustr(u"codproyecto = '", cursor.valueBuffer(u"codproyecto"), u"'")) or 0
+            if isNaN(valor):
+                valor = 0
+            # valor = flgesttare_def.iface.time_to_seconds(valor)
 
         if fN == u"costetotal":
             valor = parseFloat(cursor.valueBuffer(u"costeinterno")) + parseFloat(cursor.valueBuffer(u"costeexterno"))
@@ -311,7 +307,6 @@ class gesttare(interna):
 
         if fN == u"rentabilidad":
             presupuesto = parseFloat(cursor.valueBuffer(u"presupuesto"))
-            print(presupuesto)
 
             if isNaN(presupuesto):
                 presupuesto = 0
@@ -323,7 +318,6 @@ class gesttare(interna):
             if isNaN(valor):
                 valor = 0
             valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"rentabilidad")
-            print(valor)
         return valor
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
@@ -335,7 +329,7 @@ class gesttare(interna):
         qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(cursor)
         return True
 
-    def gesttare_borrar_proyecto(self, oParam, cursor):
+    def gesttare_archivar_proyecto(self, oParam, cursor):
         response = {}
         if "confirmacion" in oParam and oParam["confirmacion"]:
             usuario = qsatype.FLUtil.nameUser()
@@ -361,8 +355,22 @@ class gesttare(interna):
             return response
         return True
 
+    def gesttare_borrar_proyecto(self, oParam, cursor):
+        resul = {}
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+            cursor.setModeAccess(cursor.Del)
+            cursor.refreshBuffer()
+            if not cursor.commitBuffer():
+                return False
+            resul["return_data"] = False
+            resul["msg"] = "Correcto"
+        else:
+            resul['status'] = 2
+            resul['confirm'] = "¿Seguro que quieres eliminar el proyecto y todas sus tareas asociadas?"
+        return resul
+
     def gesttare_getRentabilidadGraphic(self, model, template):
-        return []
+        return [{"type": "pieDonutChart", "data": [{"name": "Rentabilidad", "value": model.rentabilidad, "color": "#50d2ce"}, {"name": "Resto", "value": 100 - model.rentabilidad, "color": "#bababa"}], "innerText": False, "animate": True, "size": 90, "showInfo": False}]
         # return [
         #     {"type": "pieDonutChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True, "size": 90},
         #     {"type": "pieChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True},
@@ -382,8 +390,20 @@ class gesttare(interna):
         query["groupby"] = ("gt_proyectos.codproyecto")
         return query
 
+    def gesttare_iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
+        labels = {}
+        # print(model.hdedicadas)
+        print(cursor.valueBuffer("hdedicadas"), data)
+        hinvertidas = flgesttare_def.iface.seconds_to_time(cursor.valueBuffer("hdedicadas"), all_in_hours=True)
+        labels["horasinvertidas"] = hinvertidas
+        labels["presupuestoFormat"] = "€ " + str(int(cursor.valueBuffer("presupuesto")))
+        return labels
+
     def __init__(self, context=None):
         super().__init__(context)
+
+    def iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
+        return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor, data)
 
     def checkProyectosFormDraw(self, cursor):
         return self.ctx.gesttare_checkProyectosFormDraw(cursor)
@@ -420,6 +440,9 @@ class gesttare(interna):
 
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
+
+    def archivar_proyecto(self, oParam, cursor):
+        return self.ctx.gesttare_archivar_proyecto(oParam, cursor)
 
     def borrar_proyecto(self, oParam, cursor):
         return self.ctx.gesttare_borrar_proyecto(oParam, cursor)

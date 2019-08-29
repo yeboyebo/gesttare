@@ -32,3 +32,11 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
     def checkDrawUser(cursor):
         return form.iface.checkDrawUser(cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def generaAnalisisGraphic(self, model, template):
+        return form.iface.generaAnalisisGraphic(model, template)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def getAnalisisGraphic(self, oParam):
+        return form.iface.getAnalisisGraphic(oParam)
+

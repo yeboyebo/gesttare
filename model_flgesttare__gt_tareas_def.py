@@ -674,6 +674,14 @@ class gesttare(interna):
     def gesttare_gotoGestionarTiempo(self, model, cursor):
         return "/gesttare/gt_timetracking/newRecord?p_idtarea=" + str(cursor.valueBuffer("idtarea"))
 
+    def gesttare_commonCalculateField(self, fN=None, cursor=None):
+        valor = None
+
+        if fN == u"hdedicadas":
+            valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
+            valor = flgesttare_def.iface.time_to_seconds(str(valor))
+        return valor
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -778,6 +786,9 @@ class gesttare(interna):
 
     def gotoGestionarTiempo(self, model, cursor):
         return self.ctx.gesttare_gotoGestionarTiempo(model, cursor)
+
+    def commonCalculateField(self, fN, cursor):
+        return self.ctx.gesttare_commonCalculateField(fN, cursor)
 
 
 # @class_declaration head #

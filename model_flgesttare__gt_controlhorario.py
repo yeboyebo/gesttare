@@ -20,6 +20,10 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     class Meta:
         proxy = True
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_control_diario(model, filters):
+        return form.iface.queryGrid_control_diario(model, filters)
+
     @helpers.decoradores.accion(aqparam=[])
     def start(self):
         return form.iface.start(self)
