@@ -58,6 +58,7 @@ class gesttare(interna):
         where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
         if filters:
+            print(filters)
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
                 where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":

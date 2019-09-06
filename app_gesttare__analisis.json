@@ -22,15 +22,6 @@
                             "label": "Análisis",
                             "componente": "YBChart",
                             "filter": {
-                                "codproyecto": {
-                                    "filterType": "custom",
-                                    "tipo": 55,
-                                    "tofield": "codproyecto",
-                                    "key": "codproyecto",
-                                    "desc": "nombre",
-                                    "rel": "gt_proyectos",
-                                    "label": "Codproyecto. 1"
-                                },
                                 "idusuario": {
                                     "filterType": "custom",
                                     "tipo": 55,

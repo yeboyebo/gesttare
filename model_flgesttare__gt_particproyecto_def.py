@@ -46,7 +46,10 @@ class gesttare(interna):
         cursor.refreshBuffer()
         if not cursor.commitBuffer():
             return False
-        return True
+        resul = {}
+        resul["return_data"] = False
+        resul["msg"] = "Correcto"
+        return resul
 
     def __init__(self, context=None):
         super().__init__(context)

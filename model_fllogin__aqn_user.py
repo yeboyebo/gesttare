@@ -38,5 +38,6 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def getAnalisisGraphic(self, oParam):
+        print("???????????????")
         return form.iface.getAnalisisGraphic(oParam)
 

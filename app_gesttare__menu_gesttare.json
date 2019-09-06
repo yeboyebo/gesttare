@@ -64,7 +64,6 @@
         {
             "NAME": "aqn_user",
             "TEXT": "Análisis",
-            "VISIBLE": false,
             "URL": "gesttare/aqn_user/custom/analisis",
             "ICON": "widgets",
             "COLOR": "rgb(7, 180, 7)"

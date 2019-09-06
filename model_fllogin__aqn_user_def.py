@@ -148,7 +148,7 @@ class gesttare(yblogin):
             return False
         return True
 
-    def gesttare_calculaGraficosAnalisis(self, oParam):
+    def gesttare_graficoproyectosportiempo(self, oParam):
         usuario = qsatype.FLUtil.nameUser()
         if oParam:
             usuario = str(oParam["idusuario"])
@@ -173,7 +173,37 @@ class gesttare(yblogin):
                 valor = 0
             data.append({"name": q.value(0), "value": int(valor)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-        return [{"type": "horizontalBarChart", "data": data, "innerText": True}]
+        return {"type": "horizontalBarChart", "data": data, "innerText": True}
+
+    def gesttare_graficostareasporestado(self, oParam):
+        usuario = qsatype.FLUtil.nameUser()
+        if oParam:
+            usuario = str(oParam["idusuario"])
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_tareas")
+        q.setSelect(u"COUNT(t.codestado), t.codestado")
+        q.setFrom(u"gt_tareas t")
+        q.setWhere(u"t.idusuario = " + usuario + " GROUP BY t.codestado LIMIT 20")
+
+        if not q.exec_():
+            return []
+        if q.size() > 100:
+            return []
+
+        while q.next():
+            valor = 0
+            data.append({"name": q.value(1), "value": q.value(0)})
+        # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
+        return {"type": "pieDonutChart", "data": data, "innerText": True}
+
+    def gesttare_calculaGraficosAnalisis(self, oParam):
+        response = []
+        proyectosportiempo = self.iface.graficoproyectosportiempo(oParam)
+        response.append(proyectosportiempo)
+        tareasporestado = self.iface.graficostareasporestado(oParam)
+        response.append(tareasporestado)
+        return response
 
     def gesttare_generaAnalisisGraphic(self, model, template):
         return self.iface.calculaGraficosAnalisis({})
@@ -220,4 +250,10 @@ class gesttare(yblogin):
 
     def calculaGraficosAnalisis(self, oParam):
         return self.ctx.gesttare_calculaGraficosAnalisis(oParam)
+
+    def graficoproyectosportiempo(self, oParam):
+        return self.ctx.gesttare_graficoproyectosportiempo(oParam)
+
+    def graficostareasporestado(self, oParam):
+        return self.ctx.gesttare_graficostareasporestado(oParam)
 

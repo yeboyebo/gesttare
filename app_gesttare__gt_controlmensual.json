@@ -33,8 +33,8 @@
                         "NIF": {"disabled": true},
                         "NAF": {"disabled": true},
                         "mesanyo": {"label": "Mes", "disabled": true},
-                        "totaltiempo": {"disabled": true},
-                        "horasordinariasstring": {"disabled": true},
+                        "totaltiempostring": {"disabled": true},
+                        "horasordinariasstring": {"disabled": true, "label": "Horas ordinarias"},
                         "horasextra": {"disabled": true},
                         "validado_user": {"disabled": true},
                         "validado_admin": {"disabled": true}
@@ -57,8 +57,8 @@
                 {"tipo": "field", "listpos": "body", "key": "fecha", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horaentrada", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasalida", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "totaltiempo", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horasordinarias", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "totaltiempostring", "width": 5},
+                {"tipo": "field", "listpos": "body", "key": "horasordinariasstring", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasextra", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "validado", "width": 5}
             ],

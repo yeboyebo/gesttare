@@ -37,7 +37,7 @@
                 {
                     "tipo": "act",
                     "key": "archivarProyecto",
-                    "label": "Borrar Linea",
+                    "label": "Archivar proyecto",
                     "success": [
                         {"slot": "refrescar"}
                     ]

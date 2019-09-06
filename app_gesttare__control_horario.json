@@ -65,6 +65,7 @@
             "prefix": "control_diario",
             "buscador": false,
             "cansavefilter": true,
+            "autofilter": false,
             "filter": {
                 "gt_controldiario.idusuario": {
                     "showpk": false,

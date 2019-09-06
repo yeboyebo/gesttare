@@ -393,10 +393,12 @@ class gesttare(interna):
     def gesttare_iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
         labels = {}
         # print(model.hdedicadas)
-        print(cursor.valueBuffer("hdedicadas"), data)
-        hinvertidas = flgesttare_def.iface.seconds_to_time(cursor.valueBuffer("hdedicadas"), all_in_hours=True)
-        labels["horasinvertidas"] = hinvertidas
-        labels["presupuestoFormat"] = "€ " + str(int(cursor.valueBuffer("presupuesto")))
+        print("iniciavalores label")
+        print(template)
+        if template == 'formRecord':
+            hinvertidas = flgesttare_def.iface.seconds_to_time(cursor.valueBuffer("hdedicadas"), all_in_hours=True)
+            labels["horasinvertidas"] = hinvertidas
+            labels["presupuestoFormat"] = "€ " + str(int(cursor.valueBuffer("presupuesto")))
         return labels
 
     def __init__(self, context=None):

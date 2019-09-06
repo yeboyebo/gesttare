@@ -63,9 +63,8 @@ class gesttare(interna):
         _i = self.iface
 
         if curT.modeAccess() == curT.Edit:
-            if curT.valueBuffer(u"coste") != curT.valueBufferCopy(u"coste"):
-                if not _i.totalizaCostesProyecto(curT.valueBuffer(u"codproyecto")):
-                    return False
+            if not _i.totalizaCostesProyecto(curT.valueBuffer(u"codproyecto")):
+                return False
 
         return True
 
@@ -117,10 +116,12 @@ class gesttare(interna):
             nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'"))
             if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
                 return False
-
+        print("aftercommit gt_parcitproyecto true")
         return True
 
     def gesttare_eliminarNotificacionesProyecto(self, curPart):
+        qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idactualizacion IN (SELECT idactualizacion from gt_actualizaciones where tipobjeto = 'proyecto' AND idobjeto = '" + curPart.valueBuffer("codproyecto") + "')")
+        qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idactualizacion IN (SELECT idactualizacion from gt_actualizaciones where idtarea in (SELECT idtarea from gt_tareas where codproyecto = '" + curPart.valueBuffer("codproyecto") + "'))")
         # qsatype.FLSqlQuery().execSql("DELETE FROM gt_partictarea where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idtarea IN (SELECT idtarea from gt_tareas where codproyecto = '" + curPart.valueBuffer("codproyecto") + "')")
         return True
 

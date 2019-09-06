@@ -4,7 +4,6 @@
         "p_c": true,
         "o_1": "fechavencimiento",
         "s_resuelta__exact": false,
-        "s_codproyecto__archivado__exact": false,
         "f_proyectosusuario": null
     },
     "schema": {

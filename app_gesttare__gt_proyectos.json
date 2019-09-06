@@ -157,7 +157,115 @@
                         }
                     }
                 }
-            }
+            },
+            "groupBoxRentabilidad": {
+                    "componente": "YBGroupBox",
+                    "className": "gbTareasRighta",
+                    "style": { },
+                    "label": "Rentabilidad",
+                    "layout": {
+                       "labelHorasInvertidas": {
+                            "componente": "YBLabel",
+                            "style": {
+                                "width": "30%",
+                                "border": "1px solid grey",
+                                "borderRadius": "8px",
+                                "backgroundColor": "white",
+                                "marginLeft": "5px",
+                                "marginRight": "5px",
+                                "fontSize": "48px",
+                                "fontWeight": "normal",
+                                "fontStyle": "normal",
+                                "fonttSretch": "normal",
+                                "lineHeight": "normal",
+                                "letterSpacing": "normal",
+                                "color": "grey",
+                                "padding": "10px"
+                            },
+                            "titlestyle": {
+                                "fontSize": "18px",
+                                "letterSpacing": "1.86px",
+                                "color": "black"
+                            },
+                            "title": "Horas Invertidas",
+                            "text": "%yb1",
+                            "params": [
+                                {"type": "calc", "key": "horasinvertidas"}
+                            ]
+                        },
+                       "labelPresupuesto": {
+                            "componente": "YBLabel",
+                            "style": {
+                                "width": "30%",
+                                "border": "1px solid grey",
+                                "borderRadius": "8px",
+                                "backgroundColor": "grey",
+                                "marginLeft": "5px",
+                                "marginRight": "5px",
+                                "fontSize": "48px",
+                                "fontWeight": "normal",
+                                "fontStyle": "normal",
+                                "fonttSretch": "normal",
+                                "lineHeight": "normal",
+                                "letterSpacing": "normal",
+                                "color": "#ffffff",
+                                "padding": "10px"
+                            },
+                            "titlestyle": {
+                                "fontSize": "18px",
+                                "letterSpacing": "1.86px"
+                            },
+                            "title": "Presupuesto",
+                            "text": "%yb1",
+                            "params": [
+                                {"type": "calc", "key": "presupuestoFormat"}
+                            ]
+                        },
+                       "labelCoste": {
+                            "componente": "YBLabel",
+                          "style": {
+                                "width": "30%",
+                                "border": "1px solid grey",
+                                "borderRadius": "8px",
+                                "backgroundImage": "linear-gradient(to right, #e79b21, #ffc68d)",
+                                "marginLeft": "5px",
+                                "marginRight": "5px",
+                                "fontSize": "48px",
+                                "fontWeight": "normal",
+                                "fontStyle": "normal",
+                                "fonttSretch": "normal",
+                                "lineHeight": "normal",
+                                "letterSpacing": "normal",
+                                "color": "#ffffff",
+                                "padding": "10px"
+                            },
+                            "titlestyle": {
+                                "fontSize": "18px",
+                                "letterSpacing": "1.86px"
+                            },
+                            "title": "Coste",
+                            "text": "%yb1",
+                            "params": [
+                                {"type": "model", "key": "costetotal"}
+                            ]
+                        },
+                        "groupBoxGraphic": {
+                            "componente": "YBGroupBox",
+                            "className": "",
+                            "style": {
+                                "paddingLeft": "18%"
+                            },
+                            "layout": {
+
+                                "pruebagrafico": {
+                                    "componente": "YBChart",
+                                    "d3": "pieChart",
+                                    "prefix": "grafico"
+                                }
+                            }
+                        }
+                    }
+                }
                 
             }
         }
@@ -215,7 +323,7 @@
     "drawIf": {
         "gb__proyectos": {
             "presupuesto": "checkProyectosFormDraw",
-            "rentabilidadh": "checkProyectosFormDraw",
+            "rentabilidad": "checkProyectosFormDraw",
             "costetotal": "checkProyectosFormDraw",
             "idresponsable": "checkResponsableDraw"
         }

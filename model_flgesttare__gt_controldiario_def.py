@@ -132,12 +132,13 @@ class gesttare(interna):
     def gesttare_validar(self, model, oParam, cursor):
         if "confirmacion" not in oParam:
             resul = {}
-            if cursor.valueBuffer("horasordinarias") < cursor.valueBuffer("horasextra"):
-                resul["status"] = 1
-                resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
-                return resul
+            if cursor.valueBuffer("horasextra"):
+                if cursor.valueBuffer("horasordinarias") < flgesttare_def.iface.time_to_seconds(cursor.valueBuffer("horasextra")):
+                    resul["status"] = 1
+                    resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
+                    return resul
             resul['status'] = 2
-            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasordinarias")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasordinariasstring")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
             return resul
         else:
             if cursor.valueBuffer("validado"):

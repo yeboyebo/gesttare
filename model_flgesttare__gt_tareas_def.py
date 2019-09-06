@@ -597,25 +597,25 @@ class gesttare(interna):
             # proin = "("
             proin = []
             usuario = qsatype.FLUtil.nameUser()
-            curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
-            curProyectos.select("idusuario = '" + str(usuario) + "'")
-            while curProyectos.next():
-                curProyectos.setModeAccess(curProyectos.Browse)
-                curProyectos.refreshBuffer()
-                proin.append(curProyectos.valueBuffer("codproyecto"))
-            # q = qsatype.FLSqlQuery()
-            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
-            # q.setSelect(u"t.codproyecto")
-            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.idcompania = 1")
+            # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            # curProyectos.select("idusuario = '" + str(usuario) + "'")
+            # while curProyectos.next():
+            #     curProyectos.setModeAccess(curProyectos.Browse)
+            #     curProyectos.refreshBuffer()
+            #     proin.append(curProyectos.valueBuffer("codproyecto"))
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            q.setSelect(u"t.codproyecto")
+            q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.archivado = false")
 
-            # if not q.exec_():
-            #     return []
-            # if q.size() > 100:
-            #     return []
+            if not q.exec_():
+                return []
+            if q.size() > 100:
+                return []
 
-            # while q.next():
-            #     proin.append(q.value("codproyecto"))
+            while q.next():
+                proin.append(q.value("codproyecto"))
             return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
@@ -679,7 +679,8 @@ class gesttare(interna):
 
         if fN == u"hdedicadas":
             valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
-            valor = flgesttare_def.iface.time_to_seconds(str(valor))
+            if valor != 0:
+                valor = valor.total_seconds()
         return valor
 
     def __init__(self, context=None):

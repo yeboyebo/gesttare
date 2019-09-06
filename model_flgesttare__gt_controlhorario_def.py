@@ -158,18 +158,13 @@ class gesttare(interna):
             where += "aqn_user.idcompany = " + str(user_company)
         else:
             where += "gt_controldiario.idusuario = '" + str(user_name) + "'"
-
-        # if filters:
-        #     if "[proyecto]" in filters and filters["[proyecto]"] != "":
-        #         where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
-        #     if "[tarea]" in filters and filters["[tarea]"] != "":
-        #         where += " AND gt_tareas.idtarea = {}".format(filters["[tarea]"])
-        #     if "[usuario]" in filters and filters["[usuario]"] != "":
-        #         where += " AND aqn_user.idusuario = '{}'".format(filters["[usuario]"])
-        #     if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
-        #         where += " AND gt_timetracking.fecha >= '{}'".format(filters["[d_fecha]"])
-        #     if "[h_fecha]" in filters and filters["[h_fecha]"] != "":
-        #         where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
+        if filters:
+            if "[gt_controldiario.idusuario]" in filters and filters["[gt_controldiario.idusuario]"] != "":
+                where += " AND gt_controldiario.idusuario = '{}'".format(filters["[gt_controldiario.idusuario]"])
+            if "[d_gt_controldiario.fecha]" in filters and filters["[d_gt_controldiario.fecha]"] != "":
+                where += " AND gt_controldiario.fecha >= '{}'".format(filters["[d_gt_controldiario.fecha]"])
+            if "[h_gt_controldiario.fecha]" in filters and filters["[h_gt_controldiario.fecha]"] != "":
+                where += " AND gt_controldiario.fecha <= '{}'".format(filters["[h_gt_controldiario.fecha]"])
         #     if "[fecha]" in filters and filters["[fecha]"] != "":
         #         where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
         #     if "[buscador]" in filters and filters["[buscador]"] != "":
