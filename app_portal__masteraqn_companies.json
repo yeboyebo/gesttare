@@ -6,6 +6,11 @@
             "value": {
                 "f_micompania": null
             }
+        },
+        {
+            "type": "deleteNode",
+            "path": "/layout/newRecordTelest",
+            "value": null
         }
     ]
 }

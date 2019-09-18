@@ -54,7 +54,8 @@
                     "gt_controlhorario": null,
                     "gt_controldiario": null,
                     "gt_controlmensual": null,
-                    "gt_companias": null
+                    "gt_companias": null,
+                    "gt_clientes": null
                 }
             }
         },

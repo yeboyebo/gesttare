@@ -25,6 +25,26 @@ class gesttare(interna):
         desc = "nombre"
         return desc
 
+    def gesttare_getForeignFields(self, model, template=None):
+        fields = []
+        if template == "master":
+            fields = [
+                {'verbose_name': 'nombreCliente', 'func': 'field_nombreCliente'}
+            ]
+
+        return fields
+
+    def gesttare_field_nombreCliente(self, model):
+        nombre_cliente = ""
+        try:
+            if not model.idcliente:
+                return nombre_cliente
+            nombre_cliente = model.idcliente.nombre
+        except Exception as e:
+            print(e)
+            pass
+        return nombre_cliente
+
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
         if "idusuario" not in oParam:
@@ -379,9 +399,9 @@ class gesttare(interna):
     def gesttare_queryGrid_proyectosarchivados(self, model, filters):
         where = "gt_proyectos.archivado"
         usuario = qsatype.FLUtil.nameUser()
-        isadmin = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
-        if not isadmin:
-            where = where + " AND gt_particproyecto.idusuario = " + str(usuario)
+        # isadmin = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        # if not isadmin:
+        where = where + " AND gt_particproyecto.idusuario = " + str(usuario)
         query = {}
         query["tablesList"] = ("gt_proyectos, gt_particproyecto")
         query["select"] = ("gt_proyectos.codproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.fechainicio, gt_proyectos.fechaterminado")
@@ -403,6 +423,12 @@ class gesttare(interna):
 
     def __init__(self, context=None):
         super().__init__(context)
+
+    def getForeignFields(self, model, template=None):
+        return self.ctx.gesttare_getForeignFields(model, template)
+
+    def field_nombreCliente(self, model):
+        return self.ctx.gesttare_field_nombreCliente(model)
 
     def iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
         return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor, data)

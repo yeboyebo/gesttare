@@ -33,6 +33,11 @@
                                     "combolimit": 1,
                                     "showpk": false,
                                     "function": "getParticCompaniaUsu"
+                                },
+                                "idcliente": {
+                                    "combolimit": 1,
+                                    "showpk": false,
+                                    "function": "getClientesCompaniaUsu"
                                 }
                             }
                         }

@@ -1,0 +1,46 @@
+{
+    "querystring": {
+        "p_l": 40,
+        "p_c": true,
+        "f_clientesCompania": null
+    },
+
+    "schema": {
+
+    },
+    "layout": {
+        "separator0": {
+            "componente": "YBSeparator"
+        },
+        "masterClientes": {
+            "componente": "YBGrid",
+            "label": "Clientes",
+            "icon": "person",
+            "prefix": "gt_clientes",
+            "filter": "buscador",
+            "columns": [
+                {
+                    "tipo": "act",
+                    "key": "delete",
+                    "label": "Borrar cliente",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
+                {"tipo": "field", "listpos": "subtitle", "key": "nombre", "avatar": true}
+            ],
+            "rowclick": "link"
+        },
+        "newRecordTarea": {
+            "componente": "YBNewRecord",
+            "class": "info",
+            "icon": "add"
+        }
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        }
+    }
+}

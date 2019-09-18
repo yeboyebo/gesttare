@@ -9,6 +9,17 @@
                 "URL": "system/aqn_companies/master",
                 "ICON": "insert_chart"
             }
+        },
+        {
+            "type": "insertAfterItem",
+            "path": "/items[empresa]",
+            "value": {
+                "NAME": "clientes",
+                "TEXT": "CLIENTES",
+                "URL": "system/gt_clientes/master",
+                "ICON": "insert_chart",
+                "VISIBLE": true
+            }
         }
     ]
 }

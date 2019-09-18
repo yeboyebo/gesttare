@@ -58,6 +58,9 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     def set_estado_mensual(self):
         return form.iface.set_estado("mensual")
 
+    def validateCursor(self):
+        return form.iface.validateCursor(self)
+
 
 # @class_declaration gt_controlhorario #
 class gt_controlhorario(gesttare_gt_controlhorario, helpers.MixinConAcciones):

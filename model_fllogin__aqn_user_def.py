@@ -197,12 +197,20 @@ class gesttare(yblogin):
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
         return {"type": "pieDonutChart", "data": data, "innerText": True}
 
+    def gesttare_graficohorasporproyecto(self, oParam):
+        data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
+        return {"type": "pieDonutChart", "data": data, "innerText": True}
+
     def gesttare_calculaGraficosAnalisis(self, oParam):
+        print("________________")
         response = []
         proyectosportiempo = self.iface.graficoproyectosportiempo(oParam)
         response.append(proyectosportiempo)
         tareasporestado = self.iface.graficostareasporestado(oParam)
         response.append(tareasporestado)
+        horasporproyecto = self.iface.graficohorasporproyecto(oParam)
+        response.append(horasporproyecto)
+        print(response)
         return response
 
     def gesttare_generaAnalisisGraphic(self, model, template):
@@ -256,4 +264,7 @@ class gesttare(yblogin):
 
     def graficostareasporestado(self, oParam):
         return self.ctx.gesttare_graficostareasporestado(oParam)
+
+    def graficohorasporproyecto(self, oParam):
+        return self.ctx.gesttare_graficohorasporproyecto(oParam)
 

@@ -165,8 +165,8 @@ class gesttare(interna):
                 where += " AND gt_controldiario.fecha >= '{}'".format(filters["[d_gt_controldiario.fecha]"])
             if "[h_gt_controldiario.fecha]" in filters and filters["[h_gt_controldiario.fecha]"] != "":
                 where += " AND gt_controldiario.fecha <= '{}'".format(filters["[h_gt_controldiario.fecha]"])
-        #     if "[fecha]" in filters and filters["[fecha]"] != "":
-        #         where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+            if "[gt_controldiario.fecha]" in filters and filters["[gt_controldiario.fecha]"] != "" and filters["[d_gt_controldiario.fecha]"] == "" and filters["[h_gt_controldiario.fecha]"] == "":
+                where += " AND gt_controldiario.fecha = '{}'".format(filters["[gt_controldiario.fecha]"])
         #     if "[buscador]" in filters and filters["[buscador]"] != "":
         #         where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
@@ -178,6 +178,29 @@ class gesttare(interna):
         query["orderby"] = ("gt_controldiario.fecha DESC, gt_controldiario.idusuario")
 
         return query
+
+    def gesttare_validateCursor(self, cursor):
+        print("validate cursor cuando se ejecuta")
+        if cursor.valueBuffer("idc_diario"):
+            horaInicio = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horainicio")))
+            horaFin = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horafin")))
+            curHorario = qsatype.FLSqlCursor(u"gt_controlhorario")
+            curHorario.select(ustr(u"idc_diario = '", cursor.valueBuffer("idc_diario"), u"'"))
+            while curHorario.next():
+                curHorario.setModeAccess(curHorario.Browse)
+                curHorario.refreshBuffer()
+                anteriorInicio = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horainicio")))
+                anteriorFin = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horafin")))
+                if (horaInicio > anteriorInicio and horaInicio < anteriorFin) or (horaFin > anteriorInicio and horaFin < anteriorFin):
+                    print("ya tengo registro diario")
+                    qsatype.FLUtil.ponMsgError("Los registors horarios se solapan")
+                    return False
+                qsatype.FLUtil.ponMsgError("No coincide")
+                return False  
+        # if referencia is None:
+        #     qsatype.FLUtil.ponMsgError("Error: La referencia no existe o no está seleccionada")
+        #     return False
+        # return True
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -223,6 +246,9 @@ class gesttare(interna):
 
     def queryGrid_control_diario(self, model, filters):
         return self.ctx.gesttare_queryGrid_control_diario(model, filters)
+
+    def validateCursor(self, cursor):
+        return self.ctx.gesttare_validateCursor(cursor)
 
 
 # @class_declaration head #

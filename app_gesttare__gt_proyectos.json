@@ -95,8 +95,13 @@
                                         "function": "getParticCompaniaUsu"
                                     },
                                     "presupuesto": {},
-                                    "rentabilidad": {"disabled": true},
-                                    "costetotal": {"disabled": true}
+                                    "idcliente": {
+                                        "combolimit": 1,
+                                        "showpk": false,
+                                        "function": "getClientesCompaniaUsu"
+                                    },
+                                    "rentabilidad": {"visible": false, "disabled": true},
+                                    "costetotal": {"visible": false, "disabled": true}
                                 }
                             }
                         },
@@ -162,13 +167,14 @@
                     "componente": "YBGroupBox",
                     "className": "gbTareasRighta",
                     "style": { },
-                    "label": "Rentabilidad",
+                    "label": "Análisis",
+                    "visible": true,
                     "layout": {
                        "labelHorasInvertidas": {
                             "componente": "YBLabel",
                             "style": {
                                 "width": "30%",
-                                "border": "1px solid grey",
+                                "border": "1px solid #dfdfdf",
                                 "borderRadius": "8px",
                                 "backgroundColor": "white",
                                 "marginLeft": "5px",
@@ -185,7 +191,8 @@
                             "titlestyle": {
                                 "fontSize": "18px",
                                 "letterSpacing": "1.86px",
-                                "color": "black"
+                                "color": "black",
+                                "textTransform": "uppercase"
                             },
                             "title": "Horas Invertidas",
                             "text": "%yb1",
@@ -197,9 +204,8 @@
                             "componente": "YBLabel",
                             "style": {
                                 "width": "30%",
-                                "border": "1px solid grey",
                                 "borderRadius": "8px",
-                                "backgroundColor": "grey",
+                                "backgroundColor": "#bababa",
                                 "marginLeft": "5px",
                                 "marginRight": "5px",
                                 "fontSize": "48px",
@@ -213,7 +219,8 @@
                             },
                             "titlestyle": {
                                 "fontSize": "18px",
-                                "letterSpacing": "1.86px"
+                                "letterSpacing": "1.86px",
+                                "textTransform": "uppercase"
                             },
                             "title": "Presupuesto",
                             "text": "%yb1",
@@ -225,7 +232,6 @@
                             "componente": "YBLabel",
                           "style": {
                                 "width": "30%",
-                                "border": "1px solid grey",
                                 "borderRadius": "8px",
                                 "backgroundImage": "linear-gradient(to right, #e79b21, #ffc68d)",
                                 "marginLeft": "5px",
@@ -241,7 +247,8 @@
                             },
                             "titlestyle": {
                                 "fontSize": "18px",
-                                "letterSpacing": "1.86px"
+                                "letterSpacing": "1.86px",
+                                "textTransform": "uppercase"
                             },
                             "title": "Coste",
                             "text": "%yb1",
@@ -321,6 +328,9 @@
         }
     },
     "drawIf": {
+        "groupBoxPadre" :{
+            "groupBoxRentabilidad": "checkProyectosFormDraw"
+        },
         "gb__proyectos": {
             "presupuesto": "checkProyectosFormDraw",
             "rentabilidad": "checkProyectosFormDraw",

@@ -39,6 +39,10 @@
                         "fechaentrega": {
                             "filterType": "interval"
                         },
+                        "idcliente": {
+                            "showpk": false,
+                            "function": "getClientesCompaniaUsu"
+                        },
                         "resuelta": null
                     },
                     "columns": [

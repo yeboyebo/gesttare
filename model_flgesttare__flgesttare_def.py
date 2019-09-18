@@ -42,6 +42,8 @@ class gesttare(interna):
         if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
             return False
 
+        if not _i.comprobarClienteProyecto(curProyecto):
+            return False
         return True
 
     def gesttare_afterCommit_gt_tareas(self, curTarea=None):
@@ -241,6 +243,11 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_comprobarClienteProyecto(self, curProyecto):
+        if curProyecto.modeAccess() == curProyecto.Edit:
+            if curProyecto.valueBufferCopy(u"idcliente") != curProyecto.valueBuffer(u"idcliente"):
+                qsatype.FLSqlQuery().execSql("UPDATE gt_tareas SET idcliente = " + str(curProyecto.valueBuffer("idcliente")) + " where codproyecto = '" + str(curProyecto.valueBuffer("codproyecto")) + "' ")
+        return True
     def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
         if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or (curTarea.modeAccess() == curTarea.Insert and curTarea.valueBuffer(u"idusuario")):
             if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curTarea.valueBuffer(u"idusuario"), u" AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
@@ -607,6 +614,9 @@ class gesttare(interna):
 
     def comprobarUsuarioResponsableProyecto(self, curProyecto=None):
         return self.ctx.gesttare_comprobarUsuarioResponsableProyecto(curProyecto)
+
+    def comprobarClienteProyecto(self, curProyecto):
+        return self.ctx.gesttare_comprobarClienteProyecto(curProyecto)
 
     def calcula_costetiempo(self, tipo, cursor):
         return self.ctx.gesttare_calcula_costetiempo(tipo, cursor)

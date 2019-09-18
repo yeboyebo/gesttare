@@ -40,8 +40,16 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
         return form.iface.validar(self, oParam, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def validar_dia(self, oParam, cursor):
+        return form.iface.validar_dia(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def desbloquear(self, oParam, cursor):
         return form.iface.desbloquear(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotoNuevoTramoFecha(self, oParam):
+        return form.iface.gotoNuevoTramoFecha(self, oParam)
 
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)

@@ -138,7 +138,9 @@ class gesttare(interna):
                     resul["msg"] = "Las horas extraordinarias no pueden superar el total de tiempo"
                     return resul
             resul['status'] = 2
-            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(cursor.valueBuffer("horasordinariasstring")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            horasextra = cursor.valueBuffer("horasextra") or "00:00:00"
+            horasordinarias = cursor.valueBuffer("horasordinariasstring") or "00:00:00"
+            resul['confirm'] = "Vas a validar el día con los siguientes datos: " + str(horasordinarias) + " como tiempo de trabajo ordinario, y " + str(horasextra) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
             return resul
         else:
             if cursor.valueBuffer("validado"):
@@ -149,6 +151,14 @@ class gesttare(interna):
                 return False
 
         return True
+
+    def gesttare_validar_dia(self, model, oParam, cursor):
+        if cursor.valueBuffer("validado"):
+            resul = {}
+            resul["status"] = 1
+            resul["msg"] = "El día ya esta validado"
+            return resul
+        return self.iface.validar(model, oParam, cursor)
 
     def gesttare_desbloquear(self, model, oParam, cursor):
         mesvalid = qsatype.FLUtil.sqlSelect("gt_controlmensual", "validado_user", "idc_mensual = {}".format(cursor.valueBuffer("idc_mensual")))
@@ -172,6 +182,29 @@ class gesttare(interna):
                 return False
 
         return True
+
+    def gesttare_gotoNuevoTramoFecha(self, model, oParam):
+        resul = {}
+        resul['status'] = 1
+        if "fecha" in oParam:
+            user_name = qsatype.FLUtil.nameUser()
+
+            idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, oParam["fecha"]))
+            if idc_diario:
+                resul["msg"] = "Ya existe un registro para tu usaurio en el dia " + oParam["fecha"]
+                return resul
+            if not idc_diario:
+                if not qsatype.FLUtil().sqlInsert("gt_controldiario", ["fecha", "horaentrada", "horasextra", "idusuario"], [oParam["fecha"], "00:00:01", "00:00:00", user_name]):
+                    resul["msg"] = "Error al crear el registro diario"
+                    return resul
+            idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, oParam["fecha"]))
+            url = '/gesttare/gt_controlhorario/newRecord?p_idc_diario=' + str(idc_diario) + '&p_idusuario=' + str(user_name)
+            print(url)
+            resul["url"] = url
+        else:
+            resul['msg']  = "Debes indicar una fecha para crear registro de tiempo"
+        return resul
+        # return resul
 
     def gesttare_bChCursor(self, fN, cursor):
         if fN == "horasextra":
@@ -223,9 +256,6 @@ class gesttare(interna):
         url = '/gesttare/gt_controldiario/' + str(model.idc_diario)
         return url
 
-    def gotoControlDiario(self, model):
-        return self.ctx.gesttare_gotoControlDiario(model)
-
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -259,14 +289,23 @@ class gesttare(interna):
     def validar(self, model, oParam, cursor):
         return self.ctx.gesttare_validar(model, oParam, cursor)
 
+    def validar_dia(self, model, oParam, cursor):
+        return self.ctx.gesttare_validar_dia(model, oParam, cursor)
+
     def desbloquear(self, model, oParam, cursor):
         return self.ctx.gesttare_desbloquear(model, oParam, cursor)
+
+    def gotoNuevoTramoFecha(self, model, oParam):
+        return self.ctx.gesttare_gotoNuevoTramoFecha(model, oParam)
 
     def bChCursor(self, fN, cursor):
         return self.ctx.gesttare_bChCursor(fN, cursor)
 
     def get_model_info(self, model, data, ident, template, where_filter):
         return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
+
+    def gotoControlDiario(self, model):
+        return self.ctx.gesttare_gotoControlDiario(model)
 
 
 # @class_declaration head #

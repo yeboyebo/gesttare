@@ -1,0 +1,41 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox",
+            "style": {},
+            "layout": {
+                "separator0": {
+                    "componente": "YBSeparator"
+                },
+                "formRecordgtclientes": {
+                    "prefix": "gt_clientes",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "update",
+                    "success": [],
+                    "groupbox": "acordeon",
+                    "return": true,
+                    "fields": {
+                        "gb__principal": {
+                            "title": "Principal",
+                            "fields": {
+                                "nombre": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "acciones": {
+        "accessControl": {
+            "action": "goto",
+            "prefix": "auth_user",
+            "serverAction": "accessControl"
+        }
+    },
+    "drawIf": {}
+}

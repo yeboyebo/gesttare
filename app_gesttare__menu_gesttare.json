@@ -66,6 +66,7 @@
             "TEXT": "Análisis",
             "URL": "gesttare/aqn_user/custom/analisis",
             "ICON": "widgets",
+            "VISIBLE": true,
             "COLOR": "rgb(7, 180, 7)"
         }
     ]

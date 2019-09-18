@@ -42,6 +42,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def actInvitarExterno(self, oParam, cursor):
         return form.iface.actInvitarExterno(oParam, cursor)
 
+    def field_nombreCliente(self):
+        return form.iface.field_nombreCliente(self)
+
     def checkProyectosFormDraw(cursor):
         return form.iface.checkProyectosFormDraw(cursor)
 

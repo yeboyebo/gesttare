@@ -78,6 +78,14 @@
             },
             "className": "",
             "columns": [
+                {
+                    "tipo": "act",
+                    "key": "validar",
+                    "label": "Validar día",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
                 {"tipo": "field", "listpos": "title", "key": "gt_controldiario.fecha", "label": "Fecha", "width": 10},
                 {"tipo": "foreignfield", "listpos": "subtitle", "key": "aqn_user.usuario", "label": "Usuario", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "gt_controldiario.horaentrada", "label": "H.Entrada", "width": 5},
@@ -86,6 +94,11 @@
                 {"tipo": "field", "listpos": "body", "key": "gt_controldiario.horasextra", "label": "H.Extra", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "gt_controldiario.validado", "label": "Validado", "width": 5, "avatar": true}
             ],
+            "accionesGrid": [{
+                "key": "nuevoTramoFecha",
+                "label": "Nuevo",
+                "success": [{ "slot": "goto"}]
+            }],
             "rowclick": "gotoControlDiario"
         },
         "controlmensual": {
@@ -132,6 +145,26 @@
         }
     },
     "acciones": {
+        "nuevoTramoFecha": {
+            "action": "legacy",
+            "prefix": "gt_controldiario",
+            "serverAction": "gotoNuevoTramoFecha",
+            "icon": "add_circle",
+            "params": [
+                {
+                    "tipo": 26,
+                    "verbose_name": "Fecha",
+                    "key": "fecha",
+                    "validaciones": null
+                }
+            ]
+        },
+        "validar": {
+            "action": "legacy",
+            "prefix": "gt_controldiario",
+            "serverAction": "validar_dia",
+            "icon": "check"
+        },
         "vistadiaria": {
             "action": "legacy",
             "serverAction": "set_estado_diario",

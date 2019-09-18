@@ -329,6 +329,34 @@
             {
                 "path": "apps/gesttare/templates/gesttare/plantillas/",
                 "name": "app_gesttare__analisis.json"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__gesttare_clients.py"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__gesttare_clients_def.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_clientes.py"
+            },
+            {
+                "path": "models/flgesttare/",
+                "name": "model_flgesttare__gt_clientes_def.py"
+            },
+            {
+                "name": "app_portal__mastergt_clientes.json",
+                "path": "apps/portal/templates/portal/plantillas/"
+            },
+            {
+                "name": "app_portal__gt_clientes.json",
+                "path": "apps/portal/templates/portal/plantillas/"
+            },
+            {
+                "name": "app_portal__newrecordgt_clientes.json",
+                "path": "apps/portal/templates/portal/plantillas/"
             }
         ],
         "replaceFile": [
@@ -396,6 +424,10 @@
             {
                 "path": "models/fllogin/",
                 "name": "model_fllogin__aqn_invitations_def.py"
+            },
+            {
+                "path": "models/fllogin/",
+                "name": "model_fllogin__models.py"
             }
         ]
     }
