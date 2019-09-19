@@ -30,6 +30,12 @@
                                     "desc": "usuario",
                                     "rel": "aqn_user",
                                     "label": "Usuario"
+                                },
+                                "fecha": {
+                                    "filterType": "custom",
+                                    "tipo": 28,
+                                    "key": "fecha",
+                                    "label": "Fecha"
                                 }
                             },
                             "d3": "pieChart",

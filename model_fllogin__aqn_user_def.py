@@ -1,7 +1,9 @@
 
 # @class_declaration gesttare #
 from models.flgesttare import flgesttare_def
-
+import datetime
+from datetime import date
+import calendar
 
 class gesttare(yblogin):
 
@@ -25,7 +27,6 @@ class gesttare(yblogin):
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
             data.append({"idusuario": q.value(0), "usuario": q.value(1)})
-        print(data)
         return data
 
     def gesttare_getParticipantesProyecto(self, oParam):
@@ -149,15 +150,35 @@ class gesttare(yblogin):
         return True
 
     def gesttare_graficoproyectosportiempo(self, oParam):
+        where = "1=1"
         usuario = qsatype.FLUtil.nameUser()
+        d = datetime.date(2019, 4, 13)
+        if not oParam:
+            hoy = date.today()
+            ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+            where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
         if oParam:
-            usuario = str(oParam["idusuario"])
+            if "idusuario" in oParam:
+                usuario = str(oParam["idusuario"])
+            if "d_fecha" not in oParam and "h_fecha" not in oParam and "fecha" not in oParam:
+                hoy = date.today()
+                ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+                where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+            else:
+                #if "i_fecha" in oParam:
+                #    where += " AND tt.fecha < '" +  oParam["h_fecha"] + "'"
+                if "fecha" in oParam:
+                    where += "AND tt.fecha = '" + oParam["fecha"] + "'"
+                if "d_fecha" in oParam:
+                    where += " AND tt.fecha BETWEEN '" + oParam["d_fecha"] + "' AND '" + oParam["h_fecha"] + "'"
+
+        where += " AND tt.idusuario = " + usuario
         data = []
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_timetracking")
-        q.setSelect(u"t.nombre, t.codproyecto")
-        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
-        q.setWhere(u"u.idusuario = " + usuario + " ORDER BY p.codproyecto LIMIT 20")
+        q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setWhere(where + " GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto LIMIT 20")
 
         if not q.exec_():
             return []
@@ -165,7 +186,8 @@ class gesttare(yblogin):
             return []
 
         while q.next():
-            valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
+            valor = q.value(2)
+            # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
             if valor:
                 valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
                 valor = flgesttare_def.iface.time_to_hours(str(valor))
@@ -178,7 +200,8 @@ class gesttare(yblogin):
     def gesttare_graficostareasporestado(self, oParam):
         usuario = qsatype.FLUtil.nameUser()
         if oParam:
-            usuario = str(oParam["idusuario"])
+            if "idusuario" in oParam:
+                usuario = str(oParam["idusuario"])
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_tareas")
@@ -195,14 +218,13 @@ class gesttare(yblogin):
             valor = 0
             data.append({"name": q.value(1), "value": q.value(0)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-        return {"type": "pieDonutChart", "data": data, "innerText": True}
+        return {"type": "pieDonutChart", "data": data, "size": 100, "innerText": True}
 
     def gesttare_graficohorasporproyecto(self, oParam):
         data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
         return {"type": "pieDonutChart", "data": data, "innerText": True}
 
     def gesttare_calculaGraficosAnalisis(self, oParam):
-        print("________________")
         response = []
         proyectosportiempo = self.iface.graficoproyectosportiempo(oParam)
         response.append(proyectosportiempo)
@@ -210,7 +232,6 @@ class gesttare(yblogin):
         response.append(tareasporestado)
         horasporproyecto = self.iface.graficohorasporproyecto(oParam)
         response.append(horasporproyecto)
-        print(response)
         return response
 
     def gesttare_generaAnalisisGraphic(self, model, template):
