@@ -259,9 +259,6 @@
                         "groupBoxGraphic": {
                             "componente": "YBGroupBox",
                             "className": "",
-                            "style": {
-                                "paddingLeft": "18%"
-                            },
                             "layout": {
 
                                 "pruebagrafico": {
