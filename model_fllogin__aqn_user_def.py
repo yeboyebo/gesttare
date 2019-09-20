@@ -152,27 +152,28 @@ class gesttare(yblogin):
     def gesttare_graficoproyectosportiempo(self, oParam):
         where = "1=1"
         usuario = qsatype.FLUtil.nameUser()
-        d = datetime.date(2019, 4, 13)
+        print(oParam)
         if not oParam:
             hoy = date.today()
             ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
-            where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+            #where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+            where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
         if oParam:
             if "idusuario" in oParam:
                 usuario = str(oParam["idusuario"])
             if "d_fecha" not in oParam and "h_fecha" not in oParam and "fecha" not in oParam:
                 hoy = date.today()
                 ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
-                where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+                where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
             else:
                 #if "i_fecha" in oParam:
                 #    where += " AND tt.fecha < '" +  oParam["h_fecha"] + "'"
                 if "fecha" in oParam:
-                    where += "AND tt.fecha = '" + oParam["fecha"] + "'"
+                    where += "AND tt.fecha = '{}'".format(oParam["fecha"])
                 if "d_fecha" in oParam:
-                    where += " AND tt.fecha BETWEEN '" + oParam["d_fecha"] + "' AND '" + oParam["h_fecha"] + "'"
+                    where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
 
-        where += " AND tt.idusuario = " + usuario
+        where += " AND tt.idusuario = {}".format(usuario)
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
@@ -207,7 +208,7 @@ class gesttare(yblogin):
         q.setTablesList(u"gt_tareas")
         q.setSelect(u"COUNT(t.codestado), t.codestado")
         q.setFrom(u"gt_tareas t")
-        q.setWhere(u"t.idusuario = " + usuario + " GROUP BY t.codestado LIMIT 20")
+        q.setWhere(u"t.idusuario = " + usuario + " AND not t.resuelta GROUP BY t.codestado LIMIT 20")
 
         if not q.exec_():
             return []
@@ -221,15 +222,76 @@ class gesttare(yblogin):
         return {"type": "pieDonutChart", "data": data, "size": 100, "innerText": True}
 
     def gesttare_graficohorasporproyecto(self, oParam):
-        data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-        return {"type": "pieDonutChart", "data": data, "innerText": True}
+        where = "1=1"
+        usuario = qsatype.FLUtil.nameUser()
+        print(oParam)
+        if not oParam:
+            hoy = date.today()
+            ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+            #where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+            where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+        if oParam:
+            if "idusuario" in oParam:
+                usuario = str(oParam["idusuario"])
+            if "d_fecha" not in oParam and "h_fecha" not in oParam and "fecha" not in oParam:
+                hoy = date.today()
+                ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+                where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+            else:
+                #if "i_fecha" in oParam:
+                #    where += " AND tt.fecha < '" +  oParam["h_fecha"] + "'"
+                if "fecha" in oParam:
+                    where += "AND tt.fecha = '{}'".format(oParam["fecha"])
+                if "d_fecha" in oParam:
+                    where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
+
+        where += " AND tt.idusuario = {}".format(usuario)
+        data = []
+        otros = 0
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setWhere("{} GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto".format(where))
+
+        if not q.exec_():
+            return []
+        if q.size() > 100:
+            return []
+
+        total = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
+
+        if total:
+            total = flgesttare_def.iface.seconds_to_time(total.total_seconds(), all_in_hours=True)
+            total = flgesttare_def.iface.time_to_hours(str(total))
+        else:
+            total = 0
+
+        i = 0
+        while q.next():
+            valor = q.value(2)
+            # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
+            if valor:
+                valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
+                valor = flgesttare_def.iface.time_to_hours(str(valor))
+            else:
+                valor = 0
+            if i > 8:
+                otros += valor
+            else:
+                data.append({"name": q.value(0), "value": 100*(valor/total)})
+            i = i+1
+            if i == q.size() and otros > 0:
+                data.append({"name": "Otros Proyectos", "value": 100*(otros/total)})
+
+        return {"type": "pieChart", "data": data, "innerText": False}
 
     def gesttare_calculaGraficosAnalisis(self, oParam):
         response = []
         proyectosportiempo = self.iface.graficoproyectosportiempo(oParam)
         response.append(proyectosportiempo)
-        tareasporestado = self.iface.graficostareasporestado(oParam)
-        response.append(tareasporestado)
+        #tareasporestado = self.iface.graficostareasporestado(oParam)
+        #response.append(tareasporestado)
         horasporproyecto = self.iface.graficohorasporproyecto(oParam)
         response.append(horasporproyecto)
         return response
