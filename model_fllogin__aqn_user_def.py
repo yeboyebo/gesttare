@@ -222,7 +222,7 @@ class gesttare(yblogin):
 
     def gesttare_graficohorasporproyecto(self, oParam):
         data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-        return {"type": "pieDonutChart", "data": data, "innerText": True}
+        return {"type": "pieChart", "data": data, "innerText": True}
 
     def gesttare_calculaGraficosAnalisis(self, oParam):
         response = []

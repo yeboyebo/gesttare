@@ -253,7 +253,7 @@
                             "title": "Coste",
                             "text": "%yb1",
                             "params": [
-                                {"type": "model", "key": "costetotal"}
+                                {"type": "calc", "key": "costeFormat"}
                             ]
                         },
                         "groupBoxGraphic": {

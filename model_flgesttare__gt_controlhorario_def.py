@@ -29,6 +29,25 @@ class gesttare(interna):
         fecha = now[:10]
         hora = now[-8:]
 
+        curDiario = qsatype.FLSqlCursor(u"gt_controldiario")
+        curDiario.select(ustr(u"fecha = '", fecha, u"' AND idusuario = '", user_name, "'"))
+        if curDiario.next():
+            print("este es el start")
+            print("hay que ver que no haya un tramo en la hora a la que quieres empezar a trackear")
+            curHorario = qsatype.FLSqlCursor(u"gt_controlhorario")
+            curHorario.select(ustr(u"idc_diario = '", curDiario.valueBuffer("idc_diario"), u"'"))
+            while curHorario.next():
+                curHorario.setModeAccess(curHorario.Browse)
+                curHorario.refreshBuffer()
+                horaInicio = flgesttare_def.iface.time_to_seconds(hora)
+                anteriorInicio = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horainicio")))
+                anteriorFin = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horafin")))
+                if (horaInicio > anteriorInicio and horaInicio < anteriorFin):
+                    resul = {}
+                    resul["status"] = 1
+                    resul["msg"] = "Error ya existe un tramo en este horario"
+                    return resul
+
         mes = str(fecha).split("-")[1]
         response = {}
         response["resul"] = False
@@ -180,27 +199,20 @@ class gesttare(interna):
         return query
 
     def gesttare_validateCursor(self, cursor):
-        print("validate cursor cuando se ejecuta")
         if cursor.valueBuffer("idc_diario"):
             horaInicio = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horainicio")))
             horaFin = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horafin")))
             curHorario = qsatype.FLSqlCursor(u"gt_controlhorario")
-            curHorario.select(ustr(u"idc_diario = '", cursor.valueBuffer("idc_diario"), u"'"))
+            curHorario.select(ustr(u"idc_diario = '", cursor.valueBuffer("idc_diario"), u"' AND idc_horario <> '", cursor.valueBuffer("idc_horario"), "'"))
             while curHorario.next():
                 curHorario.setModeAccess(curHorario.Browse)
                 curHorario.refreshBuffer()
                 anteriorInicio = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horainicio")))
                 anteriorFin = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horafin")))
-                if (horaInicio > anteriorInicio and horaInicio < anteriorFin) or (horaFin > anteriorInicio and horaFin < anteriorFin):
-                    print("ya tengo registro diario")
+                if (horaInicio > anteriorInicio and horaInicio < anteriorFin) or (horaFin > anteriorInicio and horaFin < anteriorFin) or (anteriorInicio > horaInicio and anteriorInicio < horaFin):
                     qsatype.FLUtil.ponMsgError("Los registors horarios se solapan")
                     return False
-                qsatype.FLUtil.ponMsgError("No coincide")
-                return False  
-        # if referencia is None:
-        #     qsatype.FLUtil.ponMsgError("Error: La referencia no existe o no está seleccionada")
-        #     return False
-        # return True
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)

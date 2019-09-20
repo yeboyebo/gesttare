@@ -13,6 +13,28 @@
             "value": {
                 "naf": {}
             }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/fields/costehora",
+            "value": {
+                "idresponsable": {
+                    "visible": false,
+                    "tipo": 55,
+                    "tofield": "idusuario",
+                    "key": "idusuario",
+                    "desc": "usuario",
+                    "rel": "aqn_user",
+                    "function": "getParticCompaniaUsu"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/drawIf/gb__principal/root",
+            "value": {
+                "idresponsable": "checkDrawUser"
+            }
         }
     ]
 }
