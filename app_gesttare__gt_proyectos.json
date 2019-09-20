@@ -253,15 +253,12 @@
                             "title": "Coste",
                             "text": "%yb1",
                             "params": [
-                                {"type": "model", "key": "costetotal"}
+                                {"type": "calc", "key": "costeFormat"}
                             ]
                         },
                         "groupBoxGraphic": {
                             "componente": "YBGroupBox",
                             "className": "",
-                            "style": {
-                                "paddingLeft": "18%"
-                            },
                             "layout": {
 
                                 "pruebagrafico": {

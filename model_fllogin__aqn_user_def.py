@@ -222,6 +222,7 @@ class gesttare(yblogin):
         return {"type": "pieDonutChart", "data": data, "size": 100, "innerText": True}
 
     def gesttare_graficohorasporproyecto(self, oParam):
+<<<<<<< HEAD
         where = "1=1"
         usuario = qsatype.FLUtil.nameUser()
         print(oParam)

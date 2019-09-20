@@ -390,7 +390,7 @@ class gesttare(interna):
         return resul
 
     def gesttare_getRentabilidadGraphic(self, model, template):
-        return [{"type": "pieDonutChart", "data": [{"name": "Rentabilidad", "value": model.rentabilidad, "color": "#50d2ce"}, {"name": "Resto", "value": 100 - model.rentabilidad, "color": "#bababa"}], "innerText": False, "animate": True, "size": 90, "showInfo": False}]
+        return [{"type": "pieDonutChart", "data": [{"name": "Rentabilidad", "value": model.rentabilidad, "color": "#50d2ce"}, {"name": "Resto", "value": ("{0:.2f}".format(100 - model.rentabilidad)), "color": "#bababa"}], "innerText": True, "animate": True, "size": 90, "showInfo": True, "text": "RENTABILIDAD"}]
         # return [
         #     {"type": "pieDonutChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True, "size": 90},
         #     {"type": "pieChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True},
@@ -418,7 +418,8 @@ class gesttare(interna):
         if template == 'formRecord':
             hinvertidas = flgesttare_def.iface.seconds_to_time(cursor.valueBuffer("hdedicadas"), all_in_hours=True)
             labels["horasinvertidas"] = hinvertidas
-            labels["presupuestoFormat"] = "€ " + str(int(cursor.valueBuffer("presupuesto")))
+            labels["presupuestoFormat"] = str(float(cursor.valueBuffer("presupuesto"))) + " € "
+            labels["costeFormat"] = str(float(cursor.valueBuffer("costetotal"))) + " € "
         return labels
 
     def __init__(self, context=None):
