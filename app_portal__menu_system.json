@@ -1,12 +1,20 @@
 {
     "modifications": [
         {
+            "type": "insertAfterNode",
+            "path": "/items[usuarios]/URL",
+            "value": {
+                "COLOR": "#2D95C1"
+            }
+        },
+        {
             "type": "insertAfterItem",
             "path": "/items[usuarios]",
             "value": {
                 "NAME": "empresa",
                 "TEXT": "EMPRESA",
                 "URL": "system/aqn_companies/master",
+                "COLOR": "#2D95C1",
                 "ICON": "insert_chart"
             }
         },
@@ -17,8 +25,23 @@
                 "NAME": "clientes",
                 "TEXT": "CLIENTES",
                 "URL": "system/gt_clientes/master",
+                "COLOR": "#2D95C1",
                 "ICON": "insert_chart",
                 "VISIBLE": true
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/items[grupos]/URL",
+            "value": {
+                "COLOR": "#2D95C1"
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/items[aqn_companies]/URL",
+            "value": {
+                "COLOR": "#2D95C1"
             }
         }
     ]

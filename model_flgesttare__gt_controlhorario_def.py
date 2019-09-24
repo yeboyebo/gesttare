@@ -74,19 +74,36 @@ class gesttare(interna):
         response["msg"] = "Iniciado"
         return response
 
-    def gesttare_pause(self, model):
+    def gesttare_pause(self, model, oParam):
+        print(oParam)
         now = str(qsatype.Date())
+        fecha = now[:10]
         hora = now[-8:]
         user_name = qsatype.FLUtil.nameUser()
 
         response = {}
         response["resul"] = False
         response["msg"] = ""
-
-        if not qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = '{}' AND horafin IS NULL".format(user_name)):
+        horainicio = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "horainicio", "idusuario = '{}' AND horafin IS NULL".format(user_name))
+        idcdiario = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_diario", "idusuario = '{}' AND horafin IS NULL".format(user_name))
+        idchorario = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = '{}' AND horafin IS NULL".format(user_name))
+        if not idcdiario:
             response["msg"] = "No existe un tramo iniciado"
             return response
-
+        fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(idcdiario))
+        if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
+            resta = (flgesttare_def.iface.time_to_seconds("24:00:00") - flgesttare_def.iface.time_to_seconds(horainicio)) + flgesttare_def.iface.time_to_seconds(hora)
+        else:
+            resta  = flgesttare_def.iface.time_to_seconds(hora) - flgesttare_def.iface.time_to_seconds(horainicio)
+        totalHoras = flgesttare_def.iface.seconds_to_time(resta, all_in_hours=True)
+        if int(flgesttare_def.iface.time_to_hours(totalHoras)) > 12:
+            response["status"] = 2
+            response["confirm"] = "El tiempo registrado en este intervalo es de " + str(totalHoras) + " ¿Es correcto?"
+            response["serverAction"] = "pause"
+            response["goto"] = {"nombre": "Editar", "url": "/gesttare/gt_controlhorario/" + str(idchorario)}
+            return response
+        # .seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
+        # return False
         if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin"], [hora], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
             response["msg"] = "Error al actualizar el registro horario"
             return response
@@ -223,8 +240,8 @@ class gesttare(interna):
     def start(self, model):
         return self.ctx.gesttare_start(model)
 
-    def pause(self, model):
-        return self.ctx.gesttare_pause(model)
+    def pause(self, model, oParam):
+        return self.ctx.gesttare_pause(model, oParam)
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)

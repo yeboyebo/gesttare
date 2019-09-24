@@ -477,11 +477,17 @@ class gesttare(interna):
         #     totaltiempo = "0" + totaltiempo
         # if len(totaltiempo) > 8:
         #     totaltiempo = totaltiempo[8:]
-
         try:
+            now = str(qsatype.Date())
+            fecha = now[:10]
+            fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(cursor.valueBuffer("idc_diario")))
             horainicio = self.iface.time_to_seconds(cursor.valueBuffer("horainicio"))
             horafin = self.iface.time_to_seconds(cursor.valueBuffer("horafin"))
-            totaltiempo = horafin - horainicio
+            if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
+                totaltiempo = (self.iface.time_to_seconds("24:00:00") - horainicio) + horafin
+            else:
+                totaltiempo  = horafin - horainicio
+            # totaltiempo = horafin - horainicio
             return totaltiempo
             # print(self.iface.seconds_to_time(auxT, all_in_hours=True))
         except Exception as e:

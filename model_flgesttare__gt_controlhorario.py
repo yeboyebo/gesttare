@@ -28,9 +28,9 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     def start(self):
         return form.iface.start(self)
 
-    @helpers.decoradores.accion(aqparam=[])
-    def pause(self):
-        return form.iface.pause(self)
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def pause(self, oParam):
+        return form.iface.pause(self, oParam)
 
     def drawif_controldiario(cursor):
         return form.iface.drawif_controldiario(cursor)

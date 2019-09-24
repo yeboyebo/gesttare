@@ -357,6 +357,18 @@
             {
                 "name": "app_portal__newrecordgt_clientes.json",
                 "path": "apps/portal/templates/portal/plantillas/"
+            },
+            {
+                "path": "assets/dist/img/icons/",
+                "name": "calendario.svg"
+            },
+            {
+                "path": "assets/dist/img/icons/",
+                "name": "timetrakcer.svg"
+            },
+            {
+                "path": "assets/dist/img/icons/",
+                "name": "tarea.svg"
             }
         ],
         "replaceFile": [
