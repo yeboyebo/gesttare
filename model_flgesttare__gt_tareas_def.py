@@ -665,10 +665,10 @@ class gesttare(interna):
             if not cursor.commitBuffer():
                 return False
             resul["return_data"] = False
-            resul["msg"] = "Correcto"
+            resul["msg"] = "Tarea eliminada correctamente"
         else:
             resul['status'] = 2
-            resul['confirm'] = "Seguro que quieres eliminar"
+            resul['confirm'] = "La tarea será eliminada"
         return resul
 
     def gesttare_gotoGestionarTiempo(self, model, cursor):

@@ -19,6 +19,7 @@
                     "return": true,
                     "icon": "info",
                     "label": "Información",
+                    "successmsg": "Registro de tiempo creado",
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__": {

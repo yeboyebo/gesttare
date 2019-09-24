@@ -383,7 +383,7 @@ class gesttare(interna):
             if not cursor.commitBuffer():
                 return False
             resul["return_data"] = False
-            resul["msg"] = "Correcto"
+            resul["msg"] = "Proyecto y tareas asociadas eliminados correctamente"
         else:
             resul['status'] = 2
             resul['confirm'] = "¿Seguro que quieres eliminar el proyecto y todas sus tareas asociadas?"

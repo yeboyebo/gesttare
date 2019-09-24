@@ -191,7 +191,6 @@
                             "titlestyle": {
                                 "fontSize": "18px",
                                 "letterSpacing": "1.86px",
-                                "color": "black",
                                 "textTransform": "uppercase"
                             },
                             "title": "Horas Invertidas",

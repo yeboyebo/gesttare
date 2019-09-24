@@ -286,8 +286,91 @@ class gesttare(yblogin):
 
         return {"type": "pieChart", "data": data, "innerText": False}
 
+    def gesttare_cajasinfo(self, oParam):
+        horasStyle = {
+            "border": "1px solid #dfdfdf",
+            "backgroundColor": "white",
+            "color": "grey"
+        }
+
+        presupuestoStyle = {
+            "backgroundColor": "#bababa",
+            "color": "#ffffff"
+        }
+
+        rentabilidadStyle = {
+            "backgroundImage": "linear-gradient(to right, #e79b21, #ffc68d)",
+            "color": "#ffffff"
+        }
+
+
+        where = "1=1"
+        usuario = qsatype.FLUtil.nameUser()
+
+        if not oParam:
+            hoy = date.today()
+            ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+            #where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+            where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+        if oParam:
+            if "idusuario" in oParam:
+                usuario = str(oParam["idusuario"])
+            if "d_fecha" not in oParam and "h_fecha" not in oParam and "fecha" not in oParam:
+                hoy = date.today()
+                ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+                where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+            else:
+                #if "i_fecha" in oParam:
+                #    where += " AND tt.fecha < '" +  oParam["h_fecha"] + "'"
+                if "fecha" in oParam:
+                    where += "AND tt.fecha = '{}'".format(oParam["fecha"])
+                if "d_fecha" in oParam:
+                    where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
+
+        where += " AND tt.idusuario = {}".format(usuario)
+        tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
+
+        totalPresupuesto = 0
+        totalCostes = 0
+        rentabilidad = 0
+
+        q = qsatype.FLSqlQuery()
+        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        q.setSelect("DISTINCT(t.presupuesto), t.costetotal")
+        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setWhere("{}".format(where))
+
+        if not q.exec_():
+            return []
+        if q.size() > 100:
+            return []
+
+        while q.next():
+            presupuesto = q.value(0)
+            coste = q.value(1)
+            totalPresupuesto += presupuesto
+            totalCostes += coste
+
+        if totalPresupuesto > 0:
+            rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
+
+        totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
+        totalPresupuesto = str(totalPresupuesto) +" €"
+
+        rentabilidad = qsatype.FLUtil.roundFieldValue(rentabilidad, "gt_proyectos", "rentabilidad")
+
+        if tiempo == None:
+            tiempo = "00:00:00"
+        else:
+            tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
+
+        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Presupuesto", "value": totalPresupuesto, "style": presupuestoStyle}, {"name": "Rentabilidad", "value": rentabilidad, "style" :rentabilidadStyle}]
+        return {"type": "labelInfo", "data": data}
+
     def gesttare_calculaGraficosAnalisis(self, oParam):
         response = []
+        cajasinfo = self.iface.cajasinfo(oParam)
+        response.append(cajasinfo)
         proyectosportiempo = self.iface.graficoproyectosportiempo(oParam)
         response.append(proyectosportiempo)
         #tareasporestado = self.iface.graficostareasporestado(oParam)
@@ -350,4 +433,7 @@ class gesttare(yblogin):
 
     def graficohorasporproyecto(self, oParam):
         return self.ctx.gesttare_graficohorasporproyecto(oParam)
+
+    def cajasinfo(self, oParam):
+        return self.ctx.gesttare_cajasinfo(oParam)
 

@@ -15,7 +15,8 @@
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "create",
-                    "success": [],
+                    "successmsg": "Cliente creado",
+                    "success": [{"slot": "return"}],
                     "groupbox": "acordeon",
                     "return": true,
                     "fields": {
