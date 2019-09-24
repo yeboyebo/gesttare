@@ -54,6 +54,10 @@ html, #parent-container{
     float: left;
 }
 
+.YBSiderBarItems {
+    background-color: #50d2ce !important;
+}
+
 /*.comentariosGrid {
     min-height: 710px;
     max-height: : 710px;

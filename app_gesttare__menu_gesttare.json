@@ -1,6 +1,7 @@
 {
     "format": "sideBarMenu",
     "logo": true,
+    "default": "gesttare/gt_tareas/master",
     "actions": {
         "gotoNotificacions": {
             "action": "url",
@@ -24,6 +25,10 @@
     },
     "items": [
         {
+            "TEXT": "PRODUCIR",
+            "ICONURL": "/static/dist/img/icons/tarea.svg"
+        },
+        {
             "NAME": "tareas",
             "TEXT": "tareas",
             "URL": "gesttare/gt_tareas/master",
@@ -31,11 +36,19 @@
             "COLOR": "rgb(7, 180, 7)"
         },
         {
-            "NAME": "gt_proyectos",
-            "TEXT": "proyectos",
-            "URL": "gesttare/gt_proyectos/master",
+            "NAME": "gt_actualizaciones",
+            "TEXT": "Notificaciones",
+            "URL": "gesttare/gt_actualizaciones/master",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)"
+            "COLOR": "rgb(7, 180, 7)",
+            "VISIBLE": true
+        },
+        {
+            "SEPARATOR": true
+        },
+        {
+            "TEXT": "PLANEAR",
+            "ICONURL": "/static/dist/img/icons/calendario.svg"
         },
         {
             "NAME": "calendario",
@@ -46,16 +59,22 @@
             "RESPONSIVE": false
         },
         {
-            "NAME": "gt_actualizaciones",
-            "TEXT": "Notificaciones",
-            "URL": "gesttare/gt_actualizaciones/master",
+            "NAME": "gt_proyectos",
+            "TEXT": "proyectos",
+            "URL": "gesttare/gt_proyectos/master",
             "ICON": "widgets",
-            "COLOR": "rgb(7, 180, 7)",
-            "VISIBLE": false
+            "COLOR": "rgb(7, 180, 7)"
+        },
+        {
+            "SEPARATOR": true
+        },
+        {
+            "TEXT": "ANALIZAR",
+            "ICONURL": "/static/dist/img/icons/timetrakcer.svg"
         },
         {
             "NAME": "gt_timetracking",
-            "TEXT": "time tracking",
+            "TEXT": "Time tracking",
             "URL": "gesttare/gt_timetracking/master",
             "ICON": "widgets",
             "COLOR": "rgb(7, 180, 7)",
@@ -66,7 +85,7 @@
             "TEXT": "Análisis",
             "URL": "gesttare/aqn_user/custom/analisis",
             "ICON": "widgets",
-            "VISIBLE": false,
+            "VISIBLE": true,
             "COLOR": "rgb(7, 180, 7)"
         }
     ]

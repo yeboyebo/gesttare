@@ -256,9 +256,16 @@
                                 {"type": "calc", "key": "costeFormat"}
                             ]
                         },
+                        "separatorGraphic": {
+                            "componente": "YBSeparator"
+                        },
                         "groupBoxGraphic": {
                             "componente": "YBGroupBox",
                             "className": "",
+                            "label": "Rentabilidad",
+                            "style": {
+                                "paddingLeft": "18%"
+                            },
                             "layout": {
 
                                 "pruebagrafico": {
