@@ -48,7 +48,7 @@ class gesttare(interna):
             return False
         resul = {}
         resul["return_data"] = False
-        resul["msg"] = "Correcto"
+        resul["msg"] = "Participante eliminado correctamente"
         return resul
 
     def __init__(self, context=None):
