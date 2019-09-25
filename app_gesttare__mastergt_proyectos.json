@@ -53,7 +53,7 @@
                 {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
                 {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50},
                 {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 80, "label": "Cliente"},
-                {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 100},
+                {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 100, "label": "Fecha Inicio"},
                 {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 100}
             ],
             "rowclick": "link",

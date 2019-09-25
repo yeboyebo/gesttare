@@ -19,7 +19,8 @@
                     "icon": "info",
                     "label": "Información",
                     "successmsg": "Tarea creada",
-                    "success": [{"slot": "return"}],
+                    "saveEdit": true,
+                    "saveReturn": true,
                     "fields": {
                         "gb__": {
                             "title": "",

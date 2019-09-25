@@ -136,6 +136,10 @@
                                 "padding": "0px 20px",
                                 "textAlign": "right"
                             },
+                            "prefix": "gt_tareas",
+                            "action": {
+                                "key": "verTrackingTarea"
+                            },
                             "params": [{"type": "calc", "key": "tiempoTotal"}]
                         },
                         "separator2": {
@@ -298,6 +302,11 @@
             "label": "Borrar tarea",
             "action": "legacy",
             "serverAction": "borrar_tarea"
+        },
+        "verTrackingTarea": {
+            "action": "goto",
+            "prefix": "gt_tareas",
+            "serverAction": "verTrackingTarea"
         },
         "gestionarTiempo": {
             "action": "goto",

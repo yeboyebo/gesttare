@@ -115,6 +115,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def commonCalculateField(fN, curP):
         return form.iface.commonCalculateField(fN, curP)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def verTrackingTarea(self, cursor):
+        return form.iface.verTrackingTarea(cursor)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

@@ -64,6 +64,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def queryGrid_proyectosarchivados(model, filters):
         return form.iface.queryGrid_proyectosarchivados(model, filters)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def vertareasproyecto(self, cursor):
+        return form.iface.vertareasproyecto(cursor)
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):
