@@ -50,13 +50,14 @@
                         {"slot": "refrescar"}
                     ]
                 },
-                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 100},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 50},
-                {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 80, "label": "Cliente"},
-                {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 100, "label": "Fecha Inicio"},
-                {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 100}
+                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 170, "title": true, "link": true},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 30},
+                {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
+                {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
+                {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80}
             ],
-            "rowclick": "link",
+            "rowclick": "",
+            "rowlistclick": "link",
             "accionesGrid": [{
                 "key": "getReport",
                 "label": "Genera XLS",
@@ -97,10 +98,11 @@
                         {"slot": "refrescar"}
                     ]
                 },
-                {"tipo": "field", "listpos": "title", "key": "gt_proyectos.nombre", "width": 100},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "gt_proyectos.estado", "width": 50},
-                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechainicio", "width": 100},
-                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechaterminado", "width": 100}
+                {"tipo": "field", "listpos": "title", "key": "gt_proyectos.nombre", "width": 170},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "gt_proyectos.estado", "width": 40},
+                {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
+                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechainicio", "width": 80},
+                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechaterminado", "width": 80}
             ],
             "rowclick": ""
         }
