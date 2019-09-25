@@ -387,6 +387,10 @@
             {
                 "path": "assets/dist/img/logo/",
                 "name": "footer.png"
+            },
+            {
+                "name": "app_portal__acl.html",
+                "path": "apps/portal/templates/portal/"
             }
         ],
         "deleteFile": [],

@@ -56,13 +56,18 @@ class gesttare(interna):
 
     def gesttare_borrarActualizacion(self, model, oParam):
         idactualizacion = model.idactualizacion
+        resul = {}
         # print(ustr(u"DELETE FROM gt_actualizaciones WHERE idactualizacion = '", idactualizacion, "'"))
         if not qsatype.FLUtil.sqlDelete(u"gt_actualizusuario",ustr(u"idactualizacion = ", idactualizacion)):
             # print("falla la query")
             # return False
         # if not qsatype.FLUtil.sqlDelete(u"gt_actualizaciones", ustr(u"idactualizacion = ", idactualizacion)):
-            return Falses
-        return True
+            #return False
+            resul["status"] = 1
+            resul["msg"] = "Error en la eliminación de la actualización"
+        resul["return_data"] = True
+        resul["msg"] = "Notificación eliminada correctamente"
+        return resul
 
     def __init__(self, context=None):
         super().__init__(context)

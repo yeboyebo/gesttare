@@ -150,7 +150,7 @@ class gesttare(yblogin):
         return True
 
     def gesttare_graficoproyectosportiempo(self, oParam):
-        where = "1=1"
+        where = "1=1 "
         usuario = qsatype.FLUtil.nameUser()
         print(oParam)
         if not oParam:
@@ -175,11 +175,17 @@ class gesttare(yblogin):
 
         where += " AND tt.idusuario = {}".format(usuario)
         data = []
+        #q = qsatype.FLSqlQuery()
+        #q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        #q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
+        #q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        #q.setWhere(where + " GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto LIMIT 20")
+
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere(where + " GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto LIMIT 20")
+        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setWhere(where + " GROUP BY t.codproyecto ORDER BY t.codproyecto LIMIT 20")
 
         if not q.exec_():
             return []
@@ -222,7 +228,7 @@ class gesttare(yblogin):
         return {"type": "pieDonutChart", "data": data, "size": 100, "innerText": True}
 
     def gesttare_graficohorasporproyecto(self, oParam):
-        where = "1=1"
+        where = "1=1 "
         usuario = qsatype.FLUtil.nameUser()
         print(oParam)
         if not oParam:
@@ -248,11 +254,17 @@ class gesttare(yblogin):
         where += " AND tt.idusuario = {}".format(usuario)
         data = []
         otros = 0
+        #q = qsatype.FLSqlQuery()
+        #q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        #q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
+        #q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        #q.setWhere("{} GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto".format(where))
+
         q = qsatype.FLSqlQuery()
-        q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere("{} GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto".format(where))
+        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setWhere("{} GROUP BY t.codproyecto ORDER BY t.codproyecto".format(where))
 
         if not q.exec_():
             return []
@@ -334,10 +346,16 @@ class gesttare(yblogin):
         totalCostes = 0
         rentabilidad = 0
 
+        #q = qsatype.FLSqlQuery()
+        #q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        #q.setSelect("DISTINCT(t.presupuesto), t.costetotal")
+        #q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        #q.setWhere("{}".format(where))
+
         q = qsatype.FLSqlQuery()
-        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        q.setSelect("DISTINCT(t.presupuesto), t.costetotal")
-        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setSelect("SUM(t.presupuesto), SUM(t.costetotal)")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         q.setWhere("{}".format(where))
 
         if not q.exec_():
@@ -345,13 +363,17 @@ class gesttare(yblogin):
         if q.size() > 100:
             return []
 
-        while q.next():
-            presupuesto = q.value(0)
-            coste = q.value(1)
-            totalPresupuesto += presupuesto
-            totalCostes += coste
+        #while q.next():
+        #    presupuesto = q.value(0)
+        #    coste = q.value(1)
+        #    totalPresupuesto += presupuesto
+        #    totalCostes += coste
 
-        if totalPresupuesto > 0:
+        while q.next():
+            totalPresupuesto = q.value(0)
+            totalCostes = q.value(1)
+
+        if totalPresupuesto != None and totalCostes != None:
             rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
 
         totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
