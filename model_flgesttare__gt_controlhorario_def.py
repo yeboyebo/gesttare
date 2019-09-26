@@ -75,13 +75,19 @@ class gesttare(interna):
         return response
 
     def gesttare_pause(self, model, oParam):
-        print(oParam)
+        response = {}
         now = str(qsatype.Date())
         fecha = now[:10]
         hora = now[-8:]
         user_name = qsatype.FLUtil.nameUser()
+        if oParam and "confirmacion" in oParam:
+            if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin"], [hora], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
+                response["msg"] = "Error al actualizar el registro horario"
+                return response
+            response["resul"] = True
+            response["msg"] = "Iniciado"
+            return True
 
-        response = {}
         response["resul"] = False
         response["msg"] = ""
         horainicio = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "horainicio", "idusuario = '{}' AND horafin IS NULL".format(user_name))

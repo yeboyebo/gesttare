@@ -121,6 +121,16 @@
                             "success": [{"slot": "refrescar"}]
                         }
                     },
+                    "verTareasProyecto": {
+                        "componente": "YBButton",
+                        "prefix": "gt_proyectos",
+                        "label": "Ver tareas",
+                        "className": "floatLeft",
+                        "buttonType": "raised",
+                        "action": {
+                            "key": "vertareas"
+                        }
+                    },
                     "groupBoxUsuariosC": {
                         "componente": "YBGroupBox",
                         "className": "",
@@ -302,6 +312,11 @@
             "action": "deleteRow",
             "icon": "delete"
         },
+        "vertareas": {
+            "action": "goto",
+            "prefix": "gt_proyectos",
+            "serverAction": "vertareasproyecto"
+        },
         "actNuevoPartic": {
             "label": "Nuevo participante",
             "action": "legacy",
@@ -338,7 +353,8 @@
             "presupuesto": "checkProyectosFormDraw",
             "rentabilidad": "checkProyectosFormDraw",
             "costetotal": "checkProyectosFormDraw",
-            "idresponsable": "checkResponsableDraw"
+            "idresponsable": "checkResponsableDraw",
+            "cliente": "checkResponsableDraw"
         }
     }
 }

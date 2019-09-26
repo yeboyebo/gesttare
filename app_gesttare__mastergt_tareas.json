@@ -63,8 +63,8 @@
                             ]
                         },
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 350, "link": true},
-                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "avatar": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "title": true, "avatar": true},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90, "title": true, "link": "codproyecto"},
                         {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
                         {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 80},
                         {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}

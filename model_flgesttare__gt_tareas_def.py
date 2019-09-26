@@ -683,6 +683,13 @@ class gesttare(interna):
                 valor = valor.total_seconds()
         return valor
 
+    def gesttare_verTrackingTarea(self, cursor):
+        response = {}
+        response["url"] = "/gesttare/gt_timetracking/master"
+        response["prefix"] = "mastertimetracking"
+        response["filter"] = '{"tarea": "' + str(cursor.valueBuffer("idtarea")) + '"}'
+        return response
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -790,6 +797,9 @@ class gesttare(interna):
 
     def commonCalculateField(self, fN, cursor):
         return self.ctx.gesttare_commonCalculateField(fN, cursor)
+
+    def verTrackingTarea(self, cursor):
+        return self.ctx.gesttare_verTrackingTarea(cursor)
 
 
 # @class_declaration head #

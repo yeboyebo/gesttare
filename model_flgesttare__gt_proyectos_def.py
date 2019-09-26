@@ -412,15 +412,19 @@ class gesttare(interna):
 
     def gesttare_iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
         labels = {}
-        # print(model.hdedicadas)
-        print("iniciavalores label")
-        print(template)
         if template == 'formRecord':
             hinvertidas = flgesttare_def.iface.seconds_to_time(cursor.valueBuffer("hdedicadas"), all_in_hours=True)
             labels["horasinvertidas"] = hinvertidas
             labels["presupuestoFormat"] = str(float(cursor.valueBuffer("presupuesto"))) + " € "
             labels["costeFormat"] = str(float(cursor.valueBuffer("costetotal"))) + " € "
         return labels
+
+    def gesttare_vertareasproyecto(self, cursor):
+        response = {}
+        response["url"] = "/gesttare/gt_tareas/master"
+        response["prefix"] = "gt_tareas"
+        response["filter"] = '{"codproyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
+        return response
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -481,6 +485,9 @@ class gesttare(interna):
 
     def queryGrid_proyectosarchivados(self, model, filters):
         return self.ctx.gesttare_queryGrid_proyectosarchivados(model, filters)
+
+    def vertareasproyecto(self, cursor):
+        return self.ctx.gesttare_vertareasproyecto(cursor)
 
 
 # @class_declaration head #
