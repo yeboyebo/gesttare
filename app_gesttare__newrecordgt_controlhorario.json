@@ -18,7 +18,7 @@
                     "saveReturn": true,
                     "return": true,
                     "icon": "info",
-                    "label": "Información",
+                    "label": "Nuevo control de horario",
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__": {

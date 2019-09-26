@@ -17,7 +17,7 @@
                     "submit": "create",
                     "return": true,
                     "icon": "info",
-                    "label": "Información",
+                    "label": "Nueva tarea",
                     "successmsg": "Tarea creada",
                     "success": [{"slot": "return"}],
                     "fields": {

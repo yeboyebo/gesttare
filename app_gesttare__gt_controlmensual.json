@@ -18,7 +18,7 @@
             "componente": "YBForm",
             "icon": "info",
             "class": "claseGrid",
-            "label": "Información",
+            "label": "Información control mensual",
             "submit": "update",
             "send": false,
             "return": true,

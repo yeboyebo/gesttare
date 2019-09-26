@@ -180,9 +180,21 @@ class gesttare(interna):
             return {"queryGridcontroldiario": "Tiempo total: {}".format(tiempototal)}
 
         if template == "newrecord":
+            print(data)
             fecha = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = {}".format(data["idc_diario"]))
             formateaFecha = str(fecha).split("-")
             return {"chForm": "Nuevo registro para " + formateaFecha[2] + "-" + formateaFecha[1] + "-" + formateaFecha[0]}
+
+        elif template == "formRecord":
+            print("aqui fecha")
+            if isinstance(data, list):
+                return None
+
+            fecha = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = {}".format(data["idc_diario"]))
+            formateaFecha = str(fecha).split("-")
+            
+            return {"controlHorarioFormRecord": "Editar registro para " + formateaFecha[2] + "-" + formateaFecha[1] + "-" + formateaFecha[0]}
+
 
         return None
 
