@@ -9,6 +9,7 @@
             "url": "gesttare/gt_actualizaciones/master"
         },
         "startControlHorario": {
+            "componente": "YBButton",
             "action": "legacy",
             "icon": "play_arrow",
             "prefix": "gt_controlhorario",

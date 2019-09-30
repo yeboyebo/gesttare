@@ -124,6 +124,10 @@ class gesttare(interna):
             if im_superuser:
                 return True
 
+            responsable = qsatype.FLUtil.sqlSelect("aqn_user", "idresponsable", "idusuario = '{}'".format(reg_name))
+            if str(responsable) == str(my_name):
+                return True
+
             # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
             # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
             # if my_company == reg_company:
@@ -140,16 +144,17 @@ class gesttare(interna):
             user_name = qsatype.FLUtil.nameUser()
             filters = [{"criterio": "idusuario__exact", "valor": user_name, "tipo": "q"}]
 
-            if not qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(user_name)):
-                return filters
-
             usuarios = []
             user_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(user_name))
+            where = "idcompany = {}".format(user_company)
+           
+            if not qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(user_name)):
+                where += " AND idresponsable = '" + user_name + "'"
 
             q = qsatype.FLSqlQuery()
             q.setSelect("idusuario")
             q.setFrom("aqn_user")
-            q.setWhere("idcompany = {}".format(user_company))
+            q.setWhere(where)
 
             if not q.exec_():
                 return False
@@ -186,6 +191,7 @@ class gesttare(interna):
             return "hidden"
 
         if not cursor.valueBuffer("validado_user"):
+            # responsable = 
             if my_name == "admin" or im_superuser:
                 return "disabled"
             else:

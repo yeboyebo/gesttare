@@ -115,7 +115,7 @@ class gesttare(interna):
             #     return False
 
         if curPart.modeAccess() == curPart.Insert:
-            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'"))
+            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'")) or ""
             if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
                 return False
         print("aftercommit gt_parcitproyecto true")
@@ -484,7 +484,9 @@ class gesttare(interna):
             horainicio = self.iface.time_to_seconds(cursor.valueBuffer("horainicio"))
             horafin = self.iface.time_to_seconds(cursor.valueBuffer("horafin"))
             if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
-                totaltiempo = (self.iface.time_to_seconds("24:00:00") - horainicio) + horafin
+                diferencia = (qsatype.Date(fecha) - qsatype.Date(str(fechaAnterior)))
+                dias = 24 * diferencia.days
+                totaltiempo = (self.iface.time_to_seconds(str(dias) + ":00:00") - horainicio) + horafin
             else:
                 totaltiempo  = horafin - horainicio
             # totaltiempo = horafin - horainicio

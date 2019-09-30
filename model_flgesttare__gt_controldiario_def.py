@@ -46,12 +46,18 @@ class gesttare(interna):
                 return True
 
             reg_name = qsatype.FLUtil.sqlSelect("gt_controldiario", "idusuario", "idc_diario = {}".format(pk))
+            responsable = qsatype.FLUtil.sqlSelect("aqn_user", "idresponsable", "idusuario = '{}'".format(reg_name))
             if my_name == str(reg_name):
                 return True
 
             im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
             if im_superuser:
                 return True
+
+            if str(responsable) == str(my_name):
+                return True
+
+
 
             # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
             # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))

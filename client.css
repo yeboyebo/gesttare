@@ -96,6 +96,27 @@ html, #parent-container{
 .YBSideBarItemLink:hover{
     color: white;
 }
+.controlTiempoButton > .YBButtonRaised{
+    background-color: orange;
+    border-radius: 20px;
+    max-height: 32px;
+    border: 0px;
+}
+
+.controlTiempoLabel {
+    width: 105px;
+    height: 18px;
+    font-family: Rubik;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    text-transform: none;
+    color: var(--white);
+}
 /*.comentariosGrid {
     min-height: 710px;
     max-height: : 710px;

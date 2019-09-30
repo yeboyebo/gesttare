@@ -81,6 +81,7 @@ class gesttare(interna):
         hora = now[-8:]
         user_name = qsatype.FLUtil.nameUser()
         if oParam and "confirmacion" in oParam:
+            # return False
             if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin"], [hora], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
                 response["msg"] = "Error al actualizar el registro horario"
                 return response
@@ -98,7 +99,9 @@ class gesttare(interna):
             return response
         fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(idcdiario))
         if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
-            resta = (flgesttare_def.iface.time_to_seconds("24:00:00") - flgesttare_def.iface.time_to_seconds(horainicio)) + flgesttare_def.iface.time_to_seconds(hora)
+            diferencia = (qsatype.Date(fecha) - qsatype.Date(str(fechaAnterior)))
+            dias = 24 * diferencia.days
+            resta = (flgesttare_def.iface.time_to_seconds(str(dias) + ":00:00") - flgesttare_def.iface.time_to_seconds(horainicio)) + flgesttare_def.iface.time_to_seconds(hora)
         else:
             resta  = flgesttare_def.iface.time_to_seconds(hora) - flgesttare_def.iface.time_to_seconds(horainicio)
         totalHoras = flgesttare_def.iface.seconds_to_time(resta, all_in_hours=True)
@@ -199,7 +202,7 @@ class gesttare(interna):
         if qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(user_name)):
             where += "aqn_user.idcompany = " + str(user_company)
         else:
-            where += "gt_controldiario.idusuario = '" + str(user_name) + "'"
+            where += "gt_controldiario.idusuario = '" + str(user_name) + "' OR aqn_user.idresponsable = '" + str(user_name) + "'"
         if filters:
             if "[gt_controldiario.idusuario]" in filters and filters["[gt_controldiario.idusuario]"] != "":
                 where += " AND gt_controldiario.idusuario = '{}'".format(filters["[gt_controldiario.idusuario]"])
