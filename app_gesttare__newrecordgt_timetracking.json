@@ -18,7 +18,7 @@
                     "saveReturn": true,
                     "return": true,
                     "icon": "info",
-                    "label": "Información",
+                    "label": "Nuevo Registro de tiempo",
                     "successmsg": "Registro de tiempo creado",
                     "success": [{"slot": "return"}],
                     "fields": {

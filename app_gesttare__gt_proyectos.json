@@ -79,7 +79,7 @@
                         "icon": "info",
                         "class": "claseGrid",
                         "submit": "update",
-                        "label": "Información",
+                        "label": "Información de proyecto",
                         "fields": {
                             "gb__proyectos": {
                                 "title": "",

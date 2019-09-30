@@ -5,7 +5,7 @@
         "separator1": {
             "componente": "YBSeparator"
         },
-        "formInfo": {
+        "controlHorarioFormRecord": {
             "prefix": "gt_controlhorario",
             "componente": "YBForm",
             "icon": "info",
@@ -20,7 +20,10 @@
                     "fields": {
                         "horainicio": {},
                         "horafin": {},
-                        "idusuario": {"disabled": true},
+                        "idusuario": {
+                            "disabled": true,
+                            "showpk": false
+                        },
                         "totaltiempostring": {"disabled": true}
                     }
                 }

@@ -19,7 +19,14 @@
                         "gb__": {
                             "title": "",
                             "fields": {
-                                "idusuario": {"disabled": true},
+                                "idtarea": {
+                                    "function": "getTareasUsuario", 
+                                    "disabled": true,
+                                    "showpk": false},
+                                "idusuario": {
+                                    "disabled": true,
+                                    "showpk": false
+                                },
                                 "fecha": {},
                                 "horainicio": {},
                                 "horafin": {},

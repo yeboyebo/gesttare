@@ -45,12 +45,12 @@
         "separator1": {
             "componente": "YBSeparator"
         },
-        "formInfo": {
+        "controlDiarioFormRecord": {
             "prefix": "gt_controldiario",
             "componente": "YBForm",
             "icon": "info",
             "class": "claseGrid",
-            "label": "Información",
+            "label": "Información control diario",
             "submit": "update",
             "autoCommit": false,
             "send": true,
@@ -60,7 +60,10 @@
                     "title": "",
                     "fields": {
                         "fecha": {"disabled": true},
-                        "idusuario": {"disabled": true},
+                        "idusuario": {
+                            "disabled": true,
+                            "showpk": false
+                        },
                         "horasordinariasstring": {"disabled": true},
                         "totaltiempostring": {"disabled": true},
                         "horaentrada": {"disabled": true},

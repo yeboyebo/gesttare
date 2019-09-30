@@ -16,7 +16,7 @@
                     "class": "claseGrid ",
                     "submit": "create",
                     "icon": "info",
-                    "label": "Información",
+                    "label": "Nuevo proyecto",
                     "return": true,
                     "successmsg": "Proyecto creado",
                     "success": [{"slot": "return"}],

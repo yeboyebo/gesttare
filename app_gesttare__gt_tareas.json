@@ -68,7 +68,7 @@
                             "class": "claseGrid",
                             "submit": "update",
                             "icon": "info",
-                            "label": "Información",
+                            "label": "Información de tarea",
                             "return": true,
                             "successmsg": "Tarea actualizada",
                             "fields": {
