@@ -54,6 +54,14 @@
             "className": "",
             "buscador": false,
             "columns": [
+                {
+                    "tipo": "act",
+                    "key": "validarDia",
+                    "label": "Validar",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
                 {"tipo": "field", "listpos": "body", "key": "fecha", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horaentrada", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "horasalida", "width": 5},
@@ -117,6 +125,11 @@
         }
     },
     "acciones": {
+        "validarDia": {
+            "action": "legacy",
+            "serverAction": "validar_admin",
+            "icon": "icon"
+        },
         "validar_admin": {
             "action": "legacy",
             "serverAction": "validar_admin",

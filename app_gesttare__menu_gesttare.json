@@ -10,18 +10,38 @@
         },
         "startControlHorario": {
             "componente": "YBButton",
+            "buttonType": "raised",
+            "className": "controlTiempoButton",
+            "label": "Iniciar Jornada",
+            "classLabel": "controlTiempoLabel",
             "action": "legacy",
-            "icon": "play_arrow",
+            "icon": "play_circle_outline",
             "prefix": "gt_controlhorario",
             "serverAction": "start",
             "success": [{"slot": "refrescar"}]
         },
         "pauseControlHorario": {
+            "componente": "YBButton",
+            "buttonType": "raised",
+            "className": "controlTiempoButton",
+            "label": "Parar Jornada",
+            "classLabel": "controlTiempoLabel",
             "action": "legacy",
-            "icon": "pause",
+            "icon": "pause_circle_outline",
             "prefix": "gt_controlhorario",
             "serverAction": "pause",
             "success": [{"slot": "refrescar"}]
+        }
+    },
+    "title": {
+        "anotarButton": {
+            "componente": "YBButton",
+            "buttonType": "raised",
+            "label": "ANOTAR",
+            "action": "goto",
+            "icon": "add",
+            "prefix": "gt_tareas",
+            "serverAction": "gotoNewRecordAnotacion"
         }
     },
     "items": [
