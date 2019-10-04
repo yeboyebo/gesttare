@@ -119,6 +119,11 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def verTrackingTarea(self, cursor):
         return form.iface.verTrackingTarea(cursor)
 
+    @helpers.decoradores.accion()
+    def gototarea(self):
+        return form.iface.gotoTarea(self)
+
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

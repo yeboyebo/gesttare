@@ -3,6 +3,12 @@
     "schema": {
         "grafico": {
             "custom": "generaAnalisisGraphic"
+        },
+        "pruebagrafico": {
+            "query": {
+                "p_c": true,
+                "p_l": 10
+            }
         }
     },
     "layout": {
@@ -18,7 +24,7 @@
                         "graphicSeparator": {
                             "componente": "YBSeparator"
                         },
-                        "pruebagrafico": {
+                        "pruebagraficos": {
                             "label": "Análisis",
                             "componente": "YBChart",
                             "filter": {
@@ -42,10 +48,62 @@
                             "prefix": "grafico"
                         }
                     }
+                },
+
+                "separator": {
+                    "componente": "YBSeparator"
+                },
+                "gridTareasMasTiempo": {
+                    "componente": "YBGrid",
+                    "type": "query",
+                    "prefix": "pruebagrafico",
+                    "autofilter": false,
+                    "cansavefilter": false,
+                    "paginacion": false,
+                    "className": "",
+                    "buscador": false,
+                    "label": "Top 10 tareas con más tiempo invertido",
+                    "filter": {
+                         "idusuario": {
+                                "filterType": "custom",
+                                "tipo": 55,
+                                "tofield": "idusuario",
+                                "key": "idusuario",
+                                "desc": "usuario",
+                                "rel": "aqn_user",
+                                "label": "Usuario"
+                            },
+                            "fecha": {
+                                "filterType": "custom",
+                                "tipo": 28,
+                                "key": "fecha",
+                                "label": "Fecha"
+                            }
+                    },
+                    "columns": [
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "tt.fecha", "label": "Fecha", "width": 80},
+                        {"tipo": "field", "listpos": "body", "key": "a.usuario", "label": "Usuario", "width": 80},
+                        {"tipo": "field", "listpos": "title", "key": "t.nombre", "label": "Tarea", "width": 400, "flex": 2, "title": true},
+                        {"tipo": "field", "listpos": "body", "key": "p.nombre", "label": "Proyecto", "width": 330, "flex": 2, "title": true},
+                        {"tipo": "field", "listpos": "subtitle", "key": "tt.totaltiempo", "label": "Total Tiempo", "width": 80}
+                    ],
+                    "rowclick": "gotoTarea"
                 }
+
+
             }
         }
     },
-    "acciones": {},
-    "drawIf": {}
+    "acciones": {
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "save"
+        },
+        "gotoTarea": {
+            "action": "goto",
+            "prefix": "gt_tareas",
+            "serverAction": "gototarea"
+        }
+    }
 }

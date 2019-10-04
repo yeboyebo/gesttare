@@ -688,7 +688,11 @@ class gesttare(interna):
         response["url"] = "/gesttare/gt_timetracking/master"
         response["prefix"] = "mastertimetracking"
         response["filter"] = '{"tarea": "' + str(cursor.valueBuffer("idtarea")) + '"}'
-        return response
+        return responsez
+
+    def gesttare_gotoTarea(self, model):
+        url = '/gesttare/gt_tareas/' + str(model.idtarea) 
+        return url
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -800,6 +804,9 @@ class gesttare(interna):
 
     def verTrackingTarea(self, cursor):
         return self.ctx.gesttare_verTrackingTarea(cursor)
+
+    def gotoTarea(self, model):
+        return self.ctx.gesttare_gotoTarea(model)
 
 
 # @class_declaration head #

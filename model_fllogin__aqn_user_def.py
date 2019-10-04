@@ -4,6 +4,7 @@ from models.flgesttare import flgesttare_def
 import datetime
 from datetime import date
 import calendar
+import locale
 
 class gesttare(yblogin):
 
@@ -173,7 +174,7 @@ class gesttare(yblogin):
                 if "d_fecha" in oParam:
                     where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
 
-        where += " AND tt.idusuario = {}".format(usuario)
+        where += " AND u.idusuario = {}".format(usuario)
         data = []
         #q = qsatype.FLSqlQuery()
         #q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
@@ -182,9 +183,9 @@ class gesttare(yblogin):
         #q.setWhere(where + " GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto LIMIT 20")
 
         q = qsatype.FLSqlQuery()
-        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         q.setWhere(where + " GROUP BY t.codproyecto ORDER BY t.codproyecto LIMIT 20")
 
         if not q.exec_():
@@ -251,7 +252,7 @@ class gesttare(yblogin):
                 if "d_fecha" in oParam:
                     where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
 
-        where += " AND tt.idusuario = {}".format(usuario)
+        where += " AND u.idusuario = {}".format(usuario)
         data = []
         otros = 0
         #q = qsatype.FLSqlQuery()
@@ -261,9 +262,9 @@ class gesttare(yblogin):
         #q.setWhere("{} GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto".format(where))
 
         q = qsatype.FLSqlQuery()
-        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         q.setWhere("{} GROUP BY t.codproyecto ORDER BY t.codproyecto".format(where))
 
         if not q.exec_():
@@ -271,7 +272,7 @@ class gesttare(yblogin):
         if q.size() > 100:
             return []
 
-        total = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
+        total = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
         if total:
             total = flgesttare_def.iface.seconds_to_time(total.total_seconds(), all_in_hours=True)
@@ -319,6 +320,7 @@ class gesttare(yblogin):
         where = "1=1"
         usuario = qsatype.FLUtil.nameUser()
 
+        locale.setlocale(locale.LC_ALL, '')
         if not oParam:
             hoy = date.today()
             ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
@@ -354,9 +356,9 @@ class gesttare(yblogin):
 
         q = qsatype.FLSqlQuery()
         q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
-        q.setSelect("SUM(t.presupuesto), SUM(t.costetotal)")
+        q.setSelect("t.presupuesto, t.costetotal")
         q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere("{}".format(where))
+        q.setWhere("{} GROUP BY t.codproyecto".format(where))
 
         if not q.exec_():
             return []
@@ -370,16 +372,17 @@ class gesttare(yblogin):
         #    totalCostes += coste
 
         while q.next():
-            totalPresupuesto = q.value(0)
-            totalCostes = q.value(1)
+            totalPresupuesto += q.value(0)
+            totalCostes += q.value(1)
 
         if totalPresupuesto != None and totalCostes != None:
             rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
 
-        totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
+        #totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
+        totalPresupuesto=(locale.format('%.2f', totalPresupuesto, grouping=True, monetary=True))
         totalPresupuesto = str(totalPresupuesto) +" €"
 
-        rentabilidad = qsatype.FLUtil.roundFieldValue(rentabilidad, "gt_proyectos", "rentabilidad")
+        rentabilidad = (locale.format('%.2f', rentabilidad, grouping=True))
 
         if tiempo == None:
             tiempo = "00:00:00"
@@ -388,6 +391,41 @@ class gesttare(yblogin):
 
         data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Presupuesto", "value": totalPresupuesto, "style": presupuestoStyle}, {"name": "Rentabilidad", "value": rentabilidad, "style" :rentabilidadStyle}]
         return {"type": "labelInfo", "data": data}
+
+    def gesttare_queryGrid_pruebagrafico(self, model, filters):
+
+        where = "1=1"
+        usuario = qsatype.FLUtil.nameUser()
+        print("los filtros son: ",filters)
+
+        if not filters:
+            hoy = date.today()
+            ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+            where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
+        if filters:
+            if "[idusuario]" in filters and filters["[idusuario]"] != "":
+                usuario ="'{}'".format(filters["[idusuario]"])
+            if "[d_fecha]" in filters and filters["[d_fecha]"]=="" and "[h_fecha]" in filters and filters["[h_fecha]"]=="" and "[fecha]" in filters and filters["[fecha]"]=="":
+                hoy = date.today()
+                ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+                where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+            else:
+                if "[fecha]" in filters and filters["[fecha]"] != "":
+                    where += "AND tt.fecha = '{}'".format(filters["[fecha]"])
+                if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
+                    where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(filters["[d_fecha]"], filters["[h_fecha]"])
+
+        where += " AND a.idusuario = {}".format(usuario)
+
+        query = {}
+        query["tablesList"] = ("gt_proyectos, gt_tareas, gt_timetracking, aqn_user")
+        query["select"] = ("t.idtarea, a.usuario, tt.totaltiempo, t.nombre, tt.fecha, p.nombre")
+        query["from"] = ("aqn_user a INNER JOIN gt_particproyecto pp ON a.idusuario = pp.idusuario INNER JOIN gt_proyectos p ON pp.codproyecto = p.codproyecto INNER JOIN gt_tareas t ON p.codproyecto = t.codproyecto INNER JOIN gt_timetracking tt ON t.idtarea = tt.idtarea")
+        query["where"] = "{} AND tt.totaltiempo < (SELECT MAX(tt.totaltiempo) FROM gt_timetracking tt)".format(where)
+        query["orderby"] = (" tt.totaltiempo DESC")
+
+        return query
+
 
     def gesttare_calculaGraficosAnalisis(self, oParam):
         response = []
@@ -458,4 +496,7 @@ class gesttare(yblogin):
 
     def cajasinfo(self, oParam):
         return self.ctx.gesttare_cajasinfo(oParam)
+
+    def queryGrid_pruebagrafico(self, model, filters):
+        return self.ctx.gesttare_queryGrid_pruebagrafico(model, filters)
 

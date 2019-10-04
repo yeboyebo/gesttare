@@ -41,3 +41,7 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
         print("???????????????")
         return form.iface.getAnalisisGraphic(oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_pruebagrafico(model, filters):
+        return form.iface.queryGrid_pruebagrafico(model, filters)
+
