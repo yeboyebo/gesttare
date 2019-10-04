@@ -32,6 +32,10 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def field_nombre(self):
         return form.iface.field_nombre(self)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def verTarea(self, cursor):
+        return form.iface.verTarea(self, cursor)
+
     class Meta:
         proxy = True
 

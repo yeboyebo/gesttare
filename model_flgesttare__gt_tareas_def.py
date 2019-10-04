@@ -29,6 +29,12 @@ class gesttare(interna):
         return 30
 
     def gesttare_getForeignFields(self, model, template=None):
+        if template == "renegociacion":
+            return [
+                {'verbose_name': 'renegociaProyecto', 'func': 'ren_field_proyecto'},
+                {'verbose_name': 'renegociacolorfechavencimiento', 'func': 'ren_color_fecha'},
+                {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega'}
+            ]
         fields = [
             {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
@@ -59,13 +65,11 @@ class gesttare(interna):
         return timetracking.getIface().seconds_to_time(seconds, total, all_in_hours)
 
     def gesttare_actNuevoComentario(self, model, oParam):
-        print("aqui insertamos comentario", oParam)
-        print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
+        # print("aqui insertamos comentario", oParam)
+        # print(u"gt_comentarios", [u"idtarea", u"fecha", u"hora", u"comentario", u"idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 1])
         # TODO De donde sacamos idusuario, al crear usuario en aplicacion acreamos gt_usuario?
         nombreUsuario = qsatype.FLUtil.nameUser()
-        print("Usuario: ", nombreUsuario)
         idUsuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"'"))
-        print("idusuario: ", idUsuario)
         if not idUsuario:
             print("No existe el usuario")
             return False
@@ -138,6 +142,10 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_ren_field_proyecto(self, model):
+        nombreProy = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model["gt_tareas.codproyecto"])) or ""
+        return nombreProy
+
     def gesttare_field_proyecto(self, model):
         nombreProy = ""
         try:
@@ -177,6 +185,20 @@ class gesttare(interna):
         if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
             return "fcDanger"
         if model.fechavencimiento and model.fechaentrega and model.fechaentrega < model.fechavencimiento:
+            return "fcWarning"
+        return ""
+
+    def gesttare_ren_color_fecha(self, model):
+        if model["gt_tareas.fechavencimiento"] and str(model["gt_tareas.fechavencimiento"]) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+        if model["gt_tareas.fechavencimiento"] and model["gt_tareas.fechaentrega"] and model["gt_tareas.fechaentrega"] < model["gt_tareas.fechavencimiento"]:
+            return "fcWarning"
+        return ""
+
+    def gesttare_ren_color_fechaentrega(self, model):
+        if model["gt_tareas.fechaentrega"] and str(model["gt_tareas.fechaentrega"]) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+        if model["gt_tareas.fechavencimiento"] and model["gt_tareas.fechaentrega"] and model["gt_tareas.fechaentrega"] < model["gt_tareas.fechavencimiento"]:
             return "fcWarning"
         return ""
 
@@ -694,6 +716,18 @@ class gesttare(interna):
         url = '/gesttare/gt_tareas/' + str(model.idtarea) 
         return url
 
+    def gesttare_queryGrid_renegociacion(self, model):
+        usuario = qsatype.FLUtil.nameUser()
+        query = {}
+        query["tablesList"] = ("gt_tareas")
+        query["select"] = ("gt_tareas.idtarea, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.fechaentrega, gt_tareas.nombre")
+        # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
+        query["from"] = ("gt_tareas")
+        query["where"] = ("gt_tareas.idusuario = '" + str(usuario)  + "' AND gt_tareas.resuelta = false AND (gt_tareas.fechavencimiento < '" + qsatype.Date().toString()[:10] + "' OR gt_tareas.fechaentrega < '" + qsatype.Date().toString()[:10] + "')")
+        query["orderby"] = ("gt_tareas.fechavencimiento, gt_tareas.fechavencimiento")
+        query["limit"] = 50
+        return query
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -733,6 +767,9 @@ class gesttare(interna):
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
 
+    def ren_field_proyecto(self, model):
+        return self.ctx.gesttare_ren_field_proyecto(model)
+
     def field_usuario(self, model):
         return self.ctx.gesttare_field_usuario(model)
 
@@ -741,6 +778,12 @@ class gesttare(interna):
 
     def color_fechaentrega(self, model):
         return self.ctx.gesttare_color_fechaentrega(model)
+
+    def ren_color_fecha(self, model):
+        return self.ctx.gesttare_ren_color_fecha(model)
+
+    def ren_color_fechaentrega(self, model):
+        return self.ctx.gesttare_ren_color_fechaentrega(model)
 
     def color_nombre(self, model):
         return self.ctx.gesttare_color_nombre(model)
@@ -808,6 +851,8 @@ class gesttare(interna):
     def gotoTarea(self, model):
         return self.ctx.gesttare_gotoTarea(model)
 
+    def queryGrid_renegociacion(self, model):
+        return self.ctx.gesttare_queryGrid_renegociacion(model)
 
 # @class_declaration head #
 class head(gesttare):

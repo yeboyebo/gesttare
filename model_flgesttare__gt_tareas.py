@@ -53,6 +53,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def field_proyecto(self):
         return form.iface.field_proyecto(self)
 
+    def ren_field_proyecto(self):
+        return form.iface.ren_field_proyecto(self)
+
     def field_usuario(self):
         return form.iface.field_usuario(self)
 
@@ -61,6 +64,12 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def color_fechaentrega(self):
         return form.iface.color_fechaentrega(self)
+
+    def ren_color_fecha(self):
+        return form.iface.ren_color_fecha(self)
+
+    def ren_color_fechaentrega(self):
+        return form.iface.ren_color_fechaentrega(self)
 
     def color_nombre(self):
         return form.iface.color_nombre(self)
@@ -123,6 +132,8 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def gototarea(self):
         return form.iface.gotoTarea(self)
 
+    def queryGrid_renegociacion(model):
+        return form.iface.queryGrid_renegociacion(model)
 
 
 # @class_declaration gt_tareas #

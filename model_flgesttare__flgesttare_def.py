@@ -219,7 +219,7 @@ class gesttare(interna):
 
         if cursor.table() == u"gt_comentarios" and not idActualizacion:
             idActualizacion = curActualiz.valueBuffer("idactualizacion")
-        if (cursor.table() == u"gt_tareas") or (cursor.table() == u"gt_partictarea"):
+        if ((cursor.table() == u"gt_tareas") or (cursor.table() == u"gt_partictarea")) and not idActualizacion:
             idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", "idtarea = '{}' AND tipo = '{}'".format(cursor.valueBuffer(u"idtarea"), tipo))
 
         if not idActualizacion:

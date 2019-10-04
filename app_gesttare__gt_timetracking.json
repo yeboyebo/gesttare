@@ -7,6 +7,38 @@
             "className": "gbTareas gbTareasBox ",
             "style": {},
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "icon": "close",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "gotoTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_tareas",
+                    "iconurl": "/static/dist/img/icons/clipboards.svg",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "gotoTarea"
+                    }
+                },
+                "separator0": {
+                    "componente": "YBSeparator"
+                },
                 "ttForm": {
                     "prefix": "gt_timetracking",
                     "componente": "YBForm",
@@ -39,5 +71,14 @@
             }
         }
     },
-    "acciones": {}
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
+        "gotoTarea": {
+            "action": "goto",
+            "prefix": "gt_timetracking",
+            "serverAction": "verTarea"
+        }
+    }
 }

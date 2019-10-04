@@ -6,6 +6,7 @@
         "gotoNotificacions": {
             "action": "url",
             "icon": "notifications",
+            "visible": false,
             "url": "gesttare/gt_actualizaciones/master"
         },
         "startControlHorario": {
@@ -31,17 +32,6 @@
             "prefix": "gt_controlhorario",
             "serverAction": "pause",
             "success": [{"slot": "refrescar"}]
-        }
-    },
-    "title": {
-        "anotarButton": {
-            "componente": "YBButton",
-            "buttonType": "raised",
-            "label": "ANOTAR",
-            "action": "goto",
-            "icon": "add",
-            "prefix": "gt_tareas",
-            "serverAction": "gotoNewRecordAnotacion"
         }
     },
     "items": [
