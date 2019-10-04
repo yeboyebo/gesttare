@@ -126,9 +126,10 @@
     },
     "acciones": {
         "validarDia": {
+            "prefix": "gt_controldiario",
             "action": "legacy",
-            "serverAction": "validar_admin",
-            "icon": "icon"
+            "serverAction": "validar",
+            "icon": "check"
         },
         "validar_admin": {
             "action": "legacy",

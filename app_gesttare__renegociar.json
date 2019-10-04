@@ -1,0 +1,84 @@
+{
+    "querystring": {
+        "p_l": 1
+    },
+    "schema": {
+        "renegociacion": {
+            "query": {
+                "p_l": 50
+            }
+        }
+    },
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": " ",
+            "style": {},
+            "layout": {
+                "masterTareas": {
+                    "componente": "YBGrid",
+                    "type": "query",
+                    "prefix": "renegociacion",
+                    "visible": false,
+                    "cansavefilter": false,
+                    "buscador": false,
+                    "filter": false,
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "complete",
+                            "label": "Completar tarea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Borrar",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "title": true, "width": 350, "link": "gt_tareas.idtarea"},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "renegociaProyecto", "label": "Proyecto", "width": 120},
+                        {"tipo": "field", "listpos": "secondaryitem", "color": "renegociacolorfechavencimiento", "key": "gt_tareas.fechavencimiento", "width": 80},
+                        {"tipo": "field", "key": "gt_tareas.fechaentrega", "color": "renecogiacolorfechaentrega", "width": 80},
+                        {"tipo": "field", "listpos": "body", "key": "gt_tareas.codestado", "width": 100}
+                    ],
+                    "rowclick": "",
+                    "rowlistclick": "link",
+                    "accionesGrid": [{
+                        "key": "getReport",
+                        "label": "Genera XLS",
+                        "success": []
+                    }]
+                }
+            }
+        }
+    },
+    "acciones": {
+        "changefechavencimiento": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "changefechavencimiento",
+            "icon": "alarm"
+        },
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "save"
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete",
+            "msg": "Se eliminaran todos los comentarios y registros de tiempo"
+        },
+        "complete": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "completar_tarea",
+            "icon": "check"
+        }
+    }
+}

@@ -291,10 +291,15 @@ class gesttare(yblogin):
             if i > 8:
                 otros += valor
             else:
-                data.append({"name": q.value(0), "value": 100*(valor/total)})
+                porcentaje = 0
+                if total != 0 and total != None:
+                    porcentaje = 100*(valor/total)
+                data.append({"name": q.value(0), "value": porcentaje})
             i = i+1
             if i == q.size() and otros > 0:
-                data.append({"name": "Otros Proyectos", "value": 100*(otros/total)})
+                if total != 0 and total != None:
+                    porcentaje = 100*(otros/total)
+                data.append({"name": "Otros Proyectos", "value": porcentaje})
 
         return {"type": "pieChart", "data": data, "innerText": False}
 
@@ -373,7 +378,7 @@ class gesttare(yblogin):
             totalPresupuesto = q.value(0)
             totalCostes = q.value(1)
 
-        if totalPresupuesto != None and totalCostes != None:
+        if totalPresupuesto != None and totalPresupuesto != 0 and totalCostes != None:
             rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
 
         totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")

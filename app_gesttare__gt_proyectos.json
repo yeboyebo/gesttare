@@ -205,6 +205,9 @@
                             },
                             "title": "Horas Invertidas",
                             "text": "%yb1",
+                            "action": {
+                                "key": "verTrackingProyecto"
+                            },
                             "params": [
                                 {"type": "calc", "key": "horasinvertidas"}
                             ]
@@ -293,6 +296,11 @@
     "acciones": {
         "acctionVolver": {
             "action": "return"
+        },
+        "verTrackingProyecto": {
+            "action": "goto",
+            "prefix": "gt_proyectos",
+            "serverAction": "verTrackingProyecto"
         },
         "actionEmail": {
             "action": "legacy",

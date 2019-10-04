@@ -426,6 +426,13 @@ class gesttare(interna):
         response["filter"] = '{"codproyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
         return response
 
+    def gesttare_verTrackingProyecto(self, cursor):
+        response = {}
+        response["url"] = "/gesttare/gt_timetracking/master"
+        response["prefix"] = "mastertimetracking"
+        response["filter"] = '{"codproyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
+        return response
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -488,6 +495,9 @@ class gesttare(interna):
 
     def vertareasproyecto(self, cursor):
         return self.ctx.gesttare_vertareasproyecto(cursor)
+
+    def verTrackingProyecto(self, cursor):
+        return self.ctx.gesttare_verTrackingProyecto(cursor)
 
 
 # @class_declaration head #

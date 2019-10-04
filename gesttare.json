@@ -369,6 +369,14 @@
             {
                 "path": "assets/dist/img/icons/",
                 "name": "tarea.svg"
+            },
+            {
+                "name": "clipboards.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__renegociar.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [

@@ -250,6 +250,10 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_verTarea(self, model, cursor):
+        url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
+        return url
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -288,6 +292,9 @@ class gesttare(interna):
 
     def field_nombre(self, model):
         return self.ctx.gesttare_field_nombre(model)
+
+    def verTarea(self, model, cursor):
+        return self.ctx.gesttare_verTarea(model, cursor)
 
 
 # @class_declaration head #
