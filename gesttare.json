@@ -452,6 +452,10 @@
             {
                 "path": "models/fllogin/",
                 "name": "model_fllogin__models.py"
+            },
+            {
+                "path": "apps/portal/viewset/",
+                "name": "app_portal__views_portal.py"
             }
         ]
     }

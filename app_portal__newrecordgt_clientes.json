@@ -15,13 +15,16 @@
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "create",
+                    "label": "Nuevo cliente",
                     "successmsg": "Cliente creado",
                     "success": [{"slot": "return"}],
                     "groupbox": "acordeon",
                     "return": true,
+                    "saveEdit": true,
+                    "saveReturn": true,
                     "fields": {
-                        "gb__principal": {
-                            "title": "Principal",
+                        "gb__": {
+                            "title": "",
                             "fields": {
                                 "nombre": {}
                             }

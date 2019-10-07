@@ -7,6 +7,21 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_clientes",
+                    "icon": "close",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -16,11 +31,15 @@
                     "class": "claseGrid",
                     "submit": "update",
                     "success": [],
+                    "label": "Información de clientes",
+                    "icon": "info",
                     "groupbox": "acordeon",
                     "return": true,
+                    "saveEdit": true,
+                    "saveReturn": true,
                     "fields": {
-                        "gb__principal": {
-                            "title": "Principal",
+                        "gb__": {
+                            "title": "",
                             "fields": {
                                 "nombre": {}
                             }
@@ -31,6 +50,9 @@
         }
     },
     "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
         "accessControl": {
             "action": "goto",
             "prefix": "auth_user",

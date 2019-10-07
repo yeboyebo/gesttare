@@ -710,7 +710,7 @@ class gesttare(interna):
         response["url"] = "/gesttare/gt_timetracking/master"
         response["prefix"] = "mastertimetracking"
         response["filter"] = '{"tarea": "' + str(cursor.valueBuffer("idtarea")) + '"}'
-        return responsez
+        return response
 
     def gesttare_gotoTarea(self, model):
         url = '/gesttare/gt_tareas/' + str(model.idtarea) 

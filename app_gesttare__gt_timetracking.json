@@ -13,6 +13,7 @@
                     "icon": "close",
                     "className": "floatRight",
                     "buttonType": "icon",
+                    "title": "Volver",
                     "style": {
                         "marginTop": "5px",
                         "marginRight": "5px"
@@ -29,6 +30,7 @@
                         "marginTop": "5px"
                     },
                     "prefix": "gt_tareas",
+                    "title": "Ir a la tarea relacionada",
                     "iconurl": "/static/dist/img/icons/clipboards.svg",
                     "className": "floatRight",
                     "buttonType": "icon",
@@ -44,6 +46,8 @@
                     "componente": "YBForm",
                     "class": "claseGrid",
                     "submit": "update",
+                    "label": "Registro de tiempo",
+                    "icon": "info",
                     "saveReturn": true,
                     "return": true,
                     "success": [{"slot": "return"}],

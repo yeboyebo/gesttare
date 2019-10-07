@@ -18,6 +18,8 @@
                     "icon": "info",
                     "label": "Nuevo proyecto",
                     "return": true,
+                    "saveEdit": true,
+                    "saveReturn": true,
                     "successmsg": "Proyecto creado",
                     "success": [{"slot": "return"}],
                     "fields": {

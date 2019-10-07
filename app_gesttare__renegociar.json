@@ -2,17 +2,12 @@
     "querystring": {
         "p_l": 1
     },
-    "schema": {
-        "renegociacion": {
-            "query": {
-                "p_l": 50
-            }
-        }
-    },
+    "schema": {},
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": " ",
+            "label": "Renegociación",
             "style": {},
             "layout": {
                 "masterTareas": {

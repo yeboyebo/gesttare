@@ -283,7 +283,7 @@ class gesttare(interna):
         asunto = "[dailyjob] Has recibido una invitación para unirte a un proyecto"
 
         # connection = notifications.get_connection("smtp.gmail.com", "todos.yeboyebo@gmail.com", "555zapato", "465", "SSL")Zv3-hZx4NB2eurm
-        connection = notifications.get_connection("smtp.zoho.com", "soporte@dailyjob.io", "060Sh8FLrYvs", "465", "SSL")
+        connection = notifications.get_connection("smtp.zoho.com", "soporte@dailyjob.io", "mjEmG9u5fGd1", "465", "SSL")
         response = notifications.sendMail(connection, "Soporte dailyjob<soporte@dailyjob.io>", asunto, cuerpo, [email])
         if not response:
             return False
