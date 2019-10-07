@@ -98,19 +98,17 @@ html, #parent-container{
 }
 .controlTiempoButton > .YBButtonRaised{
     background-color: orange;
-    border-radius: 20px;
-    max-height: 32px;
+    border-radius: 5px;
     border: 0px;
     font-weight: bold;
     position: relative;
-    padding: 4px 10px;
+    padding: 5px 10px;
     margin: 10px 1px;
     text-transform: uppercase;
     letter-spacing: 0;
     will-change: box-shadow, transform;
-    min-height: 35px;
-    max-height: 35px;
-    border-radius: 20px;
+    min-height: 32px;
+    max-height: 32px;
 }
 
 .controlTiempoLabel {
