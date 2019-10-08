@@ -135,6 +135,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def queryGrid_renegociacion(model):
         return form.iface.queryGrid_renegociacion(model)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def getParticipantesProyecto(self, oParam):
+        return form.iface.getParticipantesProyecto(self, oParam)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

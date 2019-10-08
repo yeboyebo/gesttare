@@ -555,7 +555,8 @@ class gesttare(interna):
                 {
                     "componente": "YBFieldDB",
                     "prefix": "otros",
-                    "rel": "aqn_user",
+                    "rel": "gt_tareas",
+                    "calculatepk": False,
                     "style": {
                         "width": "100%"
                     },
@@ -563,7 +564,7 @@ class gesttare(interna):
                     "verbose_name": "Participantes",
                     "label": "Participantes",
                     "key": "idusuario",
-                    "function": "getParticProyectosUsu",
+                    "function": "getParticipantesProyecto",
                     "desc": "usuario",
                     "validaciones": None,
                     "required": False,
@@ -615,10 +616,12 @@ class gesttare(interna):
 
     def gesttare_getFilters(self, model, name, template=None):
         filters = []
+        usuario = qsatype.FLUtil.nameUser()
+        if name == "renegociarusuario":
+            return [{'criterio': 'idusuario__exact', 'valor': usuario}, {'criterio': 'fechavencimiento__lt', 'valor': str(qsatype.Date().toString()[:10])}]
         if name == 'proyectosusuario':
             # proin = "("
             proin = []
-            usuario = qsatype.FLUtil.nameUser()
             # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
             # curProyectos.select("idusuario = '" + str(usuario) + "'")
             # while curProyectos.next():
@@ -728,11 +731,35 @@ class gesttare(interna):
         query["limit"] = 50
         return query
 
+    def gesttare_getParticipantesProyecto(self, model, oParam):
+        data = []
+        usuario = qsatype.FLUtil.nameUser()
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_tareas, gt_particproyecto, aqn_user")
+        q.setSelect(u"p.idusuario, u.usuario")
+        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
+        q.setWhere(u"t.idtarea = '" + str(model.idtarea) + "' ORDER BY u.usuario LIMIT 7")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"idusuario": q.value(0), "usuario": q.value(1)})
+        return data
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
+
+    def getParticipantesProyecto(self, model, oParam):
+        return self.ctx.gesttare_getParticipantesProyecto(model, oParam)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()

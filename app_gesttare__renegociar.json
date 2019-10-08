@@ -1,6 +1,10 @@
 {
     "querystring": {
-        "p_l": 1
+        "p_l": 50,
+        "p_c": true,
+        "o_1": "fechavencimiento",
+        "s_resuelta__exact": false,
+        "f_renegociarusuario": null
     },
     "schema": {},
     "layout": {
@@ -13,8 +17,7 @@
                 "masterTareas": {
                     "componente": "YBGrid",
                     "type": "query",
-                    "prefix": "renegociacion",
-                    "visible": false,
+                    "prefix": "gt_tareas",
                     "cansavefilter": false,
                     "buscador": false,
                     "filter": false,
@@ -35,19 +38,15 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "title": true, "width": 350, "link": "gt_tareas.idtarea"},
-                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "renegociaProyecto", "label": "Proyecto", "width": 120},
-                        {"tipo": "field", "listpos": "secondaryitem", "color": "renegociacolorfechavencimiento", "key": "gt_tareas.fechavencimiento", "width": 80},
-                        {"tipo": "field", "key": "gt_tareas.fechaentrega", "color": "renecogiacolorfechaentrega", "width": 80},
-                        {"tipo": "field", "listpos": "body", "key": "gt_tareas.codestado", "width": 100}
+                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 350, "link": true},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "title": true, "avatar": true},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90, "title": true, "link": "codproyecto"},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
+                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 80},
+                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
                     ],
                     "rowclick": "",
-                    "rowlistclick": "link",
-                    "accionesGrid": [{
-                        "key": "getReport",
-                        "label": "Genera XLS",
-                        "success": []
-                    }]
+                    "rowlistclick": "link"
                 }
             }
         }

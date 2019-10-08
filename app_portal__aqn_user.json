@@ -19,7 +19,7 @@
             "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/fields/costehora",
             "value": {
                 "idresponsable": {
-                    "visible": true,
+                    "visible": false,
                     "tipo": 55,
                     "showpk": false,
                     "tofield": "idusuario",
