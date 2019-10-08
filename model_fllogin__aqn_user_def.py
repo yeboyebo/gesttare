@@ -153,7 +153,6 @@ class gesttare(yblogin):
     def gesttare_graficoproyectosportiempo(self, oParam):
         where = "1=1 "
         usuario = qsatype.FLUtil.nameUser()
-        print(oParam)
         if not oParam:
             hoy = date.today()
             ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
@@ -186,7 +185,7 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere(where + " GROUP BY t.codproyecto ORDER BY t.codproyecto LIMIT 20")
+        q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY t.codproyecto LIMIT 20")
 
         if not q.exec_():
             return []
@@ -231,7 +230,6 @@ class gesttare(yblogin):
     def gesttare_graficohorasporproyecto(self, oParam):
         where = "1=1 "
         usuario = qsatype.FLUtil.nameUser()
-        print(oParam)
         if not oParam:
             hoy = date.today()
             ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
@@ -327,6 +325,7 @@ class gesttare(yblogin):
         usuario = qsatype.FLUtil.nameUser()
 
         locale.setlocale(locale.LC_ALL, '')
+
         if not oParam:
             hoy = date.today()
             ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
@@ -385,24 +384,50 @@ class gesttare(yblogin):
             rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
 
         #totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
-        totalPresupuesto=(locale.format('%.2f', totalPresupuesto, grouping=True, monetary=True))
+        if totalPresupuesto < 100:
+            totalPresupuesto = (locale.format('%.2f', totalPresupuesto, grouping=True, monetary=True))
+        elif totalPresupuesto > 100 and totalPresupuesto < 1000:
+            totalPresupuesto = (locale.format('%.0f', totalPresupuesto, grouping=True, monetary=True))
+        elif totalPresupuesto > 1000 and totalPresupuesto < 10000:
+            totalPresupuesto = (locale.format('%.0f', totalPresupuesto, grouping=True, monetary=True))
+        elif totalPresupuesto > 10000 and totalPresupuesto < 100000:
+            totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000, grouping=True, monetary=True))
+            totalPresupuesto = str(totalPresupuesto) + " K"
+        elif totalPresupuesto > 100000 and totalPresupuesto < 1000000:
+            totalPresupuesto = (locale.format('%.0f', totalPresupuesto/1000, grouping=True, monetary=True))
+            totalPresupuesto = str(totalPresupuesto) + " K"
+        # elif totalPresupuesto > 1000000 and totalPresupuesto < 10000000:
+        #     totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000000, grouping=True, monetary=True))
+        #     totalPresupuesto = str(totalPresupuesto) + " M"
+        else:
+            totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000000, grouping=True, monetary=True))
+            totalPresupuesto = str(totalPresupuesto) + " M"
         totalPresupuesto = str(totalPresupuesto) +" €"
 
         rentabilidad = (locale.format('%.2f', rentabilidad, grouping=True))
 
+
         if tiempo == None:
-            tiempo = "00:00:00"
+            tiempo = "00:00"
         else:
             tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
+            tiempo = str(tiempo)
+            if len(tiempo) == 8:
+                tiempo = tiempo[0:5]
+            elif len(tiempo) == 9:
+                tiempo = tiempo[0:6]
+            else:
+                tiempo = tiempo[0:4]
+
+
 
         data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Presupuesto", "value": totalPresupuesto, "style": presupuestoStyle}, {"name": "Rentabilidad", "value": rentabilidad, "style" :rentabilidadStyle}]
         return {"type": "labelInfo", "data": data}
 
-    def gesttare_queryGrid_pruebagrafico(self, model, filters):
+    def gesttare_queryGrid_tareasMasTiempo(self, model, filters):
 
         where = "1=1"
         usuario = qsatype.FLUtil.nameUser()
-        print("los filtros son: ",filters)
 
         if not filters:
             hoy = date.today()
@@ -411,7 +436,7 @@ class gesttare(yblogin):
         if filters:
             if "[idusuario]" in filters and filters["[idusuario]"] != "":
                 usuario ="'{}'".format(filters["[idusuario]"])
-            if "[d_fecha]" in filters and filters["[d_fecha]"]=="" and "[h_fecha]" in filters and filters["[h_fecha]"]=="" and "[fecha]" in filters and filters["[fecha]"]=="":
+            if "[d_fecha]" in filters and filters["[d_fecha]"] == "" and "[h_fecha]" in filters and filters["[h_fecha]"] == "" and "[fecha]" in filters and filters["[fecha]"] == "":
                 hoy = date.today()
                 ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
                 where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
@@ -503,6 +528,6 @@ class gesttare(yblogin):
     def cajasinfo(self, oParam):
         return self.ctx.gesttare_cajasinfo(oParam)
 
-    def queryGrid_pruebagrafico(self, model, filters):
-        return self.ctx.gesttare_queryGrid_pruebagrafico(model, filters)
+    def queryGrid_tareasMasTiempo(self, model, filters):
+        return self.ctx.gesttare_queryGrid_tareasMasTiempo(model, filters)
 

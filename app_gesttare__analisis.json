@@ -4,7 +4,7 @@
         "grafico": {
             "custom": "generaAnalisisGraphic"
         },
-        "pruebagrafico": {
+        "tareasMasTiempo": {
             "query": {
                 "p_c": true,
                 "p_l": 10
@@ -24,7 +24,7 @@
                         "graphicSeparator": {
                             "componente": "YBSeparator"
                         },
-                        "pruebagraficos": {
+                        "graficosAnalisis": {
                             "label": "Análisis",
                             "componente": "YBChart",
                             "filter": {
@@ -35,7 +35,9 @@
                                     "key": "idusuario",
                                     "desc": "usuario",
                                     "rel": "aqn_user",
-                                    "label": "Usuario"
+                                    "showpk": false,
+                                    "label": "Usuario",
+                                    "function": "getParticCompaniaUsu"
                                 },
                                 "fecha": {
                                     "filterType": "custom",
@@ -56,7 +58,7 @@
                 "gridTareasMasTiempo": {
                     "componente": "YBGrid",
                     "type": "query",
-                    "prefix": "pruebagrafico",
+                    "prefix": "tareasMasTiempo",
                     "autofilter": false,
                     "cansavefilter": false,
                     "paginacion": false,
@@ -71,7 +73,9 @@
                                 "key": "idusuario",
                                 "desc": "usuario",
                                 "rel": "aqn_user",
-                                "label": "Usuario"
+                                "showpk": false,
+                                "label": "Usuario",
+                                "function": "getParticCompaniaUsu"
                             },
                             "fecha": {
                                 "filterType": "custom",
