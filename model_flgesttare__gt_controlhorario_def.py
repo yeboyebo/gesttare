@@ -32,8 +32,6 @@ class gesttare(interna):
         curDiario = qsatype.FLSqlCursor(u"gt_controldiario")
         curDiario.select(ustr(u"fecha = '", fecha, u"' AND idusuario = '", user_name, "'"))
         if curDiario.next():
-            print("este es el start")
-            print("hay que ver que no haya un tramo en la hora a la que quieres empezar a trackear")
             curHorario = qsatype.FLSqlCursor(u"gt_controlhorario")
             curHorario.select(ustr(u"idc_diario = '", curDiario.valueBuffer("idc_diario"), u"'"))
             while curHorario.next():

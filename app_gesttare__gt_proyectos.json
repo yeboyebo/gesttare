@@ -282,7 +282,6 @@
 
                             },
                             "layout": {
-
                                 "pruebagrafico": {
                                     "componente": "YBChart",
                                     "d3": "pieChart",
