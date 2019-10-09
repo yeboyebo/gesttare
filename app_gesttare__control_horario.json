@@ -150,6 +150,7 @@
             "prefix": "gt_controldiario",
             "serverAction": "gotoNuevoTramoFecha",
             "icon": "add_circle",
+            "title": "Indica fecha",
             "params": [
                 {
                     "tipo": 26,

@@ -142,10 +142,29 @@ html, #parent-container{
 }
 
 .anotarButton .YBButtonPrimary.YBButtonRaised{
-      width: 149px;
-      height: 40px;
-      border-radius: 8px;
-      background-image: linear-gradient(to bottom, #89e3dc, #4abed8);
+    width: 149px;
+    height: 40px;
+    border-radius: 8px;
+    background-image: linear-gradient(to bottom, #89e3dc, #4abed8);
+}
+
+.anotarButtonLabel{
+    margin-top: 5px;
+}
+
+.modalPie .YBButtonRaised{
+    width: 176px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #50d2ce;
+}
+
+.modalPie .YBButtonRaised .YBButtonLabel{
+    margin-left: 20%;
+}
+
+.modalContent.modalScrool{
+
 }
 
 @media (min-width: 1303px) {
