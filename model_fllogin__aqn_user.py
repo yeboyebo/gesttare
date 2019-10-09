@@ -44,3 +44,6 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
     def queryGrid_tareasMasTiempo(model, filters):
         return form.iface.queryGrid_tareasMasTiempo(model, filters)
 
+    def drawif_idusuariofilter(cursor):
+        return form.iface.drawif_idusuariofilter(cursor)
+

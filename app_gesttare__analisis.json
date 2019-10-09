@@ -109,5 +109,13 @@
             "prefix": "gt_tareas",
             "serverAction": "gototarea"
         }
+    },
+    "drawIf": {
+        "graficosAnalisis": {
+            "filter_idusuario": "drawif_idusuariofilter"
+        },
+        "gridTareasMasTiempo": {
+            "filter_idusuario": "drawif_idusuariofilter"
+        }
     }
 }
