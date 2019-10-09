@@ -144,6 +144,8 @@ class gesttare(yblogin):
     def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
         usuario = qsatype.FLUtil.nameUser()
         isadmin = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if template == "analisis":
+            return True
         if pk == usuario:
             return True
         elif not isadmin and accion is None:
@@ -454,6 +456,13 @@ class gesttare(yblogin):
     def gesttare_getAnalisisGraphic(self, oParam):
         return self.iface.calculaGraficosAnalisis(oParam)
 
+    def gesttare_drawif_idusuariofilter(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        isSuperuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(usuario))
+        if not isSuperuser:
+            return "hidden"
+        return True
+
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -508,4 +517,7 @@ class gesttare(yblogin):
 
     def queryGrid_tareasMasTiempo(self, model, filters):
         return self.ctx.gesttare_queryGrid_tareasMasTiempo(model, filters)
+
+    def drawif_idusuariofilter(self, cursor):
+        return self.ctx.gesttare_drawif_idusuariofilter(cursor)
 

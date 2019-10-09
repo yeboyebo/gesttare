@@ -59,7 +59,7 @@
         "separator": {
             "componente": "YBSeparator"
         },
-        "queryGridcontroldiario": {
+        "controldiario": {
             "componente": "YBGrid",
             "type": "query",
             "prefix": "control_diario",
@@ -191,7 +191,7 @@
             "vistamensual": "drawif_botonmensual"
         },
         "controldiario": {
-            "filter_idusuario": "drawif_idusuariofilter"
+            "filter_gt_controldiario.idusuario": "drawif_idusuariofilter"
         },
         "controlmensual": {
             "filter_idusuario": "drawif_idusuariofilter"
