@@ -250,27 +250,29 @@ class gesttare(yblogin):
                 if "d_fecha" in oParam:
                     where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
 
-        where += " AND tt.idusuario = {}".format(usuario)
+        where += " AND u.idusuario = {}".format(usuario)
         data = []
         otros = 0
-        #q = qsatype.FLSqlQuery()
-        #q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        #q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
-        #q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        #q.setWhere("{} GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto".format(where))
-
         q = qsatype.FLSqlQuery()
-        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         q.setWhere("{} GROUP BY t.codproyecto ORDER BY t.codproyecto".format(where))
+
+        # q = qsatype.FLSqlQuery()
+        # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        # q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
+        # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        # q.setWhere("{} GROUP BY t.codproyecto ORDER BY t.codproyecto".format(where))
 
         if not q.exec_():
             return []
         if q.size() > 100:
             return []
 
-        total = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
+        # total = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
+
+        total = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "SUM(tt.totaltiempo)", where)
 
         if total:
             total = flgesttare_def.iface.seconds_to_time(total.total_seconds(), all_in_hours=True)
@@ -346,24 +348,28 @@ class gesttare(yblogin):
                 if "d_fecha" in oParam:
                     where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
 
-        where += " AND tt.idusuario = {}".format(usuario)
-        tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
+        # where += " AND tt.idusuario = {}".format(usuario)
+        # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
+
+        where += " AND u.idusuario = {}".format(usuario)
+        # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
+        tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "SUM(tt.totaltiempo)", where)
 
         totalPresupuesto = 0
         totalCostes = 0
         rentabilidad = 0
 
-        #q = qsatype.FLSqlQuery()
-        #q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        #q.setSelect("DISTINCT(t.presupuesto), t.costetotal")
-        #q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        #q.setWhere("{}".format(where))
-
         q = qsatype.FLSqlQuery()
-        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.presupuesto, t.costetotal")
-        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         q.setWhere("{} GROUP BY t.codproyecto".format(where))
+
+        # q = qsatype.FLSqlQuery()
+        # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
+        # q.setSelect("t.presupuesto, t.costetotal")
+        # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        # q.setWhere("{} GROUP BY t.codproyecto".format(where))
 
         if not q.exec_():
             return []
@@ -384,40 +390,12 @@ class gesttare(yblogin):
             rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
 
         #totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
-        if totalPresupuesto < 100:
-            totalPresupuesto = (locale.format('%.2f', totalPresupuesto, grouping=True, monetary=True))
-        elif totalPresupuesto > 100 and totalPresupuesto < 1000:
-            totalPresupuesto = (locale.format('%.0f', totalPresupuesto, grouping=True, monetary=True))
-        elif totalPresupuesto > 1000 and totalPresupuesto < 10000:
-            totalPresupuesto = (locale.format('%.0f', totalPresupuesto, grouping=True, monetary=True))
-        elif totalPresupuesto > 10000 and totalPresupuesto < 100000:
-            totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000, grouping=True, monetary=True))
-            totalPresupuesto = str(totalPresupuesto) + " K"
-        elif totalPresupuesto > 100000 and totalPresupuesto < 1000000:
-            totalPresupuesto = (locale.format('%.0f', totalPresupuesto/1000, grouping=True, monetary=True))
-            totalPresupuesto = str(totalPresupuesto) + " K"
-        # elif totalPresupuesto > 1000000 and totalPresupuesto < 10000000:
-        #     totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000000, grouping=True, monetary=True))
-        #     totalPresupuesto = str(totalPresupuesto) + " M"
-        else:
-            totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000000, grouping=True, monetary=True))
-            totalPresupuesto = str(totalPresupuesto) + " M"
-        totalPresupuesto = str(totalPresupuesto) +" €"
+        totalPresupuesto = flgesttare_def.iface.formatearTotalPresupuesto(totalPresupuesto)
 
         rentabilidad = (locale.format('%.2f', rentabilidad, grouping=True))
 
-
-        if tiempo == None:
-            tiempo = "00:00"
-        else:
-            tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
-            tiempo = str(tiempo)
-            if len(tiempo) == 8:
-                tiempo = tiempo[0:5]
-            elif len(tiempo) == 9:
-                tiempo = tiempo[0:6]
-            else:
-                tiempo = tiempo[0:4]
+        tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
+        tiempo = flgesttare_def.iface.formatearTotalTiempo(tiempo)
 
 
 

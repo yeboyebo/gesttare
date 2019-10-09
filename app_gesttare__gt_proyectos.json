@@ -21,6 +21,7 @@
             "layout": {
                 "volverButton": {
                     "componente": "YBButton",
+                    "title": "Volver",
                     "prefix": "gt_tareas",
                     "icon": "close",
                     "className": "floatRight",
@@ -36,6 +37,7 @@
                 },
                 "borrarTareaButton": {
                     "componente": "YBButton",
+                    "title": "Borrar Proyecto",
                     "style": {
                         "padding": "0px 20px",
                         "marginTop": "5px"
@@ -51,6 +53,7 @@
                 },
                 "copiarEmailButton": {
                     "componente": "YBButton",
+                    "title": "Copiar email",
                     "prefix": "gt_proyectos",
                     "icon": "email",
                     "className": "floatRight",
@@ -149,7 +152,7 @@
                                     {
                                         "tipo": "act",
                                         "key": "borrarPartic",
-                                        "label": "Borrar Linea",
+                                        "label": "Eliminar Participante",
                                         "success": [
                                             {"slot": "refrescar"}
                                         ]

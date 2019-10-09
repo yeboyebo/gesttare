@@ -590,6 +590,43 @@ class gesttare(interna):
         else:
             return "{}:{}:{}".format(hours, minutes, seconds)
 
+    def gesttare_formatearTotalPresupuesto(self, totalPresupuesto):
+        if totalPresupuesto < 100:
+            totalPresupuesto = str("{:,.2f}".format(totalPresupuesto).replace(",", "@").replace(".", ",").replace("@", "."))
+        elif totalPresupuesto > 100 and totalPresupuesto < 1000:
+            totalPresupuesto = str("{:,.0f}".format(totalPresupuesto).replace(",", "@").replace(".", ",").replace("@", "."))
+        elif totalPresupuesto > 1000 and totalPresupuesto < 10000:
+            totalPresupuesto = str("{:,.0f}".format(totalPresupuesto).replace(",", "@").replace(".", ",").replace("@", "."))
+        elif totalPresupuesto > 10000 and totalPresupuesto < 100000:
+            totalPresupuesto = str("{:,.2f}".format(totalPresupuesto/1000).replace(",", "@").replace(".", ",").replace("@", "."))
+            # totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000, grouping=True, monetary=True))
+            totalPresupuesto = str(totalPresupuesto) + "K"
+        elif totalPresupuesto > 100000 and totalPresupuesto < 1000000:
+            totalPresupuesto = str("{:,.0f}".format(totalPresupuesto/1000).replace(",", "@").replace(".", ",").replace("@", "."))
+            totalPresupuesto = str(totalPresupuesto) + "K"
+        # elif totalPresupuesto > 1000000 and totalPresupuesto < 10000000:
+        #     totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000000, grouping=True, monetary=True))
+        #     totalPresupuesto = str(totalPresupuesto) + " M"
+        else:
+            totalPresupuesto = str("{:,.2f}".format(totalPresupuesto/10000).replace(",", "@").replace(".", ",").replace("@", "."))
+            totalPresupuesto = str(totalPresupuesto) + "M"
+        totalPresupuesto = str(totalPresupuesto) +" €"
+        return totalPresupuesto
+
+    def gesttare_formatearTotalTiempo(self, tiempo):
+        if tiempo == None or tiempo =="":
+            tiempo = "00:00"
+        else:
+            # tiempo = self.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
+            tiempo = str(tiempo)
+            if len(tiempo) == 8:
+                tiempo = tiempo[0:5]
+            elif len(tiempo) == 9:
+                tiempo = tiempo[0:6]
+            else:
+                tiempo = tiempo[0:4]
+        return tiempo
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -688,6 +725,12 @@ class gesttare(interna):
 
     def seconds_to_time(self, seconds, total=False, all_in_hours=False):
         return self.ctx.gesttare_seconds_to_time(seconds, total, all_in_hours)
+
+    def formatearTotalPresupuesto(self, totalPresupuesto):
+        return self.ctx.gesttare_formatearTotalPresupuesto(totalPresupuesto)
+
+    def formatearTotalTiempo(self,tiempo):
+        return self.ctx.gesttare_formatearTotalTiempo(tiempo)
 
 
 # @class_declaration head #

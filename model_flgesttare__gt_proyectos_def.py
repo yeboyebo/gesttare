@@ -414,12 +414,14 @@ class gesttare(interna):
         labels = {}
         if template == 'formRecord':
             hinvertidas = flgesttare_def.iface.seconds_to_time(cursor.valueBuffer("hdedicadas"), all_in_hours=True)
-            print("hinvertidas: ",hinvertidas)
+            hinvertidas = flgesttare_def.iface.formatearTotalTiempo(hinvertidas)
             if hinvertidas=="":
                 hinvertidas = "00:00:00"
             labels["horasinvertidas"] = hinvertidas
-            labels["presupuestoFormat"] = str("{:,.2f}".format(cursor.valueBuffer("presupuesto")).replace(",", "@").replace(".", ",").replace("@", ".")) + " € "
-            labels["costeFormat"] = str("{:,.2f}".format(cursor.valueBuffer("costetotal")).replace(",", "@").replace(".", ",").replace("@", ".")) + " € "
+            # labels["presupuestoFormat"] = str("{:,.2f}".format(cursor.valueBuffer("presupuesto")).replace(",", "@").replace(".", ",").replace("@", ".")) + " € "
+            # labels["costeFormat"] = str("{:,.2f}".format(cursor.valueBuffer("costetotal")).replace(",", "@").replace(".", ",").replace("@", ".")) + " € "
+            labels["presupuestoFormat"] = flgesttare_def.iface.formatearTotalPresupuesto(cursor.valueBuffer("presupuesto"))
+            labels["costeFormat"] = flgesttare_def.iface.formatearTotalPresupuesto(cursor.valueBuffer("costetotal"))
         return labels
 
     def gesttare_vertareasproyecto(self, cursor):

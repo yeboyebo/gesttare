@@ -22,7 +22,7 @@
                         {
                             "tipo": "act",
                             "key": "borrarActualizacion",
-                            "label": "borrarActualizacion",
+                            "label": "Borrar Actualización",
                             "success": [
                                 {"slot": "refrescar"}
                             ]

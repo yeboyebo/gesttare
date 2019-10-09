@@ -64,7 +64,7 @@
                 {
                     "tipo": "act",
                     "key": "delete",
-                    "label": "Borrar línea",
+                    "label": "Eliminar Tracking",
                     "success": [
                         {"slot": "refrescar"}
                     ]

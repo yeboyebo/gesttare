@@ -26,6 +26,7 @@
             "layout": {
                 "volverButton": {
                     "componente": "YBButton",
+                    "title": "Volver",
                     "prefix": "gt_tareas",
                     "icon": "close",
                     "className": "floatRight",
@@ -41,6 +42,7 @@
                 },
                 "borrarTareaButton": {
                     "componente": "YBButton",
+                    "title": "Borrar Tarea",
                     "style": {
                         "padding": "0px 20px",
                         "marginTop": "5px"
@@ -160,7 +162,7 @@
                                         {
                                             "tipo": "act",
                                             "key": "deleteParticipante",
-                                            "label": "Borrar Linea",
+                                            "label": "Elminar Participante",
                                             "success": [
                                                 {
                                                     "slot": "refrescar"
