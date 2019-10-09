@@ -61,6 +61,9 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     def validateCursor(self):
         return form.iface.validateCursor(self)
 
+    def iniciaValoresCursor(cursor=None):
+        return form.iface.iniciaValoresCursor(cursor)
+
 
 # @class_declaration gt_controlhorario #
 class gt_controlhorario(gesttare_gt_controlhorario, helpers.MixinConAcciones):

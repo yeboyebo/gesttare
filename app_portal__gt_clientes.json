@@ -41,7 +41,8 @@
                         "gb__": {
                             "title": "",
                             "fields": {
-                                "nombre": {}
+                                "nombre": {},
+                                "descripcion": {}
                             }
                         }
                     }

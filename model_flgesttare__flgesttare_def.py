@@ -457,15 +457,16 @@ class gesttare(interna):
         try:
             now = str(qsatype.Date())
             # fecha = now[:10]
-            # fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(cursor.valueBuffer("idc_diario")))
+            fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(cursor.valueBuffer("idc_diario")))
             horainicio = self.iface.time_to_seconds(cursor.valueBuffer("horainicio"))
             horafin = self.iface.time_to_seconds(cursor.valueBuffer("horafin"))
-            # if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
-            #     diferencia = (qsatype.Date(fecha) - qsatype.Date(str(fechaAnterior)))
-            #     dias = 24 * diferencia.days
-            #     totaltiempo = (self.iface.time_to_seconds(str(dias) + ":00:00") - horainicio) + horafin
-            # else:
-            totaltiempo  = horafin - horainicio
+            fechafin = cursor.valueBuffer("fechafin")
+            if qsatype.Date(str(fechaAnterior)) < qsatype.Date(str(fechafin)):
+                diferencia = (qsatype.Date(fechafin) - qsatype.Date(str(fechaAnterior)))
+                dias = 24 * diferencia.days
+                totaltiempo = (self.iface.time_to_seconds(str(dias) + ":00:00") - horainicio) + horafin
+            else:
+                totaltiempo  = horafin - horainicio
             # totaltiempo = horafin - horainicio
             return totaltiempo
         except Exception as e:

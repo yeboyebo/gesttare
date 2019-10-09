@@ -64,7 +64,7 @@ class gesttare(interna):
             response["msg"] = "Ya existe un tramo iniciado"
             return response
 
-        if not qsatype.FLUtil().sqlInsert("gt_controlhorario", ["horainicio", "idusuario"], [hora, user_name]):
+        if not qsatype.FLUtil().sqlInsert("gt_controlhorario", ["horainicio", "fechafin", "idusuario"], [hora, fecha, user_name]):
             response["msg"] = "Error al crear el registro horario"
             return response
 
@@ -80,7 +80,7 @@ class gesttare(interna):
         user_name = qsatype.FLUtil.nameUser()
         if oParam and "confirmacion" in oParam:
             # return False
-            if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin"], [hora], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
+            if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin", "fechafin"], [hora, fecha], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
                 response["msg"] = "Error al actualizar el registro horario"
                 return response
             response["resul"] = True
@@ -111,7 +111,7 @@ class gesttare(interna):
             return response
         # .seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
         # return False
-        if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin"], [hora], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
+        if not qsatype.FLUtil().sqlUpdate("gt_controlhorario", ["horafin","fechafin"], [hora, fecha], "idusuario = '{}' AND horafin IS NULL".format(user_name)):
             response["msg"] = "Error al actualizar el registro horario"
             return response
 
@@ -250,8 +250,16 @@ class gesttare(interna):
                     return False
         return True
 
+    def gesttare_iniciaValoresCursor(self, cursor=None):
+        fechainicio = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(cursor.valueBuffer("idc_diario")))
+        cursor.setValueBuffer(u"fechafin", fechainicio)
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
+
+    def iniciaValoresCursor(self, cursor=None):
+        return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()

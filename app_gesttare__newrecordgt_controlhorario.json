@@ -28,6 +28,7 @@
                                 "idc_diario": {"visible": false},
                                 "horainicio": {},
                                 "horafin": {},
+                                "fechafin": {},
                                 "totaltiempo": {"visible": false}
                             }
                         }
