@@ -454,7 +454,22 @@ class gesttare(interna):
     def gesttare_calcula_totaltiempo_horario(self, cursor):
         if not cursor.valueBuffer("horainicio") or not cursor.valueBuffer("horafin"):
             return None
-
+        try:
+            now = str(qsatype.Date())
+            # fecha = now[:10]
+            # fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(cursor.valueBuffer("idc_diario")))
+            horainicio = self.iface.time_to_seconds(cursor.valueBuffer("horainicio"))
+            horafin = self.iface.time_to_seconds(cursor.valueBuffer("horafin"))
+            # if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
+            #     diferencia = (qsatype.Date(fecha) - qsatype.Date(str(fechaAnterior)))
+            #     dias = 24 * diferencia.days
+            #     totaltiempo = (self.iface.time_to_seconds(str(dias) + ":00:00") - horainicio) + horafin
+            # else:
+            totaltiempo  = horafin - horainicio
+            # totaltiempo = horafin - horainicio
+            return totaltiempo
+        except Exception as e:
+            print(e)
         # formato = "%H:%M:%S"
         # horainicio = str(cursor.valueBuffer("horainicio"))
         # if len(horainicio) == 5:
@@ -477,23 +492,7 @@ class gesttare(interna):
         #     totaltiempo = "0" + totaltiempo
         # if len(totaltiempo) > 8:
         #     totaltiempo = totaltiempo[8:]
-        try:
-            now = str(qsatype.Date())
-            fecha = now[:10]
-            fechaAnterior = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = '{}'".format(cursor.valueBuffer("idc_diario")))
-            horainicio = self.iface.time_to_seconds(cursor.valueBuffer("horainicio"))
-            horafin = self.iface.time_to_seconds(cursor.valueBuffer("horafin"))
-            if qsatype.Date(str(fechaAnterior)) < qsatype.Date(fecha):
-                diferencia = (qsatype.Date(fecha) - qsatype.Date(str(fechaAnterior)))
-                dias = 24 * diferencia.days
-                totaltiempo = (self.iface.time_to_seconds(str(dias) + ":00:00") - horainicio) + horafin
-            else:
-                totaltiempo  = horafin - horainicio
-            # totaltiempo = horafin - horainicio
-            return totaltiempo
             # print(self.iface.seconds_to_time(auxT, all_in_hours=True))
-        except Exception as e:
-            print(e)
         return 0
 
     def gesttare_calcula_totaltiempo_diario(self, idc_diario):

@@ -433,7 +433,7 @@ class gesttare(interna):
         response = {}
         response["url"] = "/gesttare/gt_timetracking/master"
         response["prefix"] = "mastertimetracking"
-        response["filter"] = '{"codproyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
+        response["filter"] = '{"proyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
         return response
 
     def __init__(self, context=None):

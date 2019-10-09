@@ -21,6 +21,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from models.flgesttare.gt_controlhorario import gt_controlhorario as controlhorario
 
 
 class gesttare(interna):
@@ -112,9 +113,6 @@ class gesttare(interna):
         return query
 
     def gesttare_getListaTarea(self, model, oParam):
-        print("________________________")
-        print(oParam)
-        return []
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"articulos")
@@ -356,10 +354,27 @@ class gesttare(interna):
             totaltiempo = totaltiempo[8:]
         return totaltiempo
 
-    def gesttare_startstop(self, model, cursor):
+    def gesttare_startstop(self, model, oParam, cursor):
         now = qsatype.Date()
         user_name = qsatype.FLUtil.nameUser()
         msg = ""
+        response = {}
+
+        tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(user_name))
+        if not tramoactivo:
+            start = controlhorario.getIface().start({})
+            if "resul" in start and start["resul"] != True:
+                return start
+
+        # Comprobamos que si hay que renegociar, ademas iniciamos el control de tiempo
+        if not oParam or "confirmacion" not in oParam:
+            renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
+            if renegociar > 0:
+                response["status"] = 2
+                response["confirm"] = "Tienes tarea pendientes ¿Deseas continuar?"
+                response["serverAction"] = "startstop"
+                response["goto"] = {"nombre": "renegociar", "url": "/gesttare/gt_tareas/custom/renegociar"}
+                return response
 
         cur_track = qsatype.FLSqlCursor("gt_timetracking")
         cur_track.select("idusuario = '{}' AND horafin IS NULL".format(user_name))
@@ -833,8 +848,8 @@ class gesttare(interna):
     def dameUsuarios(self, idusuario):
         return self.ctx.gesttare_dameUsuarios(idusuario)
 
-    def startstop(self, model, cursor):
-        return self.ctx.gesttare_startstop(model, cursor)
+    def startstop(self, model, oParam, cursor):
+        return self.ctx.gesttare_startstop(model, oParam, cursor)
 
     def completar_tarea(self, model, cursor):
         return self.ctx.gesttare_completar_tarea(model, cursor)

@@ -98,9 +98,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def dameUsuarios(email):
         return form.iface.dameUsuarios(email)
 
-    @helpers.decoradores.accion(aqparam=["cursor"])
-    def startstop(self, cursor):
-        return form.iface.startstop(self, cursor)
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def startstop(self, oParam, cursor):
+        return form.iface.startstop(self, oParam, cursor)
 
     @helpers.decoradores.accion(aqparam=["cursor"])
     def completar_tarea(self, cursor):
