@@ -36,6 +36,17 @@
             "success": [{"slot": "refrescar"}]
         }
     },
+    "title": {
+        "anotarButton": {
+            "componente": "YBButton",
+            "buttonType": "raised",
+            "label": "ANOTAR",
+            "action": "goto",
+            "icon": "add",
+            "prefix": "gt_tareas",
+            "serverAction": "gotoNewRecordAnotacion"
+        }
+    },
     "items": [
         {
             "TEXT": "PRODUCIR",
