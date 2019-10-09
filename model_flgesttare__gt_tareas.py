@@ -106,6 +106,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def completar_tarea(self, cursor):
         return form.iface.completar_tarea(self, cursor)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def incrementar_dia(self, cursor):
+        return form.iface.incrementar_dia(self, cursor)
+
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)
 

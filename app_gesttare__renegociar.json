@@ -38,11 +38,18 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 350, "link": true},
-                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "title": true, "avatar": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90, "title": true, "link": "codproyecto"},
-                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
-                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 80},
+                        {
+                            "tipo": "act",
+                            "key": "upFecha",
+                            "label": "Incrementar Día",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 420, "link": true},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 250, "title": true, "link": "codproyecto"},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 10},
+                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 10},
                         {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
                     ],
                     "rowclick": "",
@@ -73,6 +80,12 @@
             "prefix": "gt_tareas",
             "serverAction": "completar_tarea",
             "icon": "check"
+        },
+        "upFecha": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "incrementar_dia",
+            "icon": "update"
         }
     }
 }

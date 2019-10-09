@@ -112,7 +112,7 @@ html, #parent-container{
 }
 
 .controlTiempoLabel {
-    width: 105px;
+    width: 50px;
     height: 18px;
     font-family: Rubik;
     font-size: 14px;
@@ -124,6 +124,78 @@ html, #parent-container{
     text-align: center;
     text-transform: none;
     color: var(--white);
+}
+
+.anotarButton{
+    width: 200px;
+    height: 10px;
+    font-family: Rubik;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    text-transform: none;
+    color: var(--white);
+}
+
+.anotarButton .YBButtonPrimary.YBButtonRaised{
+      width: 149px;
+      height: 40px;
+      border-radius: 8px;
+      background-image: linear-gradient(to bottom, #89e3dc, #4abed8);
+}
+
+@media (min-width: 1303px) {
+  .controlTiempoButton {
+    float: right;
+    margin-top: -7px;
+  }
+  .YBNavBarActions i .material-icons {
+    float: right;
+  }
+
+  .YBNavBar-title {
+    margin: 20px 20px 0px 10% !important;
+  }
+}
+@media (max-width: 1302px) {
+  .navbar-header-center {
+    width: 45%;
+  }
+  .navbar-header-center .YBNavBarActions {
+    margin: -20px 20% 0px 20px;
+  }
+  .controlTiempoButton {
+    float: right;
+    margin-top: -7px;
+  }
+  .YBNavBarActions i .material-icons {
+    float: right;
+  }
+
+  .YBNavBar-title {
+    margin: 20px 20px 0px 7% !important;
+  }
+}
+@media (max-width: 768px) {
+  .controlTiempoButton {
+    float: right;
+  }
+  .controlTiempoButton > .YBButtonRaised{
+    background-color: orange;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    }
+    .YBButonIconResponsive {
+        margin-left: -4px;
+    }
+  .YBNavBarActions i .material-icons {
+    float: right;
+  }
 }
 /*.comentariosGrid {
     min-height: 710px;
