@@ -40,6 +40,8 @@
         "anotarButton": {
             "componente": "YBButton",
             "buttonType": "raised",
+            "className": "anotarButton",
+            "classLabel": "anotarButtonLabel",
             "label": "ANOTAR",
             "action": "goto",
             "icon": "add",

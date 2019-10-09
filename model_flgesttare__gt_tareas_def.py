@@ -4,12 +4,11 @@ from YBUTILS import gesDoc
 # from models.flfactppal.usuarios import usuarios
 from models.fllogin.aqn_user import aqn_user as usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
-from datetime import datetime
+import datetime
 from models.flgesttare import flgesttare_def
 
 import hashlib
 import json
-
 
 class interna(qsatype.objetoBase):
 
@@ -344,8 +343,8 @@ class gesttare(interna):
         horafin = str(cursor.valueBuffer("horafin"))
         if len(horafin) == 5:
             horafin += ":00"
-        hfin = datetime.strptime(horafin, formato)
-        hinicio = datetime.strptime(horainicio, formato)
+        hfin = datetime.datetime.strptime(horafin, formato)
+        hinicio = datetime.datetime.strptime(horainicio, formato)
         totaltiempo = hfin - hinicio
         totaltiempo = str(totaltiempo)
         if len(totaltiempo) < 8:
@@ -441,6 +440,30 @@ class gesttare(interna):
             response["msg"] = "Tarea completada"
         else:
             response["msg"] = "Tarea abierta"
+        return response
+
+    def gesttare_incrementar_dia(self, model, cursor):
+        response = {}
+        fecha = cursor.valueBuffer("fechavencimiento")
+        print("la fecha es: ", fecha)
+        fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
+
+        print('fecha en formato fecha: ', fecha)
+
+        increDia = fecha + datetime.timedelta(days=1)
+
+        print("fecha dia incrementada: ", increDia)
+        cursor.setValueBuffer("fechavencimiento", increDia)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea")
+            return False
+
+        response["resul"] = True
+        if fecha:
+            response["msg"] = "Fecha incrementada un día"
+        else:
+            response["msg"] = "Fallo al incrementar el día"
         return response
 
     def gesttare_creartarea(self, oParam):
@@ -853,6 +876,9 @@ class gesttare(interna):
 
     def completar_tarea(self, model, cursor):
         return self.ctx.gesttare_completar_tarea(model, cursor)
+
+    def incrementar_dia(self, model, cursor):
+        return self.ctx.gesttare_incrementar_dia(model, cursor)
 
     def calcula_totaltiempo(self, cursor):
         return self.ctx.gesttare_calcula_totaltiempo(cursor)
