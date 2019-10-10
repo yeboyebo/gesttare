@@ -184,7 +184,7 @@
     },
     "drawIf": {
         "parentGroupBox": {
-            "queryGridcontroldiario": "drawif_controldiario",
+            "controldiario": "drawif_controldiario",
             "controlmensual": "drawif_controlmensual"
         },
         "botonera": {

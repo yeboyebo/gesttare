@@ -790,6 +790,9 @@ class gesttare(interna):
             data.append({"idusuario": q.value(0), "usuario": q.value(1)})
         return data
 
+    def gesttare_gotoNewRecordAnotacion(self):
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -921,6 +924,9 @@ class gesttare(interna):
 
     def queryGrid_renegociacion(self, model):
         return self.ctx.gesttare_queryGrid_renegociacion(model)
+
+    def gotoNewRecordAnotacion(self):
+        return self.ctx.gesttare_gotoNewRecordAnotacion()
 
 # @class_declaration head #
 class head(gesttare):
