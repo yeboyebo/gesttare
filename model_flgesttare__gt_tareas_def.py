@@ -40,6 +40,7 @@ class gesttare(interna):
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
             {'verbose_name': 'Color nombre', 'func': 'color_nombre'},
+            {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
             {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'}
         ]
 
@@ -178,6 +179,7 @@ class gesttare(interna):
         print("model.codestado: ",model.codestado.codestado)
 
         if model.codestado and model.codestado.codestado == estado:
+            print("entra")
             return "naranja"
         return ""
 
