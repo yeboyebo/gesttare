@@ -126,7 +126,17 @@ html, #parent-container{
     color: var(--white);
 }
 
-.anotarButton{
+.navbar-header-center {
+  position: relative;
+  float: left;
+  margin: 20px 20px 0px 20px;
+  font-size: 17px;
+  width: 65% !important;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/*.anotarButton{
     width: 200px;
     height: 10px;
     font-family: Rubik;
@@ -149,7 +159,25 @@ html, #parent-container{
 }
 
 .anotarButtonLabel{
-    margin-top: 5px;
+    margin-top: 5px !important;
+}
+
+.modalHeader .material-icons.closeM{
+    position: absolute;
+    margin-top: -40px !important;
+    right: 10px;
+}
+
+.modalCuerpo .modal_nuevoTramoFecha{
+    margin-left: 0% !important;
+}
+
+.modalTitle{
+    text-transform: uppercase;
+}
+
+.modalBody{
+    text-align: center;
 }
 
 .modalPie .YBButtonRaised{
@@ -159,14 +187,25 @@ html, #parent-container{
     background-color: #50d2ce;
 }
 
+.modalPie{
+    margin-top: 15%;
+    text-align: center;
+}
+
 .modalPie .YBButtonRaised .YBButtonLabel{
     margin-left: 20%;
 }
 
 .modalContent.modalScrool{
-
+    width: auto;
+    height: auto;
+    max-width: 648px;
+    max-height: 368px;
+    border-radius: 16px;
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.32);
+    background-color: #f1f1f1;
 }
-
+*/
 @media (min-width: 1303px) {
   .controlTiempoButton {
     float: right;

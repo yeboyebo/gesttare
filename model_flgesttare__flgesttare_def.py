@@ -593,22 +593,22 @@ class gesttare(interna):
     def gesttare_formatearTotalPresupuesto(self, totalPresupuesto):
         if totalPresupuesto < 100:
             totalPresupuesto = str("{:,.2f}".format(totalPresupuesto).replace(",", "@").replace(".", ",").replace("@", "."))
-        elif totalPresupuesto > 100 and totalPresupuesto < 1000:
+        elif totalPresupuesto >= 100 and totalPresupuesto < 1000:
             totalPresupuesto = str("{:,.0f}".format(totalPresupuesto).replace(",", "@").replace(".", ",").replace("@", "."))
-        elif totalPresupuesto > 1000 and totalPresupuesto < 10000:
+        elif totalPresupuesto >= 1000 and totalPresupuesto < 10000:
             totalPresupuesto = str("{:,.0f}".format(totalPresupuesto).replace(",", "@").replace(".", ",").replace("@", "."))
-        elif totalPresupuesto > 10000 and totalPresupuesto < 100000:
+        elif totalPresupuesto >= 10000 and totalPresupuesto < 100000:
             totalPresupuesto = str("{:,.2f}".format(totalPresupuesto/1000).replace(",", "@").replace(".", ",").replace("@", "."))
             # totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000, grouping=True, monetary=True))
             totalPresupuesto = str(totalPresupuesto) + "K"
-        elif totalPresupuesto > 100000 and totalPresupuesto < 1000000:
+        elif totalPresupuesto >= 100000 and totalPresupuesto < 1000000:
             totalPresupuesto = str("{:,.0f}".format(totalPresupuesto/1000).replace(",", "@").replace(".", ",").replace("@", "."))
             totalPresupuesto = str(totalPresupuesto) + "K"
         # elif totalPresupuesto > 1000000 and totalPresupuesto < 10000000:
         #     totalPresupuesto = (locale.format('%.2f', totalPresupuesto/1000000, grouping=True, monetary=True))
         #     totalPresupuesto = str(totalPresupuesto) + " M"
         else:
-            totalPresupuesto = str("{:,.2f}".format(totalPresupuesto/10000).replace(",", "@").replace(".", ",").replace("@", "."))
+            totalPresupuesto = str("{:,.2f}".format(totalPresupuesto/1000000).replace(",", "@").replace(".", ",").replace("@", "."))
             totalPresupuesto = str(totalPresupuesto) + "M"
         totalPresupuesto = str(totalPresupuesto) +" €"
         return totalPresupuesto

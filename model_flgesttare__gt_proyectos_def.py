@@ -390,6 +390,10 @@ class gesttare(interna):
         return resul
 
     def gesttare_getRentabilidadGraphic(self, model, template):
+        # resto = str("{:,.2f}".format(100 - model.rentabilidad).replace(".", ",")) + "%"
+        # rentabilidad = str("{:,.2f}".format(model.rentabilidad).replace(".", ",")) + "%"
+        # print("rentabilidad: ", rentabilidad)
+
         return [{"type": "pieDonutChart", "data": [{"name": "Rentabilidad", "value": model.rentabilidad, "color": "#50d2ce"}, {"name": "Resto", "value": ("{0:.2f}".format(100 - model.rentabilidad)), "color": "#bababa"}], "innerText": True, "animate": True, "size": 90, "showInfo": False}]
         # return [
         #     {"type": "pieDonutChart", "data": [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}], "innerText": True, "animate": True, "size": 90},

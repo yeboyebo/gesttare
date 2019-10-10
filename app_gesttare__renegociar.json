@@ -11,7 +11,7 @@
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": " ",
-            "label": "Renegociación",
+            "label": "",
             "style": {},
             "layout": {
                 "masterTareas": {
