@@ -171,6 +171,16 @@ class gesttare(interna):
             return "fcSuccess"
         return ""
 
+    def gesttare_color_fondo_estado(self, model):
+        # username = qsatype.FLUtil.nameUser()
+        # estado = qsatype.FLUtil.quickSqlSelect("aqn_user u INNER JOIN gt_tareas ta ON u.idusuario = ta.idusuario", "ta.codestado", "idusuario = '{}'".format(username))
+        estado = "Por Hacer";
+        print("model.codestado: ",model.codestado.codestado)
+
+        if model.codestado and model.codestado.codestado == estado:
+            return "naranja"
+        return ""
+
     def gesttare_color_fecha(self, model):
         if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
@@ -852,6 +862,9 @@ class gesttare(interna):
 
     def color_nombre(self, model):
         return self.ctx.gesttare_color_nombre(model)
+
+    def color_fondo_estado(self, model):
+        return self.ctx.gesttare_color_fondo_estado(model)
 
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)

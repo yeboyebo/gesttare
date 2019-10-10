@@ -56,6 +56,14 @@
                         },
                         {
                             "tipo": "act",
+                            "key": "upFecha",
+                            "label": "Incrementar Día",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
                             "key": "startstop",
                             "label": "TimeTracking",
                             "success": [
@@ -67,7 +75,7 @@
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90, "title": true, "link": "codproyecto"},
                         {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
                         {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 80},
-                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
+                        {"tipo": "field", "listpos": "body", "key": "codestado", "color": "Color fondo estado", "width": 100}
                     ],
                     "rowclick": "",
                     "rowlistclick": "link",
@@ -113,6 +121,12 @@
             "prefix": "gt_tareas",
             "serverAction": "completar_tarea",
             "icon": "check"
+        },
+        "upFecha": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "incrementar_dia",
+            "icon": "update"
         }
     }
 }
