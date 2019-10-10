@@ -237,17 +237,19 @@ class gesttare(interna):
     def gesttare_validateCursor(self, cursor):
         if cursor.valueBuffer("idc_diario"):
             horaInicio = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horainicio")))
-            horaFin = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horafin")))
-            curHorario = qsatype.FLSqlCursor(u"gt_controlhorario")
-            curHorario.select(ustr(u"idc_diario = '", cursor.valueBuffer("idc_diario"), u"' AND idc_horario <> '", cursor.valueBuffer("idc_horario"), "'"))
-            while curHorario.next():
-                curHorario.setModeAccess(curHorario.Browse)
-                curHorario.refreshBuffer()
-                anteriorInicio = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horainicio")))
-                anteriorFin = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horafin")))
-                if (horaInicio > anteriorInicio and horaInicio < anteriorFin) or (horaFin > anteriorInicio and horaFin < anteriorFin) or (anteriorInicio > horaInicio and anteriorInicio < horaFin):
-                    qsatype.FLUtil.ponMsgError("Los registors horarios se solapan")
-                    return False
+            if cursor.valueBuffer("horafin"):
+                horaFin = flgesttare_def.iface.time_to_seconds((cursor.valueBuffer("horafin")))
+                curHorario = qsatype.FLSqlCursor(u"gt_controlhorario")
+                curHorario.select(ustr(u"idc_diario = '", cursor.valueBuffer("idc_diario"), u"' AND idc_horario <> '", cursor.valueBuffer("idc_horario"), "'"))
+                while curHorario.next():
+                    curHorario.setModeAccess(curHorario.Browse)
+                    curHorario.refreshBuffer()
+                    anteriorInicio = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horainicio")))
+                    if curHorario.valueBuffer("horafin"):
+                        anteriorFin = flgesttare_def.iface.time_to_seconds((curHorario.valueBuffer("horafin")))
+                        if (anteriorFin) and (horaInicio > anteriorInicio and horaInicio < anteriorFin) or (horaFin > anteriorInicio and horaFin < anteriorFin) or (anteriorInicio > horaInicio and anteriorInicio < horaFin):
+                            qsatype.FLUtil.ponMsgError("Los registors horarios se solapan")
+                            return False
         return True
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
