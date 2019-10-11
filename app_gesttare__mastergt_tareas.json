@@ -70,12 +70,12 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 350, "link": true},
+                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "title": true, "avatar": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 90, "title": true, "link": "codproyecto"},
-                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 80},
-                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 80},
-                        {"tipo": "field", "listpos": "body", "key": "codestado", "color": "Color fondo estado", "width": 100}
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 250, "title": true, "link": "codproyecto"},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 10},
+                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 10},
+                        {"tipo": "field", "listpos": "body", "key": "codestado", "color": "Color fondo estado", "width": 50}
                     ],
                     "rowclick": "",
                     "rowlistclick": "link",

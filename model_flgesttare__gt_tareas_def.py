@@ -40,6 +40,7 @@ class gesttare(interna):
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
             {'verbose_name': 'Color nombre', 'func': 'color_nombre'},
+            {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
             {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'}
         ]
 
@@ -172,14 +173,15 @@ class gesttare(interna):
         return ""
 
     def gesttare_color_fondo_estado(self, model):
-        # username = qsatype.FLUtil.nameUser()
-        # estado = qsatype.FLUtil.quickSqlSelect("aqn_user u INNER JOIN gt_tareas ta ON u.idusuario = ta.idusuario", "ta.codestado", "idusuario = '{}'".format(username))
-        estado = "Por Hacer";
-        print("model.codestado: ",model.codestado.codestado)
-
-        if model.codestado and model.codestado.codestado == estado:
-            print("entra")
-            return "naranja"
+        if model.codestado:
+            if model.codestado.codestado == "Por Hacer":
+                return "naranja"
+            elif model.codestado.codestado == "Recurrente":
+                return "lila"
+            elif model.codestado.codestado == "Hecho":
+                return "verde"
+            elif model.codestado.codestado == "En espera":
+                return "amarillo"
         return ""
 
     def gesttare_color_fecha(self, model):

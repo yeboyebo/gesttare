@@ -126,17 +126,9 @@ html, #parent-container{
     color: var(--white);
 }
 
-.navbar-header-center {
-  position: relative;
-  float: left;
-  margin: 20px 20px 0px 20px;
-  font-size: 17px;
-  width: 65% !important;
-  text-transform: uppercase;
-  font-weight: bold;
-}
 
-/*.anotarButton{
+
+.anotarButton{
     width: 200px;
     height: 10px;
     font-family: Rubik;
@@ -164,7 +156,7 @@ html, #parent-container{
 
 .modalHeader .material-icons.closeM{
     position: absolute;
-    margin-top: -40px !important;
+    margin-top: -55px !important;
     right: 10px;
 }
 
@@ -173,6 +165,7 @@ html, #parent-container{
 }
 
 .modalTitle{
+    margin-top: 20px;
     text-transform: uppercase;
 }
 
@@ -188,7 +181,6 @@ html, #parent-container{
 }
 
 .modalPie{
-    margin-top: 15%;
     text-align: center;
 }
 
@@ -205,7 +197,43 @@ html, #parent-container{
     box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.32);
     background-color: #f1f1f1;
 }
-*/
+
+.naranja span{
+    padding: 5px 15px 5px 15px;
+    border-radius: 17.5px;
+    background-color: #ffc68d;
+}
+
+.lila span{
+    padding: 5px 15px 5px 15px;
+    border-radius: 17.5px;
+    background-color: #d0cdf4;
+}
+
+.verde span{
+    padding: 5px 15px 5px 15px;
+    border-radius: 17.5px;
+    background-color: #9decac;
+}
+
+.amarillo span{
+    padding: 5px 15px 5px 15px;
+    border-radius: 17.5px;
+    background-color: #faeb8c;
+}
+
+@media (min-width: 1445px) {
+  .navbar-header-center {
+      position: relative;
+      float: left;
+      margin: 20px 20px 0px 20px;
+      font-size: 17px;
+      width: 62% !important;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+}
+
 @media (min-width: 1303px) {
   .controlTiempoButton {
     float: right;
@@ -215,9 +243,6 @@ html, #parent-container{
     float: right;
   }
 
-  .YBNavBar-title {
-    margin: 20px 20px 0px 10% !important;
-  }
 }
 @media (max-width: 1302px) {
   .navbar-header-center {
@@ -238,6 +263,20 @@ html, #parent-container{
     margin: 20px 20px 0px 7% !important;
   }
 }
+
+
+@media (max-width: 1405px) {
+    .navbar-header-center {
+      position: relative;
+      float: left;
+      margin: 20px 20px 0px 20px;
+      font-size: 17px;
+      width: 30% !important;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+}
+
 @media (max-width: 768px) {
   .controlTiempoButton {
     float: right;
