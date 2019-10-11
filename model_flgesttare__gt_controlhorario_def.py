@@ -179,15 +179,18 @@ class gesttare(interna):
         if template == "control_diario":
             user_name = qsatype.FLUtil.nameUser()
             user_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(user_name))
-            where = "aqn_user.idcompany = " + str(user_company)
+            where = ""
+            if qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(user_name)):
+                where += "aqn_user.idcompany = " + str(user_company)
+            else:
+                where += "(gt_controldiario.idusuario = '" + str(user_name) + "' OR aqn_user.idresponsable = '" + str(user_name) + "')"
             if where_filter:
                 where += " AND " + where_filter
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_controldiario INNER JOIN aqn_user ON gt_controldiario.idusuario = aqn_user.idusuario", "SUM(horasordinarias)", where) or 0
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal, all_in_hours=True)
-            return {"queryGridcontroldiario": "Tiempo total: {}".format(tiempototal)}
+            return {"controldiario": "Tiempo total: {}".format(tiempototal)}
 
         if template == "newrecord":
-            print(data)
             fecha = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "fecha", "idc_diario = {}".format(data["idc_diario"]))
             formateaFecha = str(fecha).split("-")
             return {"chForm": "Nuevo registro para " + formateaFecha[2] + "-" + formateaFecha[1] + "-" + formateaFecha[0]}
@@ -212,7 +215,7 @@ class gesttare(interna):
         if qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(user_name)):
             where += "aqn_user.idcompany = " + str(user_company)
         else:
-            where += "gt_controldiario.idusuario = '" + str(user_name) + "' OR aqn_user.idresponsable = '" + str(user_name) + "'"
+            where += "(gt_controldiario.idusuario = '" + str(user_name) + "' OR aqn_user.idresponsable = '" + str(user_name) + "')"
         if filters:
             if "[gt_controldiario.idusuario]" in filters and filters["[gt_controldiario.idusuario]"] != "":
                 where += " AND gt_controldiario.idusuario = '{}'".format(filters["[gt_controldiario.idusuario]"])

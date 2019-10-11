@@ -79,11 +79,13 @@
             "COLOR": "rgb(7, 180, 7)"
         },
         {
-            "SEPARATOR": true
+            "SEPARATOR": true,
+            "RESPONSIVE": false
         },
         {
             "TEXT": "ANALIZAR",
-            "ICONURL": "/static/dist/img/icons/timetrakcer.svg"
+            "ICONURL": "/static/dist/img/icons/timetrakcer.svg",
+            "RESPONSIVE": false
         },
         {
             "NAME": "gt_timetracking",
@@ -99,7 +101,8 @@
             "URL": "gesttare/aqn_user/custom/analisis",
             "ICON": "widgets",
             "VISIBLE": true,
-            "COLOR": "rgb(7, 180, 7)"
+            "COLOR": "rgb(7, 180, 7)",
+            "RESPONSIVE": false
         }
     ]
 }

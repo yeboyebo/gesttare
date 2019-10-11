@@ -126,6 +126,32 @@ html, #parent-container{
     color: var(--white);
 }
 
+<<<<<<< HEAD
+=======
+@media (min-width: 1445px) {
+  .navbar-header-center {
+      position: relative;
+      float: left;
+      margin: 20px 20px 0px 20px;
+      font-size: 17px;
+      width: 62% !important;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+}
+
+@media (max-width: 1005px) {
+    .navbar-header-center {
+      position: relative;
+      float: left;
+      margin: 20px 20px 0px 20px;
+      font-size: 17px;
+      width: 30% !important;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+}
+>>>>>>> bd6c0059eff166f5e39ddf0f463d6231b063da00
 
 
 .anotarButton{
@@ -246,7 +272,7 @@ html, #parent-container{
 }
 @media (max-width: 1302px) {
   .navbar-header-center {
-    width: 45%;
+    width: 55%;
   }
   .navbar-header-center .YBNavBarActions {
     margin: -20px 20% 0px 20px;
