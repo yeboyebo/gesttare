@@ -381,9 +381,10 @@ class gesttare(interna):
             renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
             if renegociar > 0:
                 response["status"] = 2
-                response["confirm"] = "Tienes tarea pendientes ¿Deseas continuar?"
+                response["confirm"] = "Antes de continuar con nuevas tareas deberías revisar las tareas que tienes atrasadas. </br></br> ¿Quieres renegociar ahora?"
                 response["serverAction"] = "startstop"
-                response["goto"] = {"nombre": "renegociar", "url": "/gesttare/gt_tareas/custom/renegociar"}
+                response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}, {"accion": "cancel","nombre": "No"}]
+                # response["goto"] = {"nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}
                 return response
 
         cur_track = qsatype.FLSqlCursor("gt_timetracking")
@@ -787,7 +788,7 @@ class gesttare(interna):
         q.setTablesList(u"gt_tareas, gt_particproyecto, aqn_user")
         q.setSelect(u"p.idusuario, u.usuario")
         q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
-        q.setWhere(u"t.idtarea = '" + str(model.idtarea) + "' ORDER BY u.usuario LIMIT 7")
+        q.setWhere(u"t.idtarea = '" + str(model.idtarea) + "' AND UPPER(u.nombre) LIKE UPPER('%" + oParam["val"] + "%') ORDER BY u.usuario LIMIT 7")
 
         if not q.exec_():
             print("Error inesperado")

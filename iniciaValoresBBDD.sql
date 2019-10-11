@@ -21,6 +21,6 @@ INSERT INTO sis_gridfilter (prefix, template, descripcion, filtro) VALUES ('cont
 INSERT INTO sis_gridfilter (prefix, template, descripcion, filtro) VALUES ('control_diario', 'master', '*Mis Registros de este mes', '{"gt_controldiario.fecha": null, "i_gt_controldiario.fecha": "estemes", "d_gt_controldiario.fecha": null, "gt_controldiario.validado": null, "filtername": "Mis Registros de este mes", "h_gt_controldiario.fecha": null, "gt_controldiario.idusuario": "me"}');*/
 
 
-INSERT INTO sis_gridfilter (prefix, template, descripcion, filtro, inicial) VALUES ('gt_controlmensual', 'master', '*Mis Registros de esta mes', '{"filtername": "*Mis Registros de esta mes", "validado_admin": null, "anyo": "", "cb_mes": "thismonth", "validado_user": null, "idusuario": "me"}', true);
+/*INSERT INTO sis_gridfilter (prefix, template, descripcion, filtro, inicial) VALUES ('gt_controlmensual', 'master', '*Mis Registros de esta mes', '{"filtername": "*Mis Registros de esta mes", "validado_admin": null, "anyo": "", "cb_mes": "thismonth", "validado_user": null, "idusuario": "me"}', true);
 
-INSERT INTO sis_gridfilter (prefix, template, descripcion, filtro) VALUES ('gt_controlmensual', 'master', '*Mis Registros de este año', '{"idusuario": "me", "validado_admin": null, "validado_user": null, "filtername": "*Mis Registros de este año", "anyo": "thisyear", "cb_mes": null}');
+INSERT INTO sis_gridfilter (prefix, template, descripcion, filtro) VALUES ('gt_controlmensual', 'master', '*Mis Registros de este año', '{"idusuario": "me", "validado_admin": null, "validado_user": null, "filtername": "*Mis Registros de este año", "anyo": "thisyear", "cb_mes": null}');*/
