@@ -126,8 +126,7 @@ html, #parent-container{
     color: var(--white);
 }
 
-<<<<<<< HEAD
-=======
+
 @media (min-width: 1445px) {
   .navbar-header-center {
       position: relative;
@@ -151,7 +150,6 @@ html, #parent-container{
       font-weight: bold;
     }
 }
->>>>>>> bd6c0059eff166f5e39ddf0f463d6231b063da00
 
 
 .anotarButton{
@@ -182,7 +180,6 @@ html, #parent-container{
 
 .modalHeader .material-icons.closeM{
     position: absolute;
-    margin-top: -55px !important;
     right: 10px;
 }
 
