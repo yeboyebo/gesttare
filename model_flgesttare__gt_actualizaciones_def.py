@@ -40,12 +40,13 @@ class gesttare(interna):
         query = {}
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
-        query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario INNER JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
+        query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
         query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "'")
         return query
 
-    def gesttare_visualizarTarea(self, model):
-        print("_______")
+    def gesttare_visualizarTarea(self, model, cursor):
+        if cursor.valueBuffer("tipo") == "anotacion":
+            return '/gesttare/gt_actualizaciones/master'
         print(model.idtarea.idtarea)
         idtarea = model.idtarea.idtarea
         print(idtarea)
@@ -56,9 +57,10 @@ class gesttare(interna):
 
     def gesttare_borrarActualizacion(self, model, oParam):
         idactualizacion = model.idactualizacion
+        idUsuario = qsatype.FLUtil.nameUser()
         resul = {}
         # print(ustr(u"DELETE FROM gt_actualizaciones WHERE idactualizacion = '", idactualizacion, "'"))
-        if not qsatype.FLUtil.sqlDelete(u"gt_actualizusuario",ustr(u"idactualizacion = ", idactualizacion)):
+        if not qsatype.FLUtil.sqlDelete(u"gt_actualizusuario",ustr(u"idactualizacion = ", idactualizacion, " AND idusuario = ", idUsuario)):
             # print("falla la query")
             # return False
         # if not qsatype.FLUtil.sqlDelete(u"gt_actualizaciones", ustr(u"idactualizacion = ", idactualizacion)):
@@ -84,8 +86,8 @@ class gesttare(interna):
     def queryGrid_notificacionesUsuario(self, model):
         return self.ctx.gesttare_queryGrid_notificacionesUsuario(model)
 
-    def visualizarTarea(self, model):
-        return self.ctx.gesttare_visualizarTarea(model)
+    def visualizarTarea(self, model, cursor):
+        return self.ctx.gesttare_visualizarTarea(model, cursor)
 
     def borrarActualizacion(self, model, oParam):
         return self.ctx.gesttare_borrarActualizacion(model, oParam)

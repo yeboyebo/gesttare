@@ -36,6 +36,41 @@
             "success": [{"slot": "refrescar"}]
         }
     },
+    "title": {
+        "anotarButton": {
+            "componente": "YBButton",
+            "buttonType": "raised",
+            "className": "anotarButton",
+            "classLabel": "anotarButtonLabel",
+            "label": "ANOTAR",
+            "action": "legacy",
+            "title": "Nueva anotación",
+            "icon": "add",
+            "prefix": "gt_tareas",
+            "serverAction": "gotoNewRecordAnotacion",
+            "params": [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Nombre",
+                    "key": "nombre",
+                    "validaciones": null,
+                    "required": true
+                },
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Descripción",
+                    "key": "descripcion",
+                    "validaciones": null,
+                    "required": false,
+                    "visible": true
+                }
+            ]
+        }
+    },
     "items": [
         {
             "TEXT": "PRODUCIR",

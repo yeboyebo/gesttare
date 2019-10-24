@@ -139,9 +139,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def gototarea(self):
         return form.iface.gotoTarea(self)
 
-    @helpers.decoradores.accion(tipo="O")
-    def gotoNewRecordAnotacion(self):
-        return form.iface.gotoNewRecordAnotacion()
+    @helpers.decoradores.accion(tipo="O", aqparam=["oParam"])
+    def gotoNewRecordAnotacion(self, oParam):
+        return form.iface.gotoNewRecordAnotacion(oParam)
 
     def queryGrid_renegociacion(model):
         return form.iface.queryGrid_renegociacion(model)

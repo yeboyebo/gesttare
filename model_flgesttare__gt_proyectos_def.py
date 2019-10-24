@@ -298,12 +298,12 @@ class gesttare(interna):
 
     def gesttare_checkResponsableDraw(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
-        if cursor.valueBuffer("idresponsable") == usuario:
+        if str(cursor.valueBuffer("idresponsable")) == usuario:
             return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
         if is_superuser:
             return True
-        return "hidden"
+        return "disabled"
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         valor = None
