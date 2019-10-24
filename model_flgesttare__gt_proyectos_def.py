@@ -115,7 +115,7 @@ class gesttare(interna):
                         if not curPartic.commitBuffer():
                             return False
             response["resul"] = True
-            response["msg"] = "Participante/s añadido/s"
+            response["msg"] = "Actualizados los participantes"
             return response
 
     def gesttare_getFilters(self, model, name, template=None):
@@ -359,6 +359,10 @@ class gesttare(interna):
                 cursor.setModeAccess(cursor.Edit)
                 cursor.refreshBuffer()
                 cursor.setValueBuffer("archivado", not cursor.valueBuffer("archivado"))
+                if (cursor.valueBuffer("archivado")):
+                    response["msg"] = "Proyecto archivado"
+                else:
+                    response["msg"] = "Proyecto abierto"
                 if not cursor.commitBuffer():
                     return False
             else:
@@ -367,13 +371,14 @@ class gesttare(interna):
                 return response
         else:
             response['status'] = 2
+            # response['resul'] = True
             if cursor.valueBuffer("archivado"):
                 msg = "¿Seguro que quieres recuperar el proyecto?"
             else:
                 msg = "¿Seguro que quieres archivar el proyecto?"
             response['confirm'] = msg
             return response
-        return True
+        return response
 
     def gesttare_borrar_proyecto(self, oParam, cursor):
         resul = {}

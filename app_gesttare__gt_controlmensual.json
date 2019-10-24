@@ -10,121 +10,147 @@
         }
     },
     "layout": {
-        "separator1": {
-            "componente": "YBSeparator"
-        },
-        "formInfo": {
-            "prefix": "gt_controlmensual",
-            "componente": "YBForm",
-            "icon": "info",
-            "class": "claseGrid",
-            "label": "Información control mensual",
-            "submit": "update",
-            "send": false,
-            "return": true,
-            "fields": {
-                "gb__": {
-                    "title": "",
-                    "fields": {
-                        "Razón social": {"disabled": true},
-                        "CIF": {"disabled": true},
-                        "CCC": {"disabled": true},
-                        "NombreAP": {"label": "Trabajador", "disabled": true},
-                        "NIF": {"disabled": true},
-                        "NAF": {"disabled": true},
-                        "mesanyo": {"label": "Mes", "disabled": true},
-                        "totaltiempostring": {"disabled": true},
-                        "horasordinariasstring": {"disabled": true, "label": "Horas ordinarias"},
-                        "horasextra": {"disabled": true},
-                        "validado_user": {"disabled": true},
-                        "validado_admin": {"disabled": true}
-                    }
-                }
-            },
-            "exclude": {}
-        },
-        "separator2": {
-            "componente": "YBSeparator"
-        },
-        "controldiario": {
-            "componente": "YBGrid",
-            "prefix": "gt_controldiario",
-            "icon": "timer",
-            "label": "Registros diarios",
-            "className": "",
-            "buscador": false,
-            "columns": [
-                {
-                    "tipo": "act",
-                    "key": "validarDia",
-                    "label": "Validar",
-                    "success": [
-                        {"slot": "refrescar"}
-                    ]
-                },
-                {"tipo": "field", "listpos": "body", "key": "fecha", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horaentrada", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horasalida", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "totaltiempostring", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horasordinariasstring", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "horasextra", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "validado", "width": 5}
-            ],
-            "rowclick": "link"
-        },
-        "botonera": {
+        "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "actionGB",
-            "style": {"zIndex": 3, "position": "relative"},
+            "className": "gbTareas gbTareasBox",
+            "style": { },
             "layout": {
-                "validarUser": {
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
+                "volverButton": {
                     "componente": "YBButton",
-                    "prefix": "gt_controlmensual",
-                    "label": "Validar como trabajador",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
                     "className": "floatRight",
-                    "buttonType": "raised",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
                     "action": {
-                        "key": "validar_user",
-                        "success": [{"slot": "refrescar"}]
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
                     }
                 },
-                "desbloquearUser": {
-                    "componente": "YBButton",
+                "formInfo": {
                     "prefix": "gt_controlmensual",
-                    "label": "Editar como trabajador",
-                    "className": "floatRight",
-                    "buttonType": "raised",
-                    "action": {
-                        "key": "desbloquear_user",
-                        "success": [{"slot": "refrescar"}]
-                    }
+                    "componente": "YBForm",
+                    "icon": "info",
+                    "class": "claseGrid",
+                    "label": "Información control mensual",
+                    "submit": "update",
+                    "send": false,
+                    "return": false,
+                    "fields": {
+                        "gb__": {
+                            "title": "",
+                            "fields": {
+                                "Razón social": {"disabled": true},
+                                "CIF": {"disabled": true},
+                                "CCC": {"disabled": true},
+                                "NombreAP": {"label": "Trabajador", "disabled": true},
+                                "NIF": {"disabled": true},
+                                "NAF": {"disabled": true},
+                                "mesanyo": {"label": "Mes", "disabled": true},
+                                "totaltiempostring": {"disabled": true},
+                                "horasordinariasstring": {"disabled": true, "label": "Horas ordinarias"},
+                                "horasextra": {"disabled": true},
+                                "validado_user": {"disabled": true},
+                                "validado_admin": {"disabled": true}
+                            }
+                        }
+                    },
+                    "exclude": {}
                 },
-                "validarAdmin": {
-                    "componente": "YBButton",
-                    "prefix": "gt_controlmensual",
-                    "label": "Validar como responsable",
-                    "className": "floatRight",
-                    "buttonType": "raised",
-                    "action": {
-                        "key": "validar_admin",
-                        "success": [{"slot": "refrescar"}]
-                    }
+                "separator2": {
+                    "componente": "YBSeparator"
                 },
-                "desbloquearAdmin": {
-                    "componente": "YBButton",
-                    "prefix": "gt_controlmensual",
-                    "label": "Editar como responsable",
-                    "className": "floatRight",
-                    "buttonType": "raised",
-                    "action": {
-                        "key": "desbloquear_admin",
-                        "success": [{"slot": "refrescar"}]
+                "controldiario": {
+                    "componente": "YBGrid",
+                    "prefix": "gt_controldiario",
+                    "icon": "timer",
+                    "label": "Registros diarios",
+                    "className": "",
+                    "buscador": false,
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "validarDia",
+                            "label": "Validar",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "body", "key": "fecha", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "horaentrada", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "horasalida", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "totaltiempostring", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "horasordinariasstring", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "horasextra", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "validado", "width": 5}
+                    ],
+                    "rowclick": "link"
+                },
+                "botonera": {
+                    "componente": "YBGroupBox",
+                    "className": "actionGB",
+                    "style": {"zIndex": 3, "position": "relative"},
+                    "layout": {
+                        "validarUser": {
+                            "componente": "YBButton",
+                            "prefix": "gt_controlmensual",
+                            "label": "Validar como trabajador",
+                            "className": "floatRight",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "validar_user",
+                                "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "desbloquearUser": {
+                            "componente": "YBButton",
+                            "prefix": "gt_controlmensual",
+                            "label": "Editar como trabajador",
+                            "className": "floatRight",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "desbloquear_user",
+                                "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "validarAdmin": {
+                            "componente": "YBButton",
+                            "prefix": "gt_controlmensual",
+                            "label": "Validar como responsable",
+                            "className": "floatRight",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "validar_admin",
+                                "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "desbloquearAdmin": {
+                            "componente": "YBButton",
+                            "prefix": "gt_controlmensual",
+                            "label": "Editar como responsable",
+                            "className": "floatRight",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "desbloquear_admin",
+                                "success": [{"slot": "refrescar"}]
+                            }
+                        }
                     }
                 }
             }
         }
     },
     "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
         "validarDia": {
             "prefix": "gt_controldiario",
             "action": "legacy",

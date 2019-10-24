@@ -23,7 +23,7 @@
                     "componente": "YBButton",
                     "title": "Volver",
                     "prefix": "gt_tareas",
-                    "icon": "close",
+                    "icon": "arrow_back",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {

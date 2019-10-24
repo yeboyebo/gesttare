@@ -50,6 +50,12 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     def drawif_idusuariofilter(cursor):
         return form.iface.drawif_idusuariofilter(cursor)
 
+    def field_nombre(self):
+        return form.iface.field_nombre(self)
+
+    def color_usuario(self):
+        return form.iface.color_usuario(self)
+
     @helpers.decoradores.accion(aqparam=[])
     def set_estado_diario(self):
         return form.iface.set_estado("diario")

@@ -23,6 +23,9 @@ class gesttare_gt_controlmensual(interna_gt_controlmensual, helpers.MixinConAcci
     def field_usuario(self):
         return form.iface.field_usuario(self)
 
+    def color_usuario(self):
+        return form.iface.color_usuario(self)
+
     def field_mesanyo(self):
         return form.iface.field_mesanyo(self)
 

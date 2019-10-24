@@ -35,6 +35,7 @@
                     },
                     "format": {
                         "title": "gt_tareas.nombre",
+                        "subtitle": "gt_proyectos.nombre",
                         "date": "gt_tareas.fechavencimiento",
                         "user": "aqn_user.usuario"
                     }
