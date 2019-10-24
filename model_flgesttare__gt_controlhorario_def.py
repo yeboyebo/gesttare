@@ -69,7 +69,7 @@ class gesttare(interna):
             return response
 
         response["resul"] = True
-        response["msg"] = "Iniciado"
+        response["msg"] = "Control horario iniciado"
         return response
 
     def gesttare_pause(self, model, oParam):
@@ -84,7 +84,7 @@ class gesttare(interna):
                 response["msg"] = "Error al actualizar el registro horario"
                 return response
             response["resul"] = True
-            response["msg"] = "Iniciado"
+            response["msg"] = "Control horario iniciado"
             return True
 
         response["resul"] = False
@@ -116,8 +116,38 @@ class gesttare(interna):
             return response
 
         response["resul"] = True
-        response["msg"] = "Detenido"
+        response["msg"] = "Control horario detenido"
         return response
+
+    def gesttare_getForeignFields(self, model, template=None):
+        # if template == "mastertimetracking":
+            # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
+        fields = [
+            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}
+        ]
+        return fields
+
+
+    def gesttare_field_nombre(self, model):
+        nombre = ""
+        print("el valor es: ",model)
+        try:
+            # print(model['aqn_user.usuario'])
+            nombre = "@" + model['aqn_user.usuario']
+            # if hasattr(model.idusuario, 'usuario'):
+            #     nombre = "@" + model.idusuario.usuario
+            #     print("el nombre es: ",nombre)
+        except Exception as e:
+            print(e)
+        return nombre
+
+    def gesttare_color_usuario(self, model):
+        # print(model['aqn_user.usuario'])
+        # if (model['aqn_user.usuario']):
+        #     return "usuario"
+
+        return "usuario"
 
     def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
         if template == "formRecord":
@@ -310,6 +340,15 @@ class gesttare(interna):
 
     def validateCursor(self, cursor):
         return self.ctx.gesttare_validateCursor(cursor)
+
+    def field_nombre(self, model):
+        return self.ctx.gesttare_field_nombre(model)
+
+    def color_usuario(self, model):
+        return self.ctx.gesttare_color_usuario(model)
+
+    def getForeignFields(self, model, template=None):
+        return self.ctx.gesttare_getForeignFields(model, template)
 
 
 # @class_declaration head #

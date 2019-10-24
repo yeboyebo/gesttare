@@ -1,0 +1,39 @@
+{
+    "modifications": [
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/masterUsuarios/columns[nombre]/avatar",
+            "value": {
+                "width": 600
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/masterUsuarios/columns[email]/key",
+            "value": {
+                "width": 600
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/masterUsuarios/columns[usuario]/key",
+            "value": {
+                "color": "Color usuario"
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/masterUsuarios/columns[usuario]/color",
+            "value": {
+                "width": 20
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/masterUsuarios/columns[usuario]/width",
+            "value": {
+                "label": "Usuario"
+            }
+        }
+    ]
+}

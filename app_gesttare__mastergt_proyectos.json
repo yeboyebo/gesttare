@@ -111,7 +111,7 @@
         "getReport": {
             "label" : "",
             "action": "onexport",
-            "icon": "save"
+            "icon": "cloud_download"
         },
         "archivarProyecto": {
             "label": "Archivar proyecto",

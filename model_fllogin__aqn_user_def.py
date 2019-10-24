@@ -50,6 +50,26 @@ class gesttare(yblogin):
             data.append({"idusuario": q.value(0), "usuario": q.value(1)})
         return data
 
+    def gesttare_getForeignFields(self, model, template=None):
+        # if template == "mastertimetracking":
+            # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
+        fields = [
+            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+            {'verbose_name': 'usuario', 'func': 'field_nombre'}
+        ]
+        return fields
+
+    def gesttare_field_nombre(self, model):
+        nombre = ""
+        try:
+            nombre = "@" + model.usuario
+            # if hasattr(model.idusuario, 'usuario'):
+            #     nombre = "@" + model.idusuario.usuario
+            #     print("el nombre es: ",nombre)
+        except Exception as e:
+            print(e)
+        return nombre
+
     def gesttare_getParticProyectosUsu(self, oParam):
         usuario = qsatype.FLUtil.nameUser()
         data = []
@@ -463,6 +483,12 @@ class gesttare(yblogin):
             return "hidden"
         return True
 
+    def gesttare_color_usuario(self, model):
+        # print(model['aqn_user.usuario'])
+        # if (model['aqn_user.usuario']):
+        #     return "usuario"
+
+        return "usuarioAqn"
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -520,4 +546,13 @@ class gesttare(yblogin):
 
     def drawif_idusuariofilter(self, cursor):
         return self.ctx.gesttare_drawif_idusuariofilter(cursor)
+
+    def field_nombre(self, model):
+        return self.ctx.gesttare_field_nombre(model)
+
+    def color_usuario(self, model):
+        return self.ctx.gesttare_color_usuario(model)
+
+    def getForeignFields(self, model, template=None):
+        return self.ctx.gesttare_getForeignFields(model, template)
 

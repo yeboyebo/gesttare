@@ -40,7 +40,9 @@ class gesttare(interna):
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
             {'verbose_name': 'Color nombre', 'func': 'color_nombre'},
+            {'verbose_name': 'Color nombre proyecto', 'func': 'color_nombreProyecto'},
             {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
+            {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
             {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'}
         ]
 
@@ -102,10 +104,10 @@ class gesttare(interna):
             proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
         proin = proin + " null)"
         query = {}
-        query["tablesList"] = ("gt_tareas, aqn_user")
-        query["select"] = ("gt_tareas.idtarea, aqn_user.email, aqn_user.usuario, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
+        query["tablesList"] = ("gt_tareas, aqn_user, gt_proyectos")
+        query["select"] = ("gt_tareas.idtarea, aqn_user.email, aqn_user.usuario, gt_tareas.codproyecto, gt_tareas.codestado, gt_proyectos.nombre ,gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
-        query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario")
+        query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario INNER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto")
         query["where"] = ("gt_tareas.fechavencimiento is not null AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
         query["limit"] = 100
         # query["groupby"] = " articulos.referencia, articulos.descripcion"
@@ -159,7 +161,7 @@ class gesttare(interna):
         try:
             if not model.idusuario:
                 return nombre_usuario
-            nombre_usuario = model.idusuario.usuario
+            nombre_usuario = "@" + model.idusuario.usuario
         except Exception:
             pass
         return nombre_usuario
@@ -169,7 +171,19 @@ class gesttare(interna):
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
 
         if model.idtarea and tareaactiva and model.idtarea == tareaactiva:
-            return "fcSuccess"
+            return "fcSuccessMango"
+        elif model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+
+        return ""
+
+    def gesttare_color_nombreProyecto(self, model):
+        username = qsatype.FLUtil.nameUser()
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
+
+        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+
         return ""
 
     def gesttare_color_fondo_estado(self, model):
@@ -182,6 +196,12 @@ class gesttare(interna):
                 return "verde"
             elif model.codestado.codestado == "En espera":
                 return "amarillo"
+        return ""
+
+    def gesttare_color_responsable(self, model):
+        if hasattr(model.idusuario, 'idusuario'):
+            return "responsable"
+
         return ""
 
     def gesttare_color_fecha(self, model):
@@ -414,10 +434,10 @@ class gesttare(interna):
         cur_user.refreshBuffer()
 
         if cur_track.valueBuffer("idtarea") == cursor.valueBuffer("idtarea"):
-            msg += "Para tarea activa"
+            msg += "Time tracking detenido"
             cur_user.setNull("idtareaactiva")
         else:
-            msg += "Inicia tarea nueva"
+            msg += "Time tracking iniciado"
             cur_track.setModeAccess(cur_track.Insert)
             cur_track.refreshBuffer()
 
@@ -451,9 +471,9 @@ class gesttare(interna):
 
         response["resul"] = True
         if resuelta:
-            response["msg"] = "Tarea completada"
-        else:
             response["msg"] = "Tarea abierta"
+        else:
+            response["msg"] = "Tarea completada"
         return response
 
     def gesttare_incrementar_dia(self, model, cursor):
@@ -475,7 +495,7 @@ class gesttare(interna):
 
         response["resul"] = True
         if fecha:
-            response["msg"] = "Fecha incrementada un día"
+            response["msg"] = "Tarea planificada para mañana"
         else:
             response["msg"] = "Fallo al incrementar el día"
         return response
@@ -516,7 +536,7 @@ class gesttare(interna):
                 data.append({"error": "Error en commit"})
             else:
                 data.append({"result": True})
-                data.append({"ok": "Tarea creada correctamente"})
+                data.append({"ok": "Tarea creada"})
         else:
             data.append({"result": False})
             data.append({"error": "Error en autenticación"})
@@ -565,7 +585,7 @@ class gesttare(interna):
                 response["error"] = "Error en commit"
             else:
                 response["result"] = True
-                response["ok"] = "Tarea creada correctamente"
+                response["ok"] = "Tarea creada"
         else:
             response["result"] = False
             response["error"] = "Error en autenticación"
@@ -648,7 +668,7 @@ class gesttare(interna):
                             return False
             response = {}
             response["resul"] = True
-            response["msg"] = "Participante/s añadido/s"
+            response["msg"] = "Actualizados los participantes"
             return response
 
     def gesttare_bChCursor(self, fN, cursor):
@@ -742,8 +762,7 @@ class gesttare(interna):
             if not cursor.commitBuffer():
                 return False
             resul["return_data"] = False
-            resul["msg"] = "Tarea eliminada correctamente"
-        else:
+            resul["msg"] = "Tarea eliminada"
             resul['status'] = 2
             resul['confirm'] = "La tarea será eliminada"
         return resul
@@ -870,8 +889,14 @@ class gesttare(interna):
     def color_nombre(self, model):
         return self.ctx.gesttare_color_nombre(model)
 
+    def color_nombreProyecto(self, model):
+        return self.ctx.gesttare_color_nombreProyecto(model)
+
     def color_fondo_estado(self, model):
         return self.ctx.gesttare_color_fondo_estado(model)
+
+    def color_responsable(self, model):
+        return self.ctx.gesttare_color_responsable(model)
 
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)

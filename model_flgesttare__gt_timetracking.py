@@ -32,6 +32,9 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def field_nombre(self):
         return form.iface.field_nombre(self)
 
+    def color_usuario(self):
+        return form.iface.color_usuario(self)
+
     @helpers.decoradores.accion(aqparam=["cursor"])
     def verTarea(self, cursor):
         return form.iface.verTarea(self, cursor)

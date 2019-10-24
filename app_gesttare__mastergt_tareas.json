@@ -49,15 +49,7 @@
                         {
                             "tipo": "act",
                             "key": "complete",
-                            "label": "Completar tarea",
-                            "success": [
-                                {"slot": "refrescar"}
-                            ]
-                        },
-                        {
-                            "tipo": "act",
-                            "key": "upFecha",
-                            "label": "Incrementar Día",
+                            "label": "Completar_tarea",
                             "success": [
                                 {"slot": "refrescar"}
                             ]
@@ -71,10 +63,18 @@
                             ]
                         },
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
-                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "width": 30, "title": true, "avatar": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 250, "title": true, "link": "codproyecto"},
-                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 10},
-                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 10},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": " "},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre proyecto", "width": 180, "title": true, "link": "codproyecto"},
+                        {
+                            "tipo": "act",
+                            "key": "upFecha",
+                            "label": "Incrementar Día",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 45},
+                        {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 45},
                         {"tipo": "field", "listpos": "body", "key": "codestado", "color": "Color fondo estado", "width": 50}
                     ],
                     "rowclick": "",
@@ -103,7 +103,7 @@
         "getReport": {
             "label" : "",
             "action": "onexport",
-            "icon": "save"
+            "icon": "cloud_download"
         },
         "delete": {
             "action": "deleteRow",

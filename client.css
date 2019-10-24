@@ -128,7 +128,7 @@ html, #parent-container{
 
 
 @media (min-width: 1445px) {
-  .navbar-header-center {
+ /* .navbar-header-center {
       position: relative;
       float: left;
       margin: 20px 20px 0px 20px;
@@ -136,11 +136,11 @@ html, #parent-container{
       width: 62% !important;
       text-transform: uppercase;
       font-weight: bold;
-    }
+    }*/
 }
 
 @media (max-width: 1005px) {
-    .navbar-header-center {
+   /* .navbar-header-center {
       position: relative;
       float: left;
       margin: 20px 20px 0px 20px;
@@ -148,9 +148,57 @@ html, #parent-container{
       width: 30% !important;
       text-transform: uppercase;
       font-weight: bold;
-    }
+    }*/
+}
+.navbar-header-center {
+    position: relative;
+    float: none !important;
+    width: 66.66% !important;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin: 20px 20px 0px 20px; */
+    font-size: 17px;
+    /* width: 62% !important; */
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
+@media (min-width: 769px) {
+    .navbar-header-right{
+      margin-top: -35px;
+    }
+
+}
+.appInfo {
+    background-color: #f9a825 !important;
+    height: 32px;
+}
+
+.appInfo .YBTableOverGrid  {
+    margin-top: -7px;
+    text-align: center !important;
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle !important;
+    align-items: center !important;
+    justify-content: center;
+    color :white; 
+}
+
+.appInfo .YBTableCell {
+    width: auto !important; 
+    text-align: center !important; 
+    border: none; 
+}
+
+.appInfo .YBTableCell i{
+    margin-top: -3px;
+}
+
+.YBTableCell {
+    border-bottom: 0px solid !important;  
+    text-overflow: ellipsis !important;
+}
 
 .anotarButton{
     width: 200px;
@@ -183,13 +231,28 @@ html, #parent-container{
     right: 10px;
 }
 
+.modalHeader {
+    display:flex;
+    justify-content: center;
+}
+
 .modalCuerpo .modal_nuevoTramoFecha{
     margin-left: 0% !important;
+    background-color: #f1f1f1 !important;
+}
+
+.modal_nuevoTramoFecha .{
+    margin-left: 0% !important;
+    background-color: #f1f1f1 !important;
+}
+
+.modal_actNuevoPartic {
+    background-color: #f1f1f1 !important;
 }
 
 .modalTitle{
     margin-top: 20px;
-    text-transform: uppercase;
+    font-size: 18px;
 }
 
 .modalBody{
@@ -199,8 +262,10 @@ html, #parent-container{
 .modalPie .YBButtonRaised{
     width: 176px;
     height: 40px;
-    border-radius: 20px;
+    border-radius: 5px;
     background-color: #50d2ce;
+    border: none !important;
+    margin-right: 0px !important;
 }
 
 .modalPie{
@@ -211,42 +276,167 @@ html, #parent-container{
     margin-left: 20%;
 }
 
-.modalContent.modalScrool{
+a.btn-primary {
+    color: #fff !important;
+    background-color: #50d2ce !important;
+    border-radius: 5px;
+    margin-right: 10px;
+    //border: 1px solid #2d95c1;
+    width: 176px;
+}
+
+a.btn-primary:hover {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid #50d2ce;
+}
+
+.modalContent.modalScrool {
     width: auto;
     height: auto;
     max-width: 648px;
-    max-height: 368px;
+    //max-height: 368px;
     border-radius: 16px;
     box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.32);
     background-color: #f1f1f1;
 }
 
-.naranja span{
-    padding: 5px 15px 5px 15px;
+/*.naranja span {
+    padding: 5px 21px 5px 19px;
     border-radius: 17.5px;
     background-color: #ffc68d;
+    text-transform: lowercase;
 }
 
 .lila span{
     padding: 5px 15px 5px 15px;
     border-radius: 17.5px;
     background-color: #d0cdf4;
+    text-transform: lowercase;
 }
 
-.verde span{
-    padding: 5px 15px 5px 15px;
+.verde span {
+    padding: 5px 31px 5px 32px;
     border-radius: 17.5px;
-    background-color: #9decac;
+    background-color: #9decac;    
+    text-transform: lowercase;
 }
 
-.amarillo span{
-    padding: 5px 15px 5px 15px;
+.amarillo span {
+    padding: 5px 21px 5px 19px;
     border-radius: 17.5px;
     background-color: #faeb8c;
+    text-transform: lowercase;
+}*/
+.naranja {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #ffc68d;
+    text-transform: lowercase;
+}
+
+.lila {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #d0cdf4;
+    text-transform: lowercase;
+}
+
+.verde {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #9decac;    
+    text-transform: lowercase;
+}
+
+.amarillo {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #faeb8c;
+    text-transform: lowercase;
+}
+
+.responsable {
+    text-align:center !important;
+    /*margin-top: 5px;
+    height: 70%;*/
+    color: black;
+    border-radius: 17.5px;
+    background-color: #DCDCDC;
+}
+
+/*.responsable span {
+    position: relative;
+    top: -5px;
+}
+*/
+/*.usuario span {
+    position: relative;
+    top: -5px;
+}
+
+.usuarioAqn span {
+    position: relative;
+    top: -5px;
+}*/
+
+.usuarioAqn {
+    text-align:center !important;
+    //margin-top: 5px;
+    max-width: 200px !important;
+    //height: 70%;
+    color: black;
+    border-radius: 17.5px;
+    background-color: #DCDCDC;
+}
+
+.usuario {
+    text-align:center !important;
+    //margin-top: 5px;
+    //height: 70%;
+    color: black;
+    border-radius: 17.5px;
+    background-color: #DCDCDC;
+}
+ 
+.naranja {
+    margin-top: -4px;
+}
+
+.verde {
+    margin-top: -4px;
+}
+
+.lila {
+    margin-top: -4px;
+}
+
+.amarillo {
+    margin-top: -4px;
+}
+
+.alert.alert-success {
+    border-radius: 8px;
+    box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.5);
+    background-color: #f9a825 !important;
+    color: rgba(255,255,255, 0.84) !important;
+   /* position:absolute !important; 
+    bottom: 0;
+    margin-left: -505px;*/
+    width: auto !important;
+    text-align: center;
+}
+
+.toaster{
+    bottom: 0 !important;
+    margin: auto;
+      right: 0;
+      left: 0;
+    width: 300px !important;
 }
 
 @media (min-width: 1445px) {
-  .navbar-header-center {
+  /*.navbar-header-center {
       position: relative;
       float: left;
       margin: 20px 20px 0px 20px;
@@ -254,10 +444,10 @@ html, #parent-container{
       width: 62% !important;
       text-transform: uppercase;
       font-weight: bold;
-    }
+    }*/
 }
 
-@media (min-width: 1303px) {
+@media (max-width: 1303px) {
   .controlTiempoButton {
     float: right;
     margin-top: -7px;
@@ -265,15 +455,20 @@ html, #parent-container{
   .YBNavBarActions i .material-icons {
     float: right;
   }
-
+  /*.YBNavBar-title {
+    width: 53% !important;
+   }*/
+   /*.toaster{
+        left: 42% !important;
+    }*/
 }
 @media (max-width: 1302px) {
-  .navbar-header-center {
+  /*.navbar-header-center {
     width: 55%;
-  }
-  .navbar-header-center .YBNavBarActions {
+  }*/
+  /*.navbar-header-center .YBNavBarActions {
     margin: -20px 20% 0px 20px;
-  }
+  }*/
   .controlTiempoButton {
     float: right;
     margin-top: -7px;
@@ -282,22 +477,21 @@ html, #parent-container{
     float: right;
   }
 
-  .YBNavBar-title {
+ /* .YBNavBar-title {
     margin: 20px 20px 0px 7% !important;
-  }
+  }*/
 }
 
-
-@media (max-width: 1405px) {
-    .navbar-header-center {
+@media (min-width: 1405px) {
+   /* .navbar-header-center {
       position: relative;
       float: left;
       margin: 20px 20px 0px 20px;
       font-size: 17px;
-      width: 30% !important;
+      width: 62% !important;
       text-transform: uppercase;
       font-weight: bold;
-    }
+    }*/
 }
 
 @media (max-width: 768px) {
@@ -305,6 +499,7 @@ html, #parent-container{
     float: right;
   }
   .controlTiempoButton > .YBButtonRaised{
+    margin-top: 10px;
     background-color: orange;
     width: 35px;
     height: 35px;
@@ -313,10 +508,31 @@ html, #parent-container{
     .YBButonIconResponsive {
         margin-left: -4px;
     }
-  .YBNavBarActions i .material-icons {
-    float: right;
-  }
+      .YBNavBarActions i .material-icons {
+        float: right;
+      }
+   /*.toaster{
+        left: 37% !important;
+    }*/
 }
+/*
+@media (max-width: 320px) {
+    .toaster{
+        left: 20% !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .toaster{
+        left: 25% !important;
+    }
+}
+
+@media (max-width: 425px) {
+    .toaster{
+        left: 29% !important;
+    }
+}*/
 /*.comentariosGrid {
     min-height: 710px;
     max-height: : 710px;
@@ -341,3 +557,146 @@ html, #parent-container{
 .YBSideBarTitle{
     border-bottom: none;
 }*/
+
+.YBTableActionsCell[title=TimeTracking] {
+  color: #50d2ce;
+}
+
+
+.YBCalendarFilters {
+   /* width: 66.66%;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;*/
+    /* float: left; 
+    text-align: center;*/
+    display: flex;
+    align-items: stretch;
+}
+
+.YBMonthFilterButtons {
+  margin-left: 0px !important;
+  width: 100% !important;
+}
+
+.YBCalendarFiltersMonth {
+    width: 100% !important;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    order: 2;
+    //float: right;
+}
+
+.YBMonthFilterButtons {
+    /* margin-left: 0px !important; */
+    /* width: 100% !important; */
+    width: 66.66% !important;
+    display: flex;
+    margin-left: auto !important;
+    margin-right: auto;
+    justify-content: center;
+    float: none !important;
+}
+
+.YBCalendarFilterForm {
+    margin-top: 35px !important;
+}
+
+.YBCalendarFiltersWeeks {
+    width: 40%;
+    position: absolute;
+    margin-top: -15px;
+    order: 1;
+    //float: right;
+}
+
+.YBCalendarDayCellDate {
+    margin-right: 0px !important;
+    padding-bottom: 5px;
+}
+
+.YBCalendarDayCurrentCellDate {
+    color: #50d2ce;
+    background-color: rgba(80, 210, 206, 0.1);
+    //padding:0.8px;
+    //border-radius: 50%;
+}
+
+.YBCalendarDayWeekFormat {
+    min-height: 248px !important; 
+}
+
+.YBNavBar-title {
+    margin: 10px auto !important;
+}
+
+/*.masterTareas a {
+    color: #293333 !important;
+    text-decoration: none !important;
+}*/
+
+a, a, a:hover, a:focus {
+    color: #293333;
+    text-decoration: none !important;
+}
+
+.sideBar a {
+    text-decoration: none !important;
+}
+
+.fcSuccessMango {
+    background-color: #f9a825;
+    border-radius: 17.5px;
+    //margin-top: 5px;
+    color: white;
+}
+
+/*.fcSuccessMango span { 
+    position: relative;
+    top: -5px;
+}*/
+
+.YBTableActionsCell[title=Completar_tarea] {
+    //color: #bababa !important;
+    font-size: 20px;
+}
+
+.masterTareas .YBTableRow {
+    margin-bottom: 10px;
+}
+
+.masterProyectos .YBTableRow {
+    margin-bottom: 10px;
+}
+
+.masterTimeTracking .YBTableRow {
+    margin-bottom: 10px;
+}
+
+.masterUsuarios .YBTableRow {
+    margin-bottom: 10px;
+}
+
+.controldiario .YBTableRow {
+    margin-bottom: 10px;
+}
+
+.controlmensual .YBTableRow {
+    margin-bottom: 10px;
+}
+
+
+/*.masterTareas {
+    background-color: #f4f6f8;
+}*/
+
+/*.masterTareas .YBTableOverGrid {
+    border-radius: 16px;
+    box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
+    background-color: #ffffff;
+}*/
+
+.tareaActiva .YBTableActionsCell[title=Timetracking] {
+    margin-right: 10px;
+}

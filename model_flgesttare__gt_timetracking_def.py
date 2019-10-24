@@ -86,12 +86,20 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         # if template == "mastertimetracking":
             # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
-        return []
+        fields = [
+            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}
+        ]
+        return fields
 
     def gesttare_field_nombre(self, model):
         nombre = ""
         try:
-            nombre = model.idusuario.usuario
+            print(model['aqn_user.usuario'])
+            nombre = "@" + model['aqn_user.usuario']
+            # if hasattr(model.idusuario, 'usuario'):
+            #     nombre = "@" + model.idusuario.usuario
+            #     print("el nombre es: ",nombre)
         except Exception as e:
             print(e)
         return nombre
@@ -254,6 +262,13 @@ class gesttare(interna):
         url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
         return url
 
+    def gesttare_color_usuario(self, model):
+        # print(model['aqn_user.usuario'])
+        # if (model['aqn_user.usuario']):
+        #     return "usuario"
+
+        return "usuario"
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -295,6 +310,9 @@ class gesttare(interna):
 
     def verTarea(self, model, cursor):
         return self.ctx.gesttare_verTarea(model, cursor)
+
+    def color_usuario(self, model):
+        return self.ctx.gesttare_color_usuario(model)
 
 
 # @class_declaration head #

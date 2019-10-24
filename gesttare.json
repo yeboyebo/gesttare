@@ -377,6 +377,18 @@
             {
                 "name": "app_gesttare__renegociar.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "timer.png",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "timer.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "export.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [
@@ -422,6 +434,10 @@
             {
                 "path": "apps/portal/templates/portal/plantillas/",
                 "name": "app_portal__aqn_user.json"
+            },
+            {
+                "name": "app_portal__masteraqn_user.json",
+                "path": "apps/portal/templates/portal/plantillas/"
             }
         ],
         "patchScript": [

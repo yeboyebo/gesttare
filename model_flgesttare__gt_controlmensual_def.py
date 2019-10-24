@@ -23,7 +23,9 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         fields = [
             {'verbose_name': 'mesanyo', 'func': 'field_mesanyo'},
-            {'verbose_name': 'usuario', 'func': 'field_usuario'}
+            {'verbose_name': 'usuario', 'func': 'field_usuario'},
+            {'verbose_name': 'Color usuario', 'func': 'color_usuario'}
+
         ]
 
         if template == "formRecord":
@@ -54,10 +56,12 @@ class gesttare(interna):
             return ""
 
     def gesttare_field_usuario(self, model):
+        usuario = "@" 
         try:
             if not model.idusuario:
                 return ""
-            return model.idusuario.usuario
+            usuario += model.idusuario.usuario
+            return usuario
         except Exception:
             return ""
 
@@ -309,6 +313,13 @@ class gesttare(interna):
 
         return True
 
+    def gesttare_color_usuario(self, model):
+        # print(model['aqn_user.usuario'])
+        # if (model['aqn_user.usuario']):
+        #     return "usuario"
+
+        return "usuario"
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -375,6 +386,8 @@ class gesttare(interna):
     def desbloquear_admin(self, model, cursor):
         return self.ctx.gesttare_desbloquear_admin(model, cursor)
 
+    def color_usuario(self, model):
+        return self.ctx.gesttare_color_usuario(model)
 
 # @class_declaration head #
 class head(gesttare):

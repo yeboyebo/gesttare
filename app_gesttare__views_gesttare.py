@@ -30,13 +30,16 @@ class gesttare(interna):
                     }]
                 }
 
+        nombre_proyecto = "// Proyecto: "
         nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
+        nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.codproyecto = ta.codproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
 
         appinfo = {
             "data": [{
                 "pk": tareaactiva,
                 "idtarea": tareaactiva,
-                "nombreactiva": nombre_tarea
+                "nombreactiva": nombre_tarea,
+                "nombreproyecto": nombre_proyecto
             }],
             "layout": {
                 "tareaActiva": {
@@ -45,6 +48,9 @@ class gesttare(interna):
                     "type": "json",
                     "hideheader": True,
                     "border": False,
+                    "style": {
+                        "fontWeight": "bold"
+                    },
                     "prefix": "appinfo",
                     "columns": [
                         {
@@ -53,7 +59,8 @@ class gesttare(interna):
                             "label": "Timetracking",
                             "success": [{"slot": "refrescar"}]
                         },
-                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"}
+                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
+                        {"tipo": "field", "key": "nombreproyecto", "label": "Tarea activa"}
                     ]
                 }
             },
