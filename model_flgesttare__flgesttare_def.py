@@ -30,9 +30,9 @@ class gesttare(interna):
                     return False
 
             nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curComentario.valueBuffer(u"idtarea"), ""))
-            # _i.compruebaNotificacion("comentario", curComentario)
-            if not _i.crearActualizaciones(u"Nuevo comentario a " + nombreTarea.replace("'", ""), curComentario):
-                return False
+            _i.compruebaNotificacion("comentario", curComentario)
+            # if not _i.crearActualizaciones(u"Nuevo comentario a " + nombreTarea.replace("'", ""), curComentario):
+            #     return False
         return True
 
     def gesttare_afterCommit_gt_proyectos(self, curProyecto=None):
@@ -94,9 +94,9 @@ class gesttare(interna):
         # print("partictarea 2")
         if curPart.modeAccess() == curPart.Insert:
             nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curPart.valueBuffer(u"idtarea"), ""))
-            # _i.compruebaNotificacion("partictarea", curPart)
-            if not _i.crearActualizaciones(u"Añadido participante tarea " + nombreTarea.replace("'", ""), curPart):
-                return False
+            _i.compruebaNotificacion("partictarea", curPart)
+            # if not _i.crearActualizaciones(u"Añadido participante tarea " + nombreTarea.replace("'", ""), curPart):
+            #     return False
 
         return True
 
@@ -118,9 +118,9 @@ class gesttare(interna):
 
         if curPart.modeAccess() == curPart.Insert:
             nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'")) or ""
-            # _i.compruebaNotificacion("particproyecto", curPart)
-            if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
-                return False
+            _i.compruebaNotificacion("particproyecto", curPart)
+            # if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
+            #     return False
         print("aftercommit gt_parcitproyecto true")
         return True
 
@@ -256,7 +256,9 @@ class gesttare(interna):
 
         if q.next():
             borramosNotificacion = True
-            if tipo == "resuelta":
+            if tipo == "deltarea":
+                borramosNotificacion = True
+            elif tipo == "resuelta":
                 borramosNotificacion = True
             elif tipo == q.value(q.value(0)):
                 borramosNotificacion = True
@@ -411,8 +413,8 @@ class gesttare(interna):
         _i = self.iface
         # actualizacion = False
         tipo = ""
-        # if curTarea.modeAccess() == curTarea.Del:
-        #     _i.compruebaNotificacion("deltarea", curTarea)
+        if curTarea.modeAccess() == curTarea.Del:
+            _i.compruebaNotificacion("deltarea", curTarea)
         if curTarea.modeAccess() == curTarea.Edit:
             # if curTarea.valueBuffer(u"codestado") != curTarea.valueBufferCopy(u"codestado"):
             #     actualizacion = True
@@ -420,12 +422,12 @@ class gesttare(interna):
             if curTarea.valueBuffer(u"idusuario") != curTarea.valueBufferCopy(u"idusuario"):
                 # actualizacion = True
                 tipo = u"Cambio de responsable"
-                _i.crearActualizaciones(tipo, curTarea)
-                # _i.compruebaNotificacion("responsable", curTarea)
-            # elif curTarea.valueBuffer(u"resuelta") != curTarea.valueBufferCopy(u"resuelta"):
-            #     _i.compruebaNotificacion("resuelta", curTarea)
-            # elif curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
-            #     _i.compruebaNotificacion("cambioFechaEjecucion", curTarea)
+                # _i.crearActualizaciones(tipo, curTarea)
+                _i.compruebaNotificacion("responsable", curTarea)
+            elif curTarea.valueBuffer(u"resuelta") != curTarea.valueBufferCopy(u"resuelta"):
+                _i.compruebaNotificacion("resuelta", curTarea)
+            elif curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
+                _i.compruebaNotificacion("cambioFechaEjecucion", curTarea)
             # if actualizacion:
             #     _i.crearActualizaciones(tipo, curTarea)
         return True

@@ -759,8 +759,9 @@ class gesttare(interna):
                 return False
             resul["return_data"] = False
             resul["msg"] = "Tarea eliminada"
-            resul['status'] = 2
-            resul['confirm'] = "La tarea será eliminada"
+            return resul
+        resul['status'] = 2
+        resul['confirm'] = "La tarea será eliminada"
         return resul
 
     def gesttare_gotoGestionarTiempo(self, model, cursor):
@@ -819,7 +820,51 @@ class gesttare(interna):
             data.append({"idusuario": q.value(0), "usuario": q.value(1)})
         return data
 
-    def gesttare_gotoNewRecordAnotacion(self):
+    def gesttare_gotoNewRecordAnotacion(self, oParam):
+        # if "nombre" not in oParam:
+        #     response = {}
+        #     response['status'] = -1
+        #     response['data'] = {}
+        #     response["serverAction"] = "gotoNewRecordAnotacion"
+        #     response['params'] = [
+        #         {
+        #             "componente": "YBFieldDB",
+        #             "prefix": "otros",
+        #             "tipo": 3,
+        #             "verbose_name": "Nombre",
+        #             "key": "nombre",
+        #             "validaciones": None,
+        #             "required": True
+        #         },
+        #         {
+        #             "componente": "YBFieldDB",
+        #             "prefix": "otros",
+        #             "tipo": 3,
+        #             "verbose_name": "Descripción",
+        #             "key": "descripcion",
+        #             "validaciones": None,
+        #             "required": True
+        #         }
+        #     ]
+        #     return response
+        # else:
+        print("_________________")
+        print(oParam)
+        if "nombre" in oParam:
+            idUsuario = qsatype.FLUtil.nameUser()
+            curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+            curActualiz.setModeAccess(curActualiz.Insert)
+            curActualiz.refreshBuffer()
+            curActualiz.setValueBuffer(u"tipo", "anotacion")
+            curActualiz.setValueBuffer(u"tipobjeto", oParam["descripcion"])
+            curActualiz.setValueBuffer(u"otros", oParam["nombre"])
+            curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+            curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+            curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
+            if not curActualiz.commitBuffer():
+                return False
+            if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
+                return False
         return True
 
     def __init__(self, context=None):

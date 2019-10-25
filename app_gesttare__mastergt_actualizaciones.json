@@ -27,12 +27,12 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "title": true, "width": 250, "flex": 2},
+                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "title": true, "width": 50},
+                        {"tipo": "field", "key": "gt_actualizaciones.otros", "label": "Elmentos relacionado", "width": 250},
                         {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 80},
-                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 80},
-                        {"tipo": "field", "key": "nombreUsuario", "label": "U.Origen", "width": 150}
+                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 80}
                     ],
-                    "rowclick": "verTarea",
+                    "rowclick": "verElemento",
                     "accionesGrid": []
                 }
             }
@@ -46,9 +46,9 @@
             "prefix": "gt_actualizaciones",
             "icon": "delete"
         },
-        "verTarea": {
+        "verElemento": {
             "action": "goto",
-            "serverAction": "visualizarTarea",
+            "serverAction": "visualizarElemento",
             "prefix": "gt_actualizaciones"
         },
         "delete": {
