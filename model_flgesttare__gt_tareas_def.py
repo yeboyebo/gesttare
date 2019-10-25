@@ -5,7 +5,6 @@ from YBUTILS import gesDoc
 from models.fllogin.aqn_user import aqn_user as usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 import datetime
-import time
 from models.flgesttare import flgesttare_def
 
 import hashlib
@@ -170,10 +169,10 @@ class gesttare(interna):
     def gesttare_color_nombre(self, model):
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
-
+        
         if model.idtarea and tareaactiva and model.idtarea == tareaactiva:
             return "fcSuccessMango"
-        elif model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+        elif model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10] or model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
 
         return ""
@@ -182,7 +181,7 @@ class gesttare(interna):
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
 
-        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10] or model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
 
         return ""
@@ -820,51 +819,7 @@ class gesttare(interna):
             data.append({"idusuario": q.value(0), "usuario": q.value(1)})
         return data
 
-    def gesttare_gotoNewRecordAnotacion(self, oParam):
-        # if "nombre" not in oParam:
-        #     response = {}
-        #     response['status'] = -1
-        #     response['data'] = {}
-        #     response["serverAction"] = "gotoNewRecordAnotacion"
-        #     response['params'] = [
-        #         {
-        #             "componente": "YBFieldDB",
-        #             "prefix": "otros",
-        #             "tipo": 3,
-        #             "verbose_name": "Nombre",
-        #             "key": "nombre",
-        #             "validaciones": None,
-        #             "required": True
-        #         },
-        #         {
-        #             "componente": "YBFieldDB",
-        #             "prefix": "otros",
-        #             "tipo": 3,
-        #             "verbose_name": "Descripción",
-        #             "key": "descripcion",
-        #             "validaciones": None,
-        #             "required": True
-        #         }
-        #     ]
-        #     return response
-        # else:
-        print("_________________")
-        print(oParam)
-        if "nombre" in oParam:
-            idUsuario = qsatype.FLUtil.nameUser()
-            curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
-            curActualiz.setModeAccess(curActualiz.Insert)
-            curActualiz.refreshBuffer()
-            curActualiz.setValueBuffer(u"tipo", "anotacion")
-            curActualiz.setValueBuffer(u"tipobjeto", "gt_anotacion")
-            curActualiz.setValueBuffer(u"otros", oParam["nombre"])
-            curActualiz.setValueBuffer(u"fecha", datetime.date.today())
-            curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
-            curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
-            if not curActualiz.commitBuffer():
-                return False
-            if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
-                return False
+    def gesttare_gotoNewRecordAnotacion(self):
         return True
 
     def __init__(self, context=None):
@@ -1008,8 +963,8 @@ class gesttare(interna):
     def queryGrid_renegociacion(self, model):
         return self.ctx.gesttare_queryGrid_renegociacion(model)
 
-    def gotoNewRecordAnotacion(self, oParam):
-        return self.ctx.gesttare_gotoNewRecordAnotacion(oParam)
+    def gotoNewRecordAnotacion(self):
+        return self.ctx.gesttare_gotoNewRecordAnotacion()
 
 # @class_declaration head #
 class head(gesttare):

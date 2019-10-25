@@ -60,6 +60,15 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def getRentabilidadGraphic(self, model, template):
         return form.iface.getRentabilidadGraphic(model, template)
 
+    def field_usuario(self):
+        return form.iface.field_usuario(self)
+
+    def color_responsable(self):
+        return form.iface.color_responsable(self)
+
+    def color_fondo_estado(self):
+        return form.iface.color_fondo_estado(self)
+
     @helpers.decoradores.accion(aqparam=["oParam"])
     def queryGrid_proyectosarchivados(model, filters):
         return form.iface.queryGrid_proyectosarchivados(model, filters)

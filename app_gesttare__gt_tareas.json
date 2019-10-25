@@ -40,7 +40,7 @@
                         "success": [{"slot": "return"}]
                     }
                 },
-                "completarButton": {
+                "completar": {
                     "componente": "YBButton",
                     "title": "Completar tarea",
                     "prefix": "gt_tareas",
@@ -301,11 +301,6 @@
         "acctionVolver": {
             "action": "return"
         },
-        "complete": {
-            "action": "legacy",
-            "prefix": "gt_tareas",
-            "serverAction": "completar_tarea"
-        },
         "actNuevoComentario": {
             "label": "Nuevo comentario",
             "action": "legacy",
@@ -324,6 +319,12 @@
             "label": "Borrar tarea",
             "action": "legacy",
             "serverAction": "borrar_tarea"
+        },
+        "complete": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "completar_tarea",
+            "icon": "check"
         },
         "verTrackingTarea": {
             "action": "goto",

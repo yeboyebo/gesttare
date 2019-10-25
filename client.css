@@ -384,6 +384,13 @@ a.btn-primary:hover {
     text-transform: lowercase;
 }
 
+.rojo {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #cc2916;
+    text-transform: lowercase;
+}
+
 .responsable {
     text-align:center !important;
     /*margin-top: 5px;
