@@ -40,6 +40,22 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "completarButton": {
+                    "componente": "YBButton",
+                    "title": "Completar tarea",
+                    "prefix": "gt_tareas",
+                    "icon": "check",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "complete",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "borrarTareaButton": {
                     "componente": "YBButton",
                     "title": "Borrar Tarea",
@@ -97,8 +113,7 @@
                                             "showpk": false,
                                             "function": "getUsuariosProyecto",
                                             "params": {"codproyecto": "codproyecto"}
-                                        },
-                                        "resuelta": {}
+                                        }
                                     }
                                 }
                             },
@@ -285,6 +300,11 @@
     "acciones": {
         "acctionVolver": {
             "action": "return"
+        },
+        "complete": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "completar_tarea"
         },
         "actNuevoComentario": {
             "label": "Nuevo comentario",

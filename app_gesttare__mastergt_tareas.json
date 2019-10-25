@@ -49,7 +49,7 @@
                         {
                             "tipo": "act",
                             "key": "complete",
-                            "label": "Completar_tarea",
+                            "label": "Completar tarea",
                             "success": [
                                 {"slot": "refrescar"}
                             ]

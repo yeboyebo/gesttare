@@ -41,10 +41,15 @@
                         },
                         "validar": {
                             "componente": "YBButton",
+                            "title": "Validar",
+                            "icon": "check",
                             "prefix": "gt_controldiario",
-                            "label": "Validar",
                             "className": "floatRight",
-                            "buttonType": "raised",
+                            "buttonType": "icon",
+                            "style": {
+                                "marginTop": "5px",
+                                "marginRight": "5px"
+                            },
                             "action": {
                                 "key": "validar",
                                 "success": [{"slot": "refrescar"}]

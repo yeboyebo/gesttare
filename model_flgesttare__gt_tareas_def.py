@@ -479,14 +479,10 @@ class gesttare(interna):
     def gesttare_incrementar_dia(self, model, cursor):
         response = {}
         fecha = cursor.valueBuffer("fechavencimiento")
-        print("la fecha es: ", fecha)
         fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
-
-        print('fecha en formato fecha: ', fecha)
 
         increDia = fecha + datetime.timedelta(days=1)
 
-        print("fecha dia incrementada: ", increDia)
         cursor.setValueBuffer("fechavencimiento", increDia)
 
         if not cursor.commitBuffer():

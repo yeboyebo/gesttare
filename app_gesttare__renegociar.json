@@ -38,6 +38,9 @@
                                 {"slot": "refrescar"}
                             ]
                         },
+                       
+                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 420, "link": true},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre","width": 250, "title": true, "link": "codproyecto"},
                         {
                             "tipo": "act",
                             "key": "upFecha",
@@ -46,11 +49,9 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 420, "link": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "width": 250, "title": true, "link": "codproyecto"},
                         {"tipo": "field", "listpos": "secondaryitem", "key": "fechavencimiento", "color": "Color fecha", "width": 10},
                         {"tipo": "field", "key": "fechaentrega", "color": "Color fechaentrega", "width": 10},
-                        {"tipo": "field", "listpos": "body", "key": "codestado", "width": 100}
+                        {"tipo": "field", "listpos": "body", "key": "codestado", "color": "Color fondo estado", "width": 100}
                     ],
                     "rowclick": "",
                     "rowlistclick": "link"

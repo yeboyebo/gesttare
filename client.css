@@ -250,9 +250,37 @@ html, #parent-container{
     background-color: #f1f1f1 !important;
 }
 
+.modalCuerpo .gbform{
+    background-color: #f1f1f1 !important;
+}
+
+.modalCuerpo .modal_actionEmail {
+    background-color: #f1f1f1 !important;
+}
+
+.modal_nuevaInvitacion {
+    background-color: #f1f1f1 !important;
+}
+
 .modalTitle{
     margin-top: 20px;
     font-size: 18px;
+}
+
+.modalScrool {
+    min-width: 350px;
+}
+
+.modal_actNuevoPartic hr{
+    display: none;
+}
+
+.modal_actNuevoPartic .YBCheckSuggestions {
+    text-align: left;
+}
+
+.modal_actInvitarExterno {
+     background-color: #f1f1f1 !important;
 }
 
 .modalBody{
@@ -657,12 +685,12 @@ a, a, a:hover, a:focus {
     top: -5px;
 }*/
 
-.YBTableActionsCell[title=Completar_tarea] {
+/*.YBTableActionsCell[title=Completar] i{
     //color: #bababa !important;
-    font-size: 20px;
-}
+    font-size: 20px !important;
+}*/
 
-.masterTareas .YBTableRow {
+/*.masterTareas .YBTableRow {
     margin-bottom: 10px;
 }
 
@@ -685,7 +713,15 @@ a, a, a:hover, a:focus {
 .controlmensual .YBTableRow {
     margin-bottom: 10px;
 }
+*/
 
+.controlmensual .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
+    margin-bottom: 10px;   
+}
+
+.modal_actInvitarExterno .is-empty {
+    text-align: left;
+}
 
 /*.masterTareas {
     background-color: #f4f6f8;

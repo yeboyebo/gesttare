@@ -7,6 +7,22 @@
             "className": "gbTareas gbTareasBox",
             "style": { },
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -17,7 +33,7 @@
                     "submit": "create",
                     "icon": "info",
                     "label": "Nuevo proyecto",
-                    "return": true,
+                    "return": false,
                     "saveEdit": true,
                     "saveReturn": true,
                     "successmsg": "Proyecto creado",
@@ -50,5 +66,9 @@
             }
         }
     },
-    "acciones": {}
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        }
+    }
 }
