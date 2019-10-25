@@ -30,6 +30,7 @@ class gesttare(interna):
                     return False
 
             nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curComentario.valueBuffer(u"idtarea"), ""))
+            # _i.compruebaNotificacion("comentario", curComentario)
             if not _i.crearActualizaciones(u"Nuevo comentario a " + nombreTarea.replace("'", ""), curComentario):
                 return False
         return True
@@ -93,6 +94,7 @@ class gesttare(interna):
         # print("partictarea 2")
         if curPart.modeAccess() == curPart.Insert:
             nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curPart.valueBuffer(u"idtarea"), ""))
+            # _i.compruebaNotificacion("partictarea", curPart)
             if not _i.crearActualizaciones(u"Añadido participante tarea " + nombreTarea.replace("'", ""), curPart):
                 return False
 
@@ -116,6 +118,7 @@ class gesttare(interna):
 
         if curPart.modeAccess() == curPart.Insert:
             nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), "'")) or ""
+            # _i.compruebaNotificacion("particproyecto", curPart)
             if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
                 return False
         print("aftercommit gt_parcitproyecto true")
@@ -129,6 +132,155 @@ class gesttare(interna):
 
     def gesttare_desasignarTareasProyecto(self, curPart):
         qsatype.FLSqlQuery().execSql("DELETE FROM gt_partictarea where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idtarea IN (SELECT idtarea from gt_tareas where codproyecto = '" + curPart.valueBuffer("codproyecto") + "')")
+        return True
+
+    def gesttare_compruebaNotificacion(self, tipo, cursor):
+        _i = self.iface
+        # tipo_objeto -> gt_tarea, gt_proyecto, gt_comentario, gt_anotacion
+        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "partictarea"]:
+            tipo_objeto = "gt_tarea"
+            idobjeto = cursor.valueBuffer("idtarea")
+        elif tipo in ["particproyecto"]:
+            tipo_objeto = "gt_proyecto"
+            idobjeto = cursor.valueBuffer("codproyecto")
+        elif tipo in ["comentario"]:
+            tipo_objeto = "gt_comentario"
+            idobjeto = cursor.valueBuffer("idcomentario")
+        elif tipo in ["anotacion"]:
+            tipo_objeto = "gt_anotacion"
+            idobjeto = cursor.valueBuffer("idanotacion")
+        else:
+            return True
+        # Creamos actualizacion y despues notificamos si es necesario
+        return _i.creaNotificacion(tipo_objeto, idobjeto, tipo, cursor)
+
+        # idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", "tipoobjeto = '{}' AND idobjeto = '{}'".format(tipo_objeto, idobjeto))
+        # if not idActualizacion:
+        #     print("aqui creamos la notificacion")
+        #     print("y notificacmos los usuarios")
+        # else:
+        #     tipo = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"tipo", "tipoobjeto = '{}' AND idobjeto = '{}'".format(tipo_objeto, idobjeto))
+        # deltarea
+        # responsable -> Añadido como responsable de una tarea
+        # resuelta
+        # comentario
+        # cambioFechaEjecucion
+        # partictarea
+        # particproyecto
+        return True
+
+    def gesttare_creaNotificacion(self, tipo_objeto, idobjeto, tipo, cursor):
+        _i = self.iface
+        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "partictarea"]:
+            mensaje = cursor.valueBuffer("nombre")
+        elif tipo in ["particproyecto"]:
+            mensaje = cursor.valueBuffer("nombre")
+        elif tipo in ["comentario"]:
+            mensaje = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
+        elif tipo in ["anotacion"]:
+            mensaje = cursor.valueBuffer("nombre")
+        else:
+            return False
+
+        idUsuario = qsatype.FLUtil.nameUser()
+        curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+        curActualiz.setModeAccess(curActualiz.Insert)
+        curActualiz.refreshBuffer()
+        curActualiz.setValueBuffer(u"tipo", tipo)
+        curActualiz.setValueBuffer(u"tipobjeto", tipo_objeto)
+        curActualiz.setValueBuffer(u"idobjeto", idobjeto)
+        curActualiz.setValueBuffer(u"otros", mensaje)
+        curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+        curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+        curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
+        if not curActualiz.commitBuffer():
+            return False
+        return _i.notificarUsuarios(curActualiz.valueBuffer("idactualizacion"), tipo_objeto, idobjeto, tipo, cursor)
+
+    def gesttare_notificarUsuarios(self, idActualizacion, tipo_objeto, idobjeto, tipo, cursor):
+        _i = self.iface
+        idUsuario = qsatype.FLUtil.nameUser()
+        if tipo in ["deltarea", "resuelta", "cambioFechaEjecucion", "comentario"]:
+            qryParticipantes = qsatype.FLSqlQuery()
+            qryParticipantes.setTablesList(u"gt_partictarea")
+            qryParticipantes.setSelect(u"idparticipante,idusuario")
+            qryParticipantes.setFrom(ustr(u"gt_partictarea"))
+            qryParticipantes.setWhere("idtarea = {} AND idusuario <> {}".format(cursor.valueBuffer(u"idtarea"), idUsuario))
+
+            try:
+                qryParticipantes.setForwardOnly(True)
+            except Exception:
+                qsatype.Object()
+
+            if not qryParticipantes.exec_():
+                return False
+
+            if qryParticipantes.size() == 0:
+                return True
+            while qryParticipantes.next():
+                if _i.creaNotificacionUsuario(idActualizacion, qryParticipantes.value(1), tipo_objeto, idobjeto, tipo, cursor):
+                    continue
+                else:
+                    print("error al generar notificacion del usuario")
+                    return False
+        elif tipo in ["particproyecto"]:
+            if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
+                return True           
+        return True
+
+    def gesttare_creaNotificacionUsuario(self, idActualizacion, usuarioNotificado, tipo_objeto, idobjeto, tipo, cursor):
+        # Si ya tenemos notificacion no hacemos nada
+        notificamos = True
+        print("_________________1_______________________")
+        idUsuario = qsatype.FLUtil.nameUser()
+        where = u"a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'"
+        if tipo_objeto == "gt_comentario":
+            where = u"a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "')"
+        if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = ", usuarioNotificado, u" AND idactualizacion = ", idActualizacion)):
+            print("Puede haber actualizacion ya creada???")
+            return True
+        print("miramos si el usuario tiene alguna notificacion en esa tabla")
+        # actualiz = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario u INNER JOIN gt_actualizaciones  ON u.idactualizacion = a.idactualizacion", "a.tipo", "a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'")
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_actualizusuario, gt_actualizaciones")
+        q.setSelect(u"a.tipo, a.idactualizacion, u.idactualizusuario")
+        q.setFrom(u"gt_actualizusuario u INNER JOIN gt_actualizaciones a ON u.idactualizacion = a.idactualizacion")
+        q.setWhere(where)
+
+        if not q.exec_():
+            print("Error inesperado")
+            return False
+        print(q.size())
+        # if q.size() > 1:
+        #     print("tengo mas de una actualizacion para este usuario en la tabla??")
+
+        if q.next():
+            borramosNotificacion = True
+            if tipo == "resuelta":
+                borramosNotificacion = True
+            elif tipo == q.value(q.value(0)):
+                borramosNotificacion = True
+            if borramosNotificacion:
+                qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizusuario = '" + str(q.value(2)) + "'")
+            print("_______________________")
+            print(q.value(0))
+            print(q.value(1))
+            print(q.value(2))
+            # notificamos = False
+
+        if notificamos:
+            print("vamos a crear la notificacion del usuario")
+            if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, usuarioNotificado, False])):
+                return False
+            
+        # deltarea
+        # responsable -> Añadido como responsable de una tarea
+        # resuelta
+        # comentario
+        # cambioFechaEjecucion
+        # partictarea
+        # particproyecto
+        # Buscar si existe alguna notificacion para ese usuario en ese tipo_objeto, si existe segun tipo elegimos cual tiene prioridad
         return True
 
     def gesttare_crearActualizaciones(self, tipo, cursor=None):
@@ -259,6 +411,8 @@ class gesttare(interna):
         _i = self.iface
         # actualizacion = False
         tipo = ""
+        # if curTarea.modeAccess() == curTarea.Del:
+        #     _i.compruebaNotificacion("deltarea", curTarea)
         if curTarea.modeAccess() == curTarea.Edit:
             # if curTarea.valueBuffer(u"codestado") != curTarea.valueBufferCopy(u"codestado"):
             #     actualizacion = True
@@ -267,11 +421,11 @@ class gesttare(interna):
                 # actualizacion = True
                 tipo = u"Cambio de responsable"
                 _i.crearActualizaciones(tipo, curTarea)
-            # if curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
-            #     # actualizacion = True
-            #     tipo = u"Cambio de fecha"
-            #     print("actualizamos fecha??")
-            #     _i.crearActualizaciones(tipo, curTarea)
+                # _i.compruebaNotificacion("responsable", curTarea)
+            # elif curTarea.valueBuffer(u"resuelta") != curTarea.valueBufferCopy(u"resuelta"):
+            #     _i.compruebaNotificacion("resuelta", curTarea)
+            # elif curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
+            #     _i.compruebaNotificacion("cambioFechaEjecucion", curTarea)
             # if actualizacion:
             #     _i.crearActualizaciones(tipo, curTarea)
         return True
@@ -653,6 +807,18 @@ class gesttare(interna):
 
     def comprobarActualizacionesTareas(self, curTarea=None):
         return self.ctx.gesttare_comprobarActualizacionesTareas(curTarea)
+
+    def compruebaNotificacion(self, tipo, cursor):
+        return self.ctx.gesttare_compruebaNotificacion(tipo, cursor)
+
+    def creaNotificacion(self, tipo_objeto, idobjeto, tipo, cursor):
+        return self.ctx.gesttare_creaNotificacion(tipo_objeto, idobjeto, tipo, cursor)
+
+    def notificarUsuarios(self, idActualizacion, tipo_objeto, idobjeto, tipo, cursor):
+        return self.ctx.gesttare_notificarUsuarios(idActualizacion, tipo_objeto, idobjeto, tipo, cursor)
+
+    def creaNotificacionUsuario(self, idActualizacion, usuarioNotificado, tipo_objeto, idobjeto, tipo, cursor):
+        return self.ctx.gesttare_creaNotificacionUsuario(idActualizacion, usuarioNotificado, tipo_objeto, idobjeto, tipo, cursor)
 
     def afterCommit_gt_proyectos(self, curProyecto=None):
         return self.ctx.gesttare_afterCommit_gt_proyectos(curProyecto)

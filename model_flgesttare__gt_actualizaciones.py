@@ -21,13 +21,12 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
     def queryGrid_notificacionesUsuario(model):
         return form.iface.queryGrid_notificacionesUsuario(model)
 
-    @helpers.decoradores.accion(miparam=[])
-    def visualizarTarea(self):
-        return form.iface.visualizarTarea(self)
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def visualizarTarea(self, cursor):
+        return form.iface.visualizarTarea(self, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def borrarActualizacion(self, oParam):
-        print(self)
         return form.iface.borrarActualizacion(self, oParam)
 
     def field_nombreUsuario(self):

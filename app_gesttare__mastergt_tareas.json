@@ -62,6 +62,7 @@
                                 {"slot": "refrescar"}
                             ]
                         },
+
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": " "},
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre proyecto", "width": 180, "title": true, "link": "codproyecto"},
