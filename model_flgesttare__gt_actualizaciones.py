@@ -22,8 +22,8 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
         return form.iface.queryGrid_notificacionesUsuario(model)
 
     @helpers.decoradores.accion(aqparam=["cursor"])
-    def visualizarTarea(self, cursor):
-        return form.iface.visualizarTarea(self, cursor)
+    def visualizarElemento(self, cursor):
+        return form.iface.visualizarElemento(self, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def borrarActualizacion(self, oParam):

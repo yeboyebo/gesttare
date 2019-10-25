@@ -760,8 +760,9 @@ class gesttare(interna):
                 return False
             resul["return_data"] = False
             resul["msg"] = "Tarea eliminada"
-            resul['status'] = 2
-            resul['confirm'] = "La tarea será eliminada"
+            return resul
+        resul['status'] = 2
+        resul['confirm'] = "La tarea será eliminada"
         return resul
 
     def gesttare_gotoGestionarTiempo(self, model, cursor):
@@ -856,7 +857,7 @@ class gesttare(interna):
             curActualiz.setModeAccess(curActualiz.Insert)
             curActualiz.refreshBuffer()
             curActualiz.setValueBuffer(u"tipo", "anotacion")
-            curActualiz.setValueBuffer(u"tipobjeto", "gt_anotacion")
+            curActualiz.setValueBuffer(u"tipobjeto", oParam["descripcion"])
             curActualiz.setValueBuffer(u"otros", oParam["nombre"])
             curActualiz.setValueBuffer(u"fecha", datetime.date.today())
             curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))

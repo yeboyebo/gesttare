@@ -39,14 +39,19 @@ class gesttare(interna):
         idUsuario = qsatype.FLUtil.nameUser()
         query = {}
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
-        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
+        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
         query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "'")
         return query
 
-    def gesttare_visualizarTarea(self, model, cursor):
+    def gesttare_visualizarElemento(self, model, cursor):
+        response = {}
         if cursor.valueBuffer("tipo") == "anotacion":
-            return '/gesttare/gt_actualizaciones/master'
+            response["status"] = 2
+            response["confirm"] = cursor.valueBuffer("otros") + "</br>" + cursor.valueBuffer("tipobjeto")
+            # print(response)
+            return response
+            # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
         print(model.idtarea.idtarea)
         idtarea = model.idtarea.idtarea
         print(idtarea)
@@ -86,8 +91,8 @@ class gesttare(interna):
     def queryGrid_notificacionesUsuario(self, model):
         return self.ctx.gesttare_queryGrid_notificacionesUsuario(model)
 
-    def visualizarTarea(self, model, cursor):
-        return self.ctx.gesttare_visualizarTarea(model, cursor)
+    def visualizarElemento(self, model, cursor):
+        return self.ctx.gesttare_visualizarElemento(model, cursor)
 
     def borrarActualizacion(self, model, oParam):
         return self.ctx.gesttare_borrarActualizacion(model, oParam)
