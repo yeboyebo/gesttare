@@ -165,7 +165,7 @@ html, #parent-container{
 
 @media (min-width: 769px) {
     .navbar-header-right{
-      margin-top: -35px;
+      margin-top: -2px;
     }
 
 }
@@ -220,6 +220,8 @@ html, #parent-container{
     height: 40px;
     border-radius: 8px;
     background-image: linear-gradient(to bottom, #89e3dc, #4abed8);
+    background-color: initial !important;
+    border: none !important;
 }
 
 .anotarButtonLabel{
@@ -314,9 +316,11 @@ a.btn-primary {
 }
 
 a.btn-primary:hover {
-    background-color: white !important;
-    color: black !important;
-    border: 1px solid #50d2ce;
+    background-color: rgba(80, 210, 206, 0.3) !important;
+}
+
+.modalPie .YBButtonRaised:hover {
+    background-color: rgba(80, 210, 206, 0.8) !important;
 }
 
 .modalContent.modalScrool {
@@ -742,4 +746,24 @@ a, a, a:hover, a:focus {
 
 .tareaActiva .YBTableActionsCell[title=Timetracking] {
     margin-right: 10px;
+}
+
+
+.navbar-header-center .YBNavBarActions {
+    /* margin: -20px 30% 0px 20px; */
+    float: none !important;
+    width: 66.66% !important;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.YBD3Info {
+    margin-top: 50px;
+    text-align: left;
+    color: #2D95C1;
+    font-size: 17px;
+    font-weight: bold;    
 }

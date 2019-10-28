@@ -224,7 +224,7 @@ class gesttare(yblogin):
                 valor = 0
             data.append({"name": q.value(0), "value": int(valor)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-        return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75"}
+        return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75", "text": "Tiempo invertido en proyectos"}
 
     def gesttare_graficostareasporestado(self, oParam):
         usuario = qsatype.FLUtil.nameUser()
@@ -325,7 +325,7 @@ class gesttare(yblogin):
                     porcentaje = 100*(otros/total)
                 data.append({"name": "Otros Proyectos", "value": porcentaje})
 
-        return {"type": "pieChart", "data": data, "innerText": False}
+        return {"type": "pieChart", "data": data, "innerText": False, "text": "Distribución del tiempo en proyectos"}
 
     def gesttare_cajasinfo(self, oParam):
         horasStyle = {
@@ -393,6 +393,20 @@ class gesttare(yblogin):
         # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         # q.setWhere("{} GROUP BY t.codproyecto".format(where))
 
+        whereCompletadas = where + "AND ta.resuelta = 'true' GROUP BY u.idusuario"
+        whereProduccion = where + "AND ta.resuelta = 'false'"
+
+        tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereCompletadas)
+
+        print("las tareas son: ",tareasCompletadas)
+        TareasProduccion = 0
+
+        # q = qsatype.FLSqlQuery()
+        # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        # q.setSelect("COUNT()")
+        # q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        # q.setWhere("{} AND ta.resuelta = 'true' GROUP BY u.idusuario".format(where))
+
         if not q.exec_():
             return []
         if q.size() > 100:
@@ -421,7 +435,7 @@ class gesttare(yblogin):
 
 
 
-        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Presupuesto", "value": totalPresupuesto, "style": presupuestoStyle}, {"name": "Rentabilidad", "value": rentabilidad, "style" :rentabilidadStyle}]
+        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Tareas Completadas", "value": tareasCompletadas, "style": presupuestoStyle}, {"name": "Rentabilidad", "value": rentabilidad, "style" :rentabilidadStyle}]
         return {"type": "labelInfo", "data": data}
 
     def gesttare_queryGrid_tareasMasTiempo(self, model, filters):
