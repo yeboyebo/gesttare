@@ -41,24 +41,34 @@ class gesttare(interna):
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
-        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "'")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion'))")
         return query
 
     def gesttare_visualizarElemento(self, model, cursor):
         response = {}
+        print("___________")
+        print(cursor.valueBuffer("tipobjeto"))
         if cursor.valueBuffer("tipo") == "anotacion":
             response["status"] = 2
             response["confirm"] = cursor.valueBuffer("otros") + "</br>" + cursor.valueBuffer("tipobjeto")
             # print(response)
             return response
             # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
+        elif cursor.valueBuffer("tipobjeto") == "proyecto":
+            response["url"] = '/gesttare/gt_tareas/' + str(cursor.valueBuffer("idobjeto"))
+            return response
+        elif cursor.valueBuffer("tipobjeto") == "gt_comentario":
+            idtarea = qsatype.FLUtil().quickSqlSelect("gt_comentarios", "idtarea", "idcomentario = '{}'".format(cursor.valueBuffer("idobjeto")))
+            response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
+            return response
         print(model.idtarea.idtarea)
         idtarea = model.idtarea.idtarea
         print(idtarea)
         # porlotes = articulos.objects.filter(referencia__exact=model.referencia.referencia)
         # print(porlotes)
         # if porlotes[0].porlotes:
-        return '/gesttare/gt_tareas/' + str(idtarea)
+        response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
+        return response
 
     def gesttare_borrarActualizacion(self, model, oParam):
         idactualizacion = model.idactualizacion

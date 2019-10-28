@@ -200,7 +200,7 @@ class gesttare(interna):
     def gesttare_notificarUsuarios(self, idActualizacion, tipo_objeto, idobjeto, tipo, cursor):
         _i = self.iface
         idUsuario = qsatype.FLUtil.nameUser()
-        if tipo in ["deltarea", "resuelta", "cambioFechaEjecucion", "comentario"]:
+        if tipo in ["deltarea", "resuelta", "cambioFechaEjecucion", "partictarea", "comentario"]:
             qryParticipantes = qsatype.FLSqlQuery()
             qryParticipantes.setTablesList(u"gt_partictarea")
             qryParticipantes.setSelect(u"idparticipante,idusuario")
@@ -223,7 +223,7 @@ class gesttare(interna):
                 else:
                     print("error al generar notificacion del usuario")
                     return False
-        elif tipo in ["particproyecto"]:
+        elif tipo in ["responsable","particproyecto"]:
             if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                 return True           
         return True
@@ -231,11 +231,10 @@ class gesttare(interna):
     def gesttare_creaNotificacionUsuario(self, idActualizacion, usuarioNotificado, tipo_objeto, idobjeto, tipo, cursor):
         # Si ya tenemos notificacion no hacemos nada
         notificamos = True
-        print("_________________1_______________________")
         idUsuario = qsatype.FLUtil.nameUser()
         where = u"a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'"
         if tipo_objeto == "gt_comentario":
-            where = u"a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "')"
+            where = u"(a.tipobjeto = 'gt_tarea' AND a.idobjeto = '" + str(cursor.valueBuffer("idtarea")) + "') OR (a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "'))"
         if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = ", usuarioNotificado, u" AND idactualizacion = ", idActualizacion)):
             print("Puede haber actualizacion ya creada???")
             return True
@@ -250,24 +249,39 @@ class gesttare(interna):
         if not q.exec_():
             print("Error inesperado")
             return False
-        print(q.size())
+
         # if q.size() > 1:
         #     print("tengo mas de una actualizacion para este usuario en la tabla??")
 
         if q.next():
-            borramosNotificacion = True
+            notificamos = False
             if tipo == "deltarea":
-                borramosNotificacion = True
+                notificamos = True
             elif tipo == "resuelta":
-                borramosNotificacion = True
-            elif tipo == q.value(q.value(0)):
-                borramosNotificacion = True
-            if borramosNotificacion:
-                qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizusuario = '" + str(q.value(2)) + "'")
-            print("_______________________")
+                notificamos = True
+            elif tipo == q.value(0):
+                notificamos = True
+            elif tipo == "comentario":
+                notificamos = True
+                if q.value(0) in ["deltarea", "resuelta", "delpartictarea"]:
+                    notificamos = False
+            elif tipo == "responsable":
+                if q.value(0) in ["partictarea"]:
+                    notificamos = True
+            else:
+                notificamos = False
+
+            print("____________________________")
+            print(tipo)
             print(q.value(0))
-            print(q.value(1))
-            print(q.value(2))
+            print(notificamos)
+
+            if notificamos:
+                qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizusuario = '" + str(q.value(2)) + "'")
+            # print("_______________________")
+            # print(q.value(0))
+            # print(q.value(1))
+            # print(q.value(2))
             # notificamos = False
 
         if notificamos:

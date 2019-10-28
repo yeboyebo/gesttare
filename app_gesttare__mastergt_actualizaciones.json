@@ -47,7 +47,7 @@
             "icon": "delete"
         },
         "verElemento": {
-            "action": "goto",
+            "action": "legacy",
             "serverAction": "visualizarElemento",
             "prefix": "gt_actualizaciones"
         },
