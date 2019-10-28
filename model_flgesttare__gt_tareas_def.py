@@ -5,6 +5,7 @@ from YBUTILS import gesDoc
 from models.fllogin.aqn_user import aqn_user as usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 import datetime
+import time
 from models.flgesttare import flgesttare_def
 
 import hashlib
@@ -1014,8 +1015,8 @@ class gesttare(interna):
     def queryGrid_renegociacion(self, model):
         return self.ctx.gesttare_queryGrid_renegociacion(model)
 
-    def gotoNewRecordAnotacion(self):
-        return self.ctx.gesttare_gotoNewRecordAnotacion()
+    def gotoNewRecordAnotacion(self, oParam):
+        return self.ctx.gesttare_gotoNewRecordAnotacion(oParam)
 
 # @class_declaration head #
 class head(gesttare):
