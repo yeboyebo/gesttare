@@ -29,7 +29,10 @@ class gesttare(interna):
         fields = []
         if template == "master":
             fields = [
-                {'verbose_name': 'nombreCliente', 'func': 'field_nombreCliente'}
+                {'verbose_name': 'nombreCliente', 'func': 'field_nombreCliente'},
+                {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
+                {'verbose_name': 'Responsable', 'func': 'field_usuario'},
+                {'verbose_name': 'Color responsable', 'func': 'color_responsable'}
             ]
 
         return fields
@@ -44,6 +47,38 @@ class gesttare(interna):
             print(e)
             pass
         return nombre_cliente
+
+    def gesttare_field_usuario(self, model):
+        nombre_usuario = ""
+        # if hasattr(model.idresponsable, 'usuario'):
+        #     print("el valor es: ",model.idresponsable.usuario)
+        try:
+            if not model.idresponsable:
+                return nombre_usuario
+            nombre_usuario = "@" + model.idresponsable.usuario
+        except Exception:
+            pass
+        return nombre_usuario
+
+    def gesttare_color_fondo_estado(self, model):
+        if model.estado:
+            if model.estado == "Abierto":
+                return "naranja"
+            elif model.estado == "Suspendido":
+                return "lila"
+            elif model.estado == "Terminado":
+                return "verde"
+            elif model.estado== "Cancelado":
+                return "rojo"
+            elif model.estado == "Por iniciar":
+                return "amarillo"
+        return ""
+
+    def gesttare_color_responsable(self, model):
+        if hasattr(model.idresponsable, 'idusuario'):
+            return "responsable"
+
+        return ""
 
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
@@ -298,12 +333,12 @@ class gesttare(interna):
 
     def gesttare_checkResponsableDraw(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
-        if str(cursor.valueBuffer("idresponsable")) == usuario:
+        if cursor.valueBuffer("idresponsable") == usuario:
             return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
         if is_superuser:
             return True
-        return "disabled"
+        return "hidden"
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         valor = None
@@ -512,6 +547,15 @@ class gesttare(interna):
 
     def verTrackingProyecto(self, cursor):
         return self.ctx.gesttare_verTrackingProyecto(cursor)
+
+    def field_usuario(self, model):
+        return self.ctx.gesttare_field_usuario(model)
+
+    def color_responsable(self, model):
+        return self.ctx.gesttare_color_responsable(model)
+
+    def color_fondo_estado(self, model):
+        return self.ctx.gesttare_color_fondo_estado(model)
 
 
 # @class_declaration head #

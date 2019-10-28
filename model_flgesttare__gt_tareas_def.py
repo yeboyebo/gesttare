@@ -5,7 +5,6 @@ from YBUTILS import gesDoc
 from models.fllogin.aqn_user import aqn_user as usuarios
 from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 import datetime
-import time
 from models.flgesttare import flgesttare_def
 
 import hashlib
@@ -170,10 +169,10 @@ class gesttare(interna):
     def gesttare_color_nombre(self, model):
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
-
+        
         if model.idtarea and tareaactiva and model.idtarea == tareaactiva:
             return "fcSuccessMango"
-        elif model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+        elif model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10] or model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
 
         return ""
@@ -182,7 +181,7 @@ class gesttare(interna):
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
 
-        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10] or model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
             return "fcDanger"
 
         return ""
@@ -1009,8 +1008,8 @@ class gesttare(interna):
     def queryGrid_renegociacion(self, model):
         return self.ctx.gesttare_queryGrid_renegociacion(model)
 
-    def gotoNewRecordAnotacion(self, oParam):
-        return self.ctx.gesttare_gotoNewRecordAnotacion(oParam)
+    def gotoNewRecordAnotacion(self):
+        return self.ctx.gesttare_gotoNewRecordAnotacion()
 
 # @class_declaration head #
 class head(gesttare):

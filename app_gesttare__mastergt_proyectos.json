@@ -51,10 +51,11 @@
                     ]
                 },
                 {"tipo": "field", "listpos": "title", "key": "nombre", "width": 270, "flex":2, "title": true, "link": true},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "width": 30},
+                {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": "Responsable"},
                 {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
                 {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
-                {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80}
+                {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80},
+                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "color": "Color fondo estado", "width": 30}
             ],
             "rowclick": "",
             "rowlistclick": "link",
