@@ -480,21 +480,27 @@ class gesttare(interna):
     def gesttare_incrementar_dia(self, model, cursor):
         response = {}
         fecha = cursor.valueBuffer("fechavencimiento")
-        fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
-
-        increDia = fecha + datetime.timedelta(days=1)
-
-        cursor.setValueBuffer("fechavencimiento", increDia)
-
-        if not cursor.commitBuffer():
-            print("Ocurrió un error al actualizar la tarea")
-            return False
-
-        response["resul"] = True
         if fecha:
+            fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
+
+            increDia = fecha + datetime.timedelta(days=1)
+
+            cursor.setValueBuffer("fechavencimiento", increDia)
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar la tarea")
+                return False
+
+            response["resul"] = True
             response["msg"] = "Tarea planificada para mañana"
+
         else:
-            response["msg"] = "Fallo al incrementar el día"
+            response["resul"] = True
+            response["msg"] = "No hay fecha de ejecución"
+        # if fecha:
+        #     response["msg"] = "Tarea planificada para mañana"
+        # else:
+        #     response["msg"] = "No hay fecha de ejecución"
         return response
 
     def gesttare_creartarea(self, oParam):
