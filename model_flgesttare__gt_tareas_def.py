@@ -669,7 +669,7 @@ class gesttare(interna):
             return response
 
     def gesttare_bChCursor(self, fN, cursor):
-        if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, curPedido):
+        if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, cursor):
             return False
         if fN == "idusuario":
             curPartic = qsatype.FLSqlCursor("gt_partictarea")
@@ -980,7 +980,7 @@ class gesttare(interna):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
 
     def bChCursor(self, fN, cursor):
-        return self.ctx.tele_omega_bChCursor(fN, cursor)
+        return self.ctx.gesttare_bChCursor(fN, cursor)
 
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)

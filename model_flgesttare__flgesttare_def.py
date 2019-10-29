@@ -427,7 +427,9 @@ class gesttare(interna):
         _i = self.iface
         # actualizacion = False
         tipo = ""
+        print(curTarea.modeAccess())
         if curTarea.modeAccess() == curTarea.Del:
+            print("notificamos deltarea")
             _i.compruebaNotificacion("deltarea", curTarea)
         if curTarea.modeAccess() == curTarea.Edit:
             # if curTarea.valueBuffer(u"codestado") != curTarea.valueBufferCopy(u"codestado"):

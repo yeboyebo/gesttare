@@ -120,6 +120,7 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
         return form.iface.incrementar_dia(self, cursor)
 
     def bChCursor(fN, cursor):
+        print("???????????????????")
         return form.iface.bChCursor(fN, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam"])

@@ -27,10 +27,29 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "title": true, "width": 50},
-                        {"tipo": "field", "key": "gt_actualizaciones.otros", "label": "Elmentos relacionado", "width": 250},
-                        {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 80},
-                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 80}
+                        {
+                            "tipo": "act",
+                            "key": "convertirTarea",
+                            "label": "Convertir en tarea",
+                            "showIf": "verConvertirTarea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "transpasarAnotacion",
+                            "label": "Transpasar Actualización",
+                            "showIf": "verTranspasarAnotacion",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "title": true, "width": 30},
+                        {"tipo": "field", "key": "gt_actualizaciones.otros", "label": "Elmentos relacionado", "width": 350},
+                        {"tipo": "foreignfield", "key": "nombreUsuario", "label": "Generado por", "color": "Color_responsable", "width": 40},
+                        {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 45},
+                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 45}
                     ],
                     "rowclick": "verElemento",
                     "accionesGrid": []
@@ -39,6 +58,20 @@
         }
     },
     "acciones": {
+        "convertirTarea": {
+            "label": "Convetir en tarea",
+            "action": "legacy",
+            "serverAction": "convertirTarea",
+            "prefix": "gt_actualizaciones",
+            "icon": "assignment"
+        },
+        "transpasarAnotacion": {
+            "label": "Transpasar anotacion",
+            "action": "legacy",
+            "serverAction": "transpasarAnotacion",
+            "prefix": "gt_actualizaciones",
+            "icon": "autorenew"
+        },
         "borrarActualizacion": {
             "label": "borrarActualizacion",
             "action": "legacy",
