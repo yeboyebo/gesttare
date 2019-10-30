@@ -492,7 +492,7 @@ class gesttare(interna):
                 return False
 
             response["resul"] = True
-            response["msg"] = "Tarea planificada para mañana"
+            response["msg"] = "Tarea planificada para el día siguiente"
 
         else:
             response["resul"] = True

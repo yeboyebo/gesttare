@@ -85,7 +85,7 @@
         },
         {
             "NAME": "gt_actualizaciones",
-            "TEXT": "Notificaciones",
+            "TEXT": "Bandeja de entrada",
             "URL": "gesttare/gt_actualizaciones/master",
             "ICON": "widgets",
             "COLOR": "rgb(7, 180, 7)",

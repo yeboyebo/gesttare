@@ -14,88 +14,113 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": "gbTareas gbTareasBox",
-            "style": {},
+            "className": "",
+            "style": { },
             "layout": {
-                "groupBoxGraphic": {
+                "groupBoxIzquierda": {
                     "componente": "YBGroupBox",
                     "className": "",
+                    "style": {
+                        "width": "50%",
+                        "position": "relative",
+                        "float": "left"
+                    },
                     "layout": {
-                        "graphicSeparator": {
-                            "componente": "YBSeparator"
-                        },
-                        "graficosAnalisis": {
-                            "label": "Análisis",
-                            "componente": "YBChart",
-                            "filter": {
-                                "idusuario": {
-                                    "filterType": "custom",
-                                    "tipo": 55,
-                                    "tofield": "idusuario",
-                                    "key": "idusuario",
-                                    "desc": "usuario",
-                                    "rel": "aqn_user",
-                                    "showpk": false,
-                                    "label": "Usuario",
-                                    "function": "getParticCompaniaUsu"
+                        "groupBoxGraphic": {
+                            "componente": "YBGroupBox",
+                            "className": "",
+                            "layout": {
+                                "graphicSeparator": {
+                                    "componente": "YBSeparator"
                                 },
-                                "fecha": {
-                                    "filterType": "custom",
-                                    "tipo": 28,
-                                    "key": "fecha",
-                                    "label": "Fecha"
+                                "graficosAnalisis": {
+                                    "label": "Análisis",
+                                    "componente": "YBChart",
+                                    "filter": {
+                                        "idusuario": {
+                                            "filterType": "custom",
+                                            "tipo": 55,
+                                            "tofield": "idusuario",
+                                            "key": "idusuario",
+                                            "desc": "usuario",
+                                            "rel": "aqn_user",
+                                            "showpk": false,
+                                            "label": "Usuario",
+                                            "function": "getParticCompaniaUsu"
+                                        },
+                                        "fecha": {
+                                            "filterType": "custom",
+                                            "tipo": 28,
+                                            "key": "fecha",
+                                            "label": "Fecha"
+                                        }
+                                    },
+                                    "d3": "pieChart",
+                                    "prefix": "grafico"
                                 }
-                            },
-                            "d3": "pieChart",
-                            "prefix": "grafico"
+                            }
+                        },
+
+                        "separator": {
+                            "componente": "YBSeparator"
                         }
                     }
                 },
-
-                "separator": {
-                    "componente": "YBSeparator"
-                },
-                "gridTareasMasTiempo": {
-                    "componente": "YBGrid",
-                    "type": "query",
-                    "prefix": "tareasMasTiempo",
-                    "autofilter": false,
-                    "cansavefilter": false,
-                    "paginacion": false,
+                "groupBoxDerecha": {
+                    "componente": "YBGroupBox",
                     "className": "",
-                    "buscador": false,
-                    "label": "Top 10 tareas con más tiempo invertido",
-                    "filter": {
-                         "idusuario": {
-                                "filterType": "custom",
-                                "tipo": 55,
-                                "tofield": "idusuario",
-                                "key": "idusuario",
-                                "desc": "usuario",
-                                "rel": "aqn_user",
-                                "showpk": false,
-                                "label": "Usuario",
-                                "function": "getParticCompaniaUsu"
-                            },
-                            "fecha": {
-                                "filterType": "custom",
-                                "tipo": 28,
-                                "key": "fecha",
-                                "label": "Fecha"
-                            }
+                    "style": {
+                        "width": "50%",
+                        "position": "relative",
+                        "float": "left"
                     },
-                    "columns": [
-                        {"tipo": "field", "listpos": "secondaryitem", "key": "tt.fecha", "label": "Fecha", "width": 80},
-                        {"tipo": "field", "listpos": "body", "key": "a.usuario", "label": "Usuario", "width": 80},
-                        {"tipo": "field", "listpos": "title", "key": "t.nombre", "label": "Tarea", "width": 400, "flex": 2, "title": true},
-                        {"tipo": "field", "listpos": "body", "key": "p.nombre", "label": "Proyecto", "width": 330, "flex": 2, "title": true},
-                        {"tipo": "field", "listpos": "subtitle", "key": "tt.totaltiempo", "label": "Total Tiempo", "width": 80}
-                    ],
-                    "rowclick": "gotoTarea"
+                    "layout": {
+                        "graphicSeparator": {
+                                    "componente": "YBSeparator"
+                                },
+                        "gridTareasMasTiempo": {
+                            "componente": "YBGrid",
+                            "type": "query",
+                            "prefix": "tareasMasTiempo",
+                            "autofilter": false,
+                            "cansavefilter": false,
+                            "paginacion": false,
+                            "className": "",
+                            "buscador": false,
+                            "label": "Top 10 tareas con más tiempo invertido",
+                            "filter": {
+                                 "idusuario": {
+                                        "filterType": "custom",
+                                        "tipo": 55,
+                                        "tofield": "idusuario",
+                                        "key": "idusuario",
+                                        "desc": "usuario",
+                                        "rel": "aqn_user",
+                                        "showpk": false,
+                                        "label": "Usuario",
+                                        "function": "getParticCompaniaUsu"
+                                    },
+                                    "fecha": {
+                                        "filterType": "custom",
+                                        "tipo": 28,
+                                        "key": "fecha",
+                                        "label": "Fecha"
+                                    }
+                            },
+                            "columns": [
+                                {"tipo": "field", "listpos": "secondaryitem", "key": "tt.fecha", "label": "Fecha", "width": 80},
+                                {"tipo": "field", "listpos": "body", "key": "a.usuario", "label": "Usuario", "width": 80},
+                                {"tipo": "field", "listpos": "title", "key": "t.nombre", "label": "Tarea", "width": 200, "flex": 2, "title": true},
+                                {"tipo": "field", "listpos": "body", "key": "p.nombre", "label": "Proyecto", "width": 130, "flex": 2, "title": true},
+                                {"tipo": "field", "listpos": "subtitle", "key": "tt.totaltiempo", "label": "Total Tiempo", "width": 80}
+                            ],
+                            "rowclick": "gotoTarea"
+                        }
+                    }
                 }
 
 
-            }
+                    }
         }
     },
     "acciones": {

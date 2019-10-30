@@ -247,7 +247,7 @@ class gesttare(yblogin):
             valor = 0
             data.append({"name": q.value(1), "value": q.value(0)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-        return {"type": "pieDonutChart", "data": data, "size": 100, "innerText": True}
+        return {"type": "pieDonutChart", "data": data, "size": 80, "innerText": True, "text": "Dristribución"}
 
     def gesttare_graficohorasporproyecto(self, oParam):
         where = "1=1 "
@@ -325,7 +325,7 @@ class gesttare(yblogin):
                     porcentaje = 100*(otros/total)
                 data.append({"name": "Otros Proyectos", "value": porcentaje})
 
-        return {"type": "pieChart", "data": data, "innerText": False, "text": "Distribución del tiempo en proyectos"}
+        return {"type": "pieChart", "data": data, "size": 80, "innerText": False, "text": "Distribución del tiempo en proyectos"}
 
     def gesttare_cajasinfo(self, oParam):
         horasStyle = {
@@ -381,11 +381,11 @@ class gesttare(yblogin):
         totalCostes = 0
         rentabilidad = 0
 
-        q = qsatype.FLSqlQuery()
-        q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        q.setSelect("t.presupuesto, t.costetotal")
-        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere("{} GROUP BY t.codproyecto".format(where))
+        # q = qsatype.FLSqlQuery()
+        # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
+        # q.setSelect("t.presupuesto, t.costetotal")
+        # q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        # q.setWhere("{} GROUP BY t.codproyecto".format(where))
 
         # q = qsatype.FLSqlQuery()
         # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
@@ -394,12 +394,14 @@ class gesttare(yblogin):
         # q.setWhere("{} GROUP BY t.codproyecto".format(where))
 
         whereCompletadas = where + "AND ta.resuelta = 'true' GROUP BY u.idusuario"
-        whereProduccion = where + "AND ta.resuelta = 'false'"
+        whereProduccion = where + "AND ta.resuelta = 'false' AND tt.totaltiempo != '00:00:00' GROUP BY u.idusuario"
 
         tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereCompletadas)
 
-        print("las tareas son: ",tareasCompletadas)
-        TareasProduccion = 0
+
+        TareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereProduccion)
+
+        print("las tareas son: ",TareasProduccion)
 
         # q = qsatype.FLSqlQuery()
         # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
@@ -407,10 +409,10 @@ class gesttare(yblogin):
         # q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
         # q.setWhere("{} AND ta.resuelta = 'true' GROUP BY u.idusuario".format(where))
 
-        if not q.exec_():
-            return []
-        if q.size() > 100:
-            return []
+        # if not q.exec_():
+        #     return []
+        # if q.size() > 100:
+        #     return []
 
         #while q.next():
         #    presupuesto = q.value(0)
@@ -418,24 +420,24 @@ class gesttare(yblogin):
         #    totalPresupuesto += presupuesto
         #    totalCostes += coste
 
-        while q.next():
-            totalPresupuesto += q.value(0)
-            totalCostes += q.value(1)
+        # while q.next():
+        #     totalPresupuesto += q.value(0)
+        #     totalCostes += q.value(1)
 
-        if totalPresupuesto != None and totalPresupuesto != 0 and totalCostes != None:
-            rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
+        # if totalPresupuesto != None and totalPresupuesto != 0 and totalCostes != None:
+        #     rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
 
         #totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
-        totalPresupuesto = flgesttare_def.iface.formatearTotalPresupuesto(totalPresupuesto)
+        # totalPresupuesto = flgesttare_def.iface.formatearTotalPresupuesto(totalPresupuesto)
 
-        rentabilidad = (locale.format('%.2f', rentabilidad, grouping=True))
+        # rentabilidad = (locale.format('%.2f', rentabilidad, grouping=True))
 
         tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
         tiempo = flgesttare_def.iface.formatearTotalTiempo(tiempo)
 
 
 
-        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Tareas Completadas", "value": tareasCompletadas, "style": presupuestoStyle}, {"name": "Rentabilidad", "value": rentabilidad, "style" :rentabilidadStyle}]
+        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Tareas Completadas", "value": tareasCompletadas, "style": presupuestoStyle}, {"name": "Tareas En Producción", "value": TareasProduccion, "style" :rentabilidadStyle}]
         return {"type": "labelInfo", "data": data}
 
     def gesttare_queryGrid_tareasMasTiempo(self, model, filters):
@@ -478,8 +480,8 @@ class gesttare(yblogin):
         response.append(cajasinfo)
         proyectosportiempo = self.iface.graficoproyectosportiempo(oParam)
         response.append(proyectosportiempo)
-        #tareasporestado = self.iface.graficostareasporestado(oParam)
-        #response.append(tareasporestado)
+        # tareasporestado = self.iface.graficostareasporestado(oParam)
+        # response.append(tareasporestado)
         horasporproyecto = self.iface.graficohorasporproyecto(oParam)
         response.append(horasporproyecto)
         return response
