@@ -289,9 +289,9 @@ html, #parent-container{
      background-color: #f1f1f1 !important;
 }
 
-.modalBody{
+/*.modalBody{
     text-align: center;
-}
+}*/
 
 .modalPie .YBButtonRaised{
     width: 176px;
@@ -729,7 +729,7 @@ a.btn-primary:hover {
 }
 */
 
-.controlmensual .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
+.controlmensual .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
     margin-bottom: 10px;   
 }
 

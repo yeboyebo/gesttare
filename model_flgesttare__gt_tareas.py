@@ -120,6 +120,7 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
         return form.iface.incrementar_dia(self, cursor)
 
     def bChCursor(fN, cursor):
+        print("???????????????????")
         return form.iface.bChCursor(fN, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam"])
@@ -155,6 +156,14 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     @helpers.decoradores.accion(aqparam=["oParam"])
     def getParticipantesProyecto(self, oParam):
         return form.iface.getParticipantesProyecto(self, oParam)
+
+    @helpers.decoradores.accion(tipo="O", aqparam=["oParam"])
+    def gotonewrecordtarea(self, oParam):
+        print(oParam)
+        response = {}
+        response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ str(oParam["nombre"]) + "&p_descripcion=" + str(oParam["descripcion"])
+        return response
+        return form.iface.gotoNewRecordAnotacion(oParam)
 
 
 # @class_declaration gt_tareas #

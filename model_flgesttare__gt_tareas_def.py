@@ -675,7 +675,7 @@ class gesttare(interna):
             return response
 
     def gesttare_bChCursor(self, fN, cursor):
-        if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, curPedido):
+        if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, cursor):
             return False
         if fN == "idusuario":
             curPartic = qsatype.FLSqlCursor("gt_partictarea")
@@ -828,50 +828,53 @@ class gesttare(interna):
         return data
 
     def gesttare_gotoNewRecordAnotacion(self, oParam):
-        # if "nombre" not in oParam:
-        #     response = {}
-        #     response['status'] = -1
-        #     response['data'] = {}
-        #     response["serverAction"] = "gotoNewRecordAnotacion"
-        #     response['params'] = [
-        #         {
-        #             "componente": "YBFieldDB",
-        #             "prefix": "otros",
-        #             "tipo": 3,
-        #             "verbose_name": "Nombre",
-        #             "key": "nombre",
-        #             "validaciones": None,
-        #             "required": True
-        #         },
-        #         {
-        #             "componente": "YBFieldDB",
-        #             "prefix": "otros",
-        #             "tipo": 3,
-        #             "verbose_name": "Descripción",
-        #             "key": "descripcion",
-        #             "validaciones": None,
-        #             "required": True
-        #         }
-        #     ]
-        #     return response
-        # else:
-        print("_________________")
-        print(oParam)
-        if "nombre" in oParam:
-            idUsuario = qsatype.FLUtil.nameUser()
-            curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
-            curActualiz.setModeAccess(curActualiz.Insert)
-            curActualiz.refreshBuffer()
-            curActualiz.setValueBuffer(u"tipo", "anotacion")
-            curActualiz.setValueBuffer(u"tipobjeto", oParam["descripcion"])
-            curActualiz.setValueBuffer(u"otros", oParam["nombre"])
-            curActualiz.setValueBuffer(u"fecha", datetime.date.today())
-            curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
-            curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
-            if not curActualiz.commitBuffer():
-                return False
-            if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
-                return False
+        if "nombre" not in oParam:
+            response = {}
+            response['status'] = -1
+            response['data'] = {}
+            response["prefix"] = "gt_tareas"
+            response["title"] = "Crear tarea"
+            response["serverAction"] = "gotoNewRecordAnotacion"
+            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear anotacion", "serverAction": "gotoNewRecordAnotacion"}, {"accion": "serverAction","nombre": "Crear tarea", "serverAction": "gotonewrecordtarea"}]
+            response['params'] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Nombre",
+                    "key": "nombre",
+                    "validaciones": None,
+                    "required": True
+                },
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Descripción",
+                    "key": "descripcion",
+                    "validaciones": None,
+                    "required": False
+                }
+            ]
+            return response
+        else:
+            print("_________________")
+            print(oParam)
+            if "nombre" in oParam:
+                idUsuario = qsatype.FLUtil.nameUser()
+                curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+                curActualiz.setModeAccess(curActualiz.Insert)
+                curActualiz.refreshBuffer()
+                curActualiz.setValueBuffer(u"tipo", "anotacion")
+                curActualiz.setValueBuffer(u"tipobjeto", oParam["descripcion"])
+                curActualiz.setValueBuffer(u"otros", oParam["nombre"])
+                curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+                curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+                curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
+                if not curActualiz.commitBuffer():
+                    return False
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
+                    return False
         return True
 
     def __init__(self, context=None):
@@ -986,7 +989,7 @@ class gesttare(interna):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)
 
     def bChCursor(self, fN, cursor):
-        return self.ctx.tele_omega_bChCursor(fN, cursor)
+        return self.ctx.gesttare_bChCursor(fN, cursor)
 
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)

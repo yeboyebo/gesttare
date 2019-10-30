@@ -12,6 +12,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+import json
 
 
 class gesttare(interna):
@@ -22,18 +23,32 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
         if template == "notificacionesUsuario":
-            return [{'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}]
+            return [{'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}]
 
         return fields
 
     def gesttare_field_nombreUsuario(self, model):
         nombre_usuario = ""
         try:
-            print(model['gt_actualizaciones.idusuarioorigen'])
             nombre_usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"nombre", ustr(u"idusuario = '", model['gt_actualizaciones.idusuarioorigen'], "'"))
         except Exception:
             pass
-        return nombre_usuario
+        return "@" + nombre_usuario
+
+    def gesttare_field_verConvertirTarea(sefl, model):
+        if model["gt_actualizaciones.tipo"] != "anotacion":
+            return "hidden"
+        else:
+            return ""
+
+    def gesttare_field_verTranspasarAnotacion(sefl, model):
+        if model["gt_actualizaciones.tipo"] != "anotacion":
+            return "hidden"
+        else:
+            return ""
+
+    def gesttare_field_color_responsable(self, model):
+        return "responsable"
 
     def gesttare_queryGrid_notificacionesUsuario(self, model):
         idUsuario = qsatype.FLUtil.nameUser()
@@ -46,11 +61,10 @@ class gesttare(interna):
 
     def gesttare_visualizarElemento(self, model, cursor):
         response = {}
-        print("___________")
-        print(cursor.valueBuffer("tipobjeto"))
         if cursor.valueBuffer("tipo") == "anotacion":
             response["status"] = 2
-            response["confirm"] = cursor.valueBuffer("otros") + "</br>" + cursor.valueBuffer("tipobjeto")
+            response["confirm"] = "Nombre: " + cursor.valueBuffer("otros") + "</br>" + "Descripcion: " + cursor.valueBuffer("tipobjeto")
+            response["close"] = True
             # print(response)
             return response
             # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
@@ -86,6 +100,47 @@ class gesttare(interna):
         resul["msg"] = "Notificación eliminada correctamente"
         return resul
 
+    def gesttare_convertirTarea(self, model, oParam):
+        response = {}
+        response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ str(model.tipobjeto) + "&p_descripcion=" + str(model.otros)
+        return response
+
+    def gesttare_transpasarAnotacion(self, model, oParam):
+        response = {}
+        if "idusuario" not in oParam:
+            response['status'] = -1
+            response['data'] = {}
+            response['params'] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "rel": "aqn_user",
+                    "style": {
+                        "width": "100%"
+                    },
+                    "tipo": 185,
+                    "verbose_name": "Participantes",
+                    "label": "Participantes",
+                    "function": "getParticCompaniaUsu",
+                    "key": "idusuario",
+                    "desc": "usuario",
+                    "validaciones": None,
+                    "required": False
+                }
+            ]
+            return response
+        else:
+            participantes = json.loads(oParam["idusuario"])
+            for p in participantes:
+                if participantes[p] is True:
+                    qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizacion = '" + str(model.idactualizacion) + "'")
+                    if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([model.idactualizacion, p, False])):
+                        return False
+            response = {}
+            response["resul"] = True
+            response["msg"] = "Anotacion transpasada"
+            return response
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -94,6 +149,12 @@ class gesttare(interna):
 
     def field_nombreUsuario(self, model):
         return self.ctx.gesttare_field_nombreUsuario(model)
+
+    def field_verConvertirTarea(self, model):
+        return self.ctx.gesttare_field_verConvertirTarea(model)
+
+    def field_verTranspasarAnotacion(self, model):
+        return self.ctx.gesttare_field_verTranspasarAnotacion(model)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
@@ -106,6 +167,15 @@ class gesttare(interna):
 
     def borrarActualizacion(self, model, oParam):
         return self.ctx.gesttare_borrarActualizacion(model, oParam)
+
+    def field_color_responsable(self, model):
+        return self.ctx.gesttare_field_color_responsable(model)
+
+    def convertirTarea(self, model, oParam):
+        return self.ctx.gesttare_convertirTarea(model, oParam)
+
+    def transpasarAnotacion(self, model, oParam):
+        return self.ctx.gesttare_transpasarAnotacion(model, oParam)
 
 
 # @class_declaration head #

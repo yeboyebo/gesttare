@@ -32,6 +32,23 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
     def field_nombreUsuario(self):
         return form.iface.field_nombreUsuario(self)
 
+    def field_verConvertirTarea(self):
+        return form.iface.field_verConvertirTarea(self)
+
+    def field_verTranspasarAnotacion(self):
+        return form.iface.field_verTranspasarAnotacion(self)
+
+    def field_color_responsable(self):
+        return form.iface.field_color_responsable(self)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def convertirTarea(self, oParam):
+        return form.iface.convertirTarea(self, oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def transpasarAnotacion(self, oParam):
+        return form.iface.transpasarAnotacion(self, oParam)
+
 
 # @class_declaration gt_actualizaciones #
 class gt_actualizaciones(gesttare_gt_actualizaciones, helpers.MixinConAcciones):
