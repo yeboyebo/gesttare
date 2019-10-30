@@ -12,6 +12,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+import json
 
 
 class gesttare(interna):
@@ -62,7 +63,7 @@ class gesttare(interna):
         response = {}
         if cursor.valueBuffer("tipo") == "anotacion":
             response["status"] = 2
-            response["confirm"] = cursor.valueBuffer("otros") + "</br>" + cursor.valueBuffer("tipobjeto")
+            response["confirm"] = "Nombre: " + cursor.valueBuffer("otros") + "</br>" + "Descripcion: " + cursor.valueBuffer("tipobjeto")
             response["close"] = True
             # print(response)
             return response
@@ -113,16 +114,15 @@ class gesttare(interna):
                 {
                     "componente": "YBFieldDB",
                     "prefix": "otros",
-                    "rel": "gt_tareas",
-                    "calculatepk": False,
+                    "rel": "aqn_user",
                     "style": {
                         "width": "100%"
                     },
-                    "tipo": 180,
+                    "tipo": 185,
                     "verbose_name": "Participantes",
                     "label": "Participantes",
+                    "function": "getParticCompaniaUsu",
                     "key": "idusuario",
-                    "function": "getParticipantesProyecto",
                     "desc": "usuario",
                     "validaciones": None,
                     "required": False
@@ -130,31 +130,15 @@ class gesttare(interna):
             ]
             return response
         else:
-            # participantes = json.loads(oParam["idusuario"])
-            # for p in participantes:
-            #     curPartic = qsatype.FLSqlCursor("gt_partictarea")
-            #     curPartic.select(ustr("idusuario = '", p, "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
-            #     curPartic.refreshBuffer()
-            #     if curPartic.first():
-            #         if participantes[p] is False:
-            #             # print("vamos a borrar")
-            #             curPartic.setModeAccess(cursor.Del)
-            #             curPartic.refreshBuffer()
-            #             if not curPartic.commitBuffer():
-            #                 return False
-            #     else:
-            #         if participantes[p] is True:
-            #             # print("vamos a crear")
-            #             curPartic.setModeAccess(curPartic.Insert)
-            #             curPartic.refreshBuffer()
-            #             curPartic.setValueBuffer("idusuario", p)
-            #             curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
-            #             if not curPartic.commitBuffer():
-            #                 return False
-            # response = {}
-            # response["resul"] = True
-            # response["msg"] = "Actualizados los participantes"
-            return True
+            participantes = json.loads(oParam["idusuario"])
+            for p in participantes:
+                if participantes[p] is True:
+                    qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizacion = '" + str(model.idactualizacion) + "'")
+                    if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([model.idactualizacion, p, False])):
+                        return False
+            response = {}
+            response["resul"] = True
+            response["msg"] = "Anotacion transpasada"
             return response
 
     def __init__(self, context=None):
