@@ -835,7 +835,7 @@ class gesttare(interna):
             response["prefix"] = "gt_tareas"
             response["title"] = "Crear tarea"
             response["serverAction"] = "gotoNewRecordAnotacion"
-            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear anotacion", "serverAction": "gotoNewRecordAnotacion"}, {"accion": "serverAction","nombre": "Crear tarea", "serverAction": "gotonewrecordtarea"}]
+            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear anotacion", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Crear tarea", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
@@ -858,15 +858,16 @@ class gesttare(interna):
             ]
             return response
         else:
-            print("_________________")
-            print(oParam)
             if "nombre" in oParam:
+                descripcion = ""
+                if "descripcion" in oParam:
+                    descripcion = oParam["descripcion"]
                 idUsuario = qsatype.FLUtil.nameUser()
                 curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
                 curActualiz.setModeAccess(curActualiz.Insert)
                 curActualiz.refreshBuffer()
                 curActualiz.setValueBuffer(u"tipo", "anotacion")
-                curActualiz.setValueBuffer(u"tipobjeto", oParam["descripcion"])
+                curActualiz.setValueBuffer(u"tipobjeto", descripcion)
                 curActualiz.setValueBuffer(u"otros", oParam["nombre"])
                 curActualiz.setValueBuffer(u"fecha", datetime.date.today())
                 curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
@@ -876,6 +877,45 @@ class gesttare(interna):
                 if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
                     return False
         return True
+
+    def gesttare_gotonewrecordtarea(self, oParam):
+        if "nombre" not in oParam:
+            response = {}
+            response['status'] = -1
+            response['data'] = {}
+            response["prefix"] = "gt_tareas"
+            response["title"] = "Crear tarea"
+            response["serverAction"] = "gotoNewRecordAnotacion"
+            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear anotacion", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Crear tarea", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+            response['params'] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Nombre",
+                    "key": "nombre",
+                    "validaciones": None,
+                    "required": True
+                },
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Descripción",
+                    "key": "descripcion",
+                    "validaciones": None,
+                    "required": False
+                }
+            ]
+            return response
+        else:
+            nombre = oParam["nombre"]
+            descripcion = ""
+            if "descripcion" in oParam:
+                descripcion = "&p_descripcion=" + str(oParam["descripcion"])
+            response = {}
+            response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ nombre + "" + descripcion
+            return response
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -1020,6 +1060,9 @@ class gesttare(interna):
 
     def gotoNewRecordAnotacion(self, oParam):
         return self.ctx.gesttare_gotoNewRecordAnotacion(oParam)
+
+    def gotonewrecordtarea(self, oParam):
+        return self.ctx.gesttare_gotonewrecordtarea(oParam)
 
 # @class_declaration head #
 class head(gesttare):
