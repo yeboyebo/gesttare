@@ -30,10 +30,11 @@ class gesttare(interna):
     def gesttare_field_nombreUsuario(self, model):
         nombre_usuario = ""
         try:
-            nombre_usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"nombre", ustr(u"idusuario = '", model['gt_actualizaciones.idusuarioorigen'], "'"))
+            nombre_usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"usuario", ustr(u"idusuario = '", model['gt_actualizaciones.idusuarioorigen'], "'"))
+            nombre_usuario = "@" + nombre_usuario
         except Exception:
             pass
-        return "@" + nombre_usuario
+        return nombre_usuario
 
     def gesttare_field_verConvertirTarea(sefl, model):
         if model["gt_actualizaciones.tipo"] != "anotacion":
