@@ -58,7 +58,6 @@ class gesttare(interna):
         where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
         if filters:
-            print(filters)
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
                 where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":
@@ -95,7 +94,6 @@ class gesttare(interna):
     def gesttare_field_nombre(self, model):
         nombre = ""
         try:
-            print(model['aqn_user.usuario'])
             nombre = "@" + model['aqn_user.usuario']
             # if hasattr(model.idusuario, 'usuario'):
             #     nombre = "@" + model.idusuario.usuario
@@ -251,10 +249,8 @@ class gesttare(interna):
                 print(usuario)
                 print(curTracking.valueBuffer("idusuario"))
                 if not pertenece:
-                    print("sale por aqui 1")
                     return False
             else:
-                print("sale por aqui 2")
                 return False
         return True
 
