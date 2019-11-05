@@ -135,14 +135,12 @@ class gesttare(interna):
 
                 if curPartic.first():
                     if participantes[p] is False:
-                        # print("vamos a borrar")
                         curPartic.setModeAccess(cursor.Del)
                         curPartic.refreshBuffer()
                         if not curPartic.commitBuffer():
                             return False
                 else:
                     if participantes[p] is True:
-                        # print("vamos a crear")
                         curPartic.setModeAccess(curPartic.Insert)
                         curPartic.refreshBuffer()
                         curPartic.setValueBuffer("idusuario", p)

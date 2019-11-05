@@ -34,7 +34,7 @@ class gesttare(interna):
 
     def gesttare_field_nombreUsuario(self, model):
         # nombre = qsatype.FLUtil.quickSqlSelect("aqn_user", "email", "idusuario = {}".format(model.idusuario.idusuario)) or ""
-        nombre = model.idusuario.usuario
+        nombre = "@" + model.idusuario.usuario
         return nombre
 
     def __init__(self, context=None):

@@ -137,15 +137,15 @@ class gesttare(interna):
     def gesttare_compruebaNotificacion(self, tipo, cursor):
         _i = self.iface
         # tipo_objeto -> gt_tarea, gt_proyecto, gt_comentario, gt_anotacion
-        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "partictarea"]:
+        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "partictarea", "comentario"]:
             tipo_objeto = "gt_tarea"
             idobjeto = cursor.valueBuffer("idtarea")
         elif tipo in ["particproyecto"]:
             tipo_objeto = "gt_proyecto"
             idobjeto = cursor.valueBuffer("codproyecto")
-        elif tipo in ["comentario"]:
-            tipo_objeto = "gt_comentario"
-            idobjeto = cursor.valueBuffer("idcomentario")
+        # elif tipo in ["comentario"]:
+        #     tipo_objeto = "gt_comentario"
+        #     idobjeto = cursor.valueBuffer("idcomentario")
         elif tipo in ["anotacion"]:
             tipo_objeto = "gt_anotacion"
             idobjeto = cursor.valueBuffer("idanotacion")
@@ -233,10 +233,9 @@ class gesttare(interna):
         notificamos = True
         idUsuario = qsatype.FLUtil.nameUser()
         where = u"a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'"
-        if tipo_objeto == "gt_comentario":
-            where = u"(a.tipobjeto = 'gt_tarea' AND a.idobjeto = '" + str(cursor.valueBuffer("idtarea")) + "') OR (a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "'))"
+        # if tipo_objeto == "gt_comentario":
+        #     where = u"(a.tipobjeto = 'gt_tarea' AND a.idobjeto = '" + str(cursor.valueBuffer("idtarea")) + "') OR (a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "'))"
         if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = ", usuarioNotificado, u" AND idactualizacion = ", idActualizacion)):
-            print("Puede haber actualizacion ya creada???")
             return True
         print("miramos si el usuario tiene alguna notificacion en esa tabla")
         # actualiz = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario u INNER JOIN gt_actualizaciones  ON u.idactualizacion = a.idactualizacion", "a.tipo", "a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'")

@@ -70,19 +70,22 @@ class gesttare(interna):
             return response
             # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
         elif cursor.valueBuffer("tipobjeto") == "proyecto":
-            response["url"] = '/gesttare/gt_tareas/' + str(cursor.valueBuffer("idobjeto"))
+            response["url"] = '/gesttare/gt_proyectos/' + str(cursor.valueBuffer("idobjeto"))
             return response
-        elif cursor.valueBuffer("tipobjeto") == "gt_comentario":
-            idtarea = qsatype.FLUtil().quickSqlSelect("gt_comentarios", "idtarea", "idcomentario = '{}'".format(cursor.valueBuffer("idobjeto")))
+        # elif cursor.valueBuffer("tipobjeto") == "gt_comentario":
+        #     idtarea = qsatype.FLUtil().quickSqlSelect("gt_comentarios", "idtarea", "idcomentario = '{}'".format(cursor.valueBuffer("idobjeto")))
+        #     response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
+        #     return response
+        if model.idtarea:
+            print(model.idtarea.idtarea)
+            idtarea = model.idtarea.idtarea
+            print(idtarea)
+            # porlotes = articulos.objects.filter(referencia__exact=model.referencia.referencia)
+            # print(porlotes)
+            # if porlotes[0].porlotes:
             response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
-            return response
-        print(model.idtarea.idtarea)
-        idtarea = model.idtarea.idtarea
-        print(idtarea)
-        # porlotes = articulos.objects.filter(referencia__exact=model.referencia.referencia)
-        # print(porlotes)
-        # if porlotes[0].porlotes:
-        response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
+        else:
+            response["url"] = '/gesttare/gt_tareas/' + str(cursor.valueBuffer("idobjeto"))
         return response
 
     def gesttare_borrarActualizacion(self, model, oParam):
