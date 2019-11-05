@@ -389,18 +389,6 @@
             {
                 "name": "export.svg",
                 "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "anotar",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "anotar_blanco.png",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "anotar_modal.svg",
-                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [
