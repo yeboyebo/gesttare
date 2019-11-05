@@ -189,8 +189,7 @@ html, #parent-container{
 
 @media (min-width: 1024px) {
     .appInfo .YBTableCell {
-        width: 450px !important; 
-        text-align: center !important; 
+        width: 950px !important; 
         border: none; 
     }
 
@@ -199,6 +198,35 @@ html, #parent-container{
         text-align: center !important; 
         border: none; 
     }
+
+}
+
+@media (max-width: 768px) {
+    .appInfo .YBTableCell {
+        width: 700px !important; 
+        border: none; 
+    }
+
+    .appInfo .YBTableActionsCell {
+        width: 50px !important; 
+        text-align: center !important; 
+        border: none; 
+    }
+
+}
+
+@media (max-width: 425px) {
+    .appInfo .YBTableCell {
+        width: 300px !important; 
+        border: none; 
+    }
+
+    .appInfo .YBTableActionsCell {
+        width: 30px !important; 
+        text-align: center !important; 
+        border: none; 
+    }
+
 }
 
 .appInfo .YBTableCell i{
@@ -922,8 +950,40 @@ a.btn-primary:hover {
     border: none !important;
 }
 
-/*Diseño modales de bandeja de entrada*/
+/*Diseño de bandeja de entrada*/
 
 .modal_transpasarAnotacion hr{
     display: none;
+}
+
+.queryGrid_notificacionesUsuario img {
+    width: 28px !important;
+    height: 28px !important;
+    margin-top: -2px !important;
+    margin-left: 2px;
+}
+
+.naranjaAnotar {
+    border-radius: 17.5px;
+    background-color: #ffc68d;
+}
+
+.lilaAnotar {
+    border-radius: 17.5px;
+    background-color: #d0cdf4;
+}
+
+.verdeAnotar {
+    border-radius: 17.5px;
+    background-color: #9decac;    
+}
+
+.amarilloAnotar {
+    border-radius: 17.5px;
+    background-color: #faeb8c;
+}
+
+.rojoAnotar {
+    border-radius: 17.5px;
+    background-color: #cc2916;
 }

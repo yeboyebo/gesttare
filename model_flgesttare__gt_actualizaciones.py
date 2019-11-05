@@ -44,6 +44,9 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
     def field_color_responsable(self):
         return form.iface.field_color_responsable(self)
 
+    def field_color_fondo_icono(self):
+        return form.iface.field_color_fondo_icono(self)
+
     @helpers.decoradores.accion(aqparam=["oParam"])
     def convertirTarea(self, oParam):
         return form.iface.convertirTarea(self, oParam)

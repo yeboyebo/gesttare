@@ -23,7 +23,7 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
         if template == "notificacionesUsuario":
-            return [{'verbose_name': 'actIcon', 'func': 'field_actIcon'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}]
+            return [{'verbose_name': 'actIcon', 'func': 'field_actIcon'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}, {'verbose_name': 'Color_fondo_icono', 'func': 'field_color_fondo_icono'}]
 
         return fields
 
@@ -51,9 +51,47 @@ class gesttare(interna):
     def gesttare_field_color_responsable(self, model):
         return "responsable"
 
+    def gesttare_field_color_fondo_icono(self, model):
+        retorno = ""
+        if model["gt_actualizaciones.tipo"]:
+            if model["gt_actualizaciones.tipo"] == "resuelto":
+                retorno = "verdeAnotar"
+            elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
+                retorno = "naranjaAnotar"
+            elif model["gt_actualizaciones.tipo"] == "comentario":
+                retorno = "lilaAnotar"
+            elif model["gt_actualizaciones.tipo"] == "partictarea":
+                retorno = "amarilloAnotar"
+            elif model["gt_actualizaciones.tipo"] == "asignadoComoResponsable":
+                retorno = "lilaAnotar"
+            elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
+                retorno = "rojoAnotar"
+            elif model["gt_actualizaciones.tipo"] == "eliminado":
+                retorno = "rojoAnotar"
+        print(retorno)
+
+        return retorno
+
     def gesttare_field_actIcon(self, model):
         # return "accessible"
-        return "/static/dist/img/icons/timer.svg"
+        retorno = ""
+        if model["gt_actualizaciones.tipo"]:
+            if model["gt_actualizaciones.tipo"] == "resuelto":
+                retorno = "/static/dist/img/icons/check.svg"
+            elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
+                retorno = "/static/dist/img/icons/update.svg"
+            elif model["gt_actualizaciones.tipo"] == "comentario":
+                retorno = "/static/dist/img/icons/group.svg"
+            elif model["gt_actualizaciones.tipo"] == "partictarea":
+                retorno = "/static/dist/img/icons/group_add.svg"
+            elif model["gt_actualizaciones.tipo"] == "asignadoComoResponsable":
+                retorno = "/static/dist/img/icons/supervisor_account.svg"
+            elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
+                retorno = "/static/dist/img/icons/person_add_disabled.svg"
+            elif model["gt_actualizaciones.tipo"] == "eliminado":
+                retorno = "/static/dist/img/icons/delete.svg"
+
+        return retorno
 
     def gesttare_queryGrid_notificacionesUsuario(self, model):
         idUsuario = qsatype.FLUtil.nameUser()
@@ -183,6 +221,9 @@ class gesttare(interna):
 
     def field_color_responsable(self, model):
         return self.ctx.gesttare_field_color_responsable(model)
+
+    def field_color_fondo_icono(self, model):
+        return self.ctx.gesttare_field_color_fondo_icono(model)
 
     def convertirTarea(self, model, oParam):
         return self.ctx.gesttare_convertirTarea(model, oParam)
