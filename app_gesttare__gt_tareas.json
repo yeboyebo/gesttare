@@ -258,6 +258,7 @@
                                     "tipo": "foreignfield",
                                     "listpos": "title",
                                     "key": "nombreUsuario",
+                                    "className": "responsable",
                                     "width": 100
                                 },
                                 {
