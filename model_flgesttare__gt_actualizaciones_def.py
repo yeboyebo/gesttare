@@ -52,7 +52,7 @@ class gesttare(interna):
         return "responsable"
 
     def gesttare_field_actIcon(self, model):
-        # return "android"
+        # return "accessible"
         return "/static/dist/img/icons/timer.svg"
 
     def gesttare_queryGrid_notificacionesUsuario(self, model):
@@ -119,7 +119,6 @@ class gesttare(interna):
         response = {}
         if "idusuario" not in oParam:
             response['status'] = -1
-            response['title'] = "Participantes"
             response['data'] = {}
             response['params'] = [
                 {
