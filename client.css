@@ -89,7 +89,7 @@ html, #parent-container{
     line-height: 1.56;
     letter-spacing: normal;
     color: #ffffff;
-    text-transform: capitalize;
+    //text-transform: capitalize;
     margin-left: 8px;
 }
 
@@ -185,10 +185,20 @@ html, #parent-container{
     color :white; 
 }
 
-.appInfo .YBTableCell {
-    width: auto !important; 
-    text-align: center !important; 
-    border: none; 
+/*Tarea activa*/
+
+@media (min-width: 1024px) {
+    .appInfo .YBTableCell {
+        width: 450px !important; 
+        text-align: center !important; 
+        border: none; 
+    }
+
+    .appInfo .YBTableActionsCell {
+        width: 50px !important; 
+        text-align: center !important; 
+        border: none; 
+    }
 }
 
 .appInfo .YBTableCell i{
@@ -491,10 +501,10 @@ a.btn-primary:hover {
 }
 
 @media (max-width: 1303px) {
-  .controlTiempoButton {
+ /* .controlTiempoButton {
     float: right;
     margin-top: -7px;
-  }
+  }*/
   .YBNavBarActions i .material-icons {
     float: right;
   }
@@ -511,11 +521,11 @@ a.btn-primary:hover {
   }*/
   /*.navbar-header-center .YBNavBarActions {
     margin: -20px 20% 0px 20px;
-  }*/
-  .controlTiempoButton {
+    }*/
+/*  .controlTiempoButton {
     float: right;
     margin-top: -7px;
-  }
+  }*/
   .YBNavBarActions i .material-icons {
     float: right;
   }
@@ -540,20 +550,21 @@ a.btn-primary:hover {
 @media (max-width: 768px) {
   .controlTiempoButton {
     float: right;
+    margin-top: -7.54px;
   }
   .controlTiempoButton > .YBButtonRaised{
     margin-top: 10px;
     background-color: orange;
-    width: 35px;
+    width: 33px;
     height: 35px;
     border-radius: 50%;
     }
     .YBButonIconResponsive {
-        margin-left: -4px;
+        margin-left: -5px;
     }
-      .YBNavBarActions i .material-icons {
+    .YBNavBarActions i .material-icons {
         float: right;
-      }
+    }
    /*.toaster{
         left: 37% !important;
     }*/
@@ -627,6 +638,7 @@ a.btn-primary:hover {
     margin-left: auto;
     margin-right: auto;
     position: relative;
+    margin-top: 25px;
     //float: right;
 }
 
@@ -646,10 +658,10 @@ a.btn-primary:hover {
 }
 
 .YBCalendarFiltersWeeks {
-    width: 40%;
+    width: 35%;
     position: absolute;
-    margin-top: -10px;
-    margin-left: 5px;
+    margin-top: 5px;
+    margin-left: 2%;
     //float: right;
 }
 
@@ -807,10 +819,12 @@ a.btn-primary:hover {
     width: 50%;
 }
 
-.navbar-user {
-    position: absolute !important;
-    top: 10px;
-    right: 0;
+@media (min-width: 769px) {
+    .navbar-user {
+        position: absolute !important;
+        top: 10px;
+        right: 0;
+    }
 }
 
 .navbar-dashboard-img {
@@ -841,8 +855,75 @@ a.btn-primary:hover {
     background-color: #f4f6f8 !important;
 }
 
-/*centrar botón anotar*/
+/*Alineado para cuadrar con: Colores, fondo, border-radius y sombreado para pantallas de listados*/
+
+.YBComponentInfoText {
+    margin-left: 17px;
+}
+
+.YBSeparatorItem {
+    width: 98%;
+}
+
+.YBComponentInfoIcon {
+    margin-left: 17px;
+}
+
+.YBComponentInfo .YBComponentInfoText {
+     margin-left: 0px !important;
+}
+
+/*centrar botón anotar y cambio diseño*/
 
 .navbar-header-center .YBButtonRaised {
     margin-right: 0px !important;
+}
+
+.anotarButton .YBButtonRaised>img {
+    float: left;
+    margin-left: 25px;
+}
+
+.anotarButton .YBButtonRaised {
+    border-radius: 5px;
+    border: 0px;
+    font-weight: bold;
+    position: relative;
+    padding: 5px 10px;
+    margin: 10px 1px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    will-change: box-shadow, transform;
+    min-height: 32px;
+    max-height: 32px;
+}
+
+/*Diseño modal anotar*/
+
+.creaAnotacionButton {
+    display: block;
+    margin-left: auto;
+    //text-transform: unset;
+    margin-right: auto !important;
+    width: 210px !important;
+}
+
+.modalBody .modalPie .anotacionToTareaButton {
+    display: block;
+    color: black !important;
+    background-color: #f1f1f1 !important;
+    text-transform: unset;
+    margin-left: auto;
+    margin-right: auto !important;
+    width: auto;
+}
+
+.is-empty hr {
+    border: none !important;
+}
+
+/*Diseño modales de bandeja de entrada*/
+
+.modal_transpasarAnotacion hr{
+    display: none;
 }

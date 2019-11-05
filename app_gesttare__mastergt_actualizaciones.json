@@ -19,6 +19,7 @@
                     "filter": "",
                     "type": "query",
                     "columns": [
+                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "color": "Color_tipoAct", "label": "Tipo Act.", "title": true, "width": 30},
                         {
                             "tipo": "act",
                             "key": "borrarActualizacion",

@@ -119,6 +119,7 @@ class gesttare(interna):
         response = {}
         if "idusuario" not in oParam:
             response['status'] = -1
+            response['title'] = "Participantes"
             response['data'] = {}
             response['params'] = [
                 {
