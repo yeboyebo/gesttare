@@ -19,6 +19,7 @@
                     "filter": "",
                     "type": "query",
                     "columns": [
+                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "color": "Color_tipoAct", "label": "Tipo Act.", "title": true, "width": 30},
                         {
                             "tipo": "act",
                             "key": "borrarActualizacion",
@@ -45,7 +46,6 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos":"subtitle", "key": "gt_actualizaciones.tipo", "label": "Tipo Act.", "title": true, "width": 30},
                         {"tipo": "field", "key": "gt_actualizaciones.otros", "label": "Elmentos relacionado", "width": 350},
                         {"tipo": "foreignfield", "key": "nombreUsuario", "label": "Generado por", "color": "Color_responsable", "width": 40},
                         {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 45},

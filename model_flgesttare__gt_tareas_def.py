@@ -833,9 +833,9 @@ class gesttare(interna):
             response['status'] = -1
             response['data'] = {}
             response["prefix"] = "gt_tareas"
-            response["title"] = "Crear tarea"
+            response["title"] = "Crear nueva tarea"
             response["serverAction"] = "gotoNewRecordAnotacion"
-            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear anotacion", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Crear tarea", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
@@ -859,6 +859,7 @@ class gesttare(interna):
             return response
         else:
             if "nombre" in oParam:
+                response = {}
                 descripcion = ""
                 if "descripcion" in oParam:
                     descripcion = oParam["descripcion"]
@@ -876,6 +877,9 @@ class gesttare(interna):
                     return False
                 if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
                     return False
+                response["msg"] = "Anotación creada"
+                return response;
+
         return True
 
     def gesttare_gotonewrecordtarea(self, oParam):

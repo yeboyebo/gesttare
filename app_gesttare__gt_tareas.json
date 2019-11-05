@@ -29,10 +29,10 @@
                     "title": "Volver",
                     "prefix": "gt_tareas",
                     "icon": "arrow_back",
-                    "className": "floatRight",
+                    "className": "floatLeft",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "5px",
+                        "marginTop": "8px",
                         "marginRight": "5px"
                     },
                     "action": {
