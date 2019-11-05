@@ -14,12 +14,12 @@
             "style": { },
             "layout": {
                 "queryGrid_notificacionesUsuario": {
-                    "componente": "YBGrid",
+                    "componente": "YBList",
                     "prefix": "notificacionesUsuario",
                     "filter": "",
                     "type": "query",
                     "columns": [
-                        {"tipo": "icon", "key": "actIcon", "label": "Tipo Act.", "title": true, "avatar": true, "width": 20},
+                        {"tipo": "icon", "listpos": "avatar", "key": "actIcon", "label": "Tipo Act.", "title": true, "width": 20},
                         {
                             "tipo": "act",
                             "key": "borrarActualizacion",

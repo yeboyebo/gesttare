@@ -1,0 +1,45 @@
+{
+    "querystring": {
+        "p_l": 0,
+        "p_c": true
+    },
+    "schema": {},
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": " ",
+            "label": "",
+            "style": {},
+            "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "8px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "separator0": {
+                    "componente": "YBSeparator"
+                },
+                "labelDenegado": {
+                    "componente": "YBLabel",
+                    "text": "Permiso Denegado"
+                }
+            }
+        }
+    },
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        }
+    }
+}
