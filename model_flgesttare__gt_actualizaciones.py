@@ -38,6 +38,9 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
     def field_verTranspasarAnotacion(self):
         return form.iface.field_verTranspasarAnotacion(self)
 
+    def field_actIcon(self):
+        return form.iface.field_actIcon(self)
+
     def field_color_responsable(self):
         return form.iface.field_color_responsable(self)
 

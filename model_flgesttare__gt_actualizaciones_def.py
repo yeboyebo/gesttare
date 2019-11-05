@@ -23,7 +23,7 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
         if template == "notificacionesUsuario":
-            return [{'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}]
+            return [{'verbose_name': 'actIcon', 'func': 'field_actIcon'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}]
 
         return fields
 
@@ -50,6 +50,10 @@ class gesttare(interna):
 
     def gesttare_field_color_responsable(self, model):
         return "responsable"
+
+    def gesttare_field_actIcon(self, model):
+        # return "android"
+        return "/static/dist/img/icons/timer.svg"
 
     def gesttare_queryGrid_notificacionesUsuario(self, model):
         idUsuario = qsatype.FLUtil.nameUser()
@@ -161,6 +165,9 @@ class gesttare(interna):
 
     def field_verTranspasarAnotacion(self, model):
         return self.ctx.gesttare_field_verTranspasarAnotacion(model)
+
+    def field_actIcon(self, model):
+        return self.ctx.gesttare_field_actIcon(model)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
