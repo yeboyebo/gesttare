@@ -131,7 +131,6 @@ class gesttare(interna):
 
     def gesttare_field_nombre(self, model):
         nombre = ""
-        print("el valor es: ",model)
         try:
             # print(model['aqn_user.usuario'])
             nombre = "@" + model['aqn_user.usuario']

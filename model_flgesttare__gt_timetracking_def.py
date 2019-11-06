@@ -61,7 +61,7 @@ class gesttare(interna):
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
                 where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":
-                where += " AND gt_tareas.idtarea = {}".format(filters["[tarea]"])
+                where += " AND UPPER(gt_tareas.nombre) like '%{}%'".format(filters["[tarea]"].upper())
             if "[usuario]" in filters and filters["[usuario]"] != "":
                 where += " AND aqn_user.idusuario = '{}'".format(filters["[usuario]"])
             if "[d_fecha]" in filters and filters["[d_fecha]"] != "":

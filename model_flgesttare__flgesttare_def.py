@@ -47,6 +47,13 @@ class gesttare(interna):
             return False
         return True
 
+    def gesttare_beforeCommit_gt_tareas(self, curTarea=None):
+        _i = self.iface
+        if curTarea.modeAccess() == curTarea.Del:
+            print("notificamos deltarea")
+            _i.compruebaNotificacion("deltarea", curTarea)
+        return True
+
     def gesttare_afterCommit_gt_tareas(self, curTarea=None):
         _i = self.iface
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_tareas(curTarea):
@@ -137,7 +144,7 @@ class gesttare(interna):
     def gesttare_compruebaNotificacion(self, tipo, cursor):
         _i = self.iface
         # tipo_objeto -> gt_tarea, gt_proyecto, gt_comentario, gt_anotacion
-        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "partictarea", "comentario"]:
+        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "comentario"]:
             tipo_objeto = "gt_tarea"
             idobjeto = cursor.valueBuffer("idtarea")
         elif tipo in ["particproyecto"]:
@@ -146,6 +153,9 @@ class gesttare(interna):
         # elif tipo in ["comentario"]:
         #     tipo_objeto = "gt_comentario"
         #     idobjeto = cursor.valueBuffer("idcomentario")
+        elif tipo in ["partictarea"]:
+            tipo_objeto = "gt_tarea"
+            idobjeto = cursor.valueBuffer("idtarea")
         elif tipo in ["anotacion"]:
             tipo_objeto = "gt_anotacion"
             idobjeto = cursor.valueBuffer("idanotacion")
@@ -153,13 +163,6 @@ class gesttare(interna):
             return True
         # Creamos actualizacion y despues notificamos si es necesario
         return _i.creaNotificacion(tipo_objeto, idobjeto, tipo, cursor)
-
-        # idActualizacion = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"idactualizacion", "tipoobjeto = '{}' AND idobjeto = '{}'".format(tipo_objeto, idobjeto))
-        # if not idActualizacion:
-        #     print("aqui creamos la notificacion")
-        #     print("y notificacmos los usuarios")
-        # else:
-        #     tipo = qsatype.FLUtil.sqlSelect(u"gt_actualizaciones", u"tipo", "tipoobjeto = '{}' AND idobjeto = '{}'".format(tipo_objeto, idobjeto))
         # deltarea
         # responsable -> Añadido como responsable de una tarea
         # resuelta
@@ -170,12 +173,13 @@ class gesttare(interna):
         return True
 
     def gesttare_creaNotificacion(self, tipo_objeto, idobjeto, tipo, cursor):
+        print("crea notificacion", tipo)
         _i = self.iface
-        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "partictarea"]:
+        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion"]:
             mensaje = cursor.valueBuffer("nombre")
         elif tipo in ["particproyecto"]:
             mensaje = cursor.valueBuffer("nombre")
-        elif tipo in ["comentario"]:
+        elif tipo in ["comentario", "partictarea"]:
             mensaje = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
         elif tipo in ["anotacion"]:
             mensaje = cursor.valueBuffer("nombre")
@@ -426,10 +430,6 @@ class gesttare(interna):
         _i = self.iface
         # actualizacion = False
         tipo = ""
-        print(curTarea.modeAccess())
-        if curTarea.modeAccess() == curTarea.Del:
-            print("notificamos deltarea")
-            _i.compruebaNotificacion("deltarea", curTarea)
         if curTarea.modeAccess() == curTarea.Edit:
             # if curTarea.valueBuffer(u"codestado") != curTarea.valueBufferCopy(u"codestado"):
             #     actualizacion = True
@@ -806,6 +806,9 @@ class gesttare(interna):
 
     def afterCommit_gt_tareas(self, curTarea=None):
         return self.ctx.gesttare_afterCommit_gt_tareas(curTarea)
+
+    def beforeCommit_gt_tareas(self, curTarea=None):
+        return self.ctx.gesttare_beforeCommit_gt_tareas(curTarea)
 
     def afterCommit_gt_timetracking(self, cursor=None):
         return self.ctx.gesttare_afterCommit_gt_timetracking(cursor)
