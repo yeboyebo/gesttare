@@ -116,6 +116,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
         return form.iface.completar_tarea(self, cursor)
 
     @helpers.decoradores.accion(aqparam=["cursor"])
+    def abrir_tarea(self, cursor):
+        return form.iface.abrir_tarea(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
     def incrementar_dia(self, cursor):
         return form.iface.incrementar_dia(self, cursor)
 
@@ -160,6 +164,12 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     @helpers.decoradores.accion(tipo="O", aqparam=["oParam"])
     def gotonewrecordtarea(self, oParam):
         return form.iface.gotonewrecordtarea(oParam)
+
+    def drawif_completartarea(cursor):
+        return form.iface.drawif_completartarea(cursor)
+
+    def drawif_abrirtarea(cursor):
+        return form.iface.drawif_abrirtarea(cursor)
 
 
 # @class_declaration gt_tareas #

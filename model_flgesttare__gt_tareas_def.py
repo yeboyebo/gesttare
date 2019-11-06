@@ -477,6 +477,20 @@ class gesttare(interna):
             response["msg"] = "Tarea completada"
         return response
 
+    def gesttare_abrir_tarea(self, model, cursor):
+        response = {}
+        resuelta = cursor.valueBuffer("resuelta")
+        cursor.setValueBuffer("resuelta", not resuelta)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea")
+            return False
+
+        response["resul"] = True
+        if resuelta:
+            response["msg"] = "Tarea abierta"
+        return response
+
     def gesttare_incrementar_dia(self, model, cursor):
         response = {}
         fecha = cursor.valueBuffer("fechavencimiento")
@@ -921,6 +935,18 @@ class gesttare(interna):
             response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ nombre + "" + descripcion
             return response
 
+    def gesttare_drawif_completartarea(self, cursor):
+        if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == True:
+            return "hidden"
+
+    def gesttare_drawif_abrirtarea(self, cursor):
+        # if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "id_tarea = {}".format(cursor.valueBuffer("id_tarea"))) == False:
+        #     return "disabled"
+        prueba = qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre")))
+        if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == False:
+            return "hidden"
+        print("la consulta va: ",prueba)
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -1017,6 +1043,9 @@ class gesttare(interna):
     def completar_tarea(self, model, cursor):
         return self.ctx.gesttare_completar_tarea(model, cursor)
 
+    def abrir_tarea(self, model, cursor):
+        return self.ctx.gesttare_abrir_tarea(model, cursor)
+
     def incrementar_dia(self, model, cursor):
         return self.ctx.gesttare_incrementar_dia(model, cursor)
 
@@ -1067,6 +1096,12 @@ class gesttare(interna):
 
     def gotonewrecordtarea(self, oParam):
         return self.ctx.gesttare_gotonewrecordtarea(oParam)
+
+    def drawif_completartarea(self, cursor):
+        return self.ctx.gesttare_drawif_completartarea(cursor)
+
+    def drawif_abrirtarea(self, cursor):
+        return self.ctx.gesttare_drawif_abrirtarea(cursor)
 
 # @class_declaration head #
 class head(gesttare):

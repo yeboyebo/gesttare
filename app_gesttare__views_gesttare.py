@@ -61,7 +61,8 @@ class gesttare(interna):
                     "hideheader": True,
                     "border": False,
                     "style": {
-                        "fontWeight": "bold"
+                        "fontWeight": "bold",
+                        "textAlingn": "center"
                     },
                     "prefix": "appinfo",
                     "columns": [
