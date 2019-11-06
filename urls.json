@@ -23,6 +23,15 @@
         },
         {
             "type": "insertAfterNode",
+            "path": "/api",
+            "value": {
+                "nuevo": {
+                    "api": true
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
             "path": "/models/flfactppal",
             "value": {
                 "flsisppal": {

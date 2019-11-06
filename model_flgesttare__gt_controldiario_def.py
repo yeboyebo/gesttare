@@ -136,6 +136,11 @@ class gesttare(interna):
             return "disabled"
 
     def gesttare_validar(self, model, oParam, cursor):
+        if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idc_diario = {} AND horafin IS NULL".format(cursor.valueBuffer("idc_diario"))):
+            response = {}
+            response["status"] = 1
+            response["msg"] = "No puedes validar el día si tienes un tramo activo"
+            return response
         if "confirmacion" not in oParam:
             resul = {}
             if cursor.valueBuffer("horasextra"):

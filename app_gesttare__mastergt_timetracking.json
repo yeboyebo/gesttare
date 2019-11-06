@@ -35,14 +35,8 @@
                 "tarea": {
                     "label": "Tarea",
                     "filterType": "custom",
-                    "tipo": 55,
-                    "rel": "gt_tareas",
-                    "key": "idtarea",
-                    "tofield": "idtarea",
-                    "desc": "nombre",
-                    "showpk": false,
-                    "fN": "gt_tareas.idtarea",
-                    "function": "getTareasUsuario"
+                    "tipo": 3,
+                    "key": "tarea"
                 },
                 "proyecto": {
                     "label": "Proyecto",
