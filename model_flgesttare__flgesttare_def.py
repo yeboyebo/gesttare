@@ -176,11 +176,11 @@ class gesttare(interna):
         print("crea notificacion", tipo)
         _i = self.iface
         if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion"]:
-            mensaje = cursor.valueBuffer("nombre")
+            mensaje = "Tarea: " + cursor.valueBuffer("nombre")
         elif tipo in ["particproyecto"]:
-            mensaje = cursor.valueBuffer("nombre")
+            mensaje = "Proyecto: " + cursor.valueBuffer("nombre")
         elif tipo in ["comentario", "partictarea"]:
-            mensaje = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
+            mensaje = "Tarea: " + qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
         elif tipo in ["anotacion"]:
             mensaje = cursor.valueBuffer("nombre")
         else:
