@@ -45,7 +45,7 @@
             "label": "ANOTAR",
             "action": "legacy",
             "title": "Crear tarea",
-            "iconurl": "/static/dist/img/icons/anotar_blanco.png",
+            "iconurl": "/static/dist/img/icons/anotar_blanco.svg",
             "prefix": "gt_tareas",
             "serverAction": "gotoNewRecordAnotacion"
         }
@@ -53,7 +53,7 @@
     "items": [
         {
             "TEXT": "PRODUCIR",
-            "ICONURL": "/static/dist/img/icons/tarea.svg"
+            "ICONURL": "/static/dist/img/icons/producir.svg"
         },
         {
             "NAME": "tareas",
@@ -75,7 +75,7 @@
         },
         {
             "TEXT": "PLANEAR",
-            "ICONURL": "/static/dist/img/icons/calendario.svg"
+            "ICONURL": "/static/dist/img/icons/planear.svg"
         },
         {
             "NAME": "calendario",
@@ -98,7 +98,7 @@
         },
         {
             "TEXT": "ANALIZAR",
-            "ICONURL": "/static/dist/img/icons/timetrakcer.svg",
+            "ICONURL": "/static/dist/img/icons/analizar.svg",
             "RESPONSIVE": false
         },
         {

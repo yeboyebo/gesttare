@@ -641,7 +641,8 @@ a.btn-primary:hover {
 }*/
 
 .YBTableActionsCell[title=TimeTracking] {
-  color: #50d2ce;
+    margin-top: -4px;
+    color: #50d2ce;
 }
 
 
@@ -909,7 +910,8 @@ a.btn-primary:hover {
 
 .anotarButton .YBButtonRaised>img {
     float: left;
-    margin-left: 25px;
+    margin-top: -9px;
+    margin-left: 20px;
 }
 
 .anotarButton .YBButtonRaised {
@@ -956,34 +958,43 @@ a.btn-primary:hover {
     display: none;
 }
 
-.queryGrid_notificacionesUsuario img {
-    width: 28px !important;
-    height: 28px !important;
-    margin-top: -2px !important;
+.queryGrid_notificacionesUsuario .YBTableRow img {
+    width: 35px !important;
+    height: 35px !important;
+    margin-top: -9px !important;
     margin-left: 2px;
 }
 
-.naranjaAnotar {
-    border-radius: 17.5px;
+.YBTableRow i{
+    margin-top: -5px !important;
+}
+
+.naranjaAnotar img {
     background-color: #ffc68d;
+    padding: 5px;
+    border-radius: 50%;
 }
 
-.lilaAnotar {
-    border-radius: 17.5px;
+.lilaAnotar img {
     background-color: #d0cdf4;
+    padding: 5px;
+    border-radius: 50%;
 }
 
-.verdeAnotar {
-    border-radius: 17.5px;
-    background-color: #9decac;    
+.verdeAnotar img {
+    background-color: #9decac;
+    padding: 5px;
+    border-radius: 50%;    
 }
 
-.amarilloAnotar {
-    border-radius: 17.5px;
+.amarilloAnotar img {
     background-color: #faeb8c;
+    padding: 5px;
+    border-radius: 50%;
 }
 
-.rojoAnotar {
-    border-radius: 17.5px;
+.rojoAnotar img {
     background-color: #cc2916;
+    padding: 5px;
+    border-radius: 50%;
 }

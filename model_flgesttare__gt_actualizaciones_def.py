@@ -23,7 +23,7 @@ class gesttare(interna):
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
         if template == "notificacionesUsuario":
-            return [{'verbose_name': 'actIcon', 'func': 'field_actIcon'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}, {'verbose_name': 'Color_fondo_icono', 'func': 'field_color_fondo_icono'}]
+            return [{'verbose_name': 'actIcon', 'func': 'field_actIcon'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}, {'verbose_name': 'Color_fondo_icono', 'func': 'field_color_fondo_icono'},{'verbose_name': 'titulo_icono', 'func': 'field_titulo_icono'} ]
 
         return fields
 
@@ -92,6 +92,29 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/delete.svg"
 
         return retorno
+
+
+    def gesttare_field_titulo_icono(self, model):
+        print("entra")
+        retorno = ""
+        if model["gt_actualizaciones.tipo"]:
+            if model["gt_actualizaciones.tipo"] == "resuelto":
+                retorno = "Resuelto"
+            elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
+                retorno = "Cambio fecha ejecución"
+            elif model["gt_actualizaciones.tipo"] == "comentario":
+                retorno = "Comentario"
+            elif model["gt_actualizaciones.tipo"] == "partictarea":
+                retorno = "Añadido como participante"
+            elif model["gt_actualizaciones.tipo"] == "asignadoComoResponsable":
+                retorno = "Asignado como responsable"
+            elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
+                retorno = "Eliminado como participante"
+            elif model["gt_actualizaciones.tipo"] == "eliminado":
+                retorno = "Eliminado"
+
+        return retorno
+    
 
     def gesttare_queryGrid_notificacionesUsuario(self, model):
         idUsuario = qsatype.FLUtil.nameUser()
@@ -224,6 +247,9 @@ class gesttare(interna):
 
     def field_color_fondo_icono(self, model):
         return self.ctx.gesttare_field_color_fondo_icono(model)
+
+    def field_titulo_icono(self, model):
+        return self.ctx.gesttare_field_titulo_icono(model)
 
     def convertirTarea(self, model, oParam):
         return self.ctx.gesttare_convertirTarea(model, oParam)

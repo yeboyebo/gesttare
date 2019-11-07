@@ -409,6 +409,26 @@
             {
                 "name": "app_gesttare__denegado.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "anotar_blanco.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "producir.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "analizar.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "planear.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anotar_modal.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

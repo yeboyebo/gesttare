@@ -56,6 +56,22 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "abrir": {
+                    "componente": "YBButton",
+                    "title": "Abrir tarea",
+                    "prefix": "gt_tareas",
+                    "icon": "undo",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "abrir",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "borrarTareaButton": {
                     "componente": "YBButton",
                     "title": "Borrar Tarea",
@@ -327,6 +343,12 @@
             "serverAction": "completar_tarea",
             "icon": "check"
         },
+        "abrir": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "abrir_tarea",
+            "icon": "undo"
+        },
         "verTrackingTarea": {
             "action": "goto",
             "prefix": "gt_tareas",
@@ -366,5 +388,11 @@
             "icon": "add_circle"
         },
         "nuevaLineaParams": {}
+    },
+    "drawIf": {
+        "groupBoxPadre": {
+            "completar": "drawif_completartarea",
+            "abrir": "drawif_abrirtarea"
+        }
     }
 }

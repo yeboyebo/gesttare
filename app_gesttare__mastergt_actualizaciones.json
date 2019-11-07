@@ -14,12 +14,12 @@
             "style": { },
             "layout": {
                 "queryGrid_notificacionesUsuario": {
-                    "componente": "YBList",
+                    "componente": "YBGrid",
                     "prefix": "notificacionesUsuario",
                     "filter": "",
                     "type": "query",
                     "columns": [
-                        {"tipo": "icon", "listpos": "avatar", "key": "actIcon", "color": "Color_fondo_icono", "label": "Tipo Act.", "title": true, "width": 20},
+                        {"tipo": "icon", "listpos": "avatar", "key": "actIcon", "title": "titulo_icono", "color": "Color_fondo_icono", "label": " ", "width": 20},
                         {
                             "tipo": "act",
                             "key": "borrarActualizacion",
@@ -46,7 +46,7 @@
                                 {"slot": "refrescar"}
                             ]
                         },
-                        {"tipo": "field", "listpos": "subtitle", "key": "gt_actualizaciones.otros", "label": "Elmentos relacionado", "width": 350},
+                        {"tipo": "field", "listpos": "subtitle", "key": "gt_actualizaciones.otros", "label": "Elemento relacionado", "width": 350, "title": true},
                         {"tipo": "foreignfield", "key": "nombreUsuario", "label": "Generado por", "color": "Color_responsable", "width": 40},
                         {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 45},
                         {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 45}
