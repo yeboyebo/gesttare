@@ -541,7 +541,7 @@ class gesttare(interna):
             cursor.setValueBuffer("totaltiempostring", self.iface.seconds_to_time(int(totaltiempo), all_in_hours=True))
         return True
 
-    # def gesttare_beforeCommit_gt_controldiario(self, cursor=None):
+    def gesttare_beforeCommit_gt_controldiario(self, cursor=None):
         # _i = self.iface
 
         if cursor.modeAccess() != cursor.Insert:
