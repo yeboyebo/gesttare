@@ -436,7 +436,9 @@
             },
             {
                 "name": "note.svg",
-                "path": "assets/dist/img/icons/"
+                "path": "assets/dist/img/icons/",
+                "name": "ctrl_nuevo____init__.py",
+                "path": "controllers/nuevo/"
             }
         ],
         "replaceFile": [
