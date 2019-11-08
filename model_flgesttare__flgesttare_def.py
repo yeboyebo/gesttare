@@ -178,7 +178,7 @@ class gesttare(interna):
         if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion"]:
             mensaje = "Tarea: " + cursor.valueBuffer("nombre")
         elif tipo in ["particproyecto"]:
-            mensaje = "Proyecto: " + cursor.valueBuffer("nombre")
+            mensaje = "Proyecto: " + qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", "codproyecto = '{}'".format(cursor.valueBuffer(u"codproyecto")))
         elif tipo in ["comentario", "partictarea"]:
             mensaje = "Tarea: " + qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
         elif tipo in ["anotacion"]:
