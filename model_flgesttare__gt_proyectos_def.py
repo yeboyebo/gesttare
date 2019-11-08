@@ -480,6 +480,14 @@ class gesttare(interna):
         response["filter"] = '{"proyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
         return response
 
+    def gesttare_gotoNuevoProyecto(self, model, oParam):
+        url='/gesttare/gt_proyectos/newRecord'
+        resul = {}
+        resul["url"] = url
+        resul['status'] = 1
+        return resul
+        # return resul
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -554,6 +562,9 @@ class gesttare(interna):
 
     def color_fondo_estado(self, model):
         return self.ctx.gesttare_color_fondo_estado(model)
+
+    def gotoNuevoProyecto(self, model, oParam):
+        return self.ctx.gesttare_gotoNuevoProyecto(model, oParam)
 
 
 # @class_declaration head #

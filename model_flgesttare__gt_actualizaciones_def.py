@@ -60,9 +60,9 @@ class gesttare(interna):
                 retorno = "naranjaAnotar"
             elif model["gt_actualizaciones.tipo"] == "comentario":
                 retorno = "lilaAnotar"
-            elif model["gt_actualizaciones.tipo"] == "partictarea":
+            elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "amarilloAnotar"
-            elif model["gt_actualizaciones.tipo"] == "asignadoComoResponsable":
+            elif model["gt_actualizaciones.tipo"] == "responsable":
                 retorno = "lilaAnotar"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "rojoAnotar"
@@ -83,9 +83,9 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/update.svg"
             elif model["gt_actualizaciones.tipo"] == "comentario":
                 retorno = "/static/dist/img/icons/group.svg"
-            elif model["gt_actualizaciones.tipo"] == "partictarea":
+            elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "/static/dist/img/icons/group_add.svg"
-            elif model["gt_actualizaciones.tipo"] == "asignadoComoResponsable":
+            elif model["gt_actualizaciones.tipo"] == "responsable":
                 retorno = "/static/dist/img/icons/supervisor_account.svg"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "/static/dist/img/icons/person_add_disabled.svg"
@@ -107,16 +107,16 @@ class gesttare(interna):
                 retorno = "Cambio fecha ejecución"
             elif model["gt_actualizaciones.tipo"] == "comentario":
                 retorno = "Comentario"
-            elif model["gt_actualizaciones.tipo"] == "partictarea":
+            elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "Añadido como participante"
-            elif model["gt_actualizaciones.tipo"] == "asignadoComoResponsable":
+            elif model["gt_actualizaciones.tipo"] == "responsable":
                 retorno = "Asignado como responsable"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "Eliminado como participante"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "Eliminado"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
-                retorno = "Anotación"
+                retorno = "Posible tarea"
 
         return retorno
     
@@ -216,7 +216,7 @@ class gesttare(interna):
                         return False
             response = {}
             response["resul"] = True
-            response["msg"] = "Anotacion transpasada"
+            response["msg"] = "Posible tarea traspasada"
             return response
 
     def __init__(self, context=None):

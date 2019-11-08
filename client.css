@@ -188,7 +188,11 @@ html, #parent-container{
 
 /*Tarea activa*/
 
-@media (min-width: 1024px) {
+ .appInfo .YBTableCell {
+        width:auto !important; 
+        border: none; 
+    }
+/*@media (min-width: 1024px) {
     .appInfo .YBTableCell {
         width: 950px !important; 
         border: none; 
@@ -228,7 +232,7 @@ html, #parent-container{
         border: none; 
     }
 
-}
+}*/
 
 .appInfo .YBTableCell i{
     margin-top: -3px;
@@ -732,8 +736,7 @@ a.btn-primary:hover {
 .fcSuccessMango {
     background-color: #f9a825;
     border-radius: 17.5px;
-    //margin-top: 5px;
-    color: white;
+    color: white !important;
 }
 
 /*.fcSuccessMango span { 
@@ -887,20 +890,17 @@ a.btn-primary:hover {
 
 /*Alineado para cuadrar con: Colores, fondo, border-radius y sombreado para pantallas de listados*/
 
-.YBComponentInfoText {
-    margin-left: 17px;
-}
-
 .YBSeparatorItem {
     width: 98%;
 }
 
 .YBComponentInfoIcon {
     margin-left: 17px;
+    margin-right: -15px;
 }
 
 .YBComponentInfo .YBComponentInfoText {
-     margin-left: 0px !important;
+     margin-left: 15px !important;
 }
 
 /*centrar botón anotar y cambio diseño*/

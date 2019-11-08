@@ -23,7 +23,7 @@
                         {
                             "tipo": "act",
                             "key": "borrarActualizacion",
-                            "label": "Borrar Actualización",
+                            "label": "Borrar notificación",
                             "success": [
                                 {"slot": "refrescar"}
                             ]
@@ -40,7 +40,7 @@
                         {
                             "tipo": "act",
                             "key": "transpasarAnotacion",
-                            "label": "Transpasar Actualización",
+                            "label": "Traspasar posible tarea",
                             "showIf": "verTranspasarAnotacion",
                             "success": [
                                 {"slot": "refrescar"}

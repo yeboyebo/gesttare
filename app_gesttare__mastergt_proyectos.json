@@ -59,16 +59,18 @@
             ],
             "rowclick": "",
             "rowlistclick": "link",
-            "accionesGrid": [{
-                "key": "getReport",
-                "label": "Genera XLS",
-                "success": []
-            }]
-        },
-        "newRecordProyectos": {
-            "componente": "YBNewRecord",
-            "class": "info",
-            "icon": "add"
+            "accionesGrid": [
+                {
+                    "key": "getReport",
+                    "label": "Genera XLS",
+                    "success": []
+                },
+                {
+                    "key": "nuevoProyecto",
+                    "label": "Nuevo",
+                    "success": [{ "slot": "goto"}]
+                }
+            ]
         },
         "separator": {
             "componente": "YBSeparator"
@@ -132,6 +134,12 @@
             "action": "deleteRow",
             "icon": "delete",
             "msg": "El proyecto seŕa eliminado y se eliminarán todas las tareas asociadas"
+        },
+        "nuevoProyecto": {
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "serverAction": "gotoNuevoProyecto",
+            "icon": "add_circle"
         }
     }
 }
