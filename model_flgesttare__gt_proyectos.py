@@ -81,6 +81,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def verTrackingProyecto(self, cursor):
         return form.iface.verTrackingProyecto(cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotoNuevoProyecto(self, oParam):
+        return form.iface.gotoNuevoProyecto(self, oParam)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

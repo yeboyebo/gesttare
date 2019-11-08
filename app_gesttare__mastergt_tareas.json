@@ -87,11 +87,6 @@
                     }]
                 }
             }
-        },
-        "newRecordTarea": {
-            "componente": "YBNewRecord",
-            "class": "info",
-            "icon": "add"
         }
     },
     "acciones": {
