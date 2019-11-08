@@ -60,7 +60,7 @@
                     "componente": "YBButton",
                     "title": "Abrir tarea",
                     "prefix": "gt_tareas",
-                    "icon": "undo",
+                    "icon": "offline_pin",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {

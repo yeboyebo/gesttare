@@ -66,9 +66,10 @@ class gesttare(interna):
                 retorno = "lilaAnotar"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "rojoAnotar"
-            elif model["gt_actualizaciones.tipo"] == "eliminado":
+            elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "rojoAnotar"
-        print(retorno)
+            elif model["gt_actualizaciones.tipo"] == "anotacion":
+                retorno = "verdeazulAnotar"
 
         return retorno
 
@@ -88,14 +89,16 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/supervisor_account.svg"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "/static/dist/img/icons/person_add_disabled.svg"
-            elif model["gt_actualizaciones.tipo"] == "eliminado":
+            elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "/static/dist/img/icons/delete.svg"
+            elif model["gt_actualizaciones.tipo"] == "anotacion":
+                retorno = "/static/dist/img/icons/note.svg"
 
         return retorno
 
 
     def gesttare_field_titulo_icono(self, model):
-        print("entra")
+        print(model["gt_actualizaciones.tipo"])
         retorno = ""
         if model["gt_actualizaciones.tipo"]:
             if model["gt_actualizaciones.tipo"] == "resuelto":
@@ -110,8 +113,10 @@ class gesttare(interna):
                 retorno = "Asignado como responsable"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "Eliminado como participante"
-            elif model["gt_actualizaciones.tipo"] == "eliminado":
+            elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "Eliminado"
+            elif model["gt_actualizaciones.tipo"] == "anotacion":
+                retorno = "Anotación"
 
         return retorno
     
@@ -129,7 +134,7 @@ class gesttare(interna):
         response = {}
         if cursor.valueBuffer("tipo") == "anotacion":
             response["status"] = 2
-            response["confirm"] = "Nombre: " + cursor.valueBuffer("otros") + "</br>" + "Descripcion: " + cursor.valueBuffer("tipobjeto")
+            response["confirm"] = "<div class='anotacionNombre'>Nombre: </div><div class='anotacionNombreOtros'>" + cursor.valueBuffer("otros") + "</div></br>" + "<div class='anotacionDescripcion'>Descripción: </div><div class='anotacionDescripcionTipobjeto'>" + cursor.valueBuffer("tipobjeto") + "</div>"
             response["close"] = True
             # print(response)
             return response
@@ -142,15 +147,17 @@ class gesttare(interna):
         #     response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
         #     return response
         if model.idtarea:
-            print(model.idtarea.idtarea)
             idtarea = model.idtarea.idtarea
-            print(idtarea)
             # porlotes = articulos.objects.filter(referencia__exact=model.referencia.referencia)
             # print(porlotes)
             # if porlotes[0].porlotes:
             response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
         else:
             response["url"] = '/gesttare/gt_tareas/' + str(cursor.valueBuffer("idobjeto"))
+        if cursor.valueBuffer("tipo") == "deltarea":
+            response["msg"] = "Tarea eliminada"
+            return response
+
         return response
 
     def gesttare_borrarActualizacion(self, model, oParam):

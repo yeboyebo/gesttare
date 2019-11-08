@@ -429,6 +429,14 @@
             {
                 "name": "anotar_modal.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "delete.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "note.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

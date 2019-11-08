@@ -7,7 +7,7 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": " ",
+            "className": "denegado",
             "label": "",
             "style": {},
             "layout": {
@@ -27,12 +27,23 @@
                         "success": [{"slot": "return"}]
                     }
                 },
-                "separator0": {
-                    "componente": "YBSeparator"
+                "iconoError": {
+                    "componente": "YBButton",
+                    "title": "Denegado",
+                    "icon": "error",
+                    "className": "iconoPermisoDenegado",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "50px",
+                        "textAlign": "center",
+                        "float": "none"
+                    }
                 },
                 "labelDenegado": {
                     "componente": "YBLabel",
-                    "text": "Permiso Denegado"
+                    "title":"No tienes permiso de acceso.",
+                    "className": "DenegadoTitulo",
+                    "text": "Estás intentando acceder a un contenido sobre el que no tienes acceso. Contacta con el administrador de tu compañía si necesitas acceder a este contenido."
                 }
             }
         }
