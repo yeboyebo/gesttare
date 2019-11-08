@@ -897,43 +897,44 @@ class gesttare(interna):
         return True
 
     def gesttare_gotonewrecordtarea(self, oParam):
-        if "nombre" not in oParam:
-            response = {}
-            response['status'] = -1
-            response['data'] = {}
-            response["prefix"] = "gt_tareas"
-            response["title"] = "Crear tarea"
-            response["serverAction"] = "gotoNewRecordAnotacion"
-            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear anotacion", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Crear tarea", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
-            response['params'] = [
-                {
-                    "componente": "YBFieldDB",
-                    "prefix": "otros",
-                    "tipo": 3,
-                    "verbose_name": "Nombre",
-                    "key": "nombre",
-                    "validaciones": None,
-                    "required": True
-                },
-                {
-                    "componente": "YBFieldDB",
-                    "prefix": "otros",
-                    "tipo": 3,
-                    "verbose_name": "Descripción",
-                    "key": "descripcion",
-                    "validaciones": None,
-                    "required": False
-                }
-            ]
-            return response
-        else:
-            nombre = oParam["nombre"]
-            descripcion = ""
+        # if "nombre" not in oParam:
+        #     response = {}
+        #     response['status'] = -1
+        #     response['data'] = {}
+        #     response["prefix"] = "gt_tareas"
+        #     response["title"] = "Crear nueva tarea"
+        #     response["serverAction"] = "gotoNewRecordAnotacion"
+        #     response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+        #     response['params'] = [
+        #         {
+        #             "componente": "YBFieldDB",
+        #             "prefix": "otros",
+        #             "tipo": 3,
+        #             "verbose_name": "Nombre",
+        #             "key": "nombre",
+        #             "validaciones": None,
+        #             "required": True
+        #         },
+        #         {
+        #             "componente": "YBFieldDB",
+        #             "prefix": "otros",
+        #             "tipo": 3,
+        #             "verbose_name": "Descripción",
+        #             "key": "descripcion",
+        #             "validaciones": None,
+        #             "required": False
+        #         }
+        #     ]
+        #     return response
+        # else:
+        params = ""
+        if "nombre" in oParam:
+            params += "?p_nombre=" + oParam["nombre"]
             if "descripcion" in oParam:
-                descripcion = "&p_descripcion=" + str(oParam["descripcion"])
-            response = {}
-            response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ nombre + "" + descripcion
-            return response
+                params += "&p_descripcion=" + str(oParam["descripcion"])
+        response = {}
+        response["url"] = '/gesttare/gt_tareas/newRecord' + params
+        return response
 
     def gesttare_drawif_completartarea(self, cursor):
         if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == True:
