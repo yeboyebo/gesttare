@@ -44,7 +44,7 @@
                     "componente": "YBButton",
                     "title": "Completar tarea",
                     "prefix": "gt_tareas",
-                    "icon": "check",
+                    "icon": "check_box",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {
@@ -60,7 +60,7 @@
                     "componente": "YBButton",
                     "title": "Abrir tarea",
                     "prefix": "gt_tareas",
-                    "icon": "offline_pin",
+                    "icon": "check_box_outline_blank",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {

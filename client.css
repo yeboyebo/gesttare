@@ -646,7 +646,7 @@ a.btn-primary:hover {
 }*/
 
 .YBTableActionsCell[title=TimeTracking] {
-    margin-top: -4px;
+    margin-top: -3px;
     color: #50d2ce;
 }
 
@@ -774,7 +774,7 @@ a.btn-primary:hover {
 }
 */
 
-.controlmensual .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
+.controlmensual .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .queryGrid_notificacionesUsuarioViejas .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
     margin-bottom: 10px;   
 }
 
@@ -794,6 +794,10 @@ a.btn-primary:hover {
 
 .tareaActiva .YBTableActionsCell[title=Timetracking] {
     margin-right: 10px;
+}
+
+.tareaActiva .YBTableCell {
+    margin-top: -4px;
 }
 
 
@@ -958,7 +962,7 @@ a.btn-primary:hover {
     display: none;
 }
 
-.queryGrid_notificacionesUsuario .YBTableRow img {
+.queryGrid_notificacionesUsuario .YBTableRow img, .queryGrid_notificacionesUsuarioViejas .YBTableRow img {
     width: 35px !important;
     height: 35px !important;
     margin-top: -9px !important;
@@ -966,7 +970,7 @@ a.btn-primary:hover {
 }
 
 .YBTableRow i{
-    margin-top: -5px !important;
+    margin-top: -4px !important;
 }
 
 .naranjaAnotar img {
@@ -1003,6 +1007,23 @@ a.btn-primary:hover {
     background-color: #42adaa;
     padding: 5px;
     border-radius: 50%;
+}
+
+.marronAnotar img {
+    background-color: #8f3f2b;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+/*Vista móvil bandeja de entrada*/
+
+.queryGrid_notificacionesUsuario .YBListItemAvatar, .queryGrid_notificacionesUsuarioViejas .YBListItemAvatar {
+    padding-left: 0px;
+}
+
+.queryGrid_notificacionesUsuario .YBListItemSecondaryAction, .queryGrid_notificacionesUsuarioViejas .YBListItemSecondaryAction {
+    width: auto !important;
+    margin-right: -5px;
 }
 
 /*modal anotaciones*/

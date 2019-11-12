@@ -946,7 +946,6 @@ class gesttare(interna):
         prueba = qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre")))
         if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == False:
             return "hidden"
-        print("la consulta va: ",prueba)
 
     def __init__(self, context=None):
         super().__init__(context)

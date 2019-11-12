@@ -171,6 +171,12 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def drawif_abrirtarea(cursor):
         return form.iface.drawif_abrirtarea(cursor)
 
+    def field_verConvertirTarea(self):
+        return form.iface.field_verConvertirTarea(self)
+
+    def field_verConvertirTareaA(self):
+        return form.iface.field_verConvertirTareaA(self)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

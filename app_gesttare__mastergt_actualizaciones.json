@@ -5,6 +5,11 @@
             "query": {
                 "p_l": 20
             }
+        },
+        "notificacionesUsuarioViejas": {
+            "query": {
+                "p_l": 20
+            }
         }
     },
     "layout": {
@@ -48,8 +53,50 @@
                         },
                         {"tipo": "field", "listpos": "subtitle", "key": "gt_actualizaciones.otros", "label": "Elemento relacionado", "width": 350, "title": true},
                         {"tipo": "foreignfield", "key": "nombreUsuario", "label": "Generado por", "color": "Color_responsable", "width": 40},
-                        {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha Act.", "width": 45},
-                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora Act.", "width": 45}
+                        {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha", "width": 45},
+                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora", "width": 45}
+                    ],
+                    "rowclick": "verElemento",
+                    "accionesGrid": []
+                },
+                "queryGrid_notificacionesUsuarioViejas": {
+                    "componente": "YBGrid",
+                    "prefix": "notificacionesUsuarioViejas",
+                    "filter": "",
+                    "label": " NOTIFICACIONES ANTERIORES (Deben borrarse antes del 20 de Noviembre ya que serán desactivadas)",
+                    "type": "query",
+                    "columns": [
+                        {"tipo": "icon", "listpos": "avatar", "key": "actIcon", "title": "titulo_icono", "color": "Color_fondo_icono", "label": " ", "width": 20},
+                        {
+                            "tipo": "act",
+                            "key": "borrarActualizacion",
+                            "label": "Borrar notificación",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "convertirTarea",
+                            "label": "Convertir en tarea",
+                            "showIf": "verConvertirTarea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "transpasarAnotacion",
+                            "label": "Traspasar posible tarea",
+                            "showIf": "verTranspasarAnotacion",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "subtitle", "key": "gt_actualizaciones.otros", "label": "Elemento relacionado", "width": 350, "title": true},
+                        {"tipo": "foreignfield", "key": "nombreUsuario", "label": "Generado por", "color": "Color_responsable", "width": 40},
+                        {"tipo": "field", "listpos":"secondaryitem", "key": "gt_actualizaciones.fecha", "label": "Fecha", "width": 45},
+                        {"tipo": "field", "key": "gt_actualizaciones.hora", "label": "Hora", "width": 45}
                     ],
                     "rowclick": "verElemento",
                     "accionesGrid": []

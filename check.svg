@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    id="svg6"
-   sodipodi:docname="group.svg"
+   sodipodi:docname="check.svg"
    inkscape:version="0.92.4 (f8dce91, 2019-08-02)">
   <metadata
      id="metadata12">
@@ -36,23 +36,23 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1533"
-     inkscape:window-height="845"
+     inkscape:window-width="764"
+     inkscape:window-height="480"
      id="namedview8"
      showgrid="false"
      inkscape:zoom="9.8333333"
-     inkscape:cx="-24.305085"
+     inkscape:cx="12"
      inkscape:cy="12"
-     inkscape:window-x="67"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
+     inkscape:window-x="792"
+     inkscape:window-y="130"
+     inkscape:window-maximized="0"
      inkscape:current-layer="svg6" />
   <path
      d="M0 0h24v24H0z"
      fill="none"
      id="path2" />
   <path
-     d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+     d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
      id="path4"
      style="fill:#ffffff;fill-opacity:1" />
 </svg>
