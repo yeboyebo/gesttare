@@ -380,6 +380,8 @@ class gesttare(yblogin):
         totalPresupuesto = 0
         totalCostes = 0
         rentabilidad = 0
+        tareasCompletadas = 0
+        TareasProduccion = 0
 
         # q = qsatype.FLSqlQuery()
         # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
@@ -399,9 +401,13 @@ class gesttare(yblogin):
         tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereCompletadas)
 
 
-        TareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereProduccion)
+        tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereProduccion)
 
-        print("las tareas son: ",TareasProduccion)
+        if tareasCompletadas == None:
+            tareasCompletadas = 0
+
+        if tareasProduccion == None:
+            tareasProduccion = 0
 
         # q = qsatype.FLSqlQuery()
         # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
@@ -437,7 +443,7 @@ class gesttare(yblogin):
 
 
 
-        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Tareas Completadas", "value": tareasCompletadas, "style": presupuestoStyle}, {"name": "Tareas En Producción", "value": TareasProduccion, "style" :rentabilidadStyle}]
+        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Tareas Completadas", "value": tareasCompletadas, "style": presupuestoStyle}, {"name": "Tareas En Producción", "value": tareasProduccion, "style" :rentabilidadStyle}]
         return {"type": "labelInfo", "data": data}
 
     def gesttare_queryGrid_tareasMasTiempo(self, model, filters):

@@ -21,6 +21,9 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
     def queryGrid_notificacionesUsuario(model):
         return form.iface.queryGrid_notificacionesUsuario(model)
 
+    def queryGrid_notificacionesUsuarioViejas(model):
+        return form.iface.queryGrid_notificacionesUsuarioViejas(model)
+
     @helpers.decoradores.accion(aqparam=["cursor"])
     def visualizarElemento(self, cursor):
         return form.iface.visualizarElemento(self, cursor)

@@ -22,7 +22,7 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
-        if template == "notificacionesUsuario":
+        if template == "notificacionesUsuario" or template == "notificacionesUsuarioViejas":
             return [{'verbose_name': 'actIcon', 'func': 'field_actIcon'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}, {'verbose_name': 'verConvertirTarea', 'func': 'field_verConvertirTarea'}, {'verbose_name': 'verTranspasarAnotacion', 'func': 'field_verTranspasarAnotacion'}, {'verbose_name': 'Color_responsable', 'func': 'field_color_responsable'}, {'verbose_name': 'Color_fondo_icono', 'func': 'field_color_fondo_icono'},{'verbose_name': 'titulo_icono', 'func': 'field_titulo_icono'} ]
 
         return fields
@@ -63,7 +63,7 @@ class gesttare(interna):
             elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "amarilloAnotar"
             elif model["gt_actualizaciones.tipo"] == "responsable":
-                retorno = "lilaAnotar"
+                retorno = "marronAnotar"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "rojoAnotar"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
@@ -82,7 +82,7 @@ class gesttare(interna):
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "/static/dist/img/icons/update.svg"
             elif model["gt_actualizaciones.tipo"] == "comentario":
-                retorno = "/static/dist/img/icons/group.svg"
+                retorno = "/static/dist/img/icons/chat.svg"
             elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "/static/dist/img/icons/group_add.svg"
             elif model["gt_actualizaciones.tipo"] == "responsable":
@@ -127,7 +127,16 @@ class gesttare(interna):
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
-        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion'))")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) AND gt_actualizaciones.fecha BETWEEN '10-11-2019' AND '20-12-2500'")
+        return query
+
+    def gesttare_queryGrid_notificacionesUsuarioViejas(self, model):
+        idUsuario = qsatype.FLUtil.nameUser()
+        query = {}
+        query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
+        query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
+        query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "'AND gt_actualizaciones.fecha BETWEEN '10-11-2010' AND '09-11-2019' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) ")
         return query
 
     def gesttare_visualizarElemento(self, model, cursor):
@@ -245,6 +254,9 @@ class gesttare(interna):
 
     def queryGrid_notificacionesUsuario(self, model):
         return self.ctx.gesttare_queryGrid_notificacionesUsuario(model)
+
+    def queryGrid_notificacionesUsuarioViejas(self, model):
+        return self.ctx.gesttare_queryGrid_notificacionesUsuarioViejas(model)
 
     def visualizarElemento(self, model, cursor):
         return self.ctx.gesttare_visualizarElemento(model, cursor)
