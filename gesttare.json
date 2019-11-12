@@ -479,10 +479,6 @@
             {
                 "name": "app_portal__403.html",
                 "path": "apps/portal/templates/portal/"
-            },
-            {
-                "name": "wsgi.py",
-                "path": "AQNEXT/"
             }
         ],
         "deleteFile": [],
