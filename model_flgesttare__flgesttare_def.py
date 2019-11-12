@@ -20,12 +20,13 @@ import datetime
 
 class gesttare(interna):
 
-    def gesttare_afterCommit_gt_comentarios(self, curComentario=None):
+    def gesttare_afterCommit_gt_comentarios(self, curComentario):
         _i = self.iface
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_comentarios(curComentario):
             return False
         if curComentario.modeAccess() == curComentario.Insert:
             if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curComentario.valueBuffer(u"idusuario"), u" AND idtarea = ", curComentario.valueBuffer(u"idtarea"))):
+                print("falla al añadir como participante???")
                 if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curComentario.valueBuffer(u"idusuario"), curComentario.valueBuffer(u"idtarea")])):
                     return False
 
@@ -35,7 +36,7 @@ class gesttare(interna):
             #     return False
         return True
 
-    def gesttare_afterCommit_gt_proyectos(self, curProyecto=None):
+    def gesttare_afterCommit_gt_proyectos(self, curProyecto):
         _i = self.iface
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
         #     return False
@@ -45,16 +46,28 @@ class gesttare(interna):
 
         if not _i.comprobarClienteProyecto(curProyecto):
             return False
+
         return True
 
-    def gesttare_beforeCommit_gt_tareas(self, curTarea=None):
+    def gesttare_beforeCommit_gt_proyectos(self, curProyecto):
+        _i = self.iface
+
+        if curProyecto.modeAccess() == curProyecto.Del:
+            _i.compruebaNotificacion("delproyecto", curProyecto)
+
+        elif not _i.comprobarNotificacionesProyecto(curProyecto):
+            return False
+
+        return True
+
+    def gesttare_beforeCommit_gt_tareas(self, curTarea):
         _i = self.iface
         if curTarea.modeAccess() == curTarea.Del:
             print("notificamos deltarea")
             _i.compruebaNotificacion("deltarea", curTarea)
         return True
 
-    def gesttare_afterCommit_gt_tareas(self, curTarea=None):
+    def gesttare_afterCommit_gt_tareas(self, curTarea):
         _i = self.iface
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_tareas(curTarea):
         #     return False
@@ -68,14 +81,33 @@ class gesttare(interna):
             return False
 
         return True
-
-    def gesttare_controlCosteProyecto(self, curT=None):
+    def gesttare_controlCosteProyecto(self, curT):
         _i = self.iface
 
         if curT.modeAccess() == curT.Edit:
             if not _i.totalizaCostesProyecto(curT.valueBuffer(u"codproyecto")):
                 return False
 
+        return True
+
+    def gesttare_comprobarNotificacionesProyecto(self, curProyecto):
+        _i = self.iface
+        if curProyecto.valueBuffer(u"archivado") != curProyecto.valueBufferCopy(u"archivado"):
+            if curProyecto.valueBuffer(u"archivado"):
+                _i.compruebaNotificacion("archivado", curProyecto)
+            else:
+                _i.compruebaNotificacion("desarchivado", curProyecto)
+        elif curProyecto.valueBuffer(u"idresponsable") != curProyecto.valueBufferCopy(u"idresponsable"):
+            print("notificvamos cambio  responsable??")
+            _i.compruebaNotificacion("responsablepro", curProyecto)
+        return True
+
+    def gesttare_compruebaNotificacionParticTarea(self, curPart):
+        _i = self.iface
+        if curPart.modeAccess() == curPart.Insert:
+            return _i.compruebaNotificacion("partictarea", curPart)
+        elif curPart.modeAccess() == curPart.Del:
+            return _i.compruebaNotificacion("delpartictarea", curPart)
         return True
 
     def gesttare_totalizaCostesProyecto(self, codProyecto=None):
@@ -98,12 +130,8 @@ class gesttare(interna):
         _i = self.iface
         if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_partictarea(curPart):
             return False
-        # print("partictarea 2")
-        if curPart.modeAccess() == curPart.Insert:
-            # nombreTarea = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", ustr(u"idtarea = ", curPart.valueBuffer(u"idtarea"), ""))
-            _i.compruebaNotificacion("partictarea", curPart)
-            # if not _i.crearActualizaciones(u"Añadido participante tarea " + nombreTarea.replace("'", ""), curPart):
-            #     return False
+        
+        _i.compruebaNotificacionParticTarea(curPart)
 
         return True
 
@@ -118,6 +146,8 @@ class gesttare(interna):
 
             if not _i.eliminarNotificacionesProyecto(curPart):
                 return False
+
+            _i.compruebaNotificacion("delparticproyecto", curPart)
 
             # count = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"count(*)", ustr(u"codproyecto = '", str(curPart.valueBuffer(u"codproyecto")), u"'"))
             # if count == 0:
@@ -147,13 +177,13 @@ class gesttare(interna):
         if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "comentario"]:
             tipo_objeto = "gt_tarea"
             idobjeto = cursor.valueBuffer("idtarea")
-        elif tipo in ["particproyecto"]:
+        elif tipo in ["particproyecto", "archivado", "desarchivado", "responsablepro"]:
             tipo_objeto = "gt_proyecto"
             idobjeto = cursor.valueBuffer("codproyecto")
         # elif tipo in ["comentario"]:
         #     tipo_objeto = "gt_comentario"
         #     idobjeto = cursor.valueBuffer("idcomentario")
-        elif tipo in ["partictarea"]:
+        elif tipo in ["partictarea", "delpartictarea"]:
             tipo_objeto = "gt_tarea"
             idobjeto = cursor.valueBuffer("idtarea")
         elif tipo in ["anotacion"]:
@@ -177,9 +207,9 @@ class gesttare(interna):
         _i = self.iface
         if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion"]:
             mensaje = "Tarea: " + cursor.valueBuffer("nombre")
-        elif tipo in ["particproyecto"]:
+        elif tipo in ["particproyecto", "delparticproyecto", "archivado", "desarchivado", "delproyecto", "responsablepro"]:
             mensaje = "Proyecto: " + qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", "codproyecto = '{}'".format(cursor.valueBuffer(u"codproyecto")))
-        elif tipo in ["comentario", "partictarea"]:
+        elif tipo in ["comentario", "partictarea", "delpartictarea"]:
             mensaje = "Tarea: " + qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
         elif tipo in ["anotacion"]:
             mensaje = cursor.valueBuffer("nombre")
@@ -227,7 +257,30 @@ class gesttare(interna):
                 else:
                     print("error al generar notificacion del usuario")
                     return False
-        elif tipo in ["responsable", "particproyecto", "partictarea"]:
+        if tipo in ["archivado", "desarchivado", "delproyecto", "responsablepro"]:
+            qryParticipantes = qsatype.FLSqlQuery()
+            qryParticipantes.setTablesList(u"gt_particproyecto")
+            qryParticipantes.setSelect(u"idparticipante,idusuario")
+            qryParticipantes.setFrom(ustr(u"gt_particproyecto"))
+            qryParticipantes.setWhere("codproyecto = '{}' AND idusuario <> {}".format(cursor.valueBuffer(u"codproyecto"), idUsuario))
+
+            try:
+                qryParticipantes.setForwardOnly(True)
+            except Exception:
+                qsatype.Object()
+
+            if not qryParticipantes.exec_():
+                return False
+
+            if qryParticipantes.size() == 0:
+                return True
+            while qryParticipantes.next():
+                if _i.creaNotificacionUsuario(idActualizacion, qryParticipantes.value(1), tipo_objeto, idobjeto, tipo, cursor):
+                    continue
+                else:
+                    print("error al generar notificacion del usuario")
+                    return False
+        elif tipo in ["responsable", "particproyecto", "partictarea", "delpartictarea", "delparticproyecto"]:
             if idUsuario != cursor.valueBuffer("idusuario"):
                 if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                     return True
@@ -265,13 +318,20 @@ class gesttare(interna):
                 notificamos = True
             elif tipo == q.value(0):
                 notificamos = True
+            elif tipo in ["archivado", "desarchivado", "delproyecto"]:
+                notificamos = True
+            elif tipo in ["responsablepro"]:
+                notificamos = True
+                if q.value(0) in ["archivado", "desarchivado", "delproyecto"]:
+                    notificamos = False
             elif tipo == "comentario":
                 notificamos = True
-                if q.value(0) in ["deltarea", "resuelta", "delpartictarea"]:
+                if q.value(0) in ["deltarea", "resuelta", "delpartictarea", "delpartictarea", "delparticproyecto"]:
                     notificamos = False
             elif tipo == "responsable":
-                if q.value(0) in ["partictarea"]:
-                    notificamos = True
+                notificamos = True
+                if q.value(0) in ["deltarea", "comentario"]:
+                    notificamos = False
             else:
                 notificamos = False
 
@@ -841,10 +901,13 @@ class gesttare(interna):
     def creaNotificacionUsuario(self, idActualizacion, usuarioNotificado, tipo_objeto, idobjeto, tipo, cursor):
         return self.ctx.gesttare_creaNotificacionUsuario(idActualizacion, usuarioNotificado, tipo_objeto, idobjeto, tipo, cursor)
 
-    def afterCommit_gt_proyectos(self, curProyecto=None):
+    def afterCommit_gt_proyectos(self, curProyecto):
         return self.ctx.gesttare_afterCommit_gt_proyectos(curProyecto)
 
-    def comprobarUsuarioResponsableProyecto(self, curProyecto=None):
+    def beforeCommit_gt_proyectos(self, curProyecto):
+        return self.ctx.gesttare_beforeCommit_gt_proyectos(curProyecto)
+
+    def comprobarUsuarioResponsableProyecto(self, curProyecto):
         return self.ctx.gesttare_comprobarUsuarioResponsableProyecto(curProyecto)
 
     def comprobarClienteProyecto(self, curProyecto):
@@ -867,6 +930,12 @@ class gesttare(interna):
 
     def controlCosteProyecto(self, curT):
         return self.ctx.gesttare_controlCosteProyecto(curT)
+
+    def compruebaNotificacionParticTarea(self, curPart):
+        return self.ctx.gesttare_compruebaNotificacionParticTarea(curPart)
+
+    def comprobarNotificacionesProyecto(self, curProyecto):
+        return self.ctx.gesttare_comprobarNotificacionesProyecto(curProyecto)
 
     def totalizaCostesProyecto(self, codProyecto):
         return self.ctx.gesttare_totalizaCostesProyecto(codProyecto)

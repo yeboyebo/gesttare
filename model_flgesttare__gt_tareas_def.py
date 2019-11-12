@@ -469,7 +469,7 @@ class gesttare(interna):
         if not cursor.commitBuffer():
             print("Ocurrió un error al actualizar la tarea")
             return False
-
+        # qsatype.APIQSA.entry_point("POST", "gt_tareas", qsatype.FLUtil.nameUser(), {"pk": model.pk, "data": {"resuelta": not resuelta}}, "update")
         response["resul"] = True
         if resuelta:
             response["msg"] = "Tarea abierta"

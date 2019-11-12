@@ -316,7 +316,7 @@ class gesttare(interna):
         asunto = "[dailyjob] Has recibido una invitación para unirte a un proyecto"
 
         # connection = notifications.get_connection("smtp.gmail.com", "todos.yeboyebo@gmail.com", "555zapato", "465", "SSL")Zv3-hZx4NB2eurm
-        connection = notifications.get_connection("smtp.zoho.com", "soporte@dailyjob.io", "mjEmG9u5fGd1", "465", "SSL")
+        connection = notifications.get_connection("smtp.zoho.com", "soporte@dailyjob.io", "I7c5uXGnNuee", "465", "SSL")
         response = notifications.sendMail(connection, "Soporte dailyjob<soporte@dailyjob.io>", asunto, cuerpo, [email])
         if not response:
             return False
@@ -331,11 +331,12 @@ class gesttare(interna):
 
     def gesttare_checkResponsableDraw(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
-        if cursor.valueBuffer("idresponsable") == usuario:
+        if str(cursor.valueBuffer("idresponsable")) == str(usuario):
             return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
         if is_superuser:
             return True
+        print("check responsable hidden")
         return "hidden"
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):

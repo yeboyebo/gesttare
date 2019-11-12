@@ -141,6 +141,14 @@ class gesttare(interna):
 
     def gesttare_visualizarElemento(self, model, cursor):
         response = {}
+        print("________________")
+        print(cursor.valueBuffer("tipobjeto"))
+        if cursor.valueBuffer("tipo") == "deltarea":
+            response["msg"] = "Tarea eliminada"
+            return response
+        elif cursor.valueBuffer("tipo") == "delproyecto":
+            response["msg"] = "Proyecto eliminado"
+            return response
         if cursor.valueBuffer("tipo") == "anotacion":
             response["status"] = 2
             response["confirm"] = "<div class='anotacionNombre'>Nombre: </div><div class='anotacionNombreOtros'>" + cursor.valueBuffer("otros") + "</div></br>" + "<div class='anotacionDescripcion'>Descripción: </div><div class='anotacionDescripcionTipobjeto'>" + cursor.valueBuffer("tipobjeto") + "</div>"
@@ -148,7 +156,7 @@ class gesttare(interna):
             # print(response)
             return response
             # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
-        elif cursor.valueBuffer("tipobjeto") == "proyecto":
+        elif cursor.valueBuffer("tipobjeto") in ["proyecto", "gt_proyecto"]:
             response["url"] = '/gesttare/gt_proyectos/' + str(cursor.valueBuffer("idobjeto"))
             return response
         # elif cursor.valueBuffer("tipobjeto") == "gt_comentario":
@@ -163,9 +171,6 @@ class gesttare(interna):
             response["url"] = '/gesttare/gt_tareas/' + str(idtarea)
         else:
             response["url"] = '/gesttare/gt_tareas/' + str(cursor.valueBuffer("idobjeto"))
-        if cursor.valueBuffer("tipo") == "deltarea":
-            response["msg"] = "Tarea eliminada"
-            return response
 
         return response
 
