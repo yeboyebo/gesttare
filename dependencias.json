@@ -1,7 +1,11 @@
 {
     "fk": "True",
-    "fun_aq": "gestor_tareas",
+    "fun_aq": "fun_dailyjob",
     "dependencias": [
+        {
+            "version": "v1.0",
+            "key": "pineboo_base"
+        },
         {
             "version": "v1.0",
             "key": "flfactppal"
