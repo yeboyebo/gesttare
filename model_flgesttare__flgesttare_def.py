@@ -55,8 +55,9 @@ class gesttare(interna):
         if curProyecto.modeAccess() == curProyecto.Del:
             _i.compruebaNotificacion("delproyecto", curProyecto)
 
-        elif not _i.comprobarNotificacionesProyecto(curProyecto):
-            return False
+        elif curProyecto.modeAccess() != curProyecto.Insert:
+            if not _i.comprobarNotificacionesProyecto(curProyecto):
+                return False
 
         return True
 

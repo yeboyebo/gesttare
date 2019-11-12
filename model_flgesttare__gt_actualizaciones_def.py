@@ -132,8 +132,6 @@ class gesttare(interna):
 
     def gesttare_visualizarElemento(self, model, cursor):
         response = {}
-        print("________________")
-        print(cursor.valueBuffer("tipobjeto"))
         if cursor.valueBuffer("tipo") == "deltarea":
             response["msg"] = "Tarea eliminada"
             return response
