@@ -453,6 +453,14 @@
             {
                 "name": "check.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "archive.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "unarchive.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

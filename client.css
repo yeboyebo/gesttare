@@ -1015,6 +1015,12 @@ a.btn-primary:hover {
     border-radius: 50%;
 }
 
+.aquaAnotar img {
+    background-color: #50d2ce;
+    padding: 5px;
+    border-radius: 50%;
+}
+
 /*Vista móvil bandeja de entrada*/
 
 .queryGrid_notificacionesUsuario .YBListItemAvatar, .queryGrid_notificacionesUsuarioViejas .YBListItemAvatar {
