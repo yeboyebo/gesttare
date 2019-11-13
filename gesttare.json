@@ -461,6 +461,14 @@
             {
                 "name": "model_flgesttare__gt_hitosproyecto_def.py",
                 "path": "models/flgesttare/"
+            },
+            {
+                "name": "archive.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "unarchive.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

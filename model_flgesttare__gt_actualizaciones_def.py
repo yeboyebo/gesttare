@@ -62,7 +62,7 @@ class gesttare(interna):
                 retorno = "lilaAnotar"
             elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "amarilloAnotar"
-            elif model["gt_actualizaciones.tipo"] == "responsable":
+            elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "marronAnotar"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "rojoAnotar"
@@ -70,6 +70,10 @@ class gesttare(interna):
                 retorno = "rojoAnotar"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
                 retorno = "verdeazulAnotar"
+            elif model["gt_actualizaciones.tipo"] == "archivado":
+                retorno = "aquaAnotar"
+            elif model["gt_actualizaciones.tipo"] == "desarchivado":
+                retorno = "aquaAnotar"
 
         return retorno
 
@@ -85,7 +89,7 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/chat.svg"
             elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "/static/dist/img/icons/group_add.svg"
-            elif model["gt_actualizaciones.tipo"] == "responsable":
+            elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "/static/dist/img/icons/supervisor_account.svg"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "/static/dist/img/icons/person_add_disabled.svg"
@@ -93,6 +97,10 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/delete.svg"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
                 retorno = "/static/dist/img/icons/note.svg"
+            elif model["gt_actualizaciones.tipo"] == "archivado":
+                retorno = "/static/dist/img/icons/archive.svg"
+            elif model["gt_actualizaciones.tipo"] == "desarchivado":
+                retorno = "/static/dist/img/icons/unarchive.svg"
 
         return retorno
 
@@ -109,7 +117,7 @@ class gesttare(interna):
                 retorno = "Comentario"
             elif model["gt_actualizaciones.tipo"] == "partictarea" or model["gt_actualizaciones.tipo"] == "particproyecto":
                 retorno = "Añadido como participante"
-            elif model["gt_actualizaciones.tipo"] == "responsable":
+            elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "Asignado como responsable"
             elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
                 retorno = "Eliminado como participante"
@@ -117,6 +125,10 @@ class gesttare(interna):
                 retorno = "Eliminado"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
                 retorno = "Posible tarea"
+            elif model["gt_actualizaciones.tipo"] == "archivado":
+                retorno = "Proyecto archivado"
+            elif model["gt_actualizaciones.tipo"] == "desarchivado":
+                retorno = "Proyecto desarchivado"
 
         return retorno
     
