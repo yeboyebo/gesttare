@@ -54,11 +54,6 @@ html, #parent-container{
     float: left;
 }
 
-/*.YBSiderBarItems {
-    
-    
-}*/
-
 .YBSideBar-White{
      box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.23);
      background-image: linear-gradient(110deg, #50d2ce, #293333);
@@ -271,6 +266,8 @@ html, #parent-container{
     margin-top: 5px !important;
 }
 
+/*Diseño modales*/
+
 .modal_anotarButton {
     text-align: left;
 }
@@ -290,16 +287,16 @@ html, #parent-container{
     background-color: #f1f1f1 !important;
 }
 
-.modal_nuevoTramoFecha .{
+.modal_nuevoTramoFecha {
     margin-left: 0% !important;
     background-color: #f1f1f1 !important;
 }
 
-.modal_actNuevoPartic {
+.modal_actNuevoPartic, .modalCuerpo .gbform, .modalCuerpo .modal_actionEmail, .modal_nuevaInvitacion {
     background-color: #f1f1f1 !important;
 }
 
-.modalCuerpo .gbform{
+/*.modalCuerpo .gbform{
     background-color: #f1f1f1 !important;
 }
 
@@ -309,7 +306,7 @@ html, #parent-container{
 
 .modal_nuevaInvitacion {
     background-color: #f1f1f1 !important;
-}
+}*/
 
 .modalTitle{
     margin-top: 20px;
@@ -407,6 +404,9 @@ a.btn-primary:hover {
     background-color: #faeb8c;
     text-transform: lowercase;
 }*/
+
+/*Colores para estados de tareas y proyectos*/
+
 .naranja {
     text-align: center !important;
     border-radius: 17.5px;
@@ -485,11 +485,11 @@ a.btn-primary:hover {
     background-color: #DCDCDC;
 }
  
-.naranja {
+.naranja, .verde, .lila, .amarillo {
     margin-top: -4px;
 }
 
-.verde {
+/*.verde {
     margin-top: -4px;
 }
 
@@ -499,7 +499,7 @@ a.btn-primary:hover {
 
 .amarillo {
     margin-top: -4px;
-}
+}*/
 
 .alert.alert-success {
     border-radius: 8px;

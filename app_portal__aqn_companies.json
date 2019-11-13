@@ -8,6 +8,21 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
+                "volverButton": {
+                        "componente": "YBButton",
+                        "prefix": "aqn_companies",
+                        "icon": "arrow_back",
+                        "className": "floatLeft",
+                        "buttonType": "icon",
+                        "style": {
+                            "marginTop": "5px",
+                            "marginRight": "5px"
+                        },
+                        "action": {
+                            "key": "acctionVolver",
+                            "success": [{"slot": "return"}]
+                        }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -18,7 +33,7 @@
                     "submit": "update",
                     "success": [],
                     "groupbox": "acordeon",
-                    "return": true,
+                    "return": false,
                     "fields": {
                         "gb__principal": {
                             "title": "",
@@ -33,6 +48,10 @@
             }
         }
     },
-    "acciones": {},
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        }
+    },
     "drawIf": {}
 }

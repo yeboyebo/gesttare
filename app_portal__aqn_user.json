@@ -2,6 +2,36 @@
     "modifications": [
         {
             "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/cambiarContrasenaButton",
+            "value": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "prefix": "aqn_user",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [
+                            {
+                                "slot": "return"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "type": "updateNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/return",
+            "value": false
+        },
+        {
+            "type": "insertAfterNode",
             "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/fields/apellidos",
             "value": {
                 "nif": {}
@@ -27,6 +57,15 @@
                     "desc": "usuario",
                     "rel": "aqn_user",
                     "function": "getParticCompaniaUsu"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/acciones/changePassword",
+            "value": {
+                "acctionVolver": {
+                    "action": "return"
                 }
             }
         },
