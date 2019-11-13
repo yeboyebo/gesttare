@@ -18,7 +18,8 @@
                     "gt_controldiario": null,
                     "gt_controlmensual": null,
                     "gt_companias": null,
-                    "gt_clientes": null
+                    "gt_clientes": null,
+                    "gt_hitosproyecto": null
                 }
             }
         },
