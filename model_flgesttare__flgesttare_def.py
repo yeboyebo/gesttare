@@ -281,8 +281,11 @@ class gesttare(interna):
                 else:
                     print("error al generar notificacion del usuario")
                     return False
-        elif tipo in ["responsable", "particproyecto", "partictarea", "delpartictarea", "delparticproyecto"]:
-            if idUsuario != cursor.valueBuffer("idusuario"):
+        elif tipo in ["responsable", "partictarea", "delpartictarea", "delparticproyecto", "particproyecto"]:
+            if str(idUsuario) != str(cursor.valueBuffer("idusuario")):
+                print("creamos notificacion para ", tipo)
+                print(idUsuario, "   " , cursor.valueBuffer("idusuario"))
+                print(str(idUsuario) != str(cursor.valueBuffer("idusuario")))
                 if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                     return True
         return True
@@ -988,6 +991,9 @@ class gesttare(interna):
 
     def formatearTotalTiempo(self,tiempo):
         return self.ctx.gesttare_formatearTotalTiempo(tiempo)
+
+    def crearHitoInicial(self, curProyecto):
+        return self.ctx.gesttare_crearHitoInicial(curProyecto)
 
 
 # @class_declaration head #

@@ -455,6 +455,14 @@
                 "path": "assets/dist/img/icons/"
             },
             {
+                "name": "model_flgesttare__gt_hitosproyecto.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "model_flgesttare__gt_hitosproyecto_def.py",
+                "path": "models/flgesttare/"
+            },
+            {
                 "name": "archive.svg",
                 "path": "assets/dist/img/icons/"
             },
