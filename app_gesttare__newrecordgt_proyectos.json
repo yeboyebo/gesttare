@@ -1,6 +1,12 @@
 {
     "querystring": {},
-    "schema": {},
+    "schema": {
+        "gt_hitosproyecto": {
+            "rel": "codproyecto",
+            "querystring": {},
+            "create": true
+        }
+    },
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
@@ -26,42 +32,62 @@
                 "separator1": {
                     "componente": "YBSeparator"
                 },
-                "proyectosForm": {
-                    "prefix": "gt_proyectos",
-                    "componente": "YBForm",
-                    "class": "claseGrid ",
+                "multiNewRecordProyectos": {
+                    "componente": "YBMultiForm",
+                    "mainPrefix": "gt_proyectos",
                     "submit": "create",
-                    "icon": "info",
-                    "label": "Nuevo proyecto",
-                    "return": false,
+                    "return": true,
                     "saveEdit": true,
                     "saveReturn": true,
-                    "successmsg": "Proyecto creado",
-                    "success": [{"slot": "return"}],
-                    "fields": {
-                        "gb__": {
-                            "title": "",
+                    "forms": {
+                        "proyectosForm": {
+                            "prefix": "gt_proyectos",
+                            "componente": "YBForm",
+                            "class": "claseGrid ",
+                            "icon": "info",
+                            "label": "Nuevo proyecto",
                             "fields": {
-                                "codproyecto": {"disabled": true},
-                                "nombre": {},
-                                "descripcion": {},
-                                "estado": {},
-                                "fechainicio": {},
-                                "fechaterminado": {},
-                                "idresponsable": {
-                                    "combolimit": 1,
-                                    "showpk": false,
-                                    "function": "getParticCompaniaUsu"
-                                },
-                                "idcliente": {
-                                    "combolimit": 1,
-                                    "showpk": false,
-                                    "function": "getClientesCompaniaUsu"
+                                "gb__": {
+                                    "title": "",
+                                    "fields": {
+                                        "codproyecto": {"disabled": true},
+                                        "nombre": {},
+                                        "descripcion": {},
+                                        "estado": {},
+                                        "fechainicio": {},
+                                        "fechaterminado": {},
+                                        "idresponsable": {
+                                            "combolimit": 1,
+                                            "showpk": false,
+                                            "function": "getParticCompaniaUsu"
+                                        },
+                                        "idcliente": {
+                                            "combolimit": 1,
+                                            "showpk": false,
+                                            "function": "getClientesCompaniaUsu"
+                                        }
+                                    }
                                 }
-                            }
+                            },
+                            "exclude": {}
+                        },
+                        "hitosForm": {
+                            "prefix": "gt_hitosproyecto",
+                            "componente": "YBForm",
+                            "class": "claseGrid ",
+                            "icon": "info",
+                            "label": "Nuevo hito",
+                            "fields": {
+                                "gb__": {
+                                    "title": "",
+                                    "fields": {
+                                        "nombre": {}
+                                    }
+                                }
+                            },
+                            "exclude": {}
                         }
-                    },
-                    "exclude": {}
+                    }
                 }
             }
         }

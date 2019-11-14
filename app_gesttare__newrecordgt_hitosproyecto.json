@@ -46,7 +46,8 @@
                                 "fechainicio": {},
                                 "idusuario": {
                                     "combolimit": 1,
-                                    "showpk": false
+                                    "showpk": false,
+                                    "function": "getParticCompaniaUsu"
                                 },
                                 "fechaterminado": {}
                             }

@@ -19,11 +19,23 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return None
 
+    def gesttare_iniciaValoresCursor(self, cursor=None):
+        usuario = qsatype.FLUtil.nameUser()
+        # idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
+        # cursor.setValueBuffer(u"idcompany", idcompany)
+        cursor.setValueBuffer("idusuario", usuario)
+
+        qsatype.FactoriaModulos.get('formRecordgt_hitosproyecto').iface.iniciaValoresCursor(cursor)
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
+
+    def iniciaValoresCursor(self, cursor=None):
+        return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
 
 # @class_declaration head #

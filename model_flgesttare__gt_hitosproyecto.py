@@ -20,6 +20,9 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     class Meta:
         proxy = True
 
+    def iniciaValoresCursor(cursor=None):
+        return form.iface.iniciaValoresCursor(cursor)
+
 
 # @class_declaration gt_hitosproyecto #
 class gt_hitosproyecto(gesttare_gt_hitosproyecto, helpers.MixinConAcciones):
