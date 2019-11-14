@@ -120,6 +120,26 @@
                     "separator2": {
                         "componente": "YBSeparator"
                     },
+                    "hitosproyecto": {
+                        "componente": "YBGrid",
+                        "prefix": "gt_hitosproyecto",
+                        "label": "Hitos",
+                        "columns": [
+                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 270, "title": true, "link": true},
+                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
+                            {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80}
+                        ],
+                        "accionesGrid": [
+                            {
+                                "key": "actNuevoHito",
+                                "label": "Nuevo",
+                                "success": [{ "slot": "goto"}]
+                            }
+                        ]
+                    },
+                    "separator3": {
+                        "componente": "YBSeparator"
+                    },
                     "nuevoParticipanteExterno": {
                         "componente": "YBButton",
                         "prefix": "gt_proyectos",
@@ -343,9 +363,7 @@
             "serverAction": "actNuevoPartic"
         },
         "actNuevoHito": {
-            "action": "legacy",
-            "prefix": "gt_proyectos",
-            "serverAction": "gotoNuevoHito",
+            "action": "newRow",
             "icon": "add_circle"
         },
         "actInvitarExterno": {

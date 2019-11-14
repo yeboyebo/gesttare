@@ -469,6 +469,10 @@
             {
                 "name": "unarchive.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__newrecordgt_hitosproyecto.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [

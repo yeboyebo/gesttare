@@ -1,0 +1,65 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox",
+            "style": { },
+            "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
+                "hitosForm": {
+                    "prefix": "gt_hitosproyecto",
+                    "componente": "YBForm",
+                    "class": "claseGrid ",
+                    "submit": "create",
+                    "icon": "info",
+                    "label": "Nuevo hito",
+                    "return": false,
+                    "saveEdit": true,
+                    "saveReturn": true,
+                    "successmsg": "hito creado",
+                    "success": [{"slot": "return"}],
+                    "fields": {
+                        "gb__": {
+                            "title": "",
+                            "fields": {
+                                "nombre": {},
+                                "fechainicio": {},
+                                "idusuario": {
+                                    "combolimit": 1,
+                                    "showpk": false
+                                },
+                                "fechaterminado": {}
+                            }
+                        }
+                    },
+                    "exclude": {}
+                }
+            }
+        }
+    },
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        }
+    }
+}

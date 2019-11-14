@@ -41,6 +41,10 @@ class gesttare(interna):
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
         #     return False
 
+        if curProyecto.modeAccess() == curProyecto.Insert:
+            if not _i.crearHitoInicial(curProyecto):
+                return False
+
         if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
             return False
 
@@ -862,6 +866,25 @@ class gesttare(interna):
             else:
                 tiempo = tiempo[0:4]
         return tiempo
+
+    def gesttare_crearHitoInicial(self, curProyecto):
+
+        user_name = qsatype.FLUtil.nameUser()
+        
+        curHito = qsatype.FLSqlCursor("gt_hitosproyecto")
+
+        curHito.setModeAccess(curHito.Insert)
+        curHito.refreshBuffer()
+        curHito.setValueBuffer("codproyecto", curProyecto.valueBuffer("codproyecto"))
+        curHito.setValueBuffer("nombre", "Coordinación")
+        curHito.setValueBuffer("idusuario", user_name)
+        curHito.setValueBuffer("fechainicio", curProyecto.valueBuffer("fechainicio"))
+        curHito.setValueBuffer("fechaterminado", curProyecto.valueBuffer("fechaterminado"))
+
+        if not curHito.commitBuffer():
+            return False
+       
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)

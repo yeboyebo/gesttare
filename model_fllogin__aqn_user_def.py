@@ -93,6 +93,7 @@ class gesttare(yblogin):
         return data
 
     def gesttare_getParticCompaniaUsu(self, oParam):
+        print("entra?'")
         usuario = qsatype.FLUtil.nameUser()
         idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
         data = []

@@ -484,12 +484,16 @@ class gesttare(interna):
         return response
 
     def gesttare_gotoNuevoProyecto(self, model, oParam):
+        user_name = qsatype.FLUtil.nameUser()
+        #idc_diario = qsatype.FLUtil().quickSqlSelect("gt_proyectos", "codproyecto", "idusuario = '{}'".format(user_name))
+
+        # codproyecto = "nuevoP2"
+        # url = '/gesttare/gt_proyectos/newRecord?p_codproyecto=' + str(codproyecto) + '&p_idusuario=' + str(user_name)
         url='/gesttare/gt_proyectos/newRecord'
         resul = {}
         resul["url"] = url
         resul['status'] = 1
         return resul
-        # return resul
 
     def __init__(self, context=None):
         super().__init__(context)
