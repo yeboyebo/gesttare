@@ -1075,3 +1075,17 @@ a.btn-primary:hover {
     text-align: center;
     margin-bottom: 60px;
 }
+
+/*centrado del calendaro semanal*/
+
+#YBCalendarWeek {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.YBCalendarFiltersWeekNames {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
