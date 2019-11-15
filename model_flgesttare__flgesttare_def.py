@@ -45,6 +45,9 @@ class gesttare(interna):
         #     if not _i.crearHitoInicial(curProyecto):
         #         return False
 
+        if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
+            return False
+
         if not _i.comprobarClienteProyecto(curProyecto):
             return False
 
@@ -56,22 +59,19 @@ class gesttare(interna):
         if curProyecto.modeAccess() == curProyecto.Del:
             _i.compruebaNotificacion("delproyecto", curProyecto)
 
-        if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
-            return False
-
         elif curProyecto.modeAccess() != curProyecto.Insert:
             if not _i.comprobarNotificacionesProyecto(curProyecto):
                 return False
 
         return True
 
-    def gesttare_beforeCommit_gt_hitosproyecto(self, curHito, curProyecto):
+    def gesttare_beforeCommit_gt_hitosproyecto(self, curHito):
         _i = self.iface
 
         if curHito.modeAccess() == curHito.Insert:
             print("valor*****************: ",curHito.valueBuffer("fechainicio"))
-            curHito.setValueBuffer("idusuario", curProyecto.valueBuffer("idresponsable"))
-            curHito.setValueBuffer("fechainicio", curProyecto.valueBuffer("fechainicio"))
+            curHito.setValueBuffer("idusuario", curHito.valueBuffer("idusuario"))
+            curHito.setValueBuffer("fechainicio", curHito.valueBuffer("fechainicio"))
 
         return True
 
@@ -490,10 +490,6 @@ class gesttare(interna):
             idUsuario = str(qsatype.FLUtil.nameUser())
             if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
                 return False
-        elif curProyecto.modeAccess() == curProyecto.Edit:
-            if curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable"):
-                if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
-                    return False
         return True
 
     def gesttare_comprobarClienteProyecto(self, curProyecto):
