@@ -45,9 +45,6 @@ class gesttare(interna):
         #     if not _i.crearHitoInicial(curProyecto):
         #         return False
 
-        if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
-            return False
-
         if not _i.comprobarClienteProyecto(curProyecto):
             return False
 
@@ -58,6 +55,9 @@ class gesttare(interna):
 
         if curProyecto.modeAccess() == curProyecto.Del:
             _i.compruebaNotificacion("delproyecto", curProyecto)
+
+        if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
+            return False
 
         elif curProyecto.modeAccess() != curProyecto.Insert:
             if not _i.comprobarNotificacionesProyecto(curProyecto):
@@ -490,6 +490,10 @@ class gesttare(interna):
             idUsuario = str(qsatype.FLUtil.nameUser())
             if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
                 return False
+        elif curProyecto.modeAccess() == curProyecto.Edit:
+            if curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable"):
+                if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
+                    return False
         return True
 
     def gesttare_comprobarClienteProyecto(self, curProyecto):
