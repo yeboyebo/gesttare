@@ -482,6 +482,8 @@ class gesttare(interna):
                 return False
         elif curProyecto.modeAccess() == curProyecto.Edit:
             if curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable"):
+                if qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idparticipante", ustr(u"idusuario = '", str(curProyecto.valueBuffer("idresponsable")), u"' AND codproyecto = '", str(curProyecto.valueBuffer("codproyecto")), "'")):
+                    return True
                 if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
                     return False
         return True
