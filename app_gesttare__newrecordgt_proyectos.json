@@ -36,7 +36,7 @@
                     "componente": "YBMultiForm",
                     "mainPrefix": "gt_proyectos",
                     "submit": "create",
-                    "return": true,
+                    "return": false,
                     "saveEdit": true,
                     "saveReturn": true,
                     "forms": {

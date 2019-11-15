@@ -41,9 +41,9 @@ class gesttare(interna):
         # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
         #     return False
 
-        if curProyecto.modeAccess() == curProyecto.Insert:
-            if not _i.crearHitoInicial(curProyecto):
-                return False
+        # if curProyecto.modeAccess() == curProyecto.Insert:
+        #     if not _i.crearHitoInicial(curProyecto):
+        #         return False
 
         if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
             return False
@@ -62,6 +62,16 @@ class gesttare(interna):
         elif curProyecto.modeAccess() != curProyecto.Insert:
             if not _i.comprobarNotificacionesProyecto(curProyecto):
                 return False
+
+        return True
+
+    def gesttare_beforeCommit_gt_hitosproyecto(self, curHito, curProyecto):
+        _i = self.iface
+
+        if curHito.modeAccess() == curHito.Insert:
+            print("valor*****************: ",curHito.valueBuffer("fechainicio"))
+            curHito.setValueBuffer("idusuario", curProyecto.valueBuffer("idresponsable"))
+            curHito.setValueBuffer("fechainicio", curProyecto.valueBuffer("fechainicio"))
 
         return True
 
@@ -867,24 +877,24 @@ class gesttare(interna):
                 tiempo = tiempo[0:4]
         return tiempo
 
-    def gesttare_crearHitoInicial(self, curProyecto):
+    # def gesttare_crearHitoInicial(self, curProyecto):
 
-        user_name = qsatype.FLUtil.nameUser()
+    #     user_name = qsatype.FLUtil.nameUser()
         
-        curHito = qsatype.FLSqlCursor("gt_hitosproyecto")
+    #     curHito = qsatype.FLSqlCursor("gt_hitosproyecto")
 
-        curHito.setModeAccess(curHito.Insert)
-        curHito.refreshBuffer()
-        curHito.setValueBuffer("codproyecto", curProyecto.valueBuffer("codproyecto"))
-        curHito.setValueBuffer("nombre", "Coordinación")
-        curHito.setValueBuffer("idusuario", user_name)
-        curHito.setValueBuffer("fechainicio", curProyecto.valueBuffer("fechainicio"))
-        curHito.setValueBuffer("fechaterminado", curProyecto.valueBuffer("fechaterminado"))
+    #     curHito.setModeAccess(curHito.Insert)
+    #     curHito.refreshBuffer()
+    #     curHito.setValueBuffer("codproyecto", curProyecto.valueBuffer("codproyecto"))
+    #     curHito.setValueBuffer("nombre", "Coordinación")
+    #     curHito.setValueBuffer("idusuario", user_name)
+    #     curHito.setValueBuffer("fechainicio", curProyecto.valueBuffer("fechainicio"))
+    #     # curHito.setValueBuffer("fechaterminado", curProyecto.valueBuffer("fechaterminado"))
 
-        if not curHito.commitBuffer():
-            return False
+    #     if not curHito.commitBuffer():
+    #         return False
        
-        return True
+    #     return True
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -933,6 +943,9 @@ class gesttare(interna):
 
     def beforeCommit_gt_proyectos(self, curProyecto):
         return self.ctx.gesttare_beforeCommit_gt_proyectos(curProyecto)
+
+    def beforeCommit_gt_hitosproyecto(self, curHito):
+        return self.ctx.gesttare_beforeCommit_gt_hitosproyecto(curHito)
 
     def comprobarUsuarioResponsableProyecto(self, curProyecto):
         return self.ctx.gesttare_comprobarUsuarioResponsableProyecto(curProyecto)

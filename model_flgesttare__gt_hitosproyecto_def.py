@@ -25,6 +25,9 @@ class gesttare(interna):
         # cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idusuario", usuario)
 
+        if cursor.valueBuffer("nombre") == None:
+            cursor.setValueBuffer("nombre", "Coordinación")
+
         qsatype.FactoriaModulos.get('formRecordgt_hitosproyecto').iface.iniciaValoresCursor(cursor)
         return True
 
