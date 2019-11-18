@@ -68,10 +68,28 @@ class gesttare(interna):
     def gesttare_beforeCommit_gt_hitosproyecto(self, curHito):
         _i = self.iface
 
+
+        # curP = qsatype.FLSqlCursor("gt_proyectos")
+        # curP.select(ustr("codproyecto = '", codProyecto, "'"))
+        # if not curP.first():
+        #     return False
+        # curP.setModeAccess(curP.Edit)
+        # curP.refreshBuffer()
+        # curP.setValueBuffer(u"hdedicadas", proyectos.getIface().commonCalculateField(u"hdedicadas", curP))
+        # curP.setValueBuffer(u"costeinterno", proyectos.getIface().commonCalculateField(u"costeinterno", curP))
+        # curP.setValueBuffer(u"costetotal", proyectos.getIface().commonCalculateField(u"costetotal", curP))
+        # curP.setValueBuffer(u"rentabilidad", proyectos.getIface().commonCalculateField(u"rentabilidad", curP))
+        # if not curP.commitBuffer():
+        #     return False
+
         if curHito.modeAccess() == curHito.Insert:
-            print("valor*****************: ",curHito.valueBuffer("fechainicio"))
+            curP = qsatype.FLSqlCursor("gt_proyectos")
+            curP.select(ustr("codproyecto = '", curHito.valueBuffer("codproyecto"), "'"))
+            if not curP.first():
+                return False
+            print("valor*****************: ",curP.valueBuffer("idresponsable"))
             curHito.setValueBuffer("idusuario", curHito.valueBuffer("idusuario"))
-            curHito.setValueBuffer("fechainicio", curHito.valueBuffer("fechainicio"))
+            curHito.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
 
         return True
 
@@ -189,7 +207,8 @@ class gesttare(interna):
     def gesttare_compruebaNotificacion(self, tipo, cursor):
         _i = self.iface
         # tipo_objeto -> gt_tarea, gt_proyecto, gt_comentario, gt_anotacion
-        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion", "comentario"]:
+        print("el tipo es: ",tipo)
+        if tipo in ["deltarea", "responsable", "resuelta", "abierta", "cambioFechaEjecucion", "comentario"]:
             tipo_objeto = "gt_tarea"
             idobjeto = cursor.valueBuffer("idtarea")
         elif tipo in ["particproyecto", "archivado", "desarchivado", "responsablepro"]:
@@ -220,7 +239,7 @@ class gesttare(interna):
     def gesttare_creaNotificacion(self, tipo_objeto, idobjeto, tipo, cursor):
         print("crea notificacion", tipo)
         _i = self.iface
-        if tipo in ["deltarea", "responsable", "resuelta", "cambioFechaEjecucion"]:
+        if tipo in ["deltarea", "responsable", "resuelta", "abierta", "cambioFechaEjecucion"]:
             mensaje = "Tarea: " + cursor.valueBuffer("nombre")
         elif tipo in ["particproyecto", "delparticproyecto", "archivado", "desarchivado", "delproyecto", "responsablepro"]:
             mensaje = "Proyecto: " + qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", "codproyecto = '{}'".format(cursor.valueBuffer(u"codproyecto")))
@@ -249,7 +268,7 @@ class gesttare(interna):
     def gesttare_notificarUsuarios(self, idActualizacion, tipo_objeto, idobjeto, tipo, cursor):
         _i = self.iface
         idUsuario = qsatype.FLUtil.nameUser()
-        if tipo in ["deltarea", "resuelta", "cambioFechaEjecucion", "comentario"]:
+        if tipo in ["deltarea", "resuelta", "abierta","cambioFechaEjecucion", "comentario"]:
             qryParticipantes = qsatype.FLSqlQuery()
             qryParticipantes.setTablesList(u"gt_partictarea")
             qryParticipantes.setSelect(u"idparticipante,idusuario")
@@ -332,7 +351,7 @@ class gesttare(interna):
             notificamos = False
             if tipo == "deltarea":
                 notificamos = True
-            elif tipo == "resuelta":
+            elif tipo == "resuelta" or tipo == "abierta":
                 notificamos = True
             elif tipo == q.value(0):
                 notificamos = True
@@ -344,7 +363,7 @@ class gesttare(interna):
                     notificamos = False
             elif tipo == "comentario":
                 notificamos = True
-                if q.value(0) in ["deltarea", "resuelta", "delpartictarea", "delpartictarea", "delparticproyecto"]:
+                if q.value(0) in ["deltarea", "resuelta", "abierta","delpartictarea", "delpartictarea", "delparticproyecto"]:
                     notificamos = False
             elif tipo == "responsable":
                 notificamos = True
@@ -519,7 +538,12 @@ class gesttare(interna):
                 # _i.crearActualizaciones(tipo, curTarea)
                 _i.compruebaNotificacion("responsable", curTarea)
             elif curTarea.valueBuffer(u"resuelta") != curTarea.valueBufferCopy(u"resuelta"):
-                _i.compruebaNotificacion("resuelta", curTarea)
+                print("curTarea es: ", curTarea.valueBuffer("resuelta"))
+                if curTarea.valueBuffer("resuelta"):
+                    _i.compruebaNotificacion("resuelta", curTarea)
+                else:
+                    print("entra cur****")
+                    _i.compruebaNotificacion("abierta", curTarea)
             elif curTarea.valueBuffer(u"fechavencimiento") != curTarea.valueBufferCopy(u"fechavencimiento"):
                 _i.compruebaNotificacion("cambioFechaEjecucion", curTarea)
             # if actualizacion:

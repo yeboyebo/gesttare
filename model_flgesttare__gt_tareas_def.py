@@ -891,7 +891,7 @@ class gesttare(interna):
                     return False
                 if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), idUsuario, False])):
                     return False
-                response["msg"] = "Anotación creada"
+                response["msg"] = "Posible tarea creada"
                 return response;
 
         return True
