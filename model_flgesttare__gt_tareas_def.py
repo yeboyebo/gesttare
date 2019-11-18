@@ -45,7 +45,8 @@ class gesttare(interna):
             {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
             {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
             {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
-            {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'}
+            {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
+            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
         ]
 
         if template == "calendarioTareas":
@@ -161,6 +162,9 @@ class gesttare(interna):
     def gesttare_field_completaIcon(self, model):
 
         return "android"
+
+    def gesttare_field_completaTitle(self, model):
+        return "title"
 
     def gesttare_field_usuario(self, model):
         nombre_usuario = ""
@@ -996,6 +1000,9 @@ class gesttare(interna):
 
     def field_completaIcon(self, model):
         return self.ctx.gesttare_field_completaIcon(model)
+
+    def field_completaTitle(self, model):
+        return self.ctx.gesttare_field_completaTitle(model)
 
     def ren_field_proyecto(self, model):
         return self.ctx.gesttare_ren_field_proyecto(model)

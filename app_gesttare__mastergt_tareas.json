@@ -49,7 +49,7 @@
                         {
                             "tipo": "act",
                             "key": "complete",
-                            "label": "Completar tarea",
+                            "calculatelabel": "completaTitle",
                             "calculateicon": "completaIcon",
                             "success": [
                                 {"slot": "refrescar"}

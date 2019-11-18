@@ -62,6 +62,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def field_usuario(self):
         return form.iface.field_usuario(self)
 
+    def field_completaTitle(self):
+        return form.iface.field_completaTitle(self)
+
     def color_fecha(self):
         return form.iface.color_fecha(self)
 
