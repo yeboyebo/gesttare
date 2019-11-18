@@ -168,6 +168,8 @@ html, #parent-container{
 .appInfo {
     background-color: #f9a825 !important;
     height: 32px;
+    display: flex;
+    justify-content: center;
 }
 
 .appInfo .YBTableOverGrid  {
@@ -853,7 +855,7 @@ a.btn-primary:hover {
     overflow: hidden;
     position: relative;
     float: left;
-    width: 50%;
+    //width: 50%;
 }
 
 @media (min-width: 769px) {
@@ -1088,4 +1090,25 @@ a.btn-primary:hover {
     display: flex;
     width: 100%;
     justify-content: center;
+}
+
+/*hitos*/
+
+.hitosproyecto .YBTableRow{
+    margin-top: 5px;
+}
+
+/*Comentarios*/
+
+.comentariosGrid .responsable{
+    padding: 5px 10px 5px 10px;
+}
+
+.comentariosGrid .YBListItemPrimaryTitle{
+    padding: 5px 10px 5px 10px;
+    margin-left: -15px;
+}
+
+.comentariosGrid .YBListItem{
+    box-shadow: none;
 }

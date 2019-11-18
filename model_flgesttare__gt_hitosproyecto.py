@@ -20,6 +20,12 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     class Meta:
         proxy = True
 
+    def field_usuario(self):
+        return form.iface.field_usuario(self)
+        
+    def color_responsable(self):
+        return form.iface.color_responsable(self)
+
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
 

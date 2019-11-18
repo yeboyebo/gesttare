@@ -1,11 +1,12 @@
 {
     "querystring": {},
-    "schema": {},
+    "schema": {
+    },
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": "gbTareas gbTareasBox",
-            "style": { },
+            "style": {},
             "layout": {
                 "volverButton": {
                     "componente": "YBButton",
@@ -15,7 +16,7 @@
                     "className": "floatLeft",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "5px",
+                        "marginTop": "8px",
                         "marginRight": "5px"
                     },
                     "action": {
@@ -23,24 +24,24 @@
                         "success": [{"slot": "return"}]
                     }
                 },
-                "separator1": {
+                
+                "separator0": {
                     "componente": "YBSeparator"
                 },
-                "hitosForm": {
-                    "prefix": "gt_hitosproyecto",
-                    "componente": "YBForm",
-                    "class": "claseGrid ",
-                    "submit": "create",
-                    "icon": "info",
-                    "label": "Nuevo hito",
-                    "return": false,
-                    "saveEdit": true,
-                    "saveReturn": true,
-                    "successmsg": "hito creado",
-                    "success": [{"slot": "return"}],
-                    "fields": {
-                        "gb__": {
-                            "title": "",
+                "groupBoxHitos": {
+                    "componente": "YBGroupBox",
+                    "className": "",
+                    "style": {},
+                    "layout": {
+                        "hitosForm": {
+                            "prefix": "gt_hitosproyecto",
+                            "componente": "YBForm",
+                            "class": "claseGrid",
+                            "submit": "update",
+                            "icon": "info",
+                            "label": "Información de hito",
+                            "return": false,
+                            "successmsg": "hito actualizada",
                             "fields": {
                                 "gb__proyecto": {
                                     "title": "",
@@ -69,10 +70,10 @@
                                         "fechaterminado": {}
                                     }
                                 }
-                            }
+                            },
+                            "exclude": {}
                         }
-                    },
-                    "exclude": {}
+                    }  
                 }
             }
         }
@@ -81,5 +82,8 @@
         "acctionVolver": {
             "action": "return"
         }
+    },
+    "drawIf": {
+        
     }
 }

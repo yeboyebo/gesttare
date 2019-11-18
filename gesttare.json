@@ -473,6 +473,18 @@
             {
                 "name": "app_gesttare__newrecordgt_hitosproyecto.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "app_gesttare__gt_hitosproyecto.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "check_box_outline_blank.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "check_box.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [
