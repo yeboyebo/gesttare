@@ -56,6 +56,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def ren_field_proyecto(self):
         return form.iface.ren_field_proyecto(self)
 
+    def field_completaIcon(self):
+        return form.iface.field_completaIcon(self)
+
     def field_usuario(self):
         return form.iface.field_usuario(self)
 

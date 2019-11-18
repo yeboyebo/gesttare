@@ -50,6 +50,7 @@
                             "tipo": "act",
                             "key": "complete",
                             "label": "Completar tarea",
+                            "calculateicon": "completaIcon",
                             "success": [
                                 {"slot": "refrescar"}
                             ]
