@@ -485,6 +485,10 @@
             {
                 "name": "check_box.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "eliminadoParticipante.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

@@ -160,11 +160,20 @@ class gesttare(interna):
         return nombreProy
 
     def gesttare_field_completaIcon(self, model):
+        if model.resuelta:
+            return "check_box"
+        else:
+            return "check_box_outline_blank"
 
-        return "android"
+        return ""
 
     def gesttare_field_completaTitle(self, model):
-        return "title"
+        if model.resuelta:
+            return "Abrir tarea"
+        else:
+            return "Completar tarea"
+
+        return ""
 
     def gesttare_field_usuario(self, model):
         nombre_usuario = ""
