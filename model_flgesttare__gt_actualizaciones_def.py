@@ -57,7 +57,7 @@ class gesttare(interna):
             if model["gt_actualizaciones.tipo"] == "resuelta":
                 retorno = "verdeAnotar"
             if model["gt_actualizaciones.tipo"] == "abierta":
-                retorno = "verdeAnotar"
+                retorno = "amarilloAnotar"
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "naranjaAnotar"
             elif model["gt_actualizaciones.tipo"] == "comentario":
@@ -66,7 +66,7 @@ class gesttare(interna):
                 retorno = "amarilloAnotar"
             elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "marronAnotar"
-            elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
+            elif model["gt_actualizaciones.tipo"] == "delpartictarea":
                 retorno = "rojoAnotar"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "rojoAnotar"
@@ -95,8 +95,8 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/group_add.svg"
             elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "/static/dist/img/icons/supervisor_account.svg"
-            elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
-                retorno = "/static/dist/img/icons/person_add_disabled.svg"
+            elif model["gt_actualizaciones.tipo"] == "delpartictarea":
+                retorno = "/static/dist/img/icons/eliminadoParticipante.svg"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "/static/dist/img/icons/delete.svg"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
@@ -125,7 +125,7 @@ class gesttare(interna):
                 retorno = "Añadido como participante"
             elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "Asignado como responsable"
-            elif model["gt_actualizaciones.tipo"] == "eliminadoComoParticipante":
+            elif model["gt_actualizaciones.tipo"] == "delpartictarea":
                 retorno = "Eliminado como participante"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "Eliminado"

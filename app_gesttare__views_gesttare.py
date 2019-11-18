@@ -45,39 +45,42 @@ class gesttare(interna):
 
         nombre_proyecto = " // Proyecto: "
         nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.codproyecto = ta.codproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
-        nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva)) + nombre_proyecto 
+        nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva)) 
 
         appinfo = {
             "data": [{
                 "pk": tareaactiva,
                 "idtarea": tareaactiva,
-                "nombreactiva": nombre_tarea
+                "nombreactiva": nombre_tarea,
+                "nombreproyecto": nombre_proyecto
             }],
             "layout": {
-                "timeTracking": {
-                    "componente": "YBButton",
-                    "prefix": "gt_tareas",
-                    "className": "",
-                    "buttonType": "",
-                    "action": {
-                        "key": "startstop",
-                        "success": [{"slot": "refresh"}]
-                    }
-                },
                 "tareaActiva": {
-                    "componente": "YBAppInfo",
+                    "componente": "YBTable",
+                    "paginacion": False,
+                    "type": "json",
+                    "hideheader": True,
+                    "border": False,
                     "style": {
-                        "fontWeight": "bold",
-                        "textAlign": "rigth",
-                        "color": "white",
-                        "whiteSpace": "nowrap"
+                        "fontWeight": "bold"
                     },
-                    "prefix": "appinfo"
+                    "prefix": "appinfo",
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "startstop",
+                            "label": "Timetracking",
+                            "success": [{"slot": "refrescar"}]
+                        },
+                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
+                        {"tipo": "field", "key": "nombreproyecto", "label": "Tarea activa"}
+                    ]
                 }
             },
             "acciones": {
                 "startstop": {
                     "action": "legacy",
+                    "prefix": "gt_tareas",
                     "icon": "alarm",
                     "serverAction": "startstop"
                 }
