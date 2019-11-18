@@ -416,6 +416,18 @@ class gesttare(interna):
     def gesttare_borrar_proyecto(self, oParam, cursor):
         resul = {}
         if "confirmacion" in oParam and oParam["confirmacion"]:
+            usuario = qsatype.FLUtil.nameUser()
+            is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+                cursor.setModeAccess(cursor.Del)
+                cursor.refreshBuffer()
+                if not cursor.commitBuffer():
+                    return False    
+            else:
+                response["status"] = 1
+                response["msg"] = "No se puede eliminar el proyecto"
+                return response
+
             cursor.setModeAccess(cursor.Del)
             cursor.refreshBuffer()
             if not cursor.commitBuffer():
