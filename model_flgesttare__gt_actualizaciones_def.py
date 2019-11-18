@@ -168,7 +168,7 @@ class gesttare(interna):
         if cursor.valueBuffer("tipo") == "anotacion":
             response["status"] = 2
             response["confirm"] = "<div class='anotacionNombre'>Nombre: </div><div class='anotacionNombreOtros'>" + cursor.valueBuffer("otros") + "</div></br>" + "<div class='anotacionDescripcion'>Descripción: </div><div class='anotacionDescripcionTipobjeto'>" + cursor.valueBuffer("tipobjeto") + "</div>"
-            response["close"] = True
+            response["customButtons"] = []
             # print(response)
             return response
             # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))

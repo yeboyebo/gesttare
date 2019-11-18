@@ -509,6 +509,15 @@ class gesttare(interna):
             idUsuario = str(qsatype.FLUtil.nameUser())
             if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
                 return False
+<<<<<<< HEAD
+        elif curProyecto.modeAccess() == curProyecto.Edit:
+            if curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable"):
+                if qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idparticipante", ustr(u"idusuario = '", str(curProyecto.valueBuffer("idresponsable")), u"' AND codproyecto = '", str(curProyecto.valueBuffer("codproyecto")), "'")):
+                    return True
+                if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
+                    return False
+=======
+>>>>>>> dbbe5eb09f6b8083ebe8531a0f9f21216f37e032
         return True
 
     def gesttare_comprobarClienteProyecto(self, curProyecto):
