@@ -66,7 +66,7 @@ class gesttare(interna):
                 retorno = "amarilloAnotar"
             elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "marronAnotar"
-            elif model["gt_actualizaciones.tipo"] == "delpartictarea":
+            elif model["gt_actualizaciones.tipo"] == "delpartictarea" or model["gt_actualizaciones.tipo"] == "delparticproyecto":
                 retorno = "rojoAnotar"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "rojoAnotar"
@@ -95,7 +95,7 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/group_add.svg"
             elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "/static/dist/img/icons/supervisor_account.svg"
-            elif model["gt_actualizaciones.tipo"] == "delpartictarea":
+            elif model["gt_actualizaciones.tipo"] == "delpartictarea" or model["gt_actualizaciones.tipo"] == "delparticproyecto":
                 retorno = "/static/dist/img/icons/eliminadoParticipante.svg"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "/static/dist/img/icons/delete.svg"
@@ -125,7 +125,7 @@ class gesttare(interna):
                 retorno = "Añadido como participante"
             elif model["gt_actualizaciones.tipo"] == "responsable" or model["gt_actualizaciones.tipo"] == "responsablepro":
                 retorno = "Asignado como responsable"
-            elif model["gt_actualizaciones.tipo"] == "delpartictarea":
+            elif model["gt_actualizaciones.tipo"] == "delpartictarea" or model["gt_actualizaciones.tipo"] == "delparticproyecto":
                 retorno = "Eliminado como participante"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "Eliminado"

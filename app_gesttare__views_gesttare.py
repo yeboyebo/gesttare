@@ -70,6 +70,7 @@ class gesttare(interna):
                             "tipo": "act",
                             "key": "startstop",
                             "label": "Timetracking",
+                            "iconurl" : "/static/dist/img/icons/timetrakcer.svg",
                             "success": [{"slot": "refrescar"}]
                         },
                         {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
