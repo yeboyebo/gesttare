@@ -85,7 +85,7 @@ class gesttare(interna):
         # return "accessible"
         retorno = ""
         if model["gt_actualizaciones.tipo"]:
-            if model["gt_actualizaciones.tipo"] == "resuelto":
+            if model["gt_actualizaciones.tipo"] == "resuelta":
                 retorno = "/static/dist/img/icons/check.svg"
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "/static/dist/img/icons/update.svg"
@@ -113,7 +113,7 @@ class gesttare(interna):
         print(model["gt_actualizaciones.tipo"])
         retorno = ""
         if model["gt_actualizaciones.tipo"]:
-            if model["gt_actualizaciones.tipo"] == "resuelto":
+            if model["gt_actualizaciones.tipo"] == "resuelta":
                 retorno = "Resuelto"
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "Cambio fecha ejecución"
@@ -143,7 +143,7 @@ class gesttare(interna):
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
-        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) AND gt_actualizaciones.fecha BETWEEN '19-11-2019' AND '20-12-2500'")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) AND gt_actualizaciones.fecha BETWEEN '2019-11-16' AND '20-12-2500'")
         return query
 
     def gesttare_queryGrid_notificacionesUsuarioViejas(self, model):
@@ -152,7 +152,7 @@ class gesttare(interna):
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
-        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "'AND gt_actualizaciones.fecha BETWEEN '10-11-2010' AND '19-11-2019' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) ")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "'AND gt_actualizaciones.fecha BETWEEN '2010-11-10' AND '2019-11-18' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) ")
         return query
 
     def gesttare_visualizarElemento(self, model, cursor):

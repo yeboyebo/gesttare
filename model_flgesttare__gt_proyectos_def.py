@@ -424,19 +424,22 @@ class gesttare(interna):
                 if not cursor.commitBuffer():
                     return False    
             else:
-                response["status"] = 1
-                response["msg"] = "No se puede eliminar el proyecto"
-                return response
+                resul["status"] = 1
+                resul["msg"] = "No se puede eliminar el proyecto"
+                return resul
 
-            cursor.setModeAccess(cursor.Del)
-            cursor.refreshBuffer()
-            if not cursor.commitBuffer():
-                return False
             resul["return_data"] = False
             resul["msg"] = "Proyecto y tareas asociadas eliminados correctamente"
         else:
-            resul['status'] = 2
-            resul['confirm'] = "¿Seguro que quieres eliminar el proyecto y todas sus tareas asociadas?"
+            usuario = qsatype.FLUtil.nameUser()
+            is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+                resul['status'] = 2
+                resul['confirm'] = "¿Seguro que quieres eliminar el proyecto y todas sus tareas asociadas?"
+            else:
+                resul["status"] = 1
+                resul["msg"] = "No se puede eliminar el proyecto"
+                return resul
         return resul
 
     def gesttare_getRentabilidadGraphic(self, model, template):

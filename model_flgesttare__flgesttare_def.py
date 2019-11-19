@@ -26,7 +26,7 @@ class gesttare(interna):
             return False
         if curComentario.modeAccess() == curComentario.Insert:
             if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curComentario.valueBuffer(u"idusuario"), u" AND idtarea = ", curComentario.valueBuffer(u"idtarea"))):
-                print("falla al añadir como participante???")
+                # print("falla al añadir como participante???")
                 if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curComentario.valueBuffer(u"idusuario"), curComentario.valueBuffer(u"idtarea")])):
                     return False
 
@@ -95,7 +95,7 @@ class gesttare(interna):
     def gesttare_beforeCommit_gt_tareas(self, curTarea):
         _i = self.iface
         if curTarea.modeAccess() == curTarea.Del:
-            print("notificamos deltarea")
+            # print("notificamos deltarea")
             _i.compruebaNotificacion("deltarea", curTarea)
         return True
 
@@ -290,7 +290,7 @@ class gesttare(interna):
                 else:
                     print("error al generar notificacion del usuario")
                     return False
-        if tipo in ["archivado", "desarchivado", "delproyecto", "responsablepro"]:
+        if tipo in ["archivado", "desarchivado", "delproyecto"]:
             qryParticipantes = qsatype.FLSqlQuery()
             qryParticipantes.setTablesList(u"gt_particproyecto")
             qryParticipantes.setSelect(u"idparticipante,idusuario")
@@ -313,11 +313,11 @@ class gesttare(interna):
                 else:
                     print("error al generar notificacion del usuario")
                     return False
-        elif tipo in ["responsable", "partictarea", "delpartictarea", "delparticproyecto", "particproyecto"]:
+        elif tipo in ["responsable", "responsablepro", "partictarea", "delpartictarea", "delparticproyecto", "particproyecto"]:
             if str(idUsuario) != str(cursor.valueBuffer("idusuario")):
-                print("creamos notificacion para ", tipo)
-                print(idUsuario, "   " , cursor.valueBuffer("idusuario"))
-                print(str(idUsuario) != str(cursor.valueBuffer("idusuario")))
+                # print("creamos notificacion para ", tipo)
+                # print(idUsuario, "   " , cursor.valueBuffer("idusuario"))
+                # print(str(idUsuario) != str(cursor.valueBuffer("idusuario")))
                 if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                     return True
         return True
@@ -331,7 +331,7 @@ class gesttare(interna):
         #     where = u"(a.tipobjeto = 'gt_tarea' AND a.idobjeto = '" + str(cursor.valueBuffer("idtarea")) + "') OR (a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "'))"
         if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = ", usuarioNotificado, u" AND idactualizacion = ", idActualizacion)):
             return True
-        print("miramos si el usuario tiene alguna notificacion en esa tabla")
+        # print("miramos si el usuario tiene alguna notificacion en esa tabla")
         # actualiz = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario u INNER JOIN gt_actualizaciones  ON u.idactualizacion = a.idactualizacion", "a.tipo", "a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'")
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_actualizusuario, gt_actualizaciones")
@@ -373,10 +373,10 @@ class gesttare(interna):
             else:
                 notificamos = False
 
-            print("____________________________")
-            print(tipo)
-            print(q.value(0))
-            print(notificamos)
+            # print("____________________________")
+            # print(tipo)
+            # print(q.value(0))
+            # print(notificamos)
 
             if notificamos:
                 qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizusuario = '" + str(q.value(2)) + "'")
@@ -387,7 +387,7 @@ class gesttare(interna):
             # notificamos = False
 
         if notificamos:
-            print("vamos a crear la notificacion del usuario", usuarioNotificado)
+            # print("vamos a crear la notificacion del usuario", usuarioNotificado)
             if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, usuarioNotificado, False])):
                 return False
         # deltarea
