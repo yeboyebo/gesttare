@@ -58,6 +58,7 @@
                         {
                             "tipo": "act",
                             "key": "startstop",
+                            "iconurl" : "/static/dist/img/icons/timer.svg",
                             "label": "TimeTracking",
                             "success": [
                                 {"slot": "refrescar"}

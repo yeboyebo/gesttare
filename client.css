@@ -103,8 +103,8 @@ html, #parent-container{
     text-transform: uppercase;
     letter-spacing: 0;
     will-change: box-shadow, transform;
-    min-height: 32px;
-    max-height: 32px;
+    min-height: 31px;
+    max-height: 31px;
 }
 
 .controlTiempoLabel {
@@ -585,7 +585,8 @@ a.btn-primary:hover {
 @media (max-width: 768px) {
   .controlTiempoButton {
     float: right;
-    margin-top: -7.54px;
+    //margin-top: -7.54px;
+    margin-top: -19px;
   }
   .controlTiempoButton > .YBButtonRaised{
     margin-top: 10px;
@@ -595,10 +596,17 @@ a.btn-primary:hover {
     border-radius: 50%;
     }
     .YBButonIconResponsive {
-        margin-left: -5px;
+        margin-left: -5.5px;
+        margin-top: -1px;
     }
     .YBNavBarActions i .material-icons {
         float: right;
+    }
+    .YBNavBarAvatar {
+        margin-top: -6px !important;
+    }
+    .YBListItemSecondaryAction .material-icons {
+        margin-right: 5px;
     }
    /*.toaster{
         left: 37% !important;
@@ -1111,4 +1119,10 @@ a.btn-primary:hover {
 
 .comentariosGrid .YBListItem{
     box-shadow: none;
+}
+
+.appInfo img {
+    width: 20px !important;
+    height: 22px !important;
+    position: absolute !important;
 }

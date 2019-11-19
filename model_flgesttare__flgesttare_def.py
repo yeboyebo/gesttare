@@ -136,11 +136,9 @@ class gesttare(interna):
 
     def gesttare_compruebaNotificacionParticTarea(self, curPart):
         _i = self.iface
-        print("entra")
         if curPart.modeAccess() == curPart.Insert:
             return _i.compruebaNotificacion("partictarea", curPart)
         elif curPart.modeAccess() == curPart.Del:
-            print("entra2")
             return _i.compruebaNotificacion("delpartictarea", curPart)
         return True
 
@@ -211,7 +209,7 @@ class gesttare(interna):
         if tipo in ["deltarea", "responsable", "resuelta", "abierta", "cambioFechaEjecucion", "comentario"]:
             tipo_objeto = "gt_tarea"
             idobjeto = cursor.valueBuffer("idtarea")
-        elif tipo in ["particproyecto", "archivado", "desarchivado", "responsablepro"]:
+        elif tipo in ["particproyecto", "archivado", "desarchivado", "responsablepro", "delparticproyecto"]:
             tipo_objeto = "gt_proyecto"
             idobjeto = cursor.valueBuffer("codproyecto")
         # elif tipo in ["comentario"]:
