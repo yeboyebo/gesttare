@@ -54,11 +54,9 @@ class gesttare(interna):
     def gesttare_field_color_fondo_icono(self, model):
         retorno = ""
         if model["gt_actualizaciones.tipo"]:
-            if model["gt_actualizaciones.tipo"] == "resuelto":
-                retorno = "verdeAnotar"
             if model["gt_actualizaciones.tipo"] == "resuelta":
                 retorno = "verdeAnotar"
-            if model["gt_actualizaciones.tipo"] == "abierta":
+            elif model["gt_actualizaciones.tipo"] == "abierta":
                 retorno = "amarilloAnotar"
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "naranjaAnotar"
@@ -85,8 +83,10 @@ class gesttare(interna):
         # return "accessible"
         retorno = ""
         if model["gt_actualizaciones.tipo"]:
-            if model["gt_actualizaciones.tipo"] == "resuelto":
-                retorno = "/static/dist/img/icons/check.svg"
+            if model["gt_actualizaciones.tipo"] == "resuelta":
+                retorno = "/static/dist/img/icons/check_box.svg"
+            elif model["gt_actualizaciones.tipo"] == "abierta":
+                retorno = "/static/dist/img/icons/check_box_outline_blank.svg"
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "/static/dist/img/icons/update.svg"
             elif model["gt_actualizaciones.tipo"] == "comentario":
@@ -113,8 +113,10 @@ class gesttare(interna):
         print(model["gt_actualizaciones.tipo"])
         retorno = ""
         if model["gt_actualizaciones.tipo"]:
-            if model["gt_actualizaciones.tipo"] == "resuelto":
-                retorno = "Resuelto"
+            if model["gt_actualizaciones.tipo"] == "resuelta":
+                retorno = "Tarea Completada"
+            elif model["gt_actualizaciones.tipo"] == "abierta":
+                retorno = "Tarea abierta"
             elif model["gt_actualizaciones.tipo"] == "cambioFechaEjecucion":
                 retorno = "Cambio fecha ejecución"
             elif model["gt_actualizaciones.tipo"] == "comentario":
