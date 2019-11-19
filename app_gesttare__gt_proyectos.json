@@ -118,15 +118,16 @@
                         "exclude": {}
                     },
                     "separator2": {
-                        "componente": "YBSeparator"
+                        "componente": "YBSeparator",
+                        "visible": false
                     },
                     "hitosproyecto": {
                         "componente": "YBGrid",
+                        "visible": false,
                         "prefix": "gt_hitosproyecto",
                         "label": "Hitos",
                         "columns": [
                             {"tipo": "field", "listpos": "title", "key": "nombre", "width": 270, "title": true, "link": true},
-                            {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": "Responsable"},
                             {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
                             {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80}
                         ],
