@@ -51,12 +51,15 @@ class gesttare(yblogin):
         return data
 
     def gesttare_getForeignFields(self, model, template=None):
+        fields = []
         # if template == "mastertimetracking":
             # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
-        fields = [
-            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-            {'verbose_name': 'usuario', 'func': 'field_nombre'}
-        ]
+        # if template == "formRecord":
+        #     return []
+        # fields = [
+        #     {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+        #     {'verbose_name': 'usuario', 'func': 'field_nombre'}
+        # ]
         return fields
 
     def gesttare_field_nombre(self, model):

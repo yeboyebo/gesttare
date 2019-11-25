@@ -489,6 +489,10 @@
             {
                 "name": "eliminadoParticipante.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "filtroactivo.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

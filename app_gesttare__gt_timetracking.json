@@ -52,7 +52,7 @@
                     "return": true,
                     "success": [{"slot": "return"}],
                     "fields": {
-                        "gb__": {
+                        "gb__tracking": {
                             "title": "",
                             "fields": {
                                 "idtarea": {
@@ -83,6 +83,13 @@
             "action": "goto",
             "prefix": "gt_timetracking",
             "serverAction": "verTarea"
+        }
+    },
+    "drawIf": {
+        "gb__tracking": {
+            "fecha": "checkTimeTrackingDraw",
+            "horainicio": "checkTimeTrackingDraw",
+            "horafin": "checkTimeTrackingDraw"
         }
     }
 }

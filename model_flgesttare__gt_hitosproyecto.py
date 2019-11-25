@@ -26,8 +26,18 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     def color_responsable(self):
         return form.iface.color_responsable(self)
 
+    def fun_porcentaje(self):
+        return form.iface.fun_porcentaje(self)
+
+    def fun_ntareas(self):
+        return form.iface.fun_ntareas(self)
+        
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def getHitosProyecto(self, oParam):
+        return form.iface.getHitosProyecto(oParam)
 
 
 # @class_declaration gt_hitosproyecto #

@@ -44,6 +44,12 @@
                                 "nombre": {},
                                 "descripcion": {},
                                 "codproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
+                                "idhito": {
+                                    "combolimit": 8, 
+                                    "showpk": false, 
+                                    "function": "getHitosProyecto",
+                                    "params": {"codproyecto": "codproyecto"}
+                                },
                                 "fechavencimiento": {},
                                 "fechaentrega": {},
                                 "codestado": {},
