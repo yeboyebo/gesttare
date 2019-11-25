@@ -185,10 +185,87 @@ html, #parent-container{
 
 /*Tarea activa*/
 
- .appInfo .YBTableCell {
+.tareaActivaContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.appInfo .tareaActiva {
+    color: white;
+    font-weight: bold;
+    /*white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;*/
+    margin-right: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    //flex: 1;
+}
+
+.appInfo .tareaActiva a{
+    text-overflow: ellipsis !important;
+    flex: 1;
+    text-decoration: none;
+    color: white;
+}
+
+.appInfo .tareaActiva a:hover{
+    text-overflow: ellipsis !important;
+    flex: 1;
+    text-decoration: none;
+    color: white;
+}
+
+.appInfo .proyectoActivo {
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    //flex: 1;
+}
+
+.appInfo .proyectoActivo span{
+    text-overflow: ellipsis !important;
+    flex: 1;
+}
+
+
+.appInfo .YBTableCell {
         width:auto !important; 
         border: none; 
+}
+
+.nombresContainer {
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 425px) {
+    .appInfo {
+        height: auto;
+        width: 100%; 
     }
+
+    .tareaProyectoActivos {
+        width: 95%;
+    }
+
+    .appInfo .tareaActiva {
+        margin-right: 3px;
+    }
+
+    .appInfo .proyectoActivo {
+        margin-right: 3px;
+    }
+
+    .tareaActivaContainer img {
+        margin-left: 3px;
+    }
+    .nombresContainer {
+       flex-direction: column;
+    }
+}
 /*@media (min-width: 1024px) {
     .appInfo .YBTableCell {
         width: 950px !important; 
@@ -215,21 +292,8 @@ html, #parent-container{
         border: none; 
     }
 
-}
-
-@media (max-width: 425px) {
-    .appInfo .YBTableCell {
-        width: 300px !important; 
-        border: none; 
-    }
-
-    .appInfo .YBTableActionsCell {
-        width: 30px !important; 
-        text-align: center !important; 
-        border: none; 
-    }
-
 }*/
+
 
 .appInfo .YBTableCell i{
     margin-top: -3px;
@@ -841,12 +905,16 @@ a.btn-primary:hover {
 .YBD3ProgressBar {
     overflow: hidden;
     position: relative;
-    float: left;
-    width: 100%;
+    border-radius: 8px;
+    box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+    float: right;
+    width: 47%;
+    margin: 20px 15px 10px 0px;
 }
 
 .YBD3ChartColorInfo {
-    //width: 50%;
+    width: 50%;
     width: 100%;
     overflow: hidden;
     padding-bottom: 10px;
@@ -859,11 +927,59 @@ a.btn-primary:hover {
     width: 100%;
 }
 
+.YBLabelText {
+    margin-left: 5px;
+}
+
+/*Análisis*/
+
+.analisis .YBD3ProgressBarDonut {
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+    float: left;
+    width: 47%;
+    margin: 20px 0px 10px 15px;
+}
+
+.analisis .YBD3ChartLabelInfoElement {
+    width: 32%;
+    margin-left: 7px;
+}
+
 .YBD3ProgressBarDonut {
     overflow: hidden;
     position: relative;
     float: left;
-    //width: 50%;
+    width: 100%;
+}
+
+.YBD3ProgressBarDonut .YBLabelText {
+    margin-bottom: 30px;
+    margin-top: -4px;
+    text-align: center;
+    font-family: Rubik;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #293333;
+}
+
+.YBD3ProgressBar .YBLabelText {
+    text-align: center;
+    font-family: Rubik;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #293333;
 }
 
 @media (min-width: 769px) {
@@ -884,11 +1000,6 @@ a.btn-primary:hover {
     margin: 25px;
 }
 
-.parentgroupbox {
-    border-radius: 16px;
-    box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
-    background-color: #ffffff;
-}
 
 .YBGridOverHeader {
     margin-right: 15px;
@@ -1124,5 +1235,30 @@ a.btn-primary:hover {
 .appInfo img {
     width: 20px !important;
     height: 22px !important;
-    position: absolute !important;
+    //position: absolute !important;
+}
+
+/*Sombras en análisis, edición y creación*/
+
+
+
+.boxCentro {
+    margin: 5px;
+    padding: 10px;
+}
+
+.tareaProyectoActivos {
+    display: flex;
+}
+
+.groupBoxPadre {
+    border-radius: 16px;
+    box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
+    background-color: #ffffff;
+}
+
+.gbTareas {
+    border-radius: 16px;
+    box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
+    background-color: #ffffff;
 }

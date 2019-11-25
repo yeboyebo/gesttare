@@ -45,7 +45,7 @@ class gesttare(interna):
 
         nombre_proyecto = " // Proyecto: "
         nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.codproyecto = ta.codproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
-        nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva)) 
+        nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
 
         appinfo = {
             "data": [{
@@ -56,33 +56,18 @@ class gesttare(interna):
             }],
             "layout": {
                 "tareaActiva": {
-                    "componente": "YBTable",
-                    "paginacion": False,
-                    "type": "json",
-                    "hideheader": True,
-                    "border": False,
-                    "style": {
-                        "fontWeight": "bold"
-                    },
+                    "componente": "YBAppInfo",
                     "prefix": "appinfo",
-                    "columns": [
-                        {
-                            "tipo": "act",
-                            "key": "startstop",
-                            "label": "Timetracking",
-                            "iconurl" : "/static/dist/img/icons/timetrakcer.svg",
-                            "success": [{"slot": "refrescar"}]
-                        },
-                        {"tipo": "field", "key": "nombreactiva", "label": "Tarea activa"},
-                        {"tipo": "field", "key": "nombreproyecto", "label": "Tarea activa"}
-                    ]
+                    "action": {
+                        "key": "startstop",
+                        "success": [{"slot": "refrescar"}]
+                    }
                 }
             },
             "acciones": {
                 "startstop": {
                     "action": "legacy",
-                    "prefix": "gt_tareas",
-                    "icon": "alarm",
+                    "iconurl" : "/static/dist/img/icons/timetrakcer.svg",
                     "serverAction": "startstop"
                 }
             }

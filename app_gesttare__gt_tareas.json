@@ -32,7 +32,7 @@
                     "className": "floatLeft",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "8px",
+                        "marginTop": "25px",
                         "marginRight": "5px"
                     },
                     "action": {
@@ -48,8 +48,8 @@
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "5px",
-                        "marginRight": "5px"
+                        "marginTop": "25px",
+                        "marginRight": "8px"
                     },
                     "action": {
                         "key": "complete",
@@ -64,8 +64,8 @@
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "5px",
-                        "marginRight": "5px"
+                        "marginTop": "25px",
+                        "marginRight": "8px"
                     },
                     "action": {
                         "key": "abrir",
@@ -77,7 +77,7 @@
                     "title": "Borrar Tarea",
                     "style": {
                         "padding": "0px 20px",
-                        "marginTop": "5px"
+                        "marginTop": "25px"
                     },
                     "prefix": "gt_tareas",
                     "icon": "delete",
