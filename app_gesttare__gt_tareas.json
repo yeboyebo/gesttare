@@ -121,6 +121,12 @@
                                             "showpk": false,
                                             "function": "getProyectosUsuario"
                                         },
+                                        "idhito": {
+                                            "combolimit": 1, 
+                                            "showpk": false, 
+                                            "function": "getHitosProyecto",
+                                            "params": {"codproyecto": "codproyecto"}
+                                        },
                                         "fechavencimiento": {},
                                         "fechaentrega": {},
                                         "codestado": {},

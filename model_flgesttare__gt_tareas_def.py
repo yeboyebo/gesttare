@@ -22,7 +22,7 @@ class interna(qsatype.objetoBase):
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from models.flgesttare.gt_controlhorario import gt_controlhorario as controlhorario
-
+import urllib
 
 class gesttare(interna):
 
@@ -111,7 +111,7 @@ class gesttare(interna):
         query["select"] = ("gt_tareas.idtarea, aqn_user.email, aqn_user.usuario, gt_tareas.codproyecto, gt_tareas.codestado, gt_proyectos.nombre ,gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
         query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario INNER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto")
-        query["where"] = ("gt_tareas.fechavencimiento is not null AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
+        query["where"] = ("gt_tareas.fechavencimiento is not null AND  gt_proyectos.archivado = false AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
         query["limit"] = 100
         # query["groupby"] = " articulos.referencia, articulos.descripcion"
         # query["orderby"] = "MAX(pedidoscli.fecha) DESC"
@@ -419,7 +419,15 @@ class gesttare(interna):
 
         # Comprobamos que si hay que renegociar, ademas iniciamos el control de tiempo
         if not oParam or "confirmacion" not in oParam:
-            renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
+            # renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"gt_proyectos, gt_tareas")
+            q.setSelect(u"t.idtarea")
+            q.setFrom(u"gt_tareas t INNER JOIN gt_proyectos p ON t.codproyecto=p.codproyecto")
+            q.setWhere(u"t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,user_name))
+            if not q.exec_():
+                return []
+            renegociar = q.size() or 0
             if renegociar > 0:
                 response["status"] = 2
                 response["confirm"] = "Antes de continuar con nuevas tareas deberías revisar las tareas que tienes atrasadas. </br></br> ¿Quieres renegociar ahora?"
@@ -547,6 +555,11 @@ class gesttare(interna):
             data.append({"result": False})
             data.append({"error": "No existe el usuario"})
             return data
+        existe = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"codproyecto", ustr(u"codproyecto = '", oParam["project"], "'"))
+        if not existe:
+            data.append({"result": False})
+            data.append({"error": "No existe el proyecto"})
+            return data
         pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"codproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND codproyecto = '", oParam["project"], "'"))
         if not pertenece:
             data.append({"result": False})
@@ -557,7 +570,7 @@ class gesttare(interna):
             curTarea.setModeAccess(curTarea.Insert)
             curTarea.refreshBuffer()
             curTarea.setActivatedBufferCommited(True)
-            curTarea.setValueBuffer(u"codproyecto", oParam["project"])
+            curTarea.setValueBuffer(u"codproyecto", oParam["project"].upper())
             curTarea.setValueBuffer(u"codestado", oParam["state"])
             curTarea.setValueBuffer(u"nombre", oParam["name"])
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
@@ -819,7 +832,7 @@ class gesttare(interna):
         response = {}
         response["url"] = "/gesttare/gt_timetracking/master"
         response["prefix"] = "mastertimetracking"
-        response["filter"] = '{"tarea": "' + str(cursor.valueBuffer("idtarea")) + '"}'
+        response["filter"] = '{"tarea": "' + str(cursor.valueBuffer("nombre")) + '"}'
         return response
 
     def gesttare_gotoTarea(self, model):
@@ -947,9 +960,9 @@ class gesttare(interna):
         # else:
         params = ""
         if "nombre" in oParam:
-            params += "?p_nombre=" + oParam["nombre"]
+            params += "?p_nombre=" + urllib.quote(str(oParam["nombre"]))
             if "descripcion" in oParam:
-                params += "&p_descripcion=" + str(oParam["descripcion"])
+                params += "&p_descripcion=" + urllib.quote(str(oParam["descripcion"]))
         response = {}
         response["url"] = '/gesttare/gt_tareas/newRecord' + params
         return response
@@ -964,6 +977,11 @@ class gesttare(interna):
         prueba = qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre")))
         if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == False:
             return "hidden"
+
+    def gesttare_iniciaValoresCursor(self, cursor=None):
+        # usuario = qsatype.FLUtil.nameUser()
+        cursor.setValueBuffer("codestado", "Por Hacer")
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -1126,6 +1144,9 @@ class gesttare(interna):
 
     def drawif_abrirtarea(self, cursor):
         return self.ctx.gesttare_drawif_abrirtarea(cursor)
+
+    def iniciaValoresCursor(self, cursor=None):
+        return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
 # @class_declaration head #
 class head(gesttare):

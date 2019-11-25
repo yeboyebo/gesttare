@@ -175,7 +175,9 @@ class gesttare(interna):
 
     def gesttare_set_estado(self, estado):
         cacheController.setSessionVariable("estado_controlhorario", estado)
-        return True
+        response = {}
+        response["msg"] = ""
+        return response
 
     def gesttare_drawif_controldiario(self, cursor):
         if self.iface.get_estado() != "diario":

@@ -183,6 +183,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def field_verConvertirTareaA(self):
         return form.iface.field_verConvertirTareaA(self)
 
+    def iniciaValoresCursor(cursor=None):
+        return form.iface.iniciaValoresCursor(cursor)
+
 
 # @class_declaration gt_tareas #
 class gt_tareas(gesttare_gt_tareas, helpers.MixinConAcciones):

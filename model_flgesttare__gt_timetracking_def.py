@@ -83,12 +83,13 @@ class gesttare(interna):
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
-        # if template == "mastertimetracking":
+        fields = []
+        if template == "mastertimetracking":
             # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
-        fields = [
-            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}
-        ]
+            fields = [
+                {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+                {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}
+            ]
         return fields
 
     def gesttare_field_nombre(self, model):
@@ -233,25 +234,25 @@ class gesttare(interna):
                     if not str(idusuario) == usuario:
                         return False
 
-        if template == "formRecord":
-            curTracking = qsatype.FLSqlCursor("gt_timetracking")
-            curTracking.select(ustr("idtracking = '", pk, "'"))
-            curTracking.refreshBuffer()
-            if curTracking.first():
-                usuario = qsatype.FLUtil.nameUser()
-                curTracking.setModeAccess(curTracking.Browse)
-                curTracking.refreshBuffer()
-                # idtarea = curTracking.valueBuffer("idtarea")
-                # codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
-                # nombreUsuario = qsatype.FLUtil.nameUser()
-                # pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
-                pertenece = str(curTracking.valueBuffer("idusuario")) == str(usuario)
-                print(usuario)
-                print(curTracking.valueBuffer("idusuario"))
-                if not pertenece:
-                    return False
-            else:
-                return False
+        # if template == "formRecord":
+        #     curTracking = qsatype.FLSqlCursor("gt_timetracking")
+        #     curTracking.select(ustr("idtracking = '", pk, "'"))
+        #     curTracking.refreshBuffer()
+        #     if curTracking.first():
+        #         usuario = qsatype.FLUtil.nameUser()
+        #         curTracking.setModeAccess(curTracking.Browse)
+        #         curTracking.refreshBuffer()
+        #         # idtarea = curTracking.valueBuffer("idtarea")
+        #         # codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
+        #         # nombreUsuario = qsatype.FLUtil.nameUser()
+        #         # pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+        #         pertenece = str(curTracking.valueBuffer("idusuario")) == str(usuario)
+        #         print(usuario)
+        #         print(curTracking.valueBuffer("idusuario"))
+        #         if not pertenece:
+        #             return False
+        #     else:
+        #         return False
         return True
 
     def gesttare_verTarea(self, model, cursor):
@@ -265,8 +266,20 @@ class gesttare(interna):
 
         return "usuario"
 
+    def gesttare_checkTimeTrackingDraw(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        # is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        pertenece = str(cursor.valueBuffer("idusuario")) == str(usuario)
+        if not pertenece:
+            return "disabled"
+        return True
+
+
     def __init__(self, context=None):
         super().__init__(context)
+
+    def checkTimeTrackingDraw(self, cursor):
+        return self.ctx.gesttare_checkTimeTrackingDraw(cursor)
 
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
