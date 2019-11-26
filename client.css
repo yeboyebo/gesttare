@@ -1214,7 +1214,11 @@ a.btn-primary:hover {
 /*hitos*/
 
 .hitosproyecto .YBTableRow{
-    margin-top: 5px;
+    //margin-top: 5px;
+}
+
+.hitocompletado {
+    background-color: #F1F1F1;
 }
 
 /*Comentarios*/
@@ -1239,8 +1243,6 @@ a.btn-primary:hover {
 }
 
 /*Sombras en análisis, edición y creación*/
-
-
 
 .boxCentro {
     margin: 5px;

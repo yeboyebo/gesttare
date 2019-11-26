@@ -31,6 +31,9 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
 
     def fun_ntareas(self):
         return form.iface.fun_ntareas(self)
+
+    def func_color_hito(self):
+        return form.iface.func_color_hito(self)
         
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
