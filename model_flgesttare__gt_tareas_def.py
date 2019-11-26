@@ -968,14 +968,11 @@ class gesttare(interna):
         return response
 
     def gesttare_drawif_completartarea(self, cursor):
-        if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == True:
+        if cursor.valueBuffer("resuelta") == True:
             return "hidden"
 
     def gesttare_drawif_abrirtarea(self, cursor):
-        # if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "id_tarea = {}".format(cursor.valueBuffer("id_tarea"))) == False:
-        #     return "disabled"
-        prueba = qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre")))
-        if qsatype.FLUtil().quickSqlSelect("gt_tareas", "resuelta", "nombre = '{}'".format(cursor.valueBuffer("nombre"))) == False:
+        if cursor.valueBuffer("resuelta") == False:
             return "hidden"
 
     def gesttare_iniciaValoresCursor(self, cursor=None):

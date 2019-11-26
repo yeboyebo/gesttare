@@ -65,8 +65,8 @@
                 },
                 {"tipo": "field", "listpos": "secondaryitem", "key": "gt_timetracking.fecha", "width": 5},
                 {"tipo": "field", "listpos": "body", "key": "aqn_user.usuario","color": "Color usuario", "label": " ", "width": 20},
-                {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "width": 370},
-                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "width": 180},
+                {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 370},
+                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "title": true,"width": 180},
                 {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}
             ],
             "rowclick": "gototimetracking",

@@ -349,20 +349,24 @@ class gesttare(yblogin):
                 valor = flgesttare_def.iface.time_to_hours(str(valor))
             else:
                 valor = 0
-            if i > 8:
+
+            if i > 7 or valor < 1:
                 otros += valor
             else:
                 porcentaje = 0
-                if total != 0 and total != None:
+                if total != 0 and total != None and valor > 1:
+                    print("entra valor", valor)
                     porcentaje = 100*(valor/total)
-                data.append({"name": q.value(0), "value": porcentaje})
+                data.append({"name": q.value(0), "value": round(porcentaje,2)})
             i = i+1
             if i == q.size() and otros > 0:
+                print("total entra", valor)
                 if total != 0 and total != None:
+                    print("entra", valor)
                     porcentaje = 100*(otros/total)
-                data.append({"name": "Otros Proyectos", "value": porcentaje})
+                data.append({"name": "Otros Proyectos", "value": round(porcentaje,2)})
 
-        return {"type": "pieChart", "data": data, "size": 80, "innerText": False, "text": "Distribución del tiempo en proyectos"}
+        return {"type": "pieDonutChart", "data": data, "size": 80, "innerText": True, "text": "Distribución del tiempo en proyectos"}
 
     def gesttare_cajasinfo(self, oParam):
         horasStyle = {

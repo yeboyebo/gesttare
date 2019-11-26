@@ -18,7 +18,7 @@
                     "title": "Volver",
                     "prefix": "gt_tareas",
                     "icon": "arrow_back",
-                    "className": "floatLeft",
+                    "className": "floatLeft ",
                     "buttonType": "icon",
                     "style": {
                         "marginTop": "5px",

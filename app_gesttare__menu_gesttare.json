@@ -111,10 +111,10 @@
         },
         {
             "NAME": "aqn_user",
-            "TEXT": "Análisis",
+            "TEXT": "Informe individual",
             "URL": "gesttare/aqn_user/custom/analisis",
             "ICON": "widgets",
-            "VISIBLE": false,
+            "VISIBLE": true,
             "COLOR": "rgb(7, 180, 7)",
             "RESPONSIVE": false
         }
