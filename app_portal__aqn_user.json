@@ -49,7 +49,6 @@
             "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/fields/costehora",
             "value": {
                 "idresponsable": {
-                    "visible": false,
                     "tipo": 55,
                     "showpk": false,
                     "tofield": "idusuario",
@@ -73,7 +72,7 @@
             "type": "insertAfterNode",
             "path": "/drawIf/gb__principal/root",
             "value": {
-                "idresponsable": "checkDrawUser"
+                "idresponsable": "checkResponsableDraw"
             }
         }
     ]

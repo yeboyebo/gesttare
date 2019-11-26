@@ -11,7 +11,7 @@
                 "volverButton": {
                     "componente": "YBButton",
                     "title": "Volver",
-                    "prefix": "gt_tareas",
+                    "prefix": "gt_hitosproyecto",
                     "icon": "arrow_back",
                     "className": "floatLeft",
                     "buttonType": "icon",
@@ -24,7 +24,54 @@
                         "success": [{"slot": "return"}]
                     }
                 },
-                
+                "completar": {
+                    "componente": "YBButton",
+                    "title": "Completar tarea",
+                    "prefix": "gt_hitosproyecto",
+                    "icon": "check_box_outline_blank",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "complete",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "abrir": {
+                    "componente": "YBButton",
+                    "title": "Abrir tarea",
+                    "prefix": "gt_hitosproyecto",
+                    "icon": "check_box",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "abrir",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "borrarTareaButton": {
+                    "componente": "YBButton",
+                    "title": "Borrar Tarea",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_hitosproyecto",
+                    "icon": "delete",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "borrarTarea",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -79,11 +126,31 @@
         }
     },
     "acciones": {
+        "borrarTarea": {
+            "label": "Borrar tarea",
+            "action": "legacy",
+            "serverAction": "borrar_hito"
+        },
+        "complete": {
+            "action": "legacy",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "completar_hito",
+            "icon": "check"
+        },
+        "abrir": {
+            "action": "legacy",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "abrir_hito",
+            "icon": "undo"
+        },
         "acctionVolver": {
             "action": "return"
         }
     },
     "drawIf": {
-        
+        "groupBoxPadre": {
+            "completar": "drawif_completarHito",
+            "abrir": "drawif_abrirHito"
+        }
     }
 }

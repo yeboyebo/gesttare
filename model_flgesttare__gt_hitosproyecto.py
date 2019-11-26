@@ -31,6 +31,9 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
 
     def fun_ntareas(self):
         return form.iface.fun_ntareas(self)
+
+    def func_color_hito(self):
+        return form.iface.func_color_hito(self)
         
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
@@ -38,6 +41,28 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     @helpers.decoradores.accion(aqparam=["oParam"])
     def getHitosProyecto(self, oParam):
         return form.iface.getHitosProyecto(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def getHitosProyectosUsu(self, oParam):
+        return form.iface.getHitosProyectosUsu(oParam)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def completar_hito(self, cursor):
+        return form.iface.completar_hito(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def abrir_hito(self, cursor):
+        return form.iface.abrir_hito(self, cursor)
+
+    def drawif_completarHito(cursor):
+        return form.iface.drawif_completarHito(cursor)
+
+    def drawif_abrirHito(cursor):
+        return form.iface.drawif_abrirHito(cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def borrar_hito(self, oParam, cursor):
+        return form.iface.borrar_hito(self, oParam, cursor)
 
 
 # @class_declaration gt_hitosproyecto #

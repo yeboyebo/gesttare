@@ -25,7 +25,8 @@ class gesttare(interna):
             {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'porcentaje', 'func': 'fun_porcentaje'},
-            {'verbose_name': 'ntareas', 'func': 'fun_ntareas'}
+            {'verbose_name': 'ntareas', 'func': 'fun_ntareas'},
+            {"verbose_name": "color_hito", "func": "func_color_hito"}
         ]
         return fields
 
@@ -58,11 +59,11 @@ class gesttare(interna):
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
         usuario = qsatype.FLUtil.nameUser()
-        # idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
         # cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idusuario", usuario)
 
-        if cursor.valueBuffer("nombre") == None:
+        tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+        if cursor.valueBuffer("nombre") == None and not tieneCoordinacion:
             cursor.setValueBuffer("nombre", "Coordinación")
 
         qsatype.FactoriaModulos.get('formRecordgt_hitosproyecto').iface.iniciaValoresCursor(cursor)
@@ -90,11 +91,104 @@ class gesttare(interna):
             data.append({"idhito": q.value(0), "nombre": q.value(1)})
         return data
 
+    def gesttare_getHitosProyectosUsu(self, oParam):
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos, gt_hitosproyecto, gt_particproyecto")
+        q.setSelect(u"h.idhito, h.nombre, p.nombre")
+        q.setFrom(u"gt_proyectos p INNER JOIN gt_hitosproyecto h ON p.codproyecto = h.codproyecto INNER JOIN gt_particproyecto pp ON p.codproyecto = pp.codproyecto")
+        q.setWhere(u"pp.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND (UPPER(h.nombre) LIKE UPPER('%" + oParam["val"] + "%')) AND h.resuelta = false  ORDER BY h.nombre LIMIT 8")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"idhito": q.value(0), "nombre": q.value(1) + "__" + q.value(2)})
+        return data
+
+    def gesttare_borrar_hito(self, model, oParam, cursor):
+        resul = {}
+        usuario = qsatype.FLUtil.nameUser()
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+                cursor.setModeAccess(cursor.Del)
+                cursor.refreshBuffer()
+                if not cursor.commitBuffer():
+                    return False
+                resul["return_data"] = False
+                resul["msg"] = "Hito eliminado"
+                return resul
+            else:
+                resul["status"] = 1
+                resul["msg"] = "No se puede eliminar el hito"
+                return resul
+        else:
+            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+                resul['status'] = 2
+                resul['confirm'] = "El hito será eliminado"
+            else:
+                resul["status"] = 1
+                resul["msg"] = "No puedes eliminar el hito"
+                return resul
+        return resul
+
+    def gesttare_drawif_completarHito(self, cursor):
+        if cursor.valueBuffer("resuelta") == True:
+            return "hidden"
+
+    def gesttare_drawif_abrirHito(self, cursor):
+        if cursor.valueBuffer("resuelta") == False:
+            return "hidden"
+
+    def gesttare_completar_hito(self, model, cursor):
+        response = {}
+        resuelta = cursor.valueBuffer("resuelta")
+        cursor.setValueBuffer("resuelta", not resuelta)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar el hito")
+            return False
+
+        response["resul"] = True
+        if resuelta:
+            response["msg"] = "Hito abierto"
+        else:
+            response["msg"] = "Hito completado"
+        return response
+
+    def gesttare_abrir_hito(self, model, cursor):
+        response = {}
+        resuelta = cursor.valueBuffer("resuelta")
+        cursor.setValueBuffer("resuelta", not resuelta)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar el hito")
+            return False
+
+        response["resul"] = True
+        if resuelta:
+            response["msg"] = "Hito abierto"
+        return response
+
+    def gesttare_func_color_hito(self, model):
+        if model.resuelta:
+            return "hitocompletado"
+        return ""
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def getHitosProyecto(self, oParam):
         return self.ctx.gesttare_getHitosProyecto(oParam)
+
+    def getHitosProyectosUsu(self, oParam):
+        return self.ctx.gesttare_getHitosProyectosUsu(oParam)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
@@ -114,8 +208,26 @@ class gesttare(interna):
     def fun_ntareas(self, model):
         return self.ctx.gesttare_fun_ntareas(model)
 
+    def func_color_hito(self, model):
+        return self.ctx.gesttare_func_color_hito(model)
+
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
+
+    def completar_hito(self, model, cursor):
+        return self.ctx.gesttare_completar_hito(model, cursor)
+
+    def abrir_hito(self, model, cursor):
+        return self.ctx.gesttare_abrir_hito(model, cursor)
+
+    def drawif_completarHito(self, cursor):
+        return self.ctx.gesttare_drawif_completarHito(cursor)
+
+    def drawif_abrirHito(self, cursor):
+        return self.ctx.gesttare_drawif_abrirHito(cursor)
+
+    def borrar_hito(self, model, oParam, cursor):
+        return self.ctx.gesttare_borrar_hito(model, oParam, cursor)
 
 
 # @class_declaration head #

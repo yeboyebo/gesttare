@@ -19,6 +19,10 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
         return form.iface.getParticProyectosUsu(oParam)
 
     @helpers.decoradores.accion(aqparam=["oParam"])
+    def getUsuTutelados(self, oParam):
+        return form.iface.getUsuTutelados(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
     def getParticCompaniaUsu(self, oParam):
         return form.iface.getParticCompaniaUsu(oParam)
 
@@ -31,6 +35,9 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
 
     def checkDrawUser(cursor):
         return form.iface.checkDrawUser(cursor)
+
+    def checkResponsableDraw(cursor):
+        return form.iface.checkResponsableDraw(cursor)
 
     def field_nombre(self):
         return form.iface.field_nombre(self)

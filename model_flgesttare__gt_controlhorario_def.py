@@ -200,10 +200,10 @@ class gesttare(interna):
             return "disabled"
 
     def gesttare_drawif_idusuariofilter(self, cursor):
-        usuario = qsatype.FLUtil.nameUser()
-        isSuperuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(usuario))
-        if not isSuperuser:
-            return "hidden"
+        # usuario = qsatype.FLUtil.nameUser()
+        # isSuperuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(usuario))
+        # if not isSuperuser:
+        #     return "hidden"
         return True
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):

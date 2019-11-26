@@ -28,6 +28,10 @@
                             "showpk": false, 
                             "function": "getProyectosUsuario"
                         },
+                        "idhito": {
+                            "showpk": false,
+                            "function": "getHitosProyectosUsu"
+                        },
                         "codestado": null,
                         "idusuario": {
                             "showpk": false,
