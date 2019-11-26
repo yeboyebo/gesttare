@@ -211,7 +211,8 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY t.codproyecto LIMIT 20")
+        q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
+        # q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
 
         if not q.exec_():
             return []
@@ -283,7 +284,8 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere("{} GROUP BY t.codproyecto ORDER BY t.codproyecto".format(where))
+        q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere("{} GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC".format(where))
 
         # q = qsatype.FLSqlQuery()
         # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
@@ -317,19 +319,16 @@ class gesttare(yblogin):
             else:
                 valor = 0
 
-            if i > 7 or valor < 1:
+            if i > 7:
                 otros += valor
             else:
                 porcentaje = 0
-                if total != 0 and total != None and valor > 1:
-                    print("entra valor", valor)
+                if total != 0 and total != None:
                     porcentaje = 100*(valor/total)
                 data.append({"name": q.value(0), "value": round(porcentaje,2)})
             i = i+1
             if i == q.size() and otros > 0:
-                print("total entra", valor)
                 if total != 0 and total != None:
-                    print("entra", valor)
                     porcentaje = 100*(otros/total)
                 data.append({"name": "Otros Proyectos", "value": round(porcentaje,2)})
 

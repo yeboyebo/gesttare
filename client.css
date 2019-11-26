@@ -910,7 +910,7 @@ a.btn-primary:hover {
     background-color: #ffffff;
     float: right;
     width: 47%;
-    margin: 20px 15px 10px 0px;
+    margin: 53px 15px 10px 0px;
 }
 
 .YBD3ChartColorInfo {
@@ -941,12 +941,17 @@ a.btn-primary:hover {
     background-color: #ffffff;
     float: left;
     width: 47%;
-    margin: 20px 0px 10px 15px;
+    margin: 50px 0px 10px 15px;
 }
 
 .analisis .YBD3ChartLabelInfoElement {
-    width: 32%;
-    margin-left: 7px;
+    //white-space: nowrap;
+}
+
+.analisis .YBD3ChartLabelInfo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .YBD3ProgressBarDonut {
@@ -1238,9 +1243,7 @@ a.btn-primary:hover {
     //position: absolute !important;
 }
 
-/*Sombras en análisis, edición y creación*/
-
-
+/*Caja en análisis, edición y creación*/
 
 .boxCentro {
     margin: 5px;
@@ -1261,4 +1264,13 @@ a.btn-primary:hover {
     border-radius: 16px;
     box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
     background-color: #ffffff;
+}
+
+.groupBoxNuevoComentario .fdtextarea {
+    width: 98% !important;
+    margin-left: 8px !important;
+}
+
+.groupBoxNuevoComentario .YBButtonElement {
+    margin-right: 20px !important;
 }
