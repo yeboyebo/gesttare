@@ -125,11 +125,11 @@
                         "prefix": "gt_hitosproyecto",
                         "label": "Hitos",
                         "columns": [
-                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 270, "title": true, "link": true},
-                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
-                            {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80},
+                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 230, "title": true, "link": true},
+                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 60, "label": "Fecha Inicio"},
+                            {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 60},
                             {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto"},
-                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 20, "label": "Nº tareas"}
+                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 40, "label": "Nº tareas"}
                         ],
                         "accionesGrid": [
                             {

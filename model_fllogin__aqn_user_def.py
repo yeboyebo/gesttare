@@ -95,6 +95,31 @@ class gesttare(yblogin):
             data.append({"idusuario": q.value(0), "usuario": q.value(1)})
         return data
 
+    def gesttare_getUsuTutelados(self, oParam):
+        usuario = qsatype.FLUtil.nameUser()
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if is_superuser:
+            return self.iface.getParticCompaniaUsu(oParam)
+        else:
+            data = []
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"aqn_user")
+            q.setSelect(u"DISTINCT(idusuario), usuario")
+            q.setFrom(u"aqn_user")
+            q.setWhere(u"(idusuario = '" + str(usuario) + "' OR idresponsable = '" + str(usuario) + "') AND UPPER(usuario) LIKE UPPER('%" + oParam["val"] + "%') AND activo  ORDER BY usuario LIMIT 7")
+
+            if not q.exec_():
+                print("Error inesperado")
+                return []
+            if q.size() > 100:
+                print("sale por aqui")
+                return []
+
+            while q.next():
+                # descripcion = str(q.value(2)) + "€ " + q.value(1)
+                data.append({"idusuario": q.value(0), "usuario": q.value(1)})
+            return data
+
     def gesttare_getParticCompaniaUsu(self, oParam):
         print("entra?'")
         usuario = qsatype.FLUtil.nameUser()
@@ -164,6 +189,14 @@ class gesttare(yblogin):
         if not is_superuser:
             return "hidden"
         return True
+
+    def gesttare_checkResponsableDraw(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if not is_superuser:
+            return "disabled"
+        return True
+
 
     def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
         usuario = qsatype.FLUtil.nameUser()
@@ -522,6 +555,9 @@ class gesttare(yblogin):
     def checkDrawUser(self, cursor):
         return self.ctx.gesttare_checkDrawUser(cursor)
 
+    def checkResponsableDraw(self, cursor):
+        return self.ctx.gesttare_checkResponsableDraw(cursor)
+
     def checkCambiaPassword(self, cursor):
         return self.ctx.gesttare_checkCambiaPassword(cursor)
 
@@ -533,6 +569,9 @@ class gesttare(yblogin):
 
     def getParticProyectosUsu(self, oParam):
         return self.ctx.gesttare_getParticProyectosUsu(oParam)
+
+    def getUsuTutelados(self, oParam):
+        return self.ctx.gesttare_getUsuTutelados(oParam)
 
     def getParticCompaniaUsu(self, oParam):
         return self.ctx.gesttare_getParticCompaniaUsu(oParam)

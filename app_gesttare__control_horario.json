@@ -69,7 +69,7 @@
                 "filter": {
                     "gt_controldiario.idusuario": {
                         "showpk": false,
-                        "function": "getParticProyectosUsu"
+                        "function": "getUsuTutelados"
                     },
                     "gt_controldiario.fecha": {
                         "filterType": "interval"
@@ -109,7 +109,7 @@
                 "filter": {
                     "idusuario": {
                         "showpk": false,
-                        "function": "getParticProyectosUsu"
+                        "function": "getUsuTutelados"
                     },
                     "anyo": null,
                     "mes": {

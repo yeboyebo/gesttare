@@ -90,11 +90,34 @@ class gesttare(interna):
             data.append({"idhito": q.value(0), "nombre": q.value(1)})
         return data
 
+    def gesttare_getHitosProyectosUsu(self, oParam):
+        data = []
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(u"gt_proyectos, gt_hitosproyecto, gt_particproyecto")
+        q.setSelect(u"h.idhito, h.nombre, p.nombre")
+        q.setFrom(u"gt_proyectos p INNER JOIN gt_hitosproyecto h ON p.codproyecto = h.codproyecto INNER JOIN gt_particproyecto pp ON p.codproyecto = pp.codproyecto")
+        q.setWhere(u"pp.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND (UPPER(h.nombre) LIKE UPPER('%" + oParam["val"] + "%')) AND h.resuelta = false  ORDER BY h.nombre LIMIT 8")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            data.append({"idhito": q.value(0), "nombre": q.value(1) + "__" + q.value(2)})
+        return data
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def getHitosProyecto(self, oParam):
         return self.ctx.gesttare_getHitosProyecto(oParam)
+
+    def getHitosProyectosUsu(self, oParam):
+        return self.ctx.gesttare_getHitosProyectosUsu(oParam)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
@@ -116,6 +139,21 @@ class gesttare(interna):
 
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
+
+    def completar_hito():
+        return self.ctx.gesttare_completar_hito()
+
+    def abrir_hito():
+        return self.ctx.gesttare_abrir_hito()
+
+    def drawif_completarHito():
+        return self.ctx.gesttare_drawif_completarHito()
+
+    def drawif_abrirHito():
+        return self.ctx.gesttare_drawif_abrirHito()
+
+    def borrar_hito():
+        return self.ctx.gesttare_borrar_hito()
 
 
 # @class_declaration head #
