@@ -823,48 +823,13 @@ a.btn-primary:hover {
     font-size: 20px !important;
 }*/
 
-/*.masterTareas .YBTableRow {
-    margin-bottom: 10px;
-}
-
-.masterProyectos .YBTableRow {
-    margin-bottom: 10px;
-}
-
-.masterTimeTracking .YBTableRow {
-    margin-bottom: 10px;
-}
-
-.masterUsuarios .YBTableRow {
-    margin-bottom: 10px;
-}
-
-.controldiario .YBTableRow {
-    margin-bottom: 10px;
-}
-
-.controlmensual .YBTableRow {
-    margin-bottom: 10px;
-}
-*/
-
-.controlmensual .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .queryGrid_notificacionesUsuarioViejas .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
+.controlmensual .YBTableRow, .hitosproyecto .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .queryGrid_notificacionesUsuarioViejas .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
     margin-bottom: 10px;   
 }
 
 .is-empty {
     text-align: left;
 }
-
-/*.masterTareas {
-    background-color: #f4f6f8;
-}*/
-
-/*.masterTareas .YBTableOverGrid {
-    border-radius: 16px;
-    box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
-    background-color: #ffffff;
-}*/
 
 .tareaActiva .YBTableActionsCell[title=Timetracking] {
     margin-right: 10px;
@@ -1223,7 +1188,7 @@ a.btn-primary:hover {
 }
 
 .hitocompletado {
-    background-color: #F1F1F1;
+    background-color: #F1F1F1 !important;
 }
 
 /*Comentarios*/

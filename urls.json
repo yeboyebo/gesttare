@@ -2,6 +2,16 @@
     "modifications": [
         {
             "type": "insertAfterNode",
+            "path": "/portal/authentication",
+            "value": {
+                "tokenAuth": {
+                    "url": "token_auth",
+                    "func": "token_auth"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
             "path": "/portal",
             "value": {
                 "gesttare": {

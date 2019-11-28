@@ -873,6 +873,8 @@ class gesttare(interna):
         return data
 
     def gesttare_gotoNewRecordAnotacion(self, oParam):
+        print("_______________")
+        print(oParam)
         if "nombre" not in oParam:
             response = {}
             response['status'] = -1
@@ -881,6 +883,8 @@ class gesttare(interna):
             response["title"] = "Crear nueva tarea"
             response["serverAction"] = "gotoNewRecordAnotacion"
             response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+            if "abierto" in oParam:
+                response["error"] = "El campo nombre es obligatorio"
             response['params'] = [
                 {
                     "componente": "YBFieldDB",
@@ -899,6 +903,17 @@ class gesttare(interna):
                     "key": "descripcion",
                     "validaciones": None,
                     "required": False
+                },
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "tipo": 3,
+                    "verbose_name": "Nombre",
+                    "key": "abierto",
+                    "validaciones": None,
+                    "required": False,
+                    "visible": False,
+                    "value": "True"
                 }
             ]
             return response

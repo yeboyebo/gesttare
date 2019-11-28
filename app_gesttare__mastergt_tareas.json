@@ -22,6 +22,7 @@
                     "prefix": "gt_tareas",
                     "cansavefilter": true,
                     "buscador": false,
+                    "avatar": false,
                     "filter": {
                         "nombre": null,
                         "codproyecto": {

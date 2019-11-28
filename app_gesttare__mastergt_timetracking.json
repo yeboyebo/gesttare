@@ -8,73 +8,80 @@
         }
     },
     "layout": {
-        "separator": {
-            "componente": "YBSeparator"
-        },
-        "masterTimeTracking": {
-            "componente": "YBGrid",
-            "type": "query",
-            "prefix": "mastertimetracking",
-            "autofilter": false,
-            "cansavefilter": true,
-            "className": "",
-            "buscador": false,
-            "filter": {
-                "usuario": {
-                    "label": "Usuario",
-                    "filterType": "custom",
-                    "tipo": 55,
-                    "rel": "aqn_user",
-                    "key": "idusuario",
-                    "tofield": "idusuario",
-                    "desc": "usuario",
-                    "fN": "aqn_user.idusuario",
-                    "showpk": false,
-                    "function": "getParticProyectosUsu"
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": " ",
+            "style": {},
+            "layout": {
+                "separator": {
+                    "componente": "YBSeparator"
                 },
-                "tarea": {
-                    "label": "Tarea",
-                    "filterType": "custom",
-                    "tipo": 3,
-                    "key": "tarea"
-                },
-                "proyecto": {
-                    "label": "Proyecto",
-                    "filterType": "custom",
-                    "tipo": 55,
-                    "rel": "gt_proyectos",
-                    "key": "codproyecto",
-                    "tofield": "codproyecto",
-                    "desc": "nombre",
-                    "fN": "gt_proyectos.codproyecto",
-                    "showpk": false,
-                    "function": "getProyectosUsuario"
-                },
-                "fecha": {
-                    "filterType": "interval"
+                "masterTimeTracking": {
+                    "componente": "YBGrid",
+                    "type": "query",
+                    "prefix": "mastertimetracking",
+                    "autofilter": false,
+                    "cansavefilter": true,
+                    "className": "",
+                    "buscador": false,
+                    "filter": {
+                        "usuario": {
+                            "label": "Usuario",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "aqn_user",
+                            "key": "idusuario",
+                            "tofield": "idusuario",
+                            "desc": "usuario",
+                            "fN": "aqn_user.idusuario",
+                            "showpk": false,
+                            "function": "getParticProyectosUsu"
+                        },
+                        "tarea": {
+                            "label": "Tarea",
+                            "filterType": "custom",
+                            "tipo": 3,
+                            "key": "tarea"
+                        },
+                        "proyecto": {
+                            "label": "Proyecto",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_proyectos",
+                            "key": "codproyecto",
+                            "tofield": "codproyecto",
+                            "desc": "nombre",
+                            "fN": "gt_proyectos.codproyecto",
+                            "showpk": false,
+                            "function": "getProyectosUsuario"
+                        },
+                        "fecha": {
+                            "filterType": "interval"
+                        }
+                    },
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Eliminar Tracking",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "gt_timetracking.fecha", "width": 5},
+                        {"tipo": "field", "listpos": "body", "key": "aqn_user.usuario","color": "Color usuario", "label": " ", "width": 20},
+                        {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 370},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "title": true,"width": 180},
+                        {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}
+                    ],
+                    "rowclick": "gototimetracking",
+                    "accionesGrid": [{
+                        "key": "getReport",
+                        "label": "Genera XLS",
+                        "success": []
+                    }]
                 }
-            },
-            "columns": [
-                {
-                    "tipo": "act",
-                    "key": "delete",
-                    "label": "Eliminar Tracking",
-                    "success": [
-                        {"slot": "refrescar"}
-                    ]
-                },
-                {"tipo": "field", "listpos": "secondaryitem", "key": "gt_timetracking.fecha", "width": 5},
-                {"tipo": "field", "listpos": "body", "key": "aqn_user.usuario","color": "Color usuario", "label": " ", "width": 20},
-                {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 370},
-                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.nombre", "label": "Proyecto", "title": true,"width": 180},
-                {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}
-            ],
-            "rowclick": "gototimetracking",
-            "accionesGrid": [{
-                "key": "getReport",
-                "label": "Genera XLS",
-                "success": []
-            }]
+            }
         }
     },
     "acciones": {

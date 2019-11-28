@@ -125,14 +125,16 @@
                         "prefix": "gt_hitosproyecto",
                         "label": "Hitos",
                         "colorRowField": "color_hito",
+                        "avatar": false,
                         "columns": [
                             {"tipo": "field", "listpos": "title", "key": "nombre", "width": 230, "title": true, "link": true},
                             {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 60, "label": "Fecha Inicio"},
                             {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 60},
-                            {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
+                            {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
                             {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto"},
                             {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 30, "label": "Nº tareas"}
                         ],
+                        "rowclick": "link",
                         "accionesGrid": [
                             {
                                 "key": "actNuevoHito",
