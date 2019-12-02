@@ -108,7 +108,7 @@ class gesttare(interna):
 
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
-            data.append({"idhito": q.value(0), "nombre": q.value(1) + "__" + q.value(2)})
+            data.append({"idhito": q.value(0), "nombre": q.value(1) + " // " + q.value(2)})
         return data
 
     def gesttare_borrar_hito(self, model, oParam, cursor):
@@ -181,8 +181,18 @@ class gesttare(interna):
             return "hitocompletado"
         return ""
 
+    def gesttare_verTarea(self, model, cursor):
+        response = {}
+        response["url"] = "/gesttare/gt_tareas/master"
+        response["prefix"] = "gt_tareas"
+        response["filter"] = '{"idhito": "' + str(cursor.valueBuffer("idhito")) + '"}'
+        return response
+
     def __init__(self, context=None):
         super().__init__(context)
+
+    def verTarea(self, model, cursor):
+        return self.ctx.gesttare_verTarea(model, cursor)
 
     def getHitosProyecto(self, oParam):
         return self.ctx.gesttare_getHitosProyecto(oParam)

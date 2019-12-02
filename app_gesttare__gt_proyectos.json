@@ -75,6 +75,21 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "gotoTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_tareas",
+                    "title": "Ir a la tarea relacionada",
+                    "iconurl": "/static/dist/img/icons/clipboards.svg",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "vertareas"
+                    }
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -128,7 +143,7 @@
                         "avatar": false,
                         "columns": [
                             {"tipo": "field", "listpos": "title", "key": "nombre", "width": 230, "title": true, "link": true},
-                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 60, "label": "Fecha Inicio"},
+                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 60, "label": "F. Inicio"},
                             {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 60},
                             {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
                             {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto"},
@@ -144,7 +159,8 @@
                         ]
                     },
                     "separator3": {
-                        "componente": "YBSeparator"
+                        "componente": "YBSeparator",
+                        "visible": false
                     },
                     "nuevoParticipanteExterno": {
                         "componente": "YBButton",
@@ -152,6 +168,7 @@
                         "label": "Añadir externo",
                         "className": "floatLeft",
                         "buttonType": "raised",
+                        "visible": false,
                         "action": {
                             "key": "actInvitarExterno",
                             "success": [{"slot": "refrescar"}]
@@ -163,6 +180,7 @@
                         "label": "Ver tareas",
                         "className": "floatLeft",
                         "buttonType": "raised",
+                        "visible": false,
                         "action": {
                             "key": "vertareas"
                         }
@@ -198,6 +216,11 @@
                                 ],
                                 "rowclick": "",
                                 "accionesGrid": [
+                                    {
+                                        "key": "actInvitarExterno",
+                                        "label": "Añadir externo",
+                                        "success": [{"slot": "refrescar"}]
+                                    },
                                     {
                                         "key": "actNuevoPartic",
                                         "label": "Nuevo",
@@ -376,7 +399,7 @@
             "title": "Invitación de usuarios externos",
             "action": "legacy",
             "prefix": "gt_proyectos",
-            "icon": "send",
+            "iconurl": "/static/dist/img/icons/externo.svg",
             "serverAction": "actInvitarExterno",
             "params": [
                 {

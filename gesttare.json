@@ -493,6 +493,10 @@
             {
                 "name": "filtroactivo.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "externo.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

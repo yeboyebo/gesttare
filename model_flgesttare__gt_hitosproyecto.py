@@ -64,6 +64,10 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     def borrar_hito(self, oParam, cursor):
         return form.iface.borrar_hito(self, oParam, cursor)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def verTarea(self, cursor):
+        return form.iface.verTarea(self, cursor)
+
 
 # @class_declaration gt_hitosproyecto #
 class gt_hitosproyecto(gesttare_gt_hitosproyecto, helpers.MixinConAcciones):

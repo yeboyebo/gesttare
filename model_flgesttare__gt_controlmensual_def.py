@@ -191,14 +191,27 @@ class gesttare(interna):
     def gesttare_drawif_validar_admin(self, cursor):
         my_name = qsatype.FLUtil.nameUser()
         im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
-        if not im_superuser:
+        has_responsable = qsatype.FLUtil.sqlSelect("aqn_user", "idresponsable", "idusuario = '{}'".format(cursor.valueBuffer("idusuario")))
+        permiso = False
+        print("____________")
+        print(has_responsable)
+        print(my_name)
+        print(im_superuser)
+        if has_responsable:
+            print(1)
+            if str(has_responsable) == str(my_name):
+                permiso = True
+        elif im_superuser:
+            print(2)
+            permiso = True
+
+        print(permiso)
+        if not permiso:
             return "hidden"
 
         if not cursor.valueBuffer("validado_user"):
             # responsable = 
-            if my_name == "admin" or im_superuser:
-                return "disabled"
-            else:
+            if not permiso:
                 return "hidden"
 
         if cursor.valueBuffer("validado_admin"):
@@ -271,17 +284,26 @@ class gesttare(interna):
     def gesttare_drawif_desbloquear_admin(self, cursor):
         my_name = qsatype.FLUtil.nameUser()
         im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
+        has_responsable = qsatype.FLUtil.sqlSelect("aqn_user", "idresponsable", "idusuario = '{}'".format(cursor.valueBuffer("idusuario")))
+        permiso = False
+
+        if has_responsable:
+            if str(has_responsable) == str(my_name):
+                permiso = True
+        elif im_superuser:
+            permiso = True
+
         if not cursor.valueBuffer("validado_admin"):
             return "hidden"
 
-        if not im_superuser:
+        if not permiso:
             return "hidden"
 
         if not cursor.valueBuffer("validado_user"):
             return "hidden"
 
         if cursor.valueBuffer("validado_admin"):
-            if my_name == "admin" or im_superuser:
+            if permiso:
                 return ""
 
         # reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))

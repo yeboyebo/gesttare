@@ -72,6 +72,20 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "gotoTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_tareas",
+                    "title": "Ver tareas",
+                    "iconurl": "/static/dist/img/icons/clipboards.svg",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "gotoTarea"
+                    }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -145,6 +159,11 @@
         },
         "acctionVolver": {
             "action": "return"
+        },
+        "gotoTarea": {
+            "action": "goto",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "verTarea"
         }
     },
     "drawIf": {

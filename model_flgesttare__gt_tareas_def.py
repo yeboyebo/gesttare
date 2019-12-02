@@ -975,9 +975,9 @@ class gesttare(interna):
         # else:
         params = ""
         if "nombre" in oParam:
-            params += "?p_nombre=" + urllib.quote(str(oParam["nombre"]))
+            params += "?p_nombre=" + urllib.parse.quote(str(oParam["nombre"]))
             if "descripcion" in oParam:
-                params += "&p_descripcion=" + urllib.quote(str(oParam["descripcion"]))
+                params += "&p_descripcion=" + urllib.parse.quote(str(oParam["descripcion"]))
         response = {}
         response["url"] = '/gesttare/gt_tareas/newRecord' + params
         return response

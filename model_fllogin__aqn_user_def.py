@@ -121,7 +121,6 @@ class gesttare(yblogin):
             return data
 
     def gesttare_getParticCompaniaUsu(self, oParam):
-        print("entra?'")
         usuario = qsatype.FLUtil.nameUser()
         idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
         data = []
@@ -244,7 +243,8 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
+        q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
 
         if not q.exec_():
@@ -257,11 +257,12 @@ class gesttare(yblogin):
             # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
             if valor:
                 valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
-                valor = flgesttare_def.iface.time_to_hours(str(valor))
+                valor = flgesttare_def.iface.time_to_hours(str(valor)) or 0
             else:
                 valor = 0
             data.append({"name": q.value(0), "value": int(valor)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
+
         return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75", "text": "Tiempo invertido en proyectos"}
 
     def gesttare_graficostareasporestado(self, oParam):
@@ -317,7 +318,8 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere("{} GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC".format(where))
 
         # q = qsatype.FLSqlQuery()
@@ -423,18 +425,6 @@ class gesttare(yblogin):
         tareasCompletadas = 0
         TareasProduccion = 0
 
-        # q = qsatype.FLSqlQuery()
-        # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        # q.setSelect("t.presupuesto, t.costetotal")
-        # q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        # q.setWhere("{} GROUP BY t.codproyecto".format(where))
-
-        # q = qsatype.FLSqlQuery()
-        # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
-        # q.setSelect("t.presupuesto, t.costetotal")
-        # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        # q.setWhere("{} GROUP BY t.codproyecto".format(where))
-
         whereCompletadas = where + "AND ta.resuelta = 'true' GROUP BY u.idusuario"
         whereProduccion = where + "AND ta.resuelta = 'false' AND tt.totaltiempo != '00:00:00' GROUP BY u.idusuario"
 
@@ -449,37 +439,11 @@ class gesttare(yblogin):
         if tareasProduccion == None:
             tareasProduccion = 0
 
-        # q = qsatype.FLSqlQuery()
-        # q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        # q.setSelect("COUNT()")
-        # q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        # q.setWhere("{} AND ta.resuelta = 'true' GROUP BY u.idusuario".format(where))
-
-        # if not q.exec_():
-        #     return []
-        # if q.size() > 100:
-        #     return []
-
-        #while q.next():
-        #    presupuesto = q.value(0)
-        #    coste = q.value(1)
-        #    totalPresupuesto += presupuesto
-        #    totalCostes += coste
-
-        # while q.next():
-        #     totalPresupuesto += q.value(0)
-        #     totalCostes += q.value(1)
-
-        # if totalPresupuesto != None and totalPresupuesto != 0 and totalCostes != None:
-        #     rentabilidad = ((totalPresupuesto-totalCostes)*100) / totalPresupuesto
-
-        #totalPresupuesto = qsatype.FLUtil.roundFieldValue(totalPresupuesto, "gt_proyectos", "presupuesto")
-        # totalPresupuesto = flgesttare_def.iface.formatearTotalPresupuesto(totalPresupuesto)
-
-        # rentabilidad = (locale.format('%.2f', rentabilidad, grouping=True))
-
-        tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
-        tiempo = flgesttare_def.iface.formatearTotalTiempo(tiempo)
+        if tiempo:
+            tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
+            tiempo = flgesttare_def.iface.formatearTotalTiempo(tiempo).split(":")[0]
+        else:
+            tiempo = "00"
 
 
 
