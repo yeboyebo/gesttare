@@ -417,7 +417,7 @@ class gesttare(yblogin):
 
         where += " AND u.idusuario = {}".format(usuario)
         # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
-        tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "SUM(tt.totaltiempo)", where)
+        tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
         totalPresupuesto = 0
         totalCostes = 0
@@ -428,10 +428,10 @@ class gesttare(yblogin):
         whereCompletadas = where + "AND ta.resuelta = 'true' GROUP BY u.idusuario"
         whereProduccion = where + "AND ta.resuelta = 'false' AND tt.totaltiempo != '00:00:00' GROUP BY u.idusuario"
 
-        tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereCompletadas)
+        tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario =tt.idusuario ", "COUNT(u.idusuario)", whereCompletadas)
 
 
-        tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(u.idusuario)", whereProduccion)
+        tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario = tt.idusuario ", "COUNT(u.idusuario)", whereProduccion)
 
         if tareasCompletadas == None:
             tareasCompletadas = 0
