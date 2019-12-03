@@ -92,6 +92,13 @@ class gesttare(interna):
 
         return True
 
+    def gesttare_afterCommit_gt_hitosproyecto(self, curHito):
+        _i = self.iface
+        if curHito.modeAccess() == curHito.Edit:
+            if curHito.valueBuffer("resuelta") == True and (curHito.valueBuffer(u"resuelta") != curHito.valueBufferCopy(u"resuelta")):
+                _i.completarTareasHito(curHito)
+        return True
+
     def gesttare_beforeCommit_gt_tareas(self, curTarea):
         _i = self.iface
         if curTarea.modeAccess() == curTarea.Del:
@@ -908,6 +915,17 @@ class gesttare(interna):
                 tiempo = tiempo[0:4]
         return tiempo
 
+    def gesttare_completarTareasHito(self, curHito):
+        curTarea = qsatype.FLSqlCursor(u"gt_tareas")
+        curTarea.select(ustr(u"idhito = '", curHito.valueBuffer("idhito"), u"' AND resuelta = false"))
+        while curTarea.next():
+            curTarea.setModeAccess(curTarea.Edit)
+            curTarea.refreshBuffer()
+            curTarea.setValueBuffer("resuelta", True)
+            if not curTarea.commitBuffer():
+                return False
+        return True
+
     # def gesttare_crearHitoInicial(self, curProyecto):
 
     #     user_name = qsatype.FLUtil.nameUser()
@@ -977,6 +995,9 @@ class gesttare(interna):
 
     def beforeCommit_gt_hitosproyecto(self, curHito):
         return self.ctx.gesttare_beforeCommit_gt_hitosproyecto(curHito)
+
+    def afterCommit_gt_hitosproyecto(self, curHito):
+        return self.ctx.gesttare_afterCommit_gt_hitosproyecto(curHito)
 
     def comprobarUsuarioResponsableProyecto(self, curProyecto):
         return self.ctx.gesttare_comprobarUsuarioResponsableProyecto(curProyecto)
@@ -1061,6 +1082,9 @@ class gesttare(interna):
 
     def crearHitoInicial(self, curProyecto):
         return self.ctx.gesttare_crearHitoInicial(curProyecto)
+
+    def completarTareasHito(self, curHito):
+        return self.ctx.gesttare_completarTareasHito(curHito)
 
 
 # @class_declaration head #

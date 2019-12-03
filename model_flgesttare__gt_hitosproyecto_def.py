@@ -51,11 +51,29 @@ class gesttare(interna):
         return ""
 
     def gesttare_fun_porcentaje(self, model):
-        return 50
+        costeInterno = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"idhito = '", model.idhito, u"'"))
+        if isNaN(costeInterno):
+            costeInterno = 0
+        presupuesto = parseFloat(model.presupuesto)
+        if not presupuesto:
+            return 0
+
+        valor = ((presupuesto - costeInterno) * 100) / presupuesto
+
+        if isNaN(valor):
+            valor = 0
+        valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"rentabilidad")
+        print("________________")
+        print(valor)
+        return valor
 
     def gesttare_fun_ntareas(self, model):
         ntareas = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"count(idtarea)", ustr(u"idhito = '", str(model.idhito), u"'")) or 0
-        return ntareas
+        ntareasPte = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"count(idtarea)", ustr(u"idhito = '", str(model.idhito), u"' AND resuelta is false")) or 0
+        resul = ntareasPte
+        if (ntareas != ntareasPte):
+            resul = str(ntareasPte) + " / " + str(ntareas)
+        return resul 
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
         usuario = qsatype.FLUtil.nameUser()
@@ -146,9 +164,26 @@ class gesttare(interna):
         if cursor.valueBuffer("resuelta") == False:
             return "hidden"
 
-    def gesttare_completar_hito(self, model, cursor):
+    def gesttare_completar_hito(self, model, oParam, cursor):
         response = {}
         resuelta = cursor.valueBuffer("resuelta")
+        if (not oParam or "confirmacion" not in oParam) and not resuelta:
+            # renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"gt_tareas")
+            q.setSelect(u"idtarea")
+            q.setFrom(u"gt_tareas")
+            q.setWhere(u"resuelta = false AND idhito = {}".format(cursor.valueBuffer("idhito")))
+            if not q.exec_():
+                return False
+            pendientes = q.size() or 0
+            if pendientes > 0:
+                response["status"] = 2
+                response["confirm"] = "Las tareas pendientes del hito seran completadas. </br></br> ¿Quieres continuar?"
+                response["serverAction"] = "completar_hito"
+                # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
+                return response
+        
         cursor.setValueBuffer("resuelta", not resuelta)
 
         if not cursor.commitBuffer():
@@ -224,8 +259,8 @@ class gesttare(interna):
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
-    def completar_hito(self, model, cursor):
-        return self.ctx.gesttare_completar_hito(model, cursor)
+    def completar_hito(self, model, oParam, cursor):
+        return self.ctx.gesttare_completar_hito(model, oParam, cursor)
 
     def abrir_hito(self, model, cursor):
         return self.ctx.gesttare_abrir_hito(model, cursor)

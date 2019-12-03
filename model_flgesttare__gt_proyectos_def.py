@@ -338,6 +338,15 @@ class gesttare(interna):
             return True
         return "disabled"
 
+    def gesttare_checkDrawPorcentajeHito(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        if str(cursor.valueBuffer("idresponsable")) == str(usuario):
+            return True
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        if is_superuser:
+            return True
+        return "hidden"
+
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         valor = None
         if fN == u"hdedicadas":
@@ -524,6 +533,9 @@ class gesttare(interna):
 
     def checkResponsableDraw(self, cursor):
         return self.ctx.gesttare_checkResponsableDraw(cursor)
+
+    def checkDrawPorcentajeHito(self, cursor):
+        return self.ctx.gesttare_checkDrawPorcentajeHito(cursor)
 
     def getDesc(self):
         return self.ctx.gesttare_getDesc()

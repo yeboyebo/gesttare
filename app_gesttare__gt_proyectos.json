@@ -83,7 +83,7 @@
                     },
                     "prefix": "gt_tareas",
                     "title": "Ir a la tarea relacionada",
-                    "iconurl": "/static/dist/img/icons/clipboards.svg",
+                    "icon": "assignment",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "action": {
@@ -143,17 +143,18 @@
                         "avatar": false,
                         "columns": [
                             {"tipo": "field", "listpos": "title", "key": "nombre", "width": 230, "title": true, "link": true},
-                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 60, "label": "F. Inicio"},
-                            {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 60},
+                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 67, "label": "F. Inicio"},
+                            {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 67},
                             {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
-                            {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto"},
-                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 30, "label": "Nº tareas"}
+                            {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto", "aux": "presupuesto"},
+                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 20, "label": "Pte"}
                         ],
                         "rowclick": "link",
                         "accionesGrid": [
                             {
                                 "key": "actNuevoHito",
                                 "label": "Nuevo",
+                                "label": "Nuevo hito",
                                 "success": [{ "slot": "goto"}]
                             }
                         ]
@@ -223,7 +224,7 @@
                                     },
                                     {
                                         "key": "actNuevoPartic",
-                                        "label": "Nuevo",
+                                        "label": "Gestionar usuarios",
                                         "success": [{"slot": "refrescar"}]
                                     }
                                 ]
@@ -381,6 +382,7 @@
         "vertareas": {
             "action": "goto",
             "prefix": "gt_proyectos",
+            "icon": "assignment",
             "serverAction": "vertareasproyecto"
         },
         "actNuevoPartic": {
@@ -399,7 +401,7 @@
             "title": "Invitación de usuarios externos",
             "action": "legacy",
             "prefix": "gt_proyectos",
-            "iconurl": "/static/dist/img/icons/externo.svg",
+            "icon": "people_outline",
             "serverAction": "actInvitarExterno",
             "params": [
                 {
@@ -425,6 +427,9 @@
             "costetotal": "checkProyectosFormDraw",
             "idresponsable": "checkResponsableDraw",
             "cliente": "checkResponsableDraw"
+        },
+        "hitosproyecto": {
+            "porcentaje": "checkDrawPorcentajeHito"
         }
     }
 }

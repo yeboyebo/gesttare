@@ -193,19 +193,13 @@ class gesttare(interna):
         im_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(my_name))
         has_responsable = qsatype.FLUtil.sqlSelect("aqn_user", "idresponsable", "idusuario = '{}'".format(cursor.valueBuffer("idusuario")))
         permiso = False
-        print("____________")
-        print(has_responsable)
-        print(my_name)
-        print(im_superuser)
         if has_responsable:
             print(1)
             if str(has_responsable) == str(my_name):
                 permiso = True
         elif im_superuser:
-            print(2)
             permiso = True
 
-        print(permiso)
         if not permiso:
             return "hidden"
 
@@ -237,7 +231,10 @@ class gesttare(interna):
             resul['confirm'] = "Vas a validar el mes con los siguientes datos: " + str(cursor.valueBuffer("horasordinariasstring")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
             return resul
         else:
+            now = str(qsatype.Date())
+            fecha = now[:10]
             cursor.setValueBuffer("validado_user", True)
+            cursor.setValueBuffer("fechavalidadouser", fecha)
             if not cursor.commitBuffer():
                 return False
 
@@ -258,10 +255,13 @@ class gesttare(interna):
             resul['confirm'] = "Vas a validar el mes de " + nombre + " con los siguientes datos: " + str(cursor.valueBuffer("horasordinariasstring")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
             return resul
         else:
-            idadmin = qsatype.FLUtil.nameUser()
-
-            cursor.setValueBuffer("idadmin", idadmin)
+            usuario = qsatype.FLUtil.nameUser()
+            now = str(qsatype.Date())
+            fecha = now[:10]
+            cursor.setValueBuffer("idadmin", usuario)
             cursor.setValueBuffer("validado_admin", True)
+            cursor.setValueBuffer("idvalidador", usuario)
+            cursor.setValueBuffer("fechavalidadoadmin", fecha)
             if not cursor.commitBuffer():
                 return False
 
@@ -315,8 +315,10 @@ class gesttare(interna):
     def gesttare_desbloquear_user(self, model, cursor):
         if not cursor.valueBuffer("validado_user"):
             return True
-
+        now = str(qsatype.Date())
+        fecha = now[:10]
         cursor.setValueBuffer("validado_user", False)
+        cursor.setValueBuffer("fechavalidadouser", fecha)
         if not cursor.commitBuffer():
             return False
 
@@ -326,10 +328,13 @@ class gesttare(interna):
         if not cursor.valueBuffer("validado_admin"):
             return True
 
-        idadmin = qsatype.FLUtil.nameUser()
-
-        cursor.setValueBuffer("idadmin", idadmin)
+        usuario = qsatype.FLUtil.nameUser()
+        now = str(qsatype.Date())
+        fecha = now[:10]
+        cursor.setValueBuffer("idadmin", usuario)
+        cursor.setValueBuffer("idvalidador", usuario)
         cursor.setValueBuffer("validado_admin", False)
+        cursor.setValueBuffer("fechavalidadoadmin", fecha)
         if not cursor.commitBuffer():
             return False
 

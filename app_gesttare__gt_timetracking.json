@@ -31,7 +31,7 @@
                     },
                     "prefix": "gt_tareas",
                     "title": "Ir a la tarea relacionada",
-                    "iconurl": "/static/dist/img/icons/clipboards.svg",
+                    "icon": "assignment",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "action": {

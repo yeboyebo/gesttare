@@ -51,6 +51,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def checkResponsableDraw(cursor):
         return form.iface.checkResponsableDraw(cursor)
 
+    def checkDrawPorcentajeHito(cursor):
+        return form.iface.checkDrawPorcentajeHito(cursor)
+
     def commonCalculateField(fN, curP):
         return form.iface.commonCalculateField(fN, curP)
 

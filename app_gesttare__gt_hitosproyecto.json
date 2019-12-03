@@ -79,7 +79,7 @@
                     },
                     "prefix": "gt_tareas",
                     "title": "Ver tareas",
-                    "iconurl": "/static/dist/img/icons/clipboards.svg",
+                    "icon": "assignment",
                     "className": "floatRight",
                     "buttonType": "icon",
                     "action": {
