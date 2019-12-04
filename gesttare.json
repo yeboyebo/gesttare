@@ -505,6 +505,10 @@
             {
                 "name": "registrarse.png",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "logo_gmail.png",
+                "path": "assets/dist/img/logo/"
             }
         ],
         "replaceFile": [
