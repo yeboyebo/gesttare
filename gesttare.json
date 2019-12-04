@@ -497,6 +497,14 @@
             {
                 "name": "externo.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "task_created.png",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "registrarse.png",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [
