@@ -68,27 +68,13 @@ class gesttare(interna):
     def gesttare_beforeCommit_gt_hitosproyecto(self, curHito):
         _i = self.iface
 
-
-        # curP = qsatype.FLSqlCursor("gt_proyectos")
-        # curP.select(ustr("codproyecto = '", codProyecto, "'"))
-        # if not curP.first():
-        #     return False
-        # curP.setModeAccess(curP.Edit)
-        # curP.refreshBuffer()
-        # curP.setValueBuffer(u"hdedicadas", proyectos.getIface().commonCalculateField(u"hdedicadas", curP))
-        # curP.setValueBuffer(u"costeinterno", proyectos.getIface().commonCalculateField(u"costeinterno", curP))
-        # curP.setValueBuffer(u"costetotal", proyectos.getIface().commonCalculateField(u"costetotal", curP))
-        # curP.setValueBuffer(u"rentabilidad", proyectos.getIface().commonCalculateField(u"rentabilidad", curP))
-        # if not curP.commitBuffer():
-        #     return False
-
-        if curHito.modeAccess() == curHito.Insert:
-            curP = qsatype.FLSqlCursor("gt_proyectos")
-            curP.select(ustr("codproyecto = '", curHito.valueBuffer("codproyecto"), "'"))
-            if not curP.first():
-                return False
-            curHito.setValueBuffer("idusuario", curHito.valueBuffer("idusuario"))
-            curHito.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
+        # if curHito.modeAccess() == curHito.Insert:
+        #     curP = qsatype.FLSqlCursor("gt_proyectos")
+        #     curP.select(ustr("codproyecto = '", curHito.valueBuffer("codproyecto"), "'"))
+        #     if not curP.first():
+        #         return False
+        #     curHito.setValueBuffer("idusuario", curHito.valueBuffer("idusuario"))
+        #     curHito.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
 
         return True
 

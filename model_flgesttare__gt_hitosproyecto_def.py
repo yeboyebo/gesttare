@@ -58,13 +58,14 @@ class gesttare(interna):
         if not presupuesto:
             return 0
 
-        valor = ((presupuesto - costeInterno) * 100) / presupuesto
+        valor = ((costeInterno / presupuesto) * 100)
 
         if isNaN(valor):
             valor = 0
+        if valor > 100:
+            valor = 100
         valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"rentabilidad")
-        print("________________")
-        print(valor)
+
         return valor
 
     def gesttare_fun_ntareas(self, model):
@@ -79,6 +80,11 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         # cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idusuario", usuario)
+        curP = qsatype.FLSqlCursor("gt_proyectos")
+        curP.select(ustr("codproyecto = '", cursor.valueBuffer("codproyecto"), "'"))
+        if not curP.first():
+            return False
+        cursor.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
 
         tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
         if cursor.valueBuffer("nombre") == None and not tieneCoordinacion:
@@ -179,7 +185,7 @@ class gesttare(interna):
             pendientes = q.size() or 0
             if pendientes > 0:
                 response["status"] = 2
-                response["confirm"] = "Las tareas pendientes del hito seran completadas. </br></br> ¿Quieres continuar?"
+                response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito </br></br> ¿Quieres continuar?"
                 response["serverAction"] = "completar_hito"
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
                 return response

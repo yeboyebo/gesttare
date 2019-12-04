@@ -242,7 +242,7 @@ class gesttare(yblogin):
         q = qsatype.FLSqlQuery()
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
         q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
@@ -317,7 +317,7 @@ class gesttare(yblogin):
         q = qsatype.FLSqlQuery()
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
         q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere("{} GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC".format(where))
@@ -335,7 +335,7 @@ class gesttare(yblogin):
 
         # total = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
-        total = qsatype.FLUtil.sqlSelect("gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto = p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "SUM(tt.totaltiempo)", where)
+        total = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
         if total:
             total = flgesttare_def.iface.seconds_to_time(total.total_seconds(), all_in_hours=True)
