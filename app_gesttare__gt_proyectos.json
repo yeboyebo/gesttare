@@ -82,7 +82,7 @@
                         "marginTop": "5px"
                     },
                     "prefix": "gt_tareas",
-                    "title": "Ir a la tarea relacionada",
+                    "title": "Ver tareas",
                     "icon": "assignment",
                     "className": "floatRight",
                     "buttonType": "icon",
@@ -142,12 +142,12 @@
                         "colorRowField": "color_hito",
                         "avatar": false,
                         "columns": [
-                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 230, "title": true, "link": true},
+                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 210, "title": true, "link": true},
                             {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 67, "label": "F. Inicio"},
                             {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 67},
                             {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
-                            {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto", "aux": "presupuesto"},
-                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 20, "label": "Pte"}
+                            {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto", "aux": "presupuesto", "title": "presupuesto_title"},
+                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 40, "label": "Pte"}
                         ],
                         "rowclick": "link",
                         "accionesGrid": [

@@ -597,6 +597,9 @@ class gesttare(interna):
     def gotoNuevoProyecto(self, model, oParam):
         return self.ctx.gesttare_gotoNuevoProyecto(model, oParam)
 
+    def copiarProyecto(self, model, oParam, cursor):
+        return self.ctx.gesttare_copiarProyecto(model, oParam, cursor)
+
 
 # @class_declaration head #
 class head(gesttare):

@@ -26,7 +26,8 @@ class gesttare(interna):
             {'verbose_name': 'Responsable', 'func': 'field_usuario'},
             {'verbose_name': 'porcentaje', 'func': 'fun_porcentaje'},
             {'verbose_name': 'ntareas', 'func': 'fun_ntareas'},
-            {"verbose_name": "color_hito", "func": "func_color_hito"}
+            {"verbose_name": "color_hito", "func": "func_color_hito"},
+            {"verbose_name": "presupuesto_title", "func": "func_presupuesto_title"}
         ]
         return fields
 
@@ -72,22 +73,27 @@ class gesttare(interna):
         ntareas = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"count(idtarea)", ustr(u"idhito = '", str(model.idhito), u"'")) or 0
         ntareasPte = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"count(idtarea)", ustr(u"idhito = '", str(model.idhito), u"' AND resuelta is false")) or 0
         resul = ntareasPte
-        if (ntareas != ntareasPte):
-            resul = str(ntareasPte) + " / " + str(ntareas)
+        resul = str(ntareasPte) + " / " + str(ntareas)
+        # if (ntareas != ntareasPte):
+        #     resul = str(ntareasPte) + " / " + str(ntareas)
         return resul 
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
         usuario = qsatype.FLUtil.nameUser()
         # cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idusuario", usuario)
-        curP = qsatype.FLSqlCursor("gt_proyectos")
-        curP.select(ustr("codproyecto = '", cursor.valueBuffer("codproyecto"), "'"))
-        if not curP.first():
-            return False
-        cursor.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
+        if cursor.valueBuffer("codproyecto"):
+            curP = qsatype.FLSqlCursor("gt_proyectos")
+            curP.select(ustr("codproyecto = '", cursor.valueBuffer("codproyecto"), "'"))
+            if not curP.first():
+                return False
+            cursor.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
 
-        tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
-        if cursor.valueBuffer("nombre") == None and not tieneCoordinacion:
+        # tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+
+        tieneHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+
+        if cursor.valueBuffer("nombre") == None and not tieneHitos:
             cursor.setValueBuffer("nombre", "Coordinación")
 
         qsatype.FactoriaModulos.get('formRecordgt_hitosproyecto').iface.iniciaValoresCursor(cursor)
@@ -139,6 +145,11 @@ class gesttare(interna):
         resul = {}
         usuario = qsatype.FLUtil.nameUser()
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyectos", u"COUNT(idhito)", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+        if numHitos == 1:
+            resul["status"] = 1
+            resul["msg"] = "No puedes eliminar el hito"
+            return resul
         if "confirmacion" in oParam and oParam["confirmacion"]:
             if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
                 cursor.setModeAccess(cursor.Del)
@@ -155,7 +166,7 @@ class gesttare(interna):
         else:
             if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
                 resul['status'] = 2
-                resul['confirm'] = "El hito será eliminado"
+                resul['confirm'] = "¿Seguro que quieres eliminar el hito y todas sus tareas asociadas?"
             else:
                 resul["status"] = 1
                 resul["msg"] = "No puedes eliminar el hito"
@@ -185,7 +196,7 @@ class gesttare(interna):
             pendientes = q.size() or 0
             if pendientes > 0:
                 response["status"] = 2
-                response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito </br></br> ¿Quieres continuar?"
+                response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito. </br></br> ¿Quieres continuar?"
                 response["serverAction"] = "completar_hito"
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
                 return response
@@ -222,12 +233,43 @@ class gesttare(interna):
             return "hitocompletado"
         return ""
 
+    def gesttare_func_presupuesto_title(self, model):
+        costeInterno = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"idhito = '", model.idhito, u"'"))
+        if isNaN(costeInterno):
+            costeInterno = 0
+        presupuesto = parseFloat(model.presupuesto)
+        if not presupuesto:
+            return "0€ consumidos - 0%"
+
+        valor = ((costeInterno / presupuesto) * 100)
+
+        if isNaN(valor):
+            valor = 0
+
+        title = str(int(costeInterno)) +"€ consumidos - " + str(int(valor)) + "%"
+        return title
+
     def gesttare_verTarea(self, model, cursor):
         response = {}
         response["url"] = "/gesttare/gt_tareas/master"
         response["prefix"] = "gt_tareas"
         response["filter"] = '{"idhito": "' + str(cursor.valueBuffer("idhito")) + '"}'
         return response
+
+    def gesttare_validateCursor(self, cursor):
+        presupuestoHito = cursor.valueBuffer("presupuesto") or 0
+        presupuestoProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"presupuesto", ustr(u"codproyecto = '", str(cursor.valueBuffer(u"codproyecto")), "'")) or 0
+        sumaPresupuestos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"SUM(presupuesto)", ustr(u"codproyecto = '", str(cursor.valueBuffer(u"codproyecto")), "' AND idhito <> ", cursor.valueBuffer("idhito"), "")) or 0
+        if presupuestoHito > presupuestoProyecto:
+            qsatype.FLUtil.ponMsgError("El presupesto del hito es mayor al del proyecto")
+            return False
+        sumaPresupuestos = sumaPresupuestos + presupuestoHito
+
+        if sumaPresupuestos > presupuestoProyecto:
+            qsatype.FLUtil.ponMsgError("La suma de presupestos de los hitos es mayor que el presupuesto del proyecto")
+            return False
+
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -262,6 +304,9 @@ class gesttare(interna):
     def func_color_hito(self, model):
         return self.ctx.gesttare_func_color_hito(model)
 
+    def func_presupuesto_title(self, model):
+        return self.ctx.gesttare_func_presupuesto_title(model)
+
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
 
@@ -279,6 +324,9 @@ class gesttare(interna):
 
     def borrar_hito(self, model, oParam, cursor):
         return self.ctx.gesttare_borrar_hito(model, oParam, cursor)
+
+    def validateCursor(self, cursor):
+        return self.ctx.gesttare_validateCursor(cursor)
 
 
 # @class_declaration head #

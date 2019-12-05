@@ -722,6 +722,10 @@ class gesttare(interna):
     def gesttare_bChCursor(self, fN, cursor):
         if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, cursor):
             return False
+        if fN == "codproyecto":
+            numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"sum(idhito)", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'"))
+            if numHitos == 1:
+                cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'")))
         if fN == "idusuario":
             curPartic = qsatype.FLSqlCursor("gt_partictarea")
             curPartic.select(ustr("idusuario = '", cursor.valueBuffer("idusuario"), "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))

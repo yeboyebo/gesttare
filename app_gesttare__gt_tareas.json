@@ -32,7 +32,6 @@
                     "className": "floatLeft",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "25px",
                         "marginRight": "5px"
                     },
                     "action": {
@@ -48,7 +47,6 @@
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "25px",
                         "marginRight": "8px"
                     },
                     "action": {
@@ -64,7 +62,6 @@
                     "className": "floatRight",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "25px",
                         "marginRight": "8px"
                     },
                     "action": {
@@ -76,8 +73,7 @@
                     "componente": "YBButton",
                     "title": "Borrar Tarea",
                     "style": {
-                        "padding": "0px 20px",
-                        "marginTop": "25px"
+                        "padding": "0px 20px"
                     },
                     "prefix": "gt_tareas",
                     "icon": "delete",

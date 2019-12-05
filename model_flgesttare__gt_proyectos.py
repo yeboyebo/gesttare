@@ -88,6 +88,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def gotoNuevoProyecto(self, oParam):
         return form.iface.gotoNuevoProyecto(self, oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def copiarProyecto(self, oParam, cursor):
+        return form.iface.copiarProyecto(oParam, cursor)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

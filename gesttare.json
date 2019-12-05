@@ -509,6 +509,10 @@
             {
                 "name": "logo_gmail.png",
                 "path": "assets/dist/img/logo/"
+            },
+            {
+                "name": "ctrl_api_demo_users__create.py",
+                "path": "controllers/api/demo/users/"
             }
         ],
         "replaceFile": [

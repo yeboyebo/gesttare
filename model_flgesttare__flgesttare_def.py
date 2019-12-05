@@ -68,21 +68,23 @@ class gesttare(interna):
     def gesttare_beforeCommit_gt_hitosproyecto(self, curHito):
         _i = self.iface
 
-        # if curHito.modeAccess() == curHito.Insert:
-        #     curP = qsatype.FLSqlCursor("gt_proyectos")
-        #     curP.select(ustr("codproyecto = '", curHito.valueBuffer("codproyecto"), "'"))
-        #     if not curP.first():
-        #         return False
-        #     curHito.setValueBuffer("idusuario", curHito.valueBuffer("idusuario"))
-        #     curHito.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
+        if curHito.modeAccess() == curHito.Insert:
+            if curHito.valueBuffer("codproyecto"):
+                fechainicio = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"fechainicio", ustr(u"codproyecto = '", str(curHito.valueBuffer(u"codproyecto")), "'"))
+                if fechainicio:
+                    curHito.setValueBuffer("fechainicio", fechainicio)
 
         return True
 
     def gesttare_afterCommit_gt_hitosproyecto(self, curHito):
         _i = self.iface
+
         if curHito.modeAccess() == curHito.Edit:
             if curHito.valueBuffer("resuelta") == True and (curHito.valueBuffer(u"resuelta") != curHito.valueBufferCopy(u"resuelta")):
                 _i.completarTareasHito(curHito)
+        if curTarea.modeAccess() == curTarea.Del:
+            # print("notificamos deltarea")
+            _i.borrarTareasHito(curHito)
         return True
 
     def gesttare_beforeCommit_gt_tareas(self, curTarea):
@@ -339,10 +341,12 @@ class gesttare(interna):
 
         if q.next():
             notificamos = False
-            if tipo in ["delparticproyecto", "delpartictarea"]:
+            if tipo == "deltarea":
                 notificamos = True
-            elif tipo == "deltarea":
+            elif tipo in ["delparticproyecto", "delpartictarea"]:
                 notificamos = True
+                if q.value(0) in ["deltarea"]:
+                    notificamos = False
             elif tipo == "resuelta" or tipo == "abierta":
                 notificamos = True
             elif tipo == q.value(0):
@@ -364,31 +368,13 @@ class gesttare(interna):
             else:
                 notificamos = False
 
-            # print("____________________________")
-            # print(tipo)
-            # print(q.value(0))
-            # print(notificamos)
-
             if notificamos:
                 qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizusuario = '" + str(q.value(2)) + "'")
-            # print("_______________________")
-            # print(q.value(0))
-            # print(q.value(1))
-            # print(q.value(2))
-            # notificamos = False
+
 
         if notificamos:
-            # print("vamos a crear la notificacion del usuario", usuarioNotificado)
             if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([idActualizacion, usuarioNotificado, False])):
                 return False
-        # deltarea
-        # responsable -> Añadido como responsable de una tarea
-        # resuelta
-        # comentario
-        # cambioFechaEjecucion
-        # partictarea
-        # particproyecto
-        # Buscar si existe alguna notificacion para ese usuario en ese tipo_objeto, si existe segun tipo elegimos cual tiene prioridad
         return True
 
     def gesttare_crearActualizaciones(self, tipo, cursor=None):
@@ -930,6 +916,15 @@ class gesttare(interna):
     #         return False
        
     #     return True
+    def gesttare_borrarTareasHito(self, curHito):
+        curTarea = qsatype.FLSqlCursor(u"gt_tareas")
+        curTarea.select(ustr(u"idhito = '", curHito.valueBuffer("idhito"), u"'"))
+        while curTarea.next():
+            curTarea.setModeAccess(curTarea.Del)
+            curTarea.refreshBuffer()
+            if not curTarea.commitBuffer():
+                return False
+        return True
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -1071,6 +1066,9 @@ class gesttare(interna):
 
     def completarTareasHito(self, curHito):
         return self.ctx.gesttare_completarTareasHito(curHito)
+
+    def borrarTareasHito(self, curHito):
+        return self.ctx.gesttare_borrarTareasHito(curHito)
 
 
 # @class_declaration head #

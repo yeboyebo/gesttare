@@ -34,6 +34,9 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
 
     def func_color_hito(self):
         return form.iface.func_color_hito(self)
+
+    def func_presupuesto_title(self):
+        return form.iface.func_presupuesto_title(self)
         
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
@@ -67,6 +70,9 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     @helpers.decoradores.accion(aqparam=["cursor"])
     def verTarea(self, cursor):
         return form.iface.verTarea(self, cursor)
+
+    def validateCursor(self):
+        return form.iface.validateCursor(self)
 
 
 # @class_declaration gt_hitosproyecto #
