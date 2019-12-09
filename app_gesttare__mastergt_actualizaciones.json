@@ -61,6 +61,7 @@
                 },
                 "queryGrid_notificacionesUsuarioViejas": {
                     "componente": "YBGrid",
+                    "visible": false,
                     "prefix": "notificacionesUsuarioViejas",
                     "filter": "",
                     "label": " NOTIFICACIONES ANTERIORES (Deben borrarse antes del 22 de Noviembre ya que serán desactivadas)",

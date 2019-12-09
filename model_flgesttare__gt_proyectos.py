@@ -45,6 +45,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def field_nombreCliente(self):
         return form.iface.field_nombreCliente(self)
 
+    def field_queryNombreCliente(self):
+        return form.iface.field_queryNombreCliente(self)
+
     def checkProyectosFormDraw(cursor):
         return form.iface.checkProyectosFormDraw(cursor)
 

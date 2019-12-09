@@ -24,7 +24,6 @@
                     "className": "floatLeft",
                     "buttonType": "icon",
                     "style": {
-                        "marginTop": "25px",
                         "marginRight": "5px"
                     },
                     "action": {

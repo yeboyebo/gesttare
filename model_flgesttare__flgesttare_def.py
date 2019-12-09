@@ -68,11 +68,11 @@ class gesttare(interna):
     def gesttare_beforeCommit_gt_hitosproyecto(self, curHito):
         _i = self.iface
 
-        if curHito.modeAccess() == curHito.Insert:
-            if curHito.valueBuffer("codproyecto"):
-                fechainicio = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"fechainicio", ustr(u"codproyecto = '", str(curHito.valueBuffer(u"codproyecto")), "'"))
-                if fechainicio:
-                    curHito.setValueBuffer("fechainicio", fechainicio)
+        # if curHito.modeAccess() == curHito.Insert:
+        #     if curHito.valueBuffer("codproyecto"):
+        #         fechainicio = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"fechainicio", ustr(u"codproyecto = '", str(curHito.valueBuffer(u"codproyecto")), "'"))
+        #         if fechainicio:
+        #             curHito.setValueBuffer("fechainicio", fechainicio)
 
         return True
 
@@ -82,7 +82,7 @@ class gesttare(interna):
         if curHito.modeAccess() == curHito.Edit:
             if curHito.valueBuffer("resuelta") == True and (curHito.valueBuffer(u"resuelta") != curHito.valueBufferCopy(u"resuelta")):
                 _i.completarTareasHito(curHito)
-        if curTarea.modeAccess() == curTarea.Del:
+        if curHito.modeAccess() == curHito.Del:
             # print("notificamos deltarea")
             _i.borrarTareasHito(curHito)
         return True

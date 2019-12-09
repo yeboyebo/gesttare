@@ -145,9 +145,10 @@ class gesttare(interna):
         resul = {}
         usuario = qsatype.FLUtil.nameUser()
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
-        numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyectos", u"COUNT(idhito)", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+        numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
         if numHitos == 1:
             resul["status"] = 1
+            resul["resul"] = False
             resul["msg"] = "No puedes eliminar el hito"
             return resul
         if "confirmacion" in oParam and oParam["confirmacion"]:
@@ -161,6 +162,7 @@ class gesttare(interna):
                 return resul
             else:
                 resul["status"] = 1
+                resul["resul"] = False
                 resul["msg"] = "No se puede eliminar el hito"
                 return resul
         else:
@@ -169,6 +171,7 @@ class gesttare(interna):
                 resul['confirm'] = "¿Seguro que quieres eliminar el hito y todas sus tareas asociadas?"
             else:
                 resul["status"] = 1
+                resul["resul"] = False
                 resul["msg"] = "No puedes eliminar el hito"
                 return resul
         return resul

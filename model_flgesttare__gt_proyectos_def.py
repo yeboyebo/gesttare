@@ -34,6 +34,10 @@ class gesttare(interna):
                 {'verbose_name': 'Responsable', 'func': 'field_usuario'},
                 {'verbose_name': 'Color responsable', 'func': 'color_responsable'}
             ]
+        elif template == "proyectosarchivados":
+            fields = [
+                {'verbose_name': 'nombreCliente', 'func': 'field_queryNombreCliente'}
+            ]
 
         return fields
 
@@ -47,6 +51,15 @@ class gesttare(interna):
             print(e)
             pass
         return nombre_cliente
+
+    def gesttare_field_queryNombreCliente(self, model):
+        tengocliente = ""
+        if model["gt_proyectos.idcliente"]:
+            tengocliente = qsatype.FLUtil.sqlSelect("gt_clientes", "nombre", "idcliente = '{}'".format(model["gt_proyectos.idcliente"]))
+            if not tengocliente:
+                return ""
+
+        return tengocliente
 
     def gesttare_field_usuario(self, model):
         nombre_usuario = ""
@@ -470,7 +483,7 @@ class gesttare(interna):
         where = where + " AND gt_particproyecto.idusuario = " + str(usuario)
         query = {}
         query["tablesList"] = ("gt_proyectos, gt_particproyecto")
-        query["select"] = ("gt_proyectos.codproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.fechainicio, gt_proyectos.fechaterminado")
+        query["select"] = ("gt_proyectos.codproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.fechainicio, gt_proyectos.fechaterminado, gt_proyectos.idcliente")
         query["from"] = ("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.codproyecto = gt_particproyecto.codproyecto")
         query["where"] = (where)
         query["groupby"] = ("gt_proyectos.codproyecto")
@@ -516,6 +529,9 @@ class gesttare(interna):
         resul['status'] = 1
         return resul
 
+    def gesttare_copiarProyecto(self, model, oParam, cursor):
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -524,6 +540,9 @@ class gesttare(interna):
 
     def field_nombreCliente(self, model):
         return self.ctx.gesttare_field_nombreCliente(model)
+
+    def field_queryNombreCliente(self, model):
+        return self.ctx.gesttare_field_queryNombreCliente(model)
 
     def iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
         return self.ctx.gesttare_iniciaValoresLabel(model, template, cursor, data)
