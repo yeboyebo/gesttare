@@ -214,7 +214,7 @@ class gesttare(interna):
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
         q.setSelect(u"p.codproyecto, t.nombre")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND NOT archivado  ORDER BY t.nombre LIMIT 7")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND NOT archivado GROUP BY p.codproyecto, t.nombre   ORDER BY t.nombre LIMIT 7")
         # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
@@ -529,7 +529,89 @@ class gesttare(interna):
         resul['status'] = 1
         return resul
 
-    def gesttare_copiarProyecto(self, model, oParam, cursor):
+    def gesttare_copiarProyecto(self, oParam, cursor):
+        _i = self.iface
+        response = {}
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+            nombre = cursor.valueBuffer("nombre")
+            if len(nombre) > 44:
+                nombre = nombre[0:44]
+            nombre = "Copia-" + nombre
+
+            user_name = qsatype.FLUtil.nameUser()
+            curCopia = qsatype.FLSqlCursor("gt_proyectos")
+            curCopia.setModeAccess(curCopia.Insert)
+            curCopia.refreshBuffer()
+            qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(curCopia)
+            curCopia.setValueBuffer("idresponsable", user_name)
+            curCopia.setValueBuffer("nombre", nombre)
+            curCopia.setValueBuffer("descripcion", "")
+            curCopia.setValueBuffer("imputable", False)
+            curCopia.setValueBuffer("margenh", 0)
+            curCopia.setValueBuffer("rentabilidad", 0)
+            curCopia.setValueBuffer("rentabilidadsobre", 0)
+            curCopia.setValueBuffer("archivado", False)
+            curCopia.setValueBuffer("usaralbaranes", False)
+            curCopia.setValueBuffer("desviacionh", 0)
+            curCopia.setValueBuffer("costeinterno", 0)
+            curCopia.setValueBuffer("costetotal", 0)
+            curCopia.setValueBuffer("presupuesto", 0)
+            curCopia.setValueBuffer("facturado", 0)
+            curCopia.setValueBuffer("hestimadas", 0)
+            curCopia.setValueBuffer("hdedicadas", 0)
+            curCopia.setValueBuffer("hfacturadas", 0)
+            curCopia.setValueBuffer("idcompany", cursor.valueBuffer("idcompany"))
+            if not curCopia.commitBuffer():
+                return False
+            # if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
+            #         return False
+            if not _i.copiarHitosProyecto(cursor, curCopia.valueBuffer("codproyecto")):
+                return False
+            response["url"] = "/gesttare/gt_proyectos/" + str(curCopia.valueBuffer("codproyecto"))
+            return response
+        response['status'] = 2
+        msg = "Vas a copiar el proyecto con todos los hitos y tareas que contiene. No se copiaran datos de fechas, responsables, participantes, comentarios o registros de tiempo asociados a proyectos y tareas. \n ¿Quieres continuar?"
+        response['confirm'] = msg
+        return response
+
+    def gesttare_copiarTareasHito(self, curHito, codproyecto, idhito):
+        curTarea = qsatype.FLSqlCursor(u"gt_tareas")
+        curTarea.select(ustr(u"idhito = '", curHito.valueBuffer("idhito"), u"'"))
+        while curTarea.next():
+            curTarea.setModeAccess(curTarea.Browse)
+            curTarea.refreshBuffer()
+            curCopia = qsatype.FLSqlCursor("gt_tareas")
+            curCopia.setModeAccess(curCopia.Insert)
+            curCopia.refreshBuffer()
+            curCopia.setValueBuffer("coste", 0)
+            curCopia.setValueBuffer("hdedicadas", 0)
+            curCopia.setValueBuffer("resuelta", False)
+            curCopia.setValueBuffer("codestado", "Por Hacer")
+            curCopia.setValueBuffer("nombre", curTarea.valueBuffer("nombre"))
+            curCopia.setValueBuffer("codproyecto", codproyecto)
+            curCopia.setValueBuffer("idhito", idhito)
+            if not curCopia.commitBuffer():
+                return False
+        # return False
+        return True
+
+    def gesttare_copiarHitosProyecto(self, cursor, codproyecto):
+        _i = self.iface
+        curHito = qsatype.FLSqlCursor(u"gt_hitosproyecto")
+        curHito.select(ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'"))
+        while curHito.next():
+            curHito.setModeAccess(curHito.Browse)
+            curHito.refreshBuffer()
+            curCopia = qsatype.FLSqlCursor("gt_hitosproyecto")
+            curCopia.setModeAccess(curCopia.Insert)
+            curCopia.refreshBuffer()
+            curCopia.setValueBuffer("resuelta", False)
+            curCopia.setValueBuffer("nombre", curHito.valueBuffer("nombre"))
+            curCopia.setValueBuffer("codproyecto", codproyecto)
+            if not curCopia.commitBuffer():
+                return False
+            if not _i.copiarTareasHito(curHito, codproyecto, curCopia.valueBuffer("idhito")):
+                return False
         return True
 
     def __init__(self, context=None):
@@ -616,8 +698,14 @@ class gesttare(interna):
     def gotoNuevoProyecto(self, model, oParam):
         return self.ctx.gesttare_gotoNuevoProyecto(model, oParam)
 
-    def copiarProyecto(self, model, oParam, cursor):
-        return self.ctx.gesttare_copiarProyecto(model, oParam, cursor)
+    def copiarProyecto(self, oParam, cursor):
+        return self.ctx.gesttare_copiarProyecto(oParam, cursor)
+
+    def copiarTareasHito(self, cursor, codproyecto, idhito):
+        return self.ctx.gesttare_copiarTareasHito(cursor, codproyecto, idhito)
+
+    def copiarHitosProyecto(self, cursor, codproyecto):
+        return self.ctx.gesttare_copiarHitosProyecto(cursor, codproyecto)
 
 
 # @class_declaration head #

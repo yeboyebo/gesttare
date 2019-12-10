@@ -95,6 +95,12 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def copiarProyecto(self, oParam, cursor):
         return form.iface.copiarProyecto(oParam, cursor)
 
+    def copiarTareasProyecto(self, cursor, codproyecto, idhito):
+        return form.iface.copiarTareasProyecto(cursor, codproyecto, idhito)
+
+    def copiarHitosProyecto(self, cursor, codproyecto):
+        return form.iface.copiarHitosProyecto(cursor, codproyecto)
+
 
 # @class_declaration gt_proyectos #
 class gt_proyectos(gesttare_gt_proyectos, helpers.MixinConAcciones):

@@ -185,7 +185,6 @@ class gesttare(interna):
             _i.compruebaNotificacion("particproyecto", curPart)
             # if not _i.crearActualizaciones(u"Añadido participante en proyecto " + nombreProyecto.replace("'", ""), curPart):
             #     return False
-        print("aftercommit gt_parcitproyecto true")
         return True
 
     def gesttare_eliminarNotificacionesProyecto(self, curPart):
@@ -308,9 +307,6 @@ class gesttare(interna):
                     return False
         elif tipo in ["responsable", "responsablepro", "partictarea", "delpartictarea", "delparticproyecto", "particproyecto"]:
             if str(idUsuario) != str(cursor.valueBuffer("idusuario")):
-                # print("creamos notificacion para ", tipo)
-                # print(idUsuario, "   " , cursor.valueBuffer("idusuario"))
-                # print(str(idUsuario) != str(cursor.valueBuffer("idusuario")))
                 if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                     return True
         return True
@@ -324,7 +320,6 @@ class gesttare(interna):
         #     where = u"(a.tipobjeto = 'gt_tarea' AND a.idobjeto = '" + str(cursor.valueBuffer("idtarea")) + "') OR (a.tipobjeto = '" + str(tipo_objeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "' AND a.idobjeto IN (Select idcomentario::VARCHAR from gt_comentarios where idtarea = '" + str(cursor.valueBuffer("idtarea")) + "'))"
         if qsatype.FLUtil.sqlSelect(u"gt_actualizusuario", u"idactualizusuario", ustr(u"idusuario = ", usuarioNotificado, u" AND idactualizacion = ", idActualizacion)):
             return True
-        # print("miramos si el usuario tiene alguna notificacion en esa tabla")
         # actualiz = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario u INNER JOIN gt_actualizaciones  ON u.idactualizacion = a.idactualizacion", "a.tipo", "a.tipobjeto = '" + str(tipo_objeto) + "' AND a.idobjeto = '" + str(idobjeto) + "' AND u.idusuario = '" + str(usuarioNotificado) + "'")
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_actualizusuario, gt_actualizaciones")
@@ -487,7 +482,7 @@ class gesttare(interna):
             idUsuario = str(qsatype.FLUtil.nameUser())
             if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
                 return False
-            if idUsuario != curProyecto.valueBuffer("idresponsable"):
+            if idUsuario != str(curProyecto.valueBuffer("idresponsable")):
                 if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
                     return False
         elif curProyecto.modeAccess() == curProyecto.Edit:
@@ -764,7 +759,6 @@ class gesttare(interna):
         #     totaltiempo = "0" + totaltiempo
         # if len(totaltiempo) > 8:
         #     totaltiempo = totaltiempo[8:]
-        print("totaltiempodiario", totaltiempo)
         return totaltiempo
 
     def gesttare_calcula_horasordinarias_diario(self, cur_diario):

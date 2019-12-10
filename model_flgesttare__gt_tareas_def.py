@@ -26,6 +26,18 @@ import urllib
 
 class gesttare(interna):
 
+    def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        # if template == "list":
+        #     print(ident["COUNT"])
+        #     return {"masterTareas": "Tiempo total: {}".format(ident["COUNT"])}
+        # if template == "master":
+        #     print(ident)
+        #     return {"masterTareas": "Total: {}".format(ident["PAG"]["COUNT"])}
+        return None
+
+    def get_model_info(self, model, data, ident, template, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
+
     def gesttare_fun_totalDays(self, model):
         return 30
 
@@ -566,6 +578,21 @@ class gesttare(interna):
             data.append({"error": "No perteneces al proyecto consulta reponsable"})
             return data
         if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            idhito = None
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"gt_hitosproyecto")
+            q.setSelect(u"idhito")
+            q.setFrom(u"gt_hitosproyecto")
+            q.setWhere(u"codproyecto = '" + str(oParam["project"].upper()) + "'")
+
+            if not q.exec_():
+                return []
+            if q.size() > 100:
+                return []
+
+            if q.next():
+                idhito = q.value("idhito")
+
             curTarea = qsatype.FLSqlCursor(u"gt_tareas")
             curTarea.setModeAccess(curTarea.Insert)
             curTarea.refreshBuffer()
@@ -576,6 +603,7 @@ class gesttare(interna):
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
             curTarea.setValueBuffer(u"descripcion", oParam["description"])
             curTarea.setValueBuffer(u"resuelta", False)
+            curTarea.setValueBuffer(u"idhito", idhito)
             if oParam["date"] and oParam["date"] != u"undefined":
                 curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
 
@@ -615,6 +643,21 @@ class gesttare(interna):
             response["username"] = usuario
             return response
         if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            idhito = None
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"gt_hitosproyecto")
+            q.setSelect(u"idhito")
+            q.setFrom(u"gt_hitosproyecto")
+            q.setWhere(u"codproyecto = '" + str(oParam["project"].upper()) + "'")
+
+            if not q.exec_():
+                return []
+            if q.size() > 100:
+                return []
+
+            if q.next():
+                idhito = q.value("idhito")
+
             curTarea = qsatype.FLSqlCursor(u"gt_tareas")
             curTarea.setModeAccess(curTarea.Insert)
             curTarea.refreshBuffer()
@@ -625,6 +668,7 @@ class gesttare(interna):
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
             curTarea.setValueBuffer(u"descripcion", oParam["description"])
             curTarea.setValueBuffer(u"resuelta", False)
+            curTarea.setValueBuffer(u"idhito", idhito)
             if oParam["date"] and oParam["date"] != u"undefined":
                 curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
 

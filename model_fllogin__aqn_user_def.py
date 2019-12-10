@@ -14,7 +14,7 @@ class gesttare(yblogin):
             return data
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user")
-        q.setSelect(u"p.idusuario, u.usuario")
+        q.setSelect(u"DISTINCT(p.idusuario), u.usuario")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
         q.setWhere(u"t.codproyecto = '" + str(oParam['codproyecto']) + "' AND (UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') OR UPPER(u.email) LIKE UPPER('%" + oParam["val"] + "%')) AND u.activo  ORDER BY u.usuario LIMIT 7")
 

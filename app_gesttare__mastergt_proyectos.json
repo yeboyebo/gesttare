@@ -45,6 +45,14 @@
             "columns": [
                 {
                     "tipo": "act",
+                    "key": "copiarProyecto",
+                    "label": "Copiar proyecto",
+                    "success": [
+                        {"slot": "refrescar"}
+                    ]
+                },
+                {
+                    "tipo": "act",
                     "key": "archivarProyecto",
                     "label": "Archivar proyecto",
                     "success": [
@@ -116,6 +124,13 @@
             "label" : "",
             "action": "onexport",
             "icon": "cloud_download"
+        },
+        "copiarProyecto": {
+            "label": "Copiar proyecto",
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "serverAction": "copiarProyecto",
+            "icon": "file_copy"
         },
         "archivarProyecto": {
             "label": "Archivar proyecto",

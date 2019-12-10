@@ -125,7 +125,9 @@
                                     "fields": {
                                         "idusuario": {
                                             "combolimit": 1,
-                                            "showpk": false
+                                            "showpk": false,
+                                            "function": "getUsuariosProyecto",
+                                            "params": {"codproyecto": "codproyecto"}
                                         },
                                         "fechainicio": {},
                                         "fechaterminado": {}
