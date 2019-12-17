@@ -21,6 +21,16 @@ from models.flgesttare import flgesttare_def
 
 class gesttare(interna):
 
+    def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        if template == "list":
+            return {"masterProyectos": "Nº DE PROYECTOS: {}".format(ident["COUNT"])}
+        if template == "master":
+            return {"masterProyectos": "Nº DE PROYECTOS: {}".format(ident["PAG"]["COUNT"])}
+        return None
+
+    def get_model_info(self, model, data, ident, template, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
+
     def gesttare_getDesc(self):
         desc = "nombre"
         return desc

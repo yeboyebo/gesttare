@@ -18,6 +18,9 @@
             "className": " ",
             "style": {},
             "layout": {
+                "separator": {
+                    "componente": "YBSeparator"
+                },
                 "masterTareas": {
                     "componente": "YBGrid",
                     "prefix": "gt_tareas",

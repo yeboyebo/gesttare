@@ -27,12 +27,10 @@ import urllib
 class gesttare(interna):
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
-        # if template == "list":
-        #     print(ident["COUNT"])
-        #     return {"masterTareas": "Tiempo total: {}".format(ident["COUNT"])}
-        # if template == "master":
-        #     print(ident)
-        #     return {"masterTareas": "Total: {}".format(ident["PAG"]["COUNT"])}
+        if template == "list":
+            return {"masterTareas": "Nº DE TAREAS: {}".format(ident["COUNT"])}
+        if template == "master":
+            return {"masterTareas": "Nº DE TAREAS: {}".format(ident["PAG"]["COUNT"])}
         return None
 
     def get_model_info(self, model, data, ident, template, where_filter):
@@ -767,10 +765,11 @@ class gesttare(interna):
         # if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, cursor):
         #     return False
         if fN == "codproyecto":
-            numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'"))
+            numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"' AND resuelta = false"))
             if numHitos == 1:
-                print("informamos")
                 cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'")))
+            else:
+                qsatype.FLUtil.ponMsgError("No es posible crear tareas para este proyecto, no tiene hitos activos")
         if fN == "idusuario":
             curPartic = qsatype.FLSqlCursor("gt_partictarea")
             curPartic.select(ustr("idusuario = '", cursor.valueBuffer("idusuario"), "' AND idtarea = '", cursor.valueBuffer("idtarea"), "'"))
@@ -922,8 +921,6 @@ class gesttare(interna):
         return data
 
     def gesttare_gotoNewRecordAnotacion(self, oParam):
-        print("_______________")
-        print(oParam)
         if "nombre" not in oParam:
             response = {}
             response['status'] = -1
@@ -942,6 +939,7 @@ class gesttare(interna):
                     "verbose_name": "Nombre",
                     "key": "nombre",
                     "validaciones": None,
+                    "maxlength": 50,
                     "required": True
                 },
                 {

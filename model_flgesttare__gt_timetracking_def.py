@@ -49,11 +49,14 @@ class gesttare(interna):
         curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
         curProyectos.select("idusuario = '" + str(usuario) + "'")
         proin = "("
+
         while curProyectos.next():
             curProyectos.setModeAccess(curProyectos.Browse)
             curProyectos.refreshBuffer()
             # proin.append(curProyectos.valueBuffer("codproyecto"))
-            proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+            if curProyectos.valueBuffer("codproyecto"):
+                proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+
         proin = proin + " null)"
         where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
@@ -79,7 +82,6 @@ class gesttare(interna):
         query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
         query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
-
         return query
 
     def gesttare_getForeignFields(self, model, template=None):

@@ -306,6 +306,8 @@ class gesttare(interna):
                     print("error al generar notificacion del usuario")
                     return False
         elif tipo in ["responsable", "responsablepro", "partictarea", "delpartictarea", "delparticproyecto", "particproyecto"]:
+            if tipo == "responsable" and not cursor.valueBuffer("idusuario"):
+                return True
             if str(idUsuario) != str(cursor.valueBuffer("idusuario")):
                 if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                     return True
@@ -486,7 +488,7 @@ class gesttare(interna):
                 if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
                     return False
         elif curProyecto.modeAccess() == curProyecto.Edit:
-            if curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable"):
+            if curProyecto.valueBuffer("idresponsable") and (curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable")):
                 if qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idparticipante", ustr(u"idusuario = '", str(curProyecto.valueBuffer("idresponsable")), u"' AND codproyecto = '", str(curProyecto.valueBuffer("codproyecto")), "'")):
                     return True
                 if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"codproyecto")])):
@@ -501,10 +503,11 @@ class gesttare(interna):
         return True
 
     def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
-        if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or (curTarea.modeAccess() == curTarea.Insert and curTarea.valueBuffer(u"idusuario")):
-            if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curTarea.valueBuffer(u"idusuario"), u" AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
-                if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
-                    return False
+        if curTarea.valueBuffer(u"idusuario"):
+            if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or (curTarea.modeAccess() == curTarea.Insert and curTarea.valueBuffer(u"idusuario")):
+                if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curTarea.valueBuffer(u"idusuario"), u" AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
+                    if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
+                        return False
         return True
 
     def gesttare_comprobarActualizacionesTareas(self, curTarea=None):

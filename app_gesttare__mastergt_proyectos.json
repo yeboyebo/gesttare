@@ -15,6 +15,9 @@
         }
     },
     "layout": {
+        "separator": {
+            "componente": "YBSeparator"
+        },
         "masterProyectos": {
             "componente": "YBGrid",
             "prefix": "gt_proyectos",

@@ -51,8 +51,8 @@
                                     "title": "",
                                     "fields": {
                                         "codproyecto": {"disabled": true},
-                                        "nombre": {},
-                                        "descripcion": {},
+                                        "nombre": {"className": "col-sm-12"},
+                                        "descripcion": {"tipo": 6},
                                         "estado": {},
                                         "fechainicio": {},
                                         "fechaterminado": {},

@@ -429,7 +429,7 @@ class gesttare(yblogin):
         whereProduccion = where + "AND ta.resuelta = 'false' AND tt.totaltiempo != '00:00:00' GROUP BY u.idusuario"
 
         tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario =tt.idusuario ", "COUNT(u.idusuario)", whereCompletadas)
-
+        # tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_tareas ", "COUNT(idtarea)", "idusuario = '" + usuario + "' and resuelta = true")
 
         tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario = tt.idusuario ", "COUNT(u.idusuario)", whereProduccion)
 

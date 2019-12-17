@@ -41,7 +41,7 @@
                         "gb__": {
                             "title": "",
                             "fields": {
-                                "nombre": {},
+                                "nombre": {"className": "col-sm-12"},
                                 "descripcion": {},
                                 "codproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
                                 "idhito": {

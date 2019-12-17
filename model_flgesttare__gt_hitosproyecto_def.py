@@ -31,6 +31,19 @@ class gesttare(interna):
         ]
         return fields
 
+    def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        # print(model, data, ident, template, where_filter)
+        if template == "formRecord" and isinstance(data, list):
+            if data:
+                codproyecto = data[0]["codproyecto"]
+                abiertas = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", codproyecto, u"' AND not resuelta"))
+                if abiertas == 0:
+                    return {"hitosproyecto": "<div class='textRojo'>No pudes crear tareas sobre este proyecto</div>"}
+        return None
+
+    def get_model_info(self, model, data, ident, template, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
+
     def gesttare_field_usuario(self, model):
         nombre_usuario = ""
         # if hasattr(model.idresponsable, 'usuario'):
@@ -189,6 +202,7 @@ class gesttare(interna):
         resuelta = cursor.valueBuffer("resuelta")
         if (not oParam or "confirmacion" not in oParam) and not resuelta:
             # renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
+            hitosActivos = qsatype.FLUtil.quickSqlSelect("gt_hitosproyecto", "COUNT(idhito)", "resuelta = false AND codproyecto = '{}' and idhito <> '{}'".format(cursor.valueBuffer("codproyecto"), cursor.valueBuffer("idhito"))) or 0
             q = qsatype.FLSqlQuery()
             q.setTablesList(u"gt_tareas")
             q.setSelect(u"idtarea")
@@ -199,7 +213,16 @@ class gesttare(interna):
             pendientes = q.size() or 0
             if pendientes > 0:
                 response["status"] = 2
-                response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito. </br></br> ¿Quieres continuar?"
+                response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito."
+                if hitosActivos == 0 and not resuelta:
+                    response["confirm"] += "<br>Recuerda: Vas a cerrar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo."
+                response["confirm"] += "</br></br> ¿Quieres continuar?"
+                response["serverAction"] = "completar_hito"
+                # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
+                return response
+            elif hitosActivos == 0 and not resuelta:
+                response["confirm"] = "Recuerda: Vas a cerrar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo."
+                response["confirm"] += "</br></br> ¿Quieres continuar?"
                 response["serverAction"] = "completar_hito"
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
                 return response

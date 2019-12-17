@@ -13,6 +13,7 @@ class gesttare(yblogin_sass):
     def gesttare_token_auth(self, request):
         username = request.GET.get("username", None)
         password = request.GET.get("password", None)
+        print(username,"________", password)
 
         usuario = aqn_user.objects.filter(email__exact=username)
         if len(usuario) == 0:
