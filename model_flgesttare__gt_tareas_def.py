@@ -765,10 +765,11 @@ class gesttare(interna):
         # if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, cursor):
         #     return False
         if fN == "codproyecto":
+            cursor.setNull("idhito")
             numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"' AND resuelta = false"))
             if numHitos == 1:
                 cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'")))
-            else:
+            elif numHitos == 0:
                 qsatype.FLUtil.ponMsgError("No es posible crear tareas para este proyecto, no tiene hitos activos")
         if fN == "idusuario":
             curPartic = qsatype.FLSqlCursor("gt_partictarea")
@@ -781,6 +782,8 @@ class gesttare(interna):
                 curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
                 if not curPartic.commitBuffer():
                     return False
+        print("sale por true", cursor.valueBuffer("idhito"))
+        return True
 
     def gesttare_getFilters(self, model, name, template=None):
         filters = []

@@ -3,6 +3,7 @@
 from django.http import HttpResponse
 import json
 from rest_framework.authtoken.models import Token
+from django.views.decorators.csrf import csrf_exempt
 
 
 class gesttare(yblogin_sass):
@@ -11,9 +12,15 @@ class gesttare(yblogin_sass):
         return HttpResponseRedirect("/gesttare/gt_tareas/custom/denegado")
 
     def gesttare_token_auth(self, request):
-        username = request.GET.get("username", None)
-        password = request.GET.get("password", None)
-        print(username,"________", password)
+        try:
+            params = json.loads(request.body.decode("utf-8"))
+            username = params["username"]
+            password = params["password"]
+
+        except Exception:
+            username = request.POST.get("username", None)
+            password = request.POST.get("password", None)
+
 
         usuario = aqn_user.objects.filter(email__exact=username)
         if len(usuario) == 0:
@@ -41,6 +48,7 @@ class gesttare(yblogin_sass):
     def forbiddenError(self, request):
         return self.iface.gesttare_forbiddenError(request)
 
+    @csrf_exempt
     def token_auth(self, request):
         return self.iface.gesttare_token_auth(request)
 

@@ -25,7 +25,7 @@
                     "componente": "YBGrid",
                     "prefix": "gt_tareas",
                     "cansavefilter": true,
-                    "buscador": false,
+                    "buscador": {"fields":["nombre"]},
                     "avatar": false,
                     "filter": {
                         "nombre": null,

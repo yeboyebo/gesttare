@@ -159,11 +159,6 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
         numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
-        if numHitos == 1:
-            resul["status"] = 1
-            resul["resul"] = False
-            resul["msg"] = "No puedes eliminar el hito"
-            return resul
         if "confirmacion" in oParam and oParam["confirmacion"]:
             if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
                 cursor.setModeAccess(cursor.Del)
@@ -178,6 +173,10 @@ class gesttare(interna):
                 resul["resul"] = False
                 resul["msg"] = "No se puede eliminar el hito"
                 return resul
+        elif numHitos == 1:
+            resul['status'] = 2
+            resul['confirm'] = "¿Seguro que quieres eliminar el hito y todas sus tareas asociadas?<br><br><i>Recuerda: Vas a eliminar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo.</i>"
+            return resul
         else:
             if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
                 resul['status'] = 2
@@ -215,7 +214,7 @@ class gesttare(interna):
                 response["status"] = 2
                 response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito."
                 if hitosActivos == 0 and not resuelta:
-                    response["confirm"] += "<br>Recuerda: Vas a cerrar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo."
+                    response["confirm"] += "<br><br><i>Recuerda: Vas a cerrar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo.</i>"
                 response["confirm"] += "</br></br> ¿Quieres continuar?"
                 response["serverAction"] = "completar_hito"
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]

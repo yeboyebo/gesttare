@@ -369,6 +369,32 @@ class gesttare(yblogin):
 
         return {"type": "pieDonutChart", "data": data, "size": 80, "innerText": True, "text": "Distribución del tiempo en proyectos"}
 
+    def gesttare_calculaTareasCompletadas(self, oParam):
+        where = "1=1"
+        usuario = qsatype.FLUtil.nameUser()
+
+        locale.setlocale(locale.LC_ALL, '')
+
+        if not oParam:
+            hoy = date.today()
+            ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+            where += " AND at.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+        if oParam:
+            if "idusuario" in oParam:
+                usuario = str(oParam["idusuario"])
+            if "d_fecha" not in oParam and "h_fecha" not in oParam and "fecha" not in oParam:
+                hoy = date.today()
+                ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+                where += " AND at.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+            else:
+                if "fecha" in oParam:
+                    where += "AND at.fecha = '{}'".format(oParam["fecha"])
+                if "d_fecha" in oParam:
+                    where += " AND at.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
+        whereCompletadas = where + " AND ta.idusuario = '" + usuario + "'AND ta.resuelta = 'true' AND at.tipo='resuelta'"
+        tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_tareas ta LEFT JOIN gt_actualizaciones at ON ta.idtarea = at.idobjeto::INTEGER", "COUNT(ta.idtarea)", whereCompletadas) or 0
+        return tareasCompletadas
+
     def gesttare_cajasinfo(self, oParam):
         horasStyle = {
             "border": "1px solid #dfdfdf",
@@ -415,7 +441,7 @@ class gesttare(yblogin):
         # where += " AND tt.idusuario = {}".format(usuario)
         # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
 
-        where += " AND u.idusuario = {}".format(usuario)
+        where += " AND tt.idusuario = {}".format(usuario)
         # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
         tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
@@ -425,14 +451,15 @@ class gesttare(yblogin):
         tareasCompletadas = 0
         TareasProduccion = 0
 
-        whereCompletadas = where + "AND ta.resuelta = 'true' GROUP BY u.idusuario"
-        whereProduccion = where + "AND ta.resuelta = 'false' AND tt.totaltiempo != '00:00:00' GROUP BY u.idusuario"
 
-        tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario =tt.idusuario ", "COUNT(u.idusuario)", whereCompletadas)
-        # tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_tareas ", "COUNT(idtarea)", "idusuario = '" + usuario + "' and resuelta = true")
+        whereProduccion = where + " AND tt.totaltiempo != '00:00:00'"
 
-        tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario = tt.idusuario ", "COUNT(u.idusuario)", whereProduccion)
+        #tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario =tt.idusuario ", "COUNT(u.idusuario)", whereCompletadas)
+        tareasCompletadas = self.iface.calculaTareasCompletadas(oParam)
 
+        # tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario = tt.idusuario ", "COUNT(u.idusuario)", whereProduccion)
+
+        tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_tareas ta INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(DISTINCT(tt.idtarea))", whereProduccion)
         if tareasCompletadas == None:
             tareasCompletadas = 0
 
@@ -569,6 +596,9 @@ class gesttare(yblogin):
 
     def graficohorasporproyecto(self, oParam):
         return self.ctx.gesttare_graficohorasporproyecto(oParam)
+
+    def calculaTareasCompletadas(self, oParam):
+        return self.ctx.gesttare_calculaTareasCompletadas(oParam)
 
     def cajasinfo(self, oParam):
         return self.ctx.gesttare_cajasinfo(oParam)

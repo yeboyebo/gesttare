@@ -53,7 +53,8 @@
                             "filterType": "custom",
                             "tipo": 28,
                             "key": "fecha",
-                            "label": "Fecha"
+                            "label": "Fecha",
+                            "value": "estemes"
                         }
                     },
                     "d3": "pieChart",
@@ -88,7 +89,8 @@
                         "filterType": "custom",
                         "tipo": 28,
                         "key": "fecha",
-                        "label": "Fecha"
+                        "label": "Fecha",
+                        "value": "estemes"
                     }
             },
             "columns": [
