@@ -28,7 +28,6 @@
                     "buscador": {"fields":["nombre"]},
                     "avatar": false,
                     "filter": {
-                        "nombre": null,
                         "codproyecto": {
                             "showpk": false, 
                             "function": "getProyectosUsuario"
