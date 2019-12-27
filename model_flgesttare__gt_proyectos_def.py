@@ -222,9 +222,9 @@ class gesttare(interna):
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
-        q.setSelect(u"p.codproyecto, t.nombre")
+        q.setSelect(u"p.codproyecto, t.nombre, t.idcliente")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND NOT archivado GROUP BY p.codproyecto, t.nombre   ORDER BY t.nombre LIMIT 7")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND NOT archivado GROUP BY p.codproyecto, t.nombre, t.idcliente  ORDER BY t.nombre LIMIT 7")
         # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
@@ -236,7 +236,11 @@ class gesttare(interna):
 
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
-            data.append({"codproyecto": q.value(0), "nombre": q.value(1)})
+            des = str(q.value(1))
+            if q.value(2):
+                codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(q.value(2)), u"'"))
+                des = "#" + str(codcliente) + " " + des 
+            data.append({"codproyecto": q.value(0), "nombre": des, "suggestion": q.value(1)})
 
         return data
 

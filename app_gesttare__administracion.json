@@ -1,0 +1,66 @@
+{
+    "querystring": {
+        "p_l": 40,
+        "p_c": true,
+        "s_activo__exact": true,
+        "s_usuario__ne": "admin"
+    },
+    "layout": {
+        "separator0": {
+            "componente": "YBSeparator"
+        },
+        "masterUsuarios": {
+            "componente": "YBGrid",
+            "label": "Usuarios",
+            "icon": "person",
+            "prefix": "aqn_user",
+            "filter": "buscador",
+            "columns": [
+                {
+                    "tipo": "act",
+                    "key": "desactivarUsu",
+                    "label": "Desactivar usuario",
+                    "success": [
+                        {
+                            "slot": "refrescar"
+                        }
+                    ]
+                },
+                {
+                    "tipo": "field",
+                    "listpos": "subtitle",
+                    "key": "nombre",
+                    "avatar": true,
+                    "width": 600
+                },
+                {
+                    "tipo": "field",
+                    "listpos": "title",
+                    "key": "email",
+                    "width": 600
+                },
+                {
+                    "tipo": "field",
+                    "listpos": "secondaryitem",
+                    "key": "usuario",
+                    "color": "Color usuario",
+                    "width": 20,
+                    "label": "Usuario"
+                }
+            ],
+            "rowclick": "link"
+        },
+    },
+    "acciones": {
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+        "desactivarUsu": {
+            "action": "legacy",
+            "prefix": "aqn_user",
+            "serverAction": "desactivar_usuario",
+            "icon": "delete"
+        }
+    }
+}

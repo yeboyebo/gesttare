@@ -116,7 +116,7 @@
                                 "gb__nombre": {
                                     "title": "",
                                     "fields": {
-                                        "nombre": {},
+                                        "nombre": {"className": "col-sm-12"},
                                         "presupuesto": {}
                                     }
                                 },

@@ -22,9 +22,9 @@
             "componente": "YBGrid",
             "prefix": "gt_proyectos",
             "cansavefilter": true,
+            "buscador": {"fields":["nombre"]},
             "className": "",
             "filter": {
-                "nombre": null,
                 "estado": null,
                 "fechainicio": {
 
@@ -44,7 +44,6 @@
             },
             "multiselectable": false,
             "avatar": false,
-            "buscador": false,
             "columns": [
                 {
                     "tipo": "act",

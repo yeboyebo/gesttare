@@ -50,7 +50,7 @@
                                 "gb__": {
                                     "title": "",
                                     "fields": {
-                                        "codproyecto": {"disabled": true},
+                                        "codproyecto": {"disabled": true, "visible": false},
                                         "nombre": {"className": "col-sm-12"},
                                         "descripcion": {"tipo": 6},
                                         "estado": {},

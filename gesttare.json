@@ -513,6 +513,10 @@
             {
                 "name": "ctrl_api_demo_users__create.py",
                 "path": "controllers/api/demo/users/"
+            },
+            {
+                "name": "app_gesttare__administracion.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [

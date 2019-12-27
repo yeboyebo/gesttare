@@ -41,6 +41,7 @@
                         "gb__": {
                             "title": "",
                             "fields": {
+                                "codcliente": {},
                                 "nombre": {},
                                 "descripcion": {}
                             }

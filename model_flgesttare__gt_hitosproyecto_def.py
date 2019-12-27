@@ -202,6 +202,7 @@ class gesttare(interna):
         if (not oParam or "confirmacion" not in oParam) and not resuelta:
             # renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
             hitosActivos = qsatype.FLUtil.quickSqlSelect("gt_hitosproyecto", "COUNT(idhito)", "resuelta = false AND codproyecto = '{}' and idhito <> '{}'".format(cursor.valueBuffer("codproyecto"), cursor.valueBuffer("idhito"))) or 0
+            print(hitosActivos)
             q = qsatype.FLSqlQuery()
             q.setTablesList(u"gt_tareas")
             q.setSelect(u"idtarea")
@@ -210,6 +211,7 @@ class gesttare(interna):
             if not q.exec_():
                 return False
             pendientes = q.size() or 0
+            print(pendientes)
             if pendientes > 0:
                 response["status"] = 2
                 response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito."
@@ -220,12 +222,13 @@ class gesttare(interna):
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
                 return response
             elif hitosActivos == 0 and not resuelta:
+                response["status"] = 2
                 response["confirm"] = "Recuerda: Vas a cerrar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo."
                 response["confirm"] += "</br></br> ¿Quieres continuar?"
                 response["serverAction"] = "completar_hito"
+                print("deberia salir por aqui???")
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
                 return response
-        
         cursor.setValueBuffer("resuelta", not resuelta)
 
         if not cursor.commitBuffer():
