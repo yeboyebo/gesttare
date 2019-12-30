@@ -27,6 +27,7 @@
                             "title": "",
                             "fields": {
                                 "nombre": {},
+                                "codcliente": {},
                                 "descripcion": {}
                             }
                         }

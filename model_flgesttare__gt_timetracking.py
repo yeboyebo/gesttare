@@ -42,6 +42,9 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def checkTimeTrackingDraw(cursor):
         return form.iface.checkTimeTrackingDraw(cursor)
 
+    def field_proyecto(self):
+        return form.iface.field_proyecto(self)
+
     class Meta:
         proxy = True
 

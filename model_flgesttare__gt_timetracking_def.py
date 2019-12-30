@@ -78,7 +78,7 @@ class gesttare(interna):
 
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, aqn_user")
-        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, aqn_user.usuario, aqn_user.nombre")
+        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, aqn_user.usuario, gt_proyectos.idcliente, aqn_user.nombre")
         query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
         query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
@@ -90,7 +90,8 @@ class gesttare(interna):
             # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
             fields = [
                 {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-                {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}
+                {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'},
+                {'verbose_name': 'Proyecto', 'func': 'field_proyecto'}
             ]
         return fields
 
@@ -276,9 +277,25 @@ class gesttare(interna):
             return "disabled"
         return True
 
+    def gesttare_field_proyecto(self, model):
+        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model.codproyecto)) or ""
+        proyecto = model['gt_proyectos.nombre']
+        try:
+            idcliente = model['gt_proyectos.idcliente']
+            if idcliente:
+                codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
+                # codcliente = model.codproyecto.idcliente.codcliente
+                if codcliente:
+                    proyecto = "#" + codcliente + " " + proyecto
+        except:
+            pass
+        return proyecto
 
     def __init__(self, context=None):
         super().__init__(context)
+
+    def field_proyecto(self, model):
+        return self.ctx.gesttare_field_proyecto(model)
 
     def checkTimeTrackingDraw(self, cursor):
         return self.ctx.gesttare_checkTimeTrackingDraw(cursor)

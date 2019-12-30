@@ -58,6 +58,14 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return "nombre"
 
+    def gesttare_gotonuevoCliente(self, model, oParam):
+        # user_name = qsatype.FLUtil.nameUser()
+        url='/gesttare/gt_clientes/newRecord'
+        resul = {}
+        resul["url"] = url
+        resul['status'] = 1
+        return resul
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -72,6 +80,9 @@ class gesttare(interna):
 
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)
+
+    def gotonuevoCliente(self, model, oParam):
+        return self.ctx.gesttare_gotonuevoCliente(model, oParam)
 
 # @class_declaration head #
 class head(gesttare):

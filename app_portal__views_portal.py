@@ -52,3 +52,70 @@ class gesttare(yblogin_sass):
     def token_auth(self, request):
         return self.iface.gesttare_token_auth(request)
 
+    def gesttare_login(self, request, error=None):
+        redirect_uri = request.GET.get("redirect_uri", None)
+        state = request.GET.get("state", None)
+        if request.user.is_authenticated():
+            if redirect_uri and redirect_uri != None and redirect_uri != "None":
+                print("tengo uri", redirect_uri)
+                url = redirect_uri + "?" + state + "&code=" + str(request.user.username) + "&token=prueba"
+                print(url)
+                return HttpResponseRedirect(url)
+        if not error:
+            error = ""
+        return render(request, "portal/login.html", {"error": error, "redirect_uri": redirect_uri, "state": state})
+
+    def login(self, request, error=None):
+        return self.iface.gesttare_login(request, error)
+
+    def gesttare_auth_login(self, request):
+        if request.method == "POST":
+            action = request.POST.get("action", None)
+            username = request.POST.get("username", None)
+            password = request.POST.get("password", None)
+            redirect_uri = None
+            state = None
+            try:
+                redirect_uri = request.POST.get("redirect_uri", None)
+                state = request.POST.get("state", None)
+                print(redirect_uri, "    ", state)
+            except Exception as e:
+                print(e)
+
+            if action == "login":
+                if username == "admin":
+                    user = authenticate(username=username, password=password)
+                    if user is not None:
+                        login_auth(request, user)
+                        accessControl.accessControl.registraAC()
+                    else:
+                        return self.iface.login(request, 'Error de autentificación')
+                    return HttpResponseRedirect("/")
+
+                usuario = aqn_user.objects.filter(email__exact=username)
+                if len(usuario) == 0:
+                    return self.iface.login(request, 'No existe el usuario')
+                if usuario[0].activo is False:
+                    return self.iface.login(request, 'No existe el usuario')
+                md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
+                print("falla por aqui??", md5passwd, usuario[0].password)
+                if usuario[0].password != md5passwd:
+                    return self.iface.login(request, 'Error de autentificación')
+                idusuario = usuario[0].idusuario
+                user = authenticate(username=idusuario, password="ybllogin")
+                if user is not None:
+                    login_auth(request, user)
+                else:
+                    return self.iface.login(request, "Error de autentificación")
+                accessControl.accessControl.registraAC()
+                if redirect_uri and redirect_uri != None and redirect_uri != "None":
+                    print("tengo uri", redirect_uri)
+                    url = redirect_uri + "?" + state + "&code=" + idusuario + "&token=prueba"
+                    print(url)
+                    return HttpResponseRedirect(url)
+                return HttpResponseRedirect("/")
+        return self.iface.login(request)
+
+    def auth_login(self, request):
+        return self.iface.gesttare_auth_login(request)
+

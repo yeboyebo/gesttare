@@ -27,6 +27,11 @@ class gesttare_gt_clientes(interna_gt_clientes, helpers.MixinConAcciones):
     def getClientesCompaniaUsu(self, oParam):
         return form.iface.getClientesCompaniaUsu(oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotonuevoCliente(self, oParam):
+        return form.iface.gotonuevoCliente(self, oParam)
+
+
 
 # @class_declaration gt_clientes #
 class gt_clientes(gesttare_gt_clientes, helpers.MixinConAcciones):

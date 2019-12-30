@@ -27,9 +27,17 @@
                         {"slot": "refrescar"}
                     ]
                 },
-                {"tipo": "field", "listpos": "subtitle", "key": "nombre", "avatar": true}
+                {"tipo": "field", "listpos": "subtitle", "key": "nombre", "avatar": true},
+                {"tipo": "field", "listpos": "title", "key": "codcliente", "label": "alias", "avatar": true}
             ],
-            "rowclick": "link"
+            "rowclick": "link",
+            "accionesGrid": [
+                {
+                    "key": "nuevoCliente",
+                    "label": "Nuevo",
+                    "success": [{ "slot": "goto"}]
+                }
+            ]
         },
         "newRecordTarea": {
             "componente": "YBNewRecord",
@@ -42,6 +50,12 @@
             "action": "deleteRow",
             "icon": "delete",
             "msg": "El cliente será eliminado"
+        },
+        "nuevoCliente": {
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "serverAction": "gotonuevoCliente",
+            "icon": "add_circle"
         }
     }
 }

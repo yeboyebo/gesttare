@@ -255,12 +255,16 @@ class gesttare(yblogin):
         while q.next():
             valor = q.value(2)
             # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
+            nombre = q.value(0)
             if valor:
                 valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
                 valor = flgesttare_def.iface.time_to_hours(str(valor)) or 0
             else:
                 valor = 0
-            data.append({"name": q.value(0), "value": int(valor)})
+            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.codproyecto = '" + q.value(1) + "'") or None
+            if codcliente:
+                nombre = "#" + codcliente + " " + nombre
+            data.append({"name": nombre, "value": int(valor)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
 
         return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75", "text": "Tiempo invertido en proyectos"}
@@ -360,7 +364,11 @@ class gesttare(yblogin):
                 porcentaje = 0
                 if total != 0 and total != None:
                     porcentaje = 100*(valor/total)
-                data.append({"name": q.value(0), "value": round(porcentaje,2)})
+                nombre = q.value(0)
+                codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.codproyecto = '" + q.value(1) + "'") or None
+                if codcliente:
+                    nombre = "#" + codcliente + " " + nombre
+                data.append({"name": nombre, "value": round(porcentaje,2)})
             i = i+1
             if i == q.size() and otros > 0:
                 if total != 0 and total != None:

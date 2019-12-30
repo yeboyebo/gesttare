@@ -112,6 +112,10 @@ class gesttare(interna):
         _i = self.iface
 
         if curT.modeAccess() == curT.Edit:
+            # llamar para el copy
+            if curT.valueBuffer(u"codproyecto") != curT.valueBufferCopy(u"codproyecto"):
+                if not _i.totalizaCostesProyecto(curT.valueBufferCopy(u"codproyecto")):
+                    return False
             if not _i.totalizaCostesProyecto(curT.valueBuffer(u"codproyecto")):
                 return False
 

@@ -156,18 +156,29 @@ class gesttare(interna):
         return True
 
     def gesttare_ren_field_proyecto(self, model):
-        nombreProy = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model["gt_tareas.codproyecto"])) or ""
-        return nombreProy
+        proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model["gt_tareas.codproyecto"])) or ""
+        idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "codproyecto = '{}'".format(model["gt_tareas.codproyecto"])) or None
+        if idcliente:
+            codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
+            if codcliente:
+                proyecto = "#" + codcliente + " " + proyecto
+        return proyecto
 
     def gesttare_field_proyecto(self, model):
-        nombreProy = ""
+        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model.codproyecto)) or ""
+        proyecto = ""
         try:
-            if not model.codproyecto:
-                return nombreProy
-            nombreProy = model.codproyecto.nombre
-        except Exception:
+            proyecto = model.codproyecto.nombre
+            # idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "codproyecto = '{}'".format(model.codproyecto)) or None
+            idcliente = model.codproyecto.idcliente
+            if idcliente:
+                # codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
+                codcliente = model.codproyecto.idcliente.codcliente
+                if codcliente:
+                    proyecto = "#" + codcliente + " " + proyecto
+        except:
             pass
-        return nombreProy
+        return proyecto
 
     def gesttare_field_completaIcon(self, model):
         if model.resuelta:
@@ -686,6 +697,51 @@ class gesttare(interna):
         response["urlTarea"] = "https://app.dailyjob.io/gesttare/gt_tareas/" + str(curTarea.valueBuffer("idtarea"))
         return response
 
+    def gesttare_createinbox(self, oParam):
+        response = {}
+        if "person" not in oParam or not oParam["person"]:
+            usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"email = '", str(oParam["email"]), u"'"))
+            if not usuario:
+                response["result"] = False
+                response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear posibles tareas"
+                response["username"] = oParam["email"]
+                return response
+        else:
+            usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"usuario = '", oParam["person"], u"'"))
+        if not usuario:
+            response["result"] = False
+            response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear posibles tareas"
+            response["username"] = oParam["email"]
+
+        if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
+            response = {}
+            descripcion = ""
+            if "description" in oParam:
+                descripcion = oParam["description"]
+            curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+            curActualiz.setModeAccess(curActualiz.Insert)
+            curActualiz.refreshBuffer()
+            curActualiz.setValueBuffer(u"tipo", "anotacion")
+            curActualiz.setValueBuffer(u"tipobjeto", descripcion)
+            curActualiz.setValueBuffer(u"otros", oParam["name"])
+            curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+            curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+            curActualiz.setValueBuffer(u"idusuarioorigen", usuario)
+            if not curActualiz.commitBuffer():
+                response["result"] = False
+                response["error"] = "Error en commit"
+            else:
+                response["result"] = True
+                response["ok"] = "Tarea creada"
+            if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), usuario, False])):
+                response["result"] = False
+                response["error"] = "Error en commit"
+        else:
+            response["result"] = False
+            response["error"] = "Error en autenticación"
+        response["username"] = usuario
+        return response
+
     def gesttare_actNuevoPartic(self, oParam, cursor):
         response = {}
         if "idusuario" not in oParam:
@@ -1161,6 +1217,9 @@ class gesttare(interna):
 
     def createtask(self, oParam):
         return self.ctx.gesttare_createtask(oParam)
+
+    def createinbox(self, oParam):
+        return self.ctx.gesttare_createinbox(oParam)
 
     def actNuevoPartic(self, oParam, cursor):
         return self.ctx.gesttare_actNuevoPartic(oParam, cursor)

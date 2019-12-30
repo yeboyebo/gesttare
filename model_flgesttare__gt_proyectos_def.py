@@ -222,9 +222,9 @@ class gesttare(interna):
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
-        q.setSelect(u"p.codproyecto, t.nombre, t.idcliente")
-        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND NOT archivado GROUP BY p.codproyecto, t.nombre, t.idcliente  ORDER BY t.nombre LIMIT 7")
+        q.setSelect(u"p.codproyecto, t.nombre")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto LEFT JOIN gt_clientes c ON c.idcliente = t.idcliente")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND (UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') OR UPPER(c.codcliente) LIKE UPPER('%" + oParam["val"] + "%'))AND NOT archivado GROUP BY p.codproyecto, t.nombre  ORDER BY t.nombre LIMIT 7")
         # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
@@ -237,9 +237,14 @@ class gesttare(interna):
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
             des = str(q.value(1))
-            if q.value(2):
-                codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(q.value(2)), u"'"))
-                des = "#" + str(codcliente) + " " + des 
+            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.codproyecto = '" + q.value(0) + "'") or None
+            if codcliente:
+                des = "#" + codcliente + " " + des
+            # if q.value(2):
+            #     print(q.value(2))
+            #     codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(q.value(2)), u"'"))
+            #     if codcliente:
+            #         des = "#" + str(codcliente) + " " + des 
             data.append({"codproyecto": q.value(0), "nombre": des, "suggestion": q.value(1)})
 
         return data

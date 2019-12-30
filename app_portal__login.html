@@ -1,0 +1,40 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+
+    <div class="loginPanel">
+        <div class="loginPanelHeader">
+            <div class="logError">{{error}}</div>
+            <div class="logSuccess">{{success}}</div>
+            <img src="{% static 'dist/img/logo/logo.png' %}" alt="logo" className="logo" style="margin-left:17%"></img>
+        </div>
+        <div class="loginPanelBody">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="login">
+                <input type="hidden" name="redirect_uri" value={{ redirect_uri }}>
+                <input type="hidden" name="state" value={{ state }}>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Email</label>
+                    <input type="text" name="username" class="loginInput form-control" autofocus>
+                </div>
+                <div class="form-group label-floating loginInputPass">
+                    <label class="control-label" for="focusedInput1">Contraseña</label>
+                    <input type="password" name="password" class=" form-control">
+                </div>
+                <div class="loginPanelFooter">
+                    <button name="loginSubmit" href="javascript:void(0)" class="btn btn-raised btn-primary loginButton">Entrar</button>
+                </div>
+            </form>
+            <button name="loginSubmit" onClick="location.href='/forgetPassword'" class="btn btn-flat btn-primary loginButton">¿Has olvidado la contraseña?</button>
+        </div>
+    </div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}
