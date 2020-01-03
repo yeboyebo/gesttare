@@ -66,6 +66,7 @@
                     "icon": "email",
                     "className": "floatRight",
                     "buttonType": "icon",
+                    "visible": false,
                     "style": {
                         "marginTop": "5px",
                         "marginRight": "5px"

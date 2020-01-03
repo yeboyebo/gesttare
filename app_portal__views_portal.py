@@ -57,9 +57,8 @@ class gesttare(yblogin_sass):
         state = request.GET.get("state", None)
         if request.user.is_authenticated():
             if redirect_uri and redirect_uri != None and redirect_uri != "None":
-                print("tengo uri", redirect_uri)
-                url = redirect_uri + "?" + state + "&code=" + str(request.user.username) + "&token=prueba"
-                print(url)
+                email = qsatype.FLUtil.sqlSelect(u"aqn_user", u"email", u"idusuario = '" + str(request.user.username) + u"'")
+                url = redirect_uri + "?state=" + state + "&code=" + str(email) + "&token=prueba"
                 return HttpResponseRedirect(url)
         if not error:
             error = ""
@@ -98,7 +97,7 @@ class gesttare(yblogin_sass):
                 if usuario[0].activo is False:
                     return self.iface.login(request, 'No existe el usuario')
                 md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
-                print("falla por aqui??", md5passwd, usuario[0].password)
+                # print("falla por aqui??", md5passwd, usuario[0].password)
                 if usuario[0].password != md5passwd:
                     return self.iface.login(request, 'Error de autentificación')
                 idusuario = usuario[0].idusuario
@@ -109,9 +108,7 @@ class gesttare(yblogin_sass):
                     return self.iface.login(request, "Error de autentificación")
                 accessControl.accessControl.registraAC()
                 if redirect_uri and redirect_uri != None and redirect_uri != "None":
-                    print("tengo uri", redirect_uri)
-                    url = redirect_uri + "?" + state + "&code=" + idusuario + "&token=prueba"
-                    print(url)
+                    url = redirect_uri + "?state=" + state + "&code=" + username + "&token=prueba"
                     return HttpResponseRedirect(url)
                 return HttpResponseRedirect("/")
         return self.iface.login(request)

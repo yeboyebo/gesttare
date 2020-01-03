@@ -521,6 +521,10 @@
             {
                 "name": "ctrl_api_mailtask_inbox__create.py",
                 "path": "controllers/api/mailtask/inbox/"
+            },
+            {
+                "name": "app_gesttare__aqn_user.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [

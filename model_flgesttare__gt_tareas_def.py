@@ -100,9 +100,9 @@ class gesttare(interna):
         # existe = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idtarea", ustr(u"extract(month from gt_tareas.fechavencimiento) = ", qsatype.Date().getMonth()))
         # if not existe:
         #     return initFilter
-        initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2019"
+        initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2020"
         initFilter['where'] += u" AND extract(month from gt_tareas.fechavencimiento) = " + str(qsatype.Date().getMonth())
-        initFilter['filter'] = {"s_extract(year from gt_tareas.fechavencimiento)__exact": "2019", "s_extract(month from gt_tareas.fechavencimiento)__exact": str(qsatype.Date().getMonth())}
+        initFilter['filter'] = {"s_extract(year from gt_tareas.fechavencimiento)__exact": "2020", "s_extract(month from gt_tareas.fechavencimiento)__exact": str(qsatype.Date().getMonth())}
         return initFilter
 
     def gesttare_queryGrid_calendarioTareas(self, model):
@@ -361,6 +361,7 @@ class gesttare(interna):
         return data
 
     def gesttare_dameProyectos(self, idusuario):
+        _i = self.iface
         proyectos = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
@@ -386,9 +387,27 @@ class gesttare(interna):
 
             while qParticPro.next():
                 participantes.append(qParticPro.value(0))
-            proyectos.append({"codigo": str(q.value(0)), "descripcion": str(q.value(1)), "participantes": participantes})
+            hitos = _i.dameHitos(q.value(0))
+            if hitos:
+                proyectos.append({"codigo": str(q.value(0)), "descripcion": str(q.value(1)), "hitos": hitos, "participantes": participantes})
 
         return proyectos
+
+    def gesttare_dameHitos(self, codproyecto):
+        hitos = []
+        qHitos = qsatype.FLSqlQuery()
+        qHitos.setTablesList(u"gt_hitosproyecto")
+        qHitos.setSelect("idhito, nombre")
+        qHitos.setFrom("gt_hitosproyecto")
+        qHitos.setWhere(u"codproyecto = '" + str(codproyecto) + "'")
+
+        if not qHitos.exec_():
+            print("No tengo hitos")
+            return []
+
+        while qHitos.next():
+            hitos.append({"idhito": str(qHitos.value(0)), "nombre": str(qHitos.value(1))})
+        return hitos
 
     def gesttare_dameUsuarios(self, idusuario):
         usuarios = []
@@ -652,20 +671,20 @@ class gesttare(interna):
             response["username"] = usuario
             return response
         if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
-            idhito = None
-            q = qsatype.FLSqlQuery()
-            q.setTablesList(u"gt_hitosproyecto")
-            q.setSelect(u"idhito")
-            q.setFrom(u"gt_hitosproyecto")
-            q.setWhere(u"codproyecto = '" + str(oParam["project"].upper()) + "'")
+            # idhito = None
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_hitosproyecto")
+            # q.setSelect(u"idhito")
+            # q.setFrom(u"gt_hitosproyecto")
+            # q.setWhere(u"codproyecto = '" + str(oParam["project"].upper()) + "'")
 
-            if not q.exec_():
-                return []
-            if q.size() > 100:
-                return []
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
 
-            if q.next():
-                idhito = q.value("idhito")
+            # if q.next():
+            #     idhito = q.value("idhito")
 
             curTarea = qsatype.FLSqlCursor(u"gt_tareas")
             curTarea.setModeAccess(curTarea.Insert)
@@ -677,7 +696,7 @@ class gesttare(interna):
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
             curTarea.setValueBuffer(u"descripcion", oParam["description"])
             curTarea.setValueBuffer(u"resuelta", False)
-            curTarea.setValueBuffer(u"idhito", idhito)
+            curTarea.setValueBuffer(u"idhito", oParam["idhito"])
             if oParam["date"] and oParam["date"] != u"undefined":
                 curTarea.setValueBuffer(u"fechavencimiento", oParam["date"])
 
@@ -712,6 +731,7 @@ class gesttare(interna):
             response["result"] = False
             response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear posibles tareas"
             response["username"] = oParam["email"]
+            return response
 
         if oParam["appid"] == "23553220-e1b3-4592-a5de-fb41a08c60c8":
             response = {}
@@ -998,7 +1018,7 @@ class gesttare(interna):
                     "verbose_name": "Nombre",
                     "key": "nombre",
                     "validaciones": None,
-                    "maxlength": 50,
+                    "maxlength": 200,
                     "required": True
                 },
                 {
@@ -1193,6 +1213,9 @@ class gesttare(interna):
 
     def dameProyectos(self, idusuario):
         return self.ctx.gesttare_dameProyectos(idusuario)
+
+    def dameHitos(self, codproyecto):
+        return self.ctx.gesttare_dameHitos(codproyecto)
 
     def dameUsuarios(self, idusuario):
         return self.ctx.gesttare_dameUsuarios(idusuario)

@@ -551,6 +551,40 @@ class gesttare(yblogin):
 
         return "usuarioAqn"
 
+    def gesttare_dameEmailCreaAnotacion(self, oParam, cursor):
+        response = {}
+        print("___________________________________")
+        if "email" not in oParam:
+            # "Javier Cantos Cañete" <javier.cantos@makinando.es>
+            # val = str(cursor.valueBuffer("codproyecto")) + "@convert.dailyjob.io"
+            val = '"' + str(cursor.valueBuffer("nombre")) + '" <' + str(cursor.valueBuffer("usuario")) + "@convert.dailyjob.io" + '>'
+            response['status'] = -1
+            response['data'] = {}
+            response['buttons'] = False
+            response['title'] = "Copiar en el portapapeles: Ctrl+C"
+            response['params'] = [
+                {
+                    "componente": "YBFieldDB",
+                    "prefix": "otros",
+                    "rel": "gt_proyectos",
+                    "style": {
+                        "width": "100%"
+                    },
+                    "tipo": 3,
+                    "verbose_name": "Email",
+                    "label": "Email",
+                    "key": "idusuario",
+                    "disabled": False,
+                    "value": val,
+                    "validaciones": None,
+                    "required": False,
+                    "select": True
+                }
+            ]
+            return response
+        else:
+            return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -625,4 +659,7 @@ class gesttare(yblogin):
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
+
+    def dameEmailCreaAnotacion(self, oParam, cursor):
+        return self.ctx.gesttare_dameEmailCreaAnotacion(oParam, cursor)
 

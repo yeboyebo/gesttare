@@ -60,3 +60,7 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
     def drawif_idusuariofilter(cursor):
         return form.iface.drawif_idusuariofilter(cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def dameEmailCreaAnotacion(self, oParam, cursor):
+        return form.iface.dameEmailCreaAnotacion(oParam, cursor)
+

@@ -4,6 +4,32 @@
             "type": "insertAfterNode",
             "path": "/layout/groupBoxPadre/layout/cambiarContrasenaButton",
             "value": {
+                "copiarEmailButton": {
+                    "componente": "YBButton",
+                    "title": "Copiar email",
+                    "prefix": "aqn_user",
+                    "icon": "email",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "actionEmail",
+                        "success": [
+                            {
+                                "slot": "return"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/copiarEmailButton",
+            "value": {
                 "volverButton": {
                     "componente": "YBButton",
                     "prefix": "aqn_user",
@@ -56,6 +82,17 @@
                     "desc": "usuario",
                     "rel": "aqn_user",
                     "function": "getParticCompaniaUsu"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/acciones/root",
+            "value": {
+                "actionEmail": {
+                    "action": "legacy",
+                    "serverAction": "dameEmailCreaAnotacion",
+                    "prefix": "aqn_user"
                 }
             }
         },

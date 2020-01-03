@@ -23,6 +23,7 @@ class gesttare(interna):
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
         if template == "mastertimetracking":
+            ntareas = ident["PAG"]["COUNT"] or 0
             if not where_filter:
                 where_filter = "1 = 1"
                 usuario = qsatype.FLUtil.nameUser()
@@ -40,7 +41,7 @@ class gesttare(interna):
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
 
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
-            return {"masterTimeTracking": "Tiempo total: {}".format(tiempototal)}
+            return {"masterTimeTracking": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
         return None
 
     def gesttare_queryGrid_mastertimetracking(self, model, filters):
@@ -77,9 +78,9 @@ class gesttare(interna):
                 where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
         query = {}
-        query["tablesList"] = ("gt_timetracking, gt_tareas, aqn_user")
-        query["select"] = ("gt_timetracking.idtracking, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, aqn_user.usuario, gt_proyectos.idcliente, aqn_user.nombre")
-        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
+        query["tablesList"] = ("gt_timetracking, gt_tareas, aqn_user, gt_hitosproyecto")
+        query["select"] = ("gt_timetracking.idtracking, gt_hitosproyecto.nombre, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, aqn_user.usuario, gt_proyectos.idcliente, aqn_user.nombre")
+        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_hitosproyecto.idhito = gt_tareas.idhito")
         query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
         return query
@@ -91,7 +92,8 @@ class gesttare(interna):
             fields = [
                 {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
                 {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'},
-                {'verbose_name': 'Proyecto', 'func': 'field_proyecto'}
+                {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+                {'verbose_name': 'Cliente', 'func': 'field_cliente'}
             ]
         return fields
 
@@ -291,11 +293,21 @@ class gesttare(interna):
             pass
         return proyecto
 
+    def gesttare_field_cliente(self, model):
+        cliente = ""
+        idcliente = model['gt_proyectos.idcliente']
+        if idcliente:
+            cliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"nombre", ustr(u"idcliente = '", str(idcliente), u"'"))
+        return cliente
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
+
+    def field_cliente(self, model):
+        return self.ctx.gesttare_field_cliente(model)
 
     def checkTimeTrackingDraw(self, cursor):
         return self.ctx.gesttare_checkTimeTrackingDraw(cursor)

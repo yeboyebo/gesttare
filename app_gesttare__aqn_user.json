@@ -1,0 +1,149 @@
+{
+    "querystring": {},
+    "schema": {},
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox",
+            "style": {},
+            "layout": {
+                "cambiarContrasenaButton": {
+                    "componente": "YBButton",
+                    "prefix": "gt_tareas",
+                    "label": "Cambiar Contraseña",
+                    "className": "floatRight",
+                    "buttonType": "flat",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "changePassword",
+                        "success": [
+                            {
+                                "slot": "return"
+                            }
+                        ]
+                    }
+                },
+                "copiarEmailButton": {
+                    "componente": "YBButton",
+                    "title": "Copiar email",
+                    "prefix": "aqn_user",
+                    "icon": "email",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "visible": false,
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "actionEmail",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "volverButton": {
+                    "componente": "YBButton",
+                    "prefix": "aqn_user",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [
+                            {
+                                "slot": "return"
+                            }
+                        ]
+                    }
+                },
+                "separator0": {
+                    "componente": "YBSeparator"
+                },
+                "formRecordAuthUser": {
+                    "prefix": "aqn_user",
+                    "componente": "YBForm",
+                    "class": "claseGrid",
+                    "submit": "update",
+                    "success": [],
+                    "groupbox": "acordeon",
+                    "return": false,
+                    "fields": {
+                        "gb__principal": {
+                            "title": "Principal",
+                            "fields": {
+                                "email": {
+                                    "disabled": true
+                                },
+                                "usuario": {},
+                                "nombre": {},
+                                "apellidos": {},
+                                "nif": {},
+                                "naf": {},
+                                "costehora": {},
+                                "idresponsable": {
+                                    "tipo": 55,
+                                    "showpk": false,
+                                    "tofield": "idusuario",
+                                    "key": "idusuario",
+                                    "desc": "usuario",
+                                    "rel": "aqn_user",
+                                    "function": "getParticCompaniaUsu"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "acciones": {
+        "actionEmail": {
+            "action": "legacy",
+            "serverAction": "dameEmailCreaAnotacion",
+            "prefix": "aqn_user"
+        },
+        "accessControl": {
+            "action": "goto",
+            "prefix": "auth_user",
+            "serverAction": "accessControl"
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+        "salirGrupo": {
+            "label": "",
+            "action": "gridAction",
+            "serverAction": "salirGrupo",
+            "icon": "delete"
+        },
+        "NuevoGrupo": {
+            "label": "",
+            "action": "gridAction",
+            "serverAction": "NuevoGrupo",
+            "icon": "add"
+        },
+        "changePassword": {
+            "action": "url",
+            "url": "changepassword"
+        },
+        "acctionVolver": {
+            "action": "return"
+        }
+    },
+    "drawIf": {
+        "groupBoxPadre": {
+            "cambiarContrasenaButton": "checkCambiaPassword"
+        },
+        "gb__principal": {
+            "idresponsable": "checkResponsableDraw",
+            "costehora": "checkDrawUser"
+        }
+    }
+}

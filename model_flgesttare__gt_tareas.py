@@ -107,6 +107,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def createtask(oParam):
         return form.iface.createtask(oParam)
 
+    def createinbox(oParam):
+        return form.iface.createinbox(oParam)
+
     def dameProyectos(email):
         return form.iface.dameProyectos(email)
 
