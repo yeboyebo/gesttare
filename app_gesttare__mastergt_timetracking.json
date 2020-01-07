@@ -55,6 +55,30 @@
                             "showpk": false,
                             "function": "getProyectosUsuario"
                         },
+                        "hito": {
+                            "label": "Hito",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_hitosproyecto",
+                            "key": "idhito",
+                            "tofield": "idhito",
+                            "desc": "nombre",
+                            "fN": "gt_hitosproyecto.idhito",
+                            "showpk": false,
+                            "function": "getHitosProyectosUsu"
+                        },
+                        "cliente": {
+                            "label": "Cliente",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_clientes",
+                            "key": "idcliente",
+                            "tofield": "idcliente",
+                            "desc": "nombre",
+                            "fN": "gt_clientes.idcliente",
+                            "showpk": false,
+                            "function": "getClientesCompaniaUsu"
+                        },
                         "fecha": {
                             "filterType": "interval"
                         }

@@ -39,6 +39,7 @@ class gesttare(interna):
                 where_filter += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
+            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
 
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTracking": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
@@ -62,6 +63,7 @@ class gesttare(interna):
         where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
 
         if filters:
+            print(filters)
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
                 where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":

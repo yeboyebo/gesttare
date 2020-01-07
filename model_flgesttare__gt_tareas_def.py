@@ -741,7 +741,7 @@ class gesttare(interna):
             curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
             curActualiz.setModeAccess(curActualiz.Insert)
             curActualiz.refreshBuffer()
-            curActualiz.setValueBuffer(u"tipo", "anotacion")
+            curActualiz.setValueBuffer(u"tipo", "inbox")
             curActualiz.setValueBuffer(u"tipobjeto", descripcion)
             curActualiz.setValueBuffer(u"otros", oParam["name"])
             curActualiz.setValueBuffer(u"fecha", datetime.date.today())

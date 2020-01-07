@@ -525,6 +525,18 @@
             {
                 "name": "app_gesttare__aqn_user.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "envelope.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "email.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "email.png",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

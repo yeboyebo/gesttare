@@ -38,9 +38,9 @@ class gesttare(interna):
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_clientes")
-        q.setSelect(u"idcliente, nombre")
+        q.setSelect(u"idcliente, nombre, codcliente")
         q.setFrom(u"gt_clientes")
-        q.setWhere(u"idcompany = '" + str(idcompany) + "' AND UPPER(nombre) LIKE UPPER('%" + oParam["val"] + "%') ORDER BY nombre LIMIT 7")
+        q.setWhere(u"idcompany = '" + str(idcompany) + "' AND (UPPER(nombre) LIKE UPPER('%" + oParam["val"] + "%') OR UPPER(codcliente) LIKE UPPER('%" + oParam["val"] + "%')) ORDER BY nombre LIMIT 7")
         # q.setWhere(u"t.idtarea = '" + str(oParam['pk']) + "' AND UPPER(u.nombre) LIKE UPPER('%" + oParam["val"] + "%')  ORDER BY u.nombre LIMIT 7")
 
         if not q.exec_():
@@ -52,7 +52,10 @@ class gesttare(interna):
 
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
-            data.append({"idcliente": q.value(0), "nombre": q.value(1)})
+            des = q.value(1)
+            if q.value(2):
+                des = str(des) + " #" +  str(q.value(2))
+            data.append({"idcliente": q.value(0), "nombre": des})
         return data
 
     def gesttare_getDesc(self):

@@ -37,13 +37,13 @@ class gesttare(interna):
         return nombre_usuario
 
     def gesttare_field_verConvertirTarea(sefl, model):
-        if model["gt_actualizaciones.tipo"] != "anotacion":
+        if model["gt_actualizaciones.tipo"] != "anotacion" and model["gt_actualizaciones.tipo"] != "inbox":
             return "hidden"
         else:
             return ""
 
     def gesttare_field_verTranspasarAnotacion(sefl, model):
-        if model["gt_actualizaciones.tipo"] != "anotacion":
+        if model["gt_actualizaciones.tipo"] != "anotacion" and model["gt_actualizaciones.tipo"] != "inbox":
             return "hidden"
         else:
             return ""
@@ -70,7 +70,7 @@ class gesttare(interna):
                 retorno = "rojoAnotar"
             elif model["gt_actualizaciones.tipo"] == "deltarea":
                 retorno = "rojoAnotar"
-            elif model["gt_actualizaciones.tipo"] == "anotacion":
+            elif model["gt_actualizaciones.tipo"] == "anotacion" or model["gt_actualizaciones.tipo"] == "inbox":
                 retorno = "verdeazulAnotar"
             elif model["gt_actualizaciones.tipo"] == "archivado":
                 retorno = "aquaAnotar"
@@ -101,6 +101,8 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/delete.svg"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
                 retorno = "/static/dist/img/icons/note.svg"
+            elif model["gt_actualizaciones.tipo"] == "inbox":
+                retorno = "/static/dist/img/icons/envelope.svg"
             elif model["gt_actualizaciones.tipo"] == "archivado":
                 retorno = "/static/dist/img/icons/archive.svg"
             elif model["gt_actualizaciones.tipo"] == "desarchivado":
@@ -131,6 +133,8 @@ class gesttare(interna):
                 retorno = "Eliminado"
             elif model["gt_actualizaciones.tipo"] == "anotacion":
                 retorno = "Posible tarea"
+            elif model["gt_actualizaciones.tipo"] == "inbox":
+                retorno = "Posible tarea"
             elif model["gt_actualizaciones.tipo"] == "archivado":
                 retorno = "Proyecto archivado"
             elif model["gt_actualizaciones.tipo"] == "desarchivado":
@@ -145,7 +149,7 @@ class gesttare(interna):
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
-        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND gt_actualizaciones.tipo = 'anotacion')) AND gt_actualizaciones.fecha BETWEEN '2019-11-16' AND '2500-12-20'")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND (gt_actualizaciones.tipo = 'anotacion' OR gt_actualizaciones.tipo = 'inbox'))) AND gt_actualizaciones.fecha BETWEEN '2019-11-16' AND '2500-12-20'")
         return query
 
     def gesttare_queryGrid_notificacionesUsuarioViejas(self, model):
@@ -165,7 +169,7 @@ class gesttare(interna):
         elif cursor.valueBuffer("tipo") == "delproyecto":
             response["msg"] = "Proyecto eliminado"
             return response
-        if cursor.valueBuffer("tipo") == "anotacion":
+        if cursor.valueBuffer("tipo") == "anotacion" or cursor.valueBuffer("tipo") == "inbox":
             response["status"] = 2
             response["confirm"] = "<div class='anotacionNombre'>Nombre: </div><div class='anotacionNombreOtros'>" + cursor.valueBuffer("otros") + "</div></br>" + "<div class='anotacionDescripcion'>Descripción: </div><div class='anotacionDescripcionTipobjeto'>" + cursor.valueBuffer("tipobjeto") + "</div>"
             response["customButtons"] = []

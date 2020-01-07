@@ -557,7 +557,8 @@ class gesttare(yblogin):
         if "email" not in oParam:
             # "Javier Cantos Cañete" <javier.cantos@makinando.es>
             # val = str(cursor.valueBuffer("codproyecto")) + "@convert.dailyjob.io"
-            val = '"' + str(cursor.valueBuffer("nombre")) + '" <' + str(cursor.valueBuffer("usuario")) + "@convert.dailyjob.io" + '>'
+            apellidos = cursor.valueBuffer("apellidos") or ""
+            val = '"' + str(cursor.valueBuffer("nombre")) + ' ' + str(apellidos) + '" <' + str(cursor.valueBuffer("usuario")) + "@convert.dailyjob.io" + '>'
             response['status'] = -1
             response['data'] = {}
             response['buttons'] = False

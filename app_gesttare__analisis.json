@@ -1,5 +1,8 @@
 {
-    "querystring": {},
+    "querystring": {
+        "p_c": true,
+        "p_l": 1
+    },
     "schema": {
         "grafico": {
             "custom": "generaAnalisisGraphic"
