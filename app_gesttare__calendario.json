@@ -26,7 +26,7 @@
                     "customfilter": true,
                     "buscador": false,
                     "filter": {
-                        "gt_tareas.codproyecto": {"label": "Proyecto", "function": "getProyectosUsuario"},
+                        "gt_tareas.idproyecto": {"label": "Proyecto", "function": "getProyectosUsuario"},
                         "gt_tareas.idusuario": {"label": "Usuario", "function": "getParticProyectosUsu"},
                         "gt_tareas.codestado": null
                     },

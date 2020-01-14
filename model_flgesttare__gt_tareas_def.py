@@ -113,15 +113,15 @@ class gesttare(interna):
         while curProyectos.next():
             curProyectos.setModeAccess(curProyectos.Browse)
             curProyectos.refreshBuffer()
-            # proin.append(curProyectos.valueBuffer("codproyecto"))
-            proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+            # proin.append(curProyectos.valueBuffer("idproyecto"))
+            proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
         proin = proin + " null)"
         query = {}
         query["tablesList"] = ("gt_tareas, aqn_user, gt_proyectos")
-        query["select"] = ("gt_tareas.idtarea, aqn_user.email, aqn_user.usuario, gt_tareas.codproyecto, gt_tareas.codestado, gt_proyectos.nombre ,gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
+        query["select"] = ("gt_tareas.idtarea, aqn_user.email, aqn_user.usuario, gt_tareas.idproyecto, gt_tareas.codestado, gt_proyectos.nombre ,gt_tareas.codespacio, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.nombre, extract(day from gt_tareas.fechavencimiento) as day, extract(month from gt_tareas.fechavencimiento) as month, extract(year from gt_tareas.fechavencimiento) as year, extract(dow from date_trunc('month', gt_tareas.fechavencimiento)) as firstDay")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
-        query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario INNER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto")
-        query["where"] = ("gt_tareas.fechavencimiento is not null AND  gt_proyectos.archivado = false AND gt_tareas.codproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
+        query["from"] = ("gt_tareas INNER JOIN aqn_user ON gt_tareas.idusuario = aqn_user.idusuario INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto")
+        query["where"] = ("gt_tareas.fechavencimiento is not null AND  gt_proyectos.archivado = false AND gt_tareas.idproyecto IN " + proin + " AND not gt_tareas.resuelta AND 1=1")
         query["limit"] = 100
         # query["groupby"] = " articulos.referencia, articulos.descripcion"
         # query["orderby"] = "MAX(pedidoscli.fecha) DESC"
@@ -156,8 +156,8 @@ class gesttare(interna):
         return True
 
     def gesttare_ren_field_proyecto(self, model):
-        proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model["gt_tareas.codproyecto"])) or ""
-        idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "codproyecto = '{}'".format(model["gt_tareas.codproyecto"])) or None
+        proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model["gt_tareas.idproyecto"])) or ""
+        idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(model["gt_tareas.idproyecto"])) or None
         if idcliente:
             codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
             if codcliente:
@@ -165,15 +165,15 @@ class gesttare(interna):
         return proyecto
 
     def gesttare_field_proyecto(self, model):
-        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model.codproyecto)) or ""
+        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model.idproyecto)) or ""
         proyecto = ""
         try:
-            proyecto = model.codproyecto.nombre
-            # idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "codproyecto = '{}'".format(model.codproyecto)) or None
-            idcliente = model.codproyecto.idcliente
+            proyecto = model.idproyecto.nombre
+            # idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(model.idproyecto)) or None
+            idcliente = model.idproyecto.idcliente
             if idcliente:
                 # codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
-                codcliente = model.codproyecto.idcliente.codcliente
+                codcliente = model.idproyecto.idcliente.codcliente
                 if codcliente:
                     proyecto = "#" + codcliente + " " + proyecto
         except:
@@ -365,8 +365,8 @@ class gesttare(interna):
         proyectos = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
-        q.setSelect("gt_proyectos.codproyecto, gt_proyectos.nombre")
-        q.setFrom("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.codproyecto = gt_particproyecto.codproyecto")
+        q.setSelect("gt_proyectos.idproyecto, gt_proyectos.nombre")
+        q.setFrom("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.idproyecto = gt_particproyecto.idproyecto")
         q.setWhere(u"idusuario = '" + str(idusuario) + "'")
 
         if not q.exec_():
@@ -379,7 +379,7 @@ class gesttare(interna):
             qParticPro.setTablesList(u"gt_particproyecto")
             qParticPro.setSelect("gt_particproyecto.idusuario")
             qParticPro.setFrom("gt_particproyecto")
-            qParticPro.setWhere(u"codproyecto = '" + str(q.value(0)) + "'")
+            qParticPro.setWhere(u"idproyecto = '" + str(q.value(0)) + "'")
 
             if not qParticPro.exec_():
                 print("Error inesperado")
@@ -393,13 +393,13 @@ class gesttare(interna):
 
         return proyectos
 
-    def gesttare_dameHitos(self, codproyecto):
+    def gesttare_dameHitos(self, idproyecto):
         hitos = []
         qHitos = qsatype.FLSqlQuery()
         qHitos.setTablesList(u"gt_hitosproyecto")
         qHitos.setSelect("idhito, nombre")
         qHitos.setFrom("gt_hitosproyecto")
-        qHitos.setWhere(u"codproyecto = '" + str(codproyecto) + "'")
+        qHitos.setWhere(u"idproyecto = '" + str(idproyecto) + "'")
 
         if not qHitos.exec_():
             print("No tengo hitos")
@@ -463,7 +463,7 @@ class gesttare(interna):
             q = qsatype.FLSqlQuery()
             q.setTablesList(u"gt_proyectos, gt_tareas")
             q.setSelect(u"t.idtarea")
-            q.setFrom(u"gt_tareas t INNER JOIN gt_proyectos p ON t.codproyecto=p.codproyecto")
+            q.setFrom(u"gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto=p.idproyecto")
             q.setWhere(u"t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,user_name))
             if not q.exec_():
                 return []
@@ -595,12 +595,12 @@ class gesttare(interna):
             data.append({"result": False})
             data.append({"error": "No existe el usuario"})
             return data
-        existe = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"codproyecto", ustr(u"codproyecto = '", oParam["project"], "'"))
+        existe = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"idproyecto", ustr(u"idproyecto = '", oParam["project"], "'"))
         if not existe:
             data.append({"result": False})
             data.append({"error": "No existe el proyecto"})
             return data
-        pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"codproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND codproyecto = '", oParam["project"], "'"))
+        pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND idproyecto = '", oParam["project"], "'"))
         if not pertenece:
             data.append({"result": False})
             data.append({"error": "No perteneces al proyecto consulta reponsable"})
@@ -611,7 +611,7 @@ class gesttare(interna):
             q.setTablesList(u"gt_hitosproyecto")
             q.setSelect(u"idhito")
             q.setFrom(u"gt_hitosproyecto")
-            q.setWhere(u"codproyecto = '" + str(oParam["project"].upper()) + "'")
+            q.setWhere(u"idproyecto = '" + str(oParam["project"].upper()) + "'")
 
             if not q.exec_():
                 return []
@@ -625,7 +625,7 @@ class gesttare(interna):
             curTarea.setModeAccess(curTarea.Insert)
             curTarea.refreshBuffer()
             curTarea.setActivatedBufferCommited(True)
-            curTarea.setValueBuffer(u"codproyecto", oParam["project"].upper())
+            curTarea.setValueBuffer(u"idproyecto", oParam["project"].upper())
             curTarea.setValueBuffer(u"codestado", oParam["state"])
             curTarea.setValueBuffer(u"nombre", oParam["name"])
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
@@ -649,7 +649,7 @@ class gesttare(interna):
     def gesttare_createtask(self, oParam):
         response = {}
         if "project" not in oParam or not oParam["project"]:
-            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", str(oParam["project"]), u"'"))
+            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"idproyecto = '", str(oParam["project"]), u"'"))
             response["result"] = False
             response["error"] = "No tienes permisos para crear tareas en el proyecto"
             response["nombreProyecto"] = nombreProyecto
@@ -662,9 +662,9 @@ class gesttare(interna):
             response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear tareas en el proyecto"
             response["nombreProyecto"] = " "
             response["username"] = oParam["person"]
-        pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"codproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND codproyecto = '", oParam["project"], "'"))
+        pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idproyecto", ustr(u"idusuario = '", str(oParam["person"]), u"' AND idproyecto = '", oParam["project"], "'"))
         if not pertenece:
-            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", oParam["project"], u"'"))
+            nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"idproyecto = '", oParam["project"], u"'"))
             response["result"] = False
             response["error"] = "No tienes permisos para crear tareas en el proyecto"
             response["nombreProyecto"] = nombreProyecto
@@ -676,7 +676,7 @@ class gesttare(interna):
             # q.setTablesList(u"gt_hitosproyecto")
             # q.setSelect(u"idhito")
             # q.setFrom(u"gt_hitosproyecto")
-            # q.setWhere(u"codproyecto = '" + str(oParam["project"].upper()) + "'")
+            # q.setWhere(u"idproyecto = '" + str(oParam["project"].upper()) + "'")
 
             # if not q.exec_():
             #     return []
@@ -690,7 +690,7 @@ class gesttare(interna):
             curTarea.setModeAccess(curTarea.Insert)
             curTarea.refreshBuffer()
             curTarea.setActivatedBufferCommited(True)
-            curTarea.setValueBuffer(u"codproyecto", oParam["project"])
+            curTarea.setValueBuffer(u"idproyecto", oParam["project"])
             curTarea.setValueBuffer(u"codestado", oParam["state"])
             curTarea.setValueBuffer(u"nombre", oParam["name"])
             curTarea.setValueBuffer(u"idusuario", oParam["person"])
@@ -710,7 +710,7 @@ class gesttare(interna):
             response["result"] = False
             response["error"] = "Error en autenticación"
         response["username"] = usuario
-        nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"codproyecto = '", oParam["project"], u"'"))
+        nombreProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", ustr(u"idproyecto = '", oParam["project"], u"'"))
         response["nombreTarea"] = oParam["name"]
         response["nombreProyecto"] = nombreProyecto
         response["urlTarea"] = "https://app.dailyjob.io/gesttare/gt_tareas/" + str(curTarea.valueBuffer("idtarea"))
@@ -840,11 +840,11 @@ class gesttare(interna):
     def gesttare_bChCursor(self, fN, cursor):
         # if not qsatype.FactoriaModulos.get('formRecordgt_tareas').iface.bChCursor(fN, cursor):
         #     return False
-        if fN == "codproyecto":
+        if fN == "idproyecto":
             cursor.setNull("idhito")
-            numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"' AND resuelta = false"))
+            numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"' AND resuelta = false"))
             if numHitos == 1:
-                cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'")))
+                cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"'")))
             elif numHitos == 0:
                 qsatype.FLUtil.ponMsgError("No es posible crear tareas para este proyecto, no tiene hitos activos")
         if fN == "idusuario":
@@ -874,11 +874,11 @@ class gesttare(interna):
             # while curProyectos.next():
             #     curProyectos.setModeAccess(curProyectos.Browse)
             #     curProyectos.refreshBuffer()
-            #     proin.append(curProyectos.valueBuffer("codproyecto"))
+            #     proin.append(curProyectos.valueBuffer("idproyecto"))
             q = qsatype.FLSqlQuery()
             q.setTablesList(u"gt_proyectos, gt_particproyecto")
-            q.setSelect(u"t.codproyecto")
-            q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            q.setSelect(u"t.idproyecto")
+            q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto")
             q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.archivado = false")
 
             if not q.exec_():
@@ -887,16 +887,16 @@ class gesttare(interna):
                 return []
 
             while q.next():
-                proin.append(q.value("codproyecto"))
-            return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
+                proin.append(q.value("idproyecto"))
+            return [{'criterio': 'idproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
     def gesttare_getTareasUsuario(self, oParam):
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_tareas, gt_particproyecto")
-        q.setSelect(u"t.idtarea, t.nombre, p.codproyecto")
-        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+        q.setSelect(u"t.idtarea, t.nombre, p.idproyecto")
+        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto")
         q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) LIKE UPPER('%" + oParam["val"] + "%')  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
@@ -920,9 +920,9 @@ class gesttare(interna):
             if curTarea.first():
                 curTarea.setModeAccess(curTarea.Browse)
                 curTarea.refreshBuffer()
-                codproyecto = curTarea.valueBuffer("codproyecto")
+                idproyecto = curTarea.valueBuffer("idproyecto")
                 nombreUsuario = qsatype.FLUtil.nameUser()
-                pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+                pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND idproyecto = '", idproyecto, "'"))
                 if not pertenece:
                     return False
             else:
@@ -970,7 +970,7 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         query = {}
         query["tablesList"] = ("gt_tareas")
-        query["select"] = ("gt_tareas.idtarea, gt_tareas.codproyecto, gt_tareas.codestado, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.fechaentrega, gt_tareas.nombre")
+        query["select"] = ("gt_tareas.idtarea, gt_tareas.idproyecto, gt_tareas.codestado, gt_tareas.idusuario, gt_tareas.fechavencimiento, gt_tareas.fechaentrega, gt_tareas.nombre")
         # query["select"] = ("gt_tareas.idtarea, gt_tareas.fechainicio, gt_tareas.descripcion")
         query["from"] = ("gt_tareas")
         query["where"] = ("gt_tareas.idusuario = '" + str(usuario)  + "' AND gt_tareas.resuelta = false AND (gt_tareas.fechavencimiento < '" + qsatype.Date().toString()[:10] + "' OR gt_tareas.fechaentrega < '" + qsatype.Date().toString()[:10] + "')")
@@ -984,7 +984,7 @@ class gesttare(interna):
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_tareas, gt_particproyecto, aqn_user")
         q.setSelect(u"p.idusuario, u.usuario")
-        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
+        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
         q.setWhere(u"t.idtarea = '" + str(model.idtarea) + "' AND UPPER(u.nombre) LIKE UPPER('%" + oParam["val"] + "%') ORDER BY u.usuario LIMIT 7")
 
         if not q.exec_():
@@ -1119,6 +1119,13 @@ class gesttare(interna):
     def gesttare_iniciaValoresCursor(self, cursor=None):
         # usuario = qsatype.FLUtil.nameUser()
         cursor.setValueBuffer("codestado", "Por Hacer")
+        if cursor.valueBuffer("nombre").startswith("gt_ac_"):
+            nombre = cursor.valueBuffer("nombre")
+            idactualizacion = nombre[6:len(nombre)]
+            nombre = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones", "otros", "idactualizacion = {}".format(idactualizacion)) or None
+            descripcion = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones", "tipobjeto", "idactualizacion = {}".format(idactualizacion)) or None
+            cursor.setValueBuffer("nombre", nombre)
+            cursor.setValueBuffer("descripcion", descripcion)
         return True
 
     def __init__(self, context=None):
@@ -1214,8 +1221,8 @@ class gesttare(interna):
     def dameProyectos(self, idusuario):
         return self.ctx.gesttare_dameProyectos(idusuario)
 
-    def dameHitos(self, codproyecto):
-        return self.ctx.gesttare_dameHitos(codproyecto)
+    def dameHitos(self, idproyecto):
+        return self.ctx.gesttare_dameHitos(idproyecto)
 
     def dameUsuarios(self, idusuario):
         return self.ctx.gesttare_dameUsuarios(idusuario)

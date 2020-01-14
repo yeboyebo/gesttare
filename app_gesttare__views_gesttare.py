@@ -31,7 +31,7 @@ class gesttare(interna):
                 }
 
 
-        # nombre_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.codproyecto = ta.codproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
+        # nombre_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
 
         # if len(nombre_proyecto) > 100:
         #     sObject = slice(100)
@@ -44,7 +44,7 @@ class gesttare(interna):
         #     nombre_tarea = nombre_tarea[sObject] +"..."+ " // Proyecto: " +nombre_proyecto
 
         nombre_proyecto = " // Proyecto: "
-        nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.codproyecto = ta.codproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
+        nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
         nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
 
         appinfo = {

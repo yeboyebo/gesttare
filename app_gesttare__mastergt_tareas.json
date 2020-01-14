@@ -3,7 +3,7 @@
         "p_l": 50,
         "p_c": true,
         "o_1": "fechavencimiento",
-        "o_2": "codproyecto",
+        "o_2": "idproyecto",
         "s_resuelta__exact": false,
         "f_proyectosusuario": null
     },
@@ -28,7 +28,7 @@
                     "buscador": {"fields":["nombre"]},
                     "avatar": false,
                     "filter": {
-                        "codproyecto": {
+                        "idproyecto": {
                             "showpk": false, 
                             "function": "getProyectosUsuario"
                         },
@@ -75,7 +75,7 @@
 
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": " "},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre proyecto", "width": 180, "title": true, "link": "codproyecto"},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre proyecto", "width": 180, "title": true, "link": "idproyecto"},
                         {
                             "tipo": "act",
                             "key": "upFecha",

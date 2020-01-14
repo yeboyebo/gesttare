@@ -112,7 +112,7 @@
                                     "title": "",
                                     "fields": {
                                         "descripcion": {},
-                                        "codproyecto": {
+                                        "idproyecto": {
                                             "combolimit": 1, 
                                             "showpk": false,
                                             "function": "getProyectosUsuario"
@@ -121,7 +121,7 @@
                                             "combolimit": 1, 
                                             "showpk": false, 
                                             "function": "getHitosProyecto",
-                                            "params": {"codproyecto": "codproyecto"}
+                                            "params": {"idproyecto": "idproyecto"}
                                         },
                                         "fechavencimiento": {},
                                         "fechaentrega": {},
@@ -130,7 +130,7 @@
                                             "combolimit": 1,
                                             "showpk": false,
                                             "function": "getUsuariosProyecto",
-                                            "params": {"codproyecto": "codproyecto"}
+                                            "params": {"idproyecto": "idproyecto"}
                                         }
                                     }
                                 }

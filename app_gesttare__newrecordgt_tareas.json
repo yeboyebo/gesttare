@@ -43,12 +43,12 @@
                             "fields": {
                                 "nombre": {"className": "col-sm-12"},
                                 "descripcion": {},
-                                "codproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
+                                "idproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
                                 "idhito": {
                                     "combolimit": 8, 
                                     "showpk": false, 
                                     "function": "getHitosProyecto",
-                                    "params": {"codproyecto": "codproyecto"}
+                                    "params": {"idproyecto": "idproyecto"}
                                 },
                                 "fechavencimiento": {},
                                 "fechaentrega": {},
@@ -57,7 +57,7 @@
                                     "combolimit": 1,
                                     "showpk": false,
                                     "function": "getUsuariosProyecto",
-                                    "params": {"codproyecto": "codproyecto"}
+                                    "params": {"idproyecto": "idproyecto"}
                                 }
                             }
                         }

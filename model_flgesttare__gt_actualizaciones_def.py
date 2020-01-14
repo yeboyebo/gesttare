@@ -214,7 +214,13 @@ class gesttare(interna):
         # Como controlamos si luego no crea la tarea??
         qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idactualizacion = '" + str(model.idactualizacion) + "'")
         response = {}
-        response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ str(model.otros) + "&p_descripcion=" + str(model.tipobjeto)
+        # descripcion = str(model.tipobjeto)
+        # descripcion.replace('\n', "")
+        # descripcion.replace('\r', "")
+        # descripcion.replace('\t', "")
+        # descripcion.replace('<', "")
+        # response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ str(model.otros) + "&p_descripcion=" + descripcion
+        response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ "gt_ac_" + str(model.idactualizacion)
         return response
 
     def gesttare_transpasarAnotacion(self, model, oParam):

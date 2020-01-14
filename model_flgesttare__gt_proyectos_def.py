@@ -118,7 +118,7 @@ class gesttare(interna):
 
             opts = []
             while qryUsuarios.next():
-                tengousuario = qsatype.FLUtil.sqlSelect("gt_particproyecto", "idusuario", "idusuario = '{}' AND codproyecto = '{}'".format(qryUsuarios.value("idusuario"), cursor.valueBuffer("codproyecto")))
+                tengousuario = qsatype.FLUtil.sqlSelect("gt_particproyecto", "idusuario", "idusuario = '{}' AND idproyecto = '{}'".format(qryUsuarios.value("idusuario"), cursor.valueBuffer("idproyecto")))
                 value = False
                 if tengousuario:
                     value = True
@@ -153,7 +153,7 @@ class gesttare(interna):
                 return True
             for p in participantes:
                 curPartic = qsatype.FLSqlCursor("gt_particproyecto")
-                curPartic.select("idusuario = '{}' AND codproyecto = '{}'".format(p, cursor.valueBuffer("codproyecto")))
+                curPartic.select("idusuario = '{}' AND idproyecto = '{}'".format(p, cursor.valueBuffer("idproyecto")))
                 curPartic.refreshBuffer()
 
                 if curPartic.first():
@@ -167,7 +167,7 @@ class gesttare(interna):
                         curPartic.setModeAccess(curPartic.Insert)
                         curPartic.refreshBuffer()
                         curPartic.setValueBuffer("idusuario", p)
-                        curPartic.setValueBuffer("codproyecto", cursor.valueBuffer("codproyecto"))
+                        curPartic.setValueBuffer("idproyecto", cursor.valueBuffer("idproyecto"))
                         if not curPartic.commitBuffer():
                             return False
             response["resul"] = True
@@ -185,13 +185,13 @@ class gesttare(interna):
             while curProyectos.next():
                 curProyectos.setModeAccess(curProyectos.Browse)
                 curProyectos.refreshBuffer()
-                proin.append(curProyectos.valueBuffer("codproyecto"))
-                # proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+                proin.append(curProyectos.valueBuffer("idproyecto"))
+                # proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
             # proin = proin + " null)"
             # q = qsatype.FLSqlQuery()
             # q.setTablesList(u"gt_proyectos, gt_particproyecto")
-            # q.setSelect(u"t.codproyecto")
-            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto")
+            # q.setSelect(u"t.idproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto")
             # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.idcompania = 1")
 
             # if not q.exec_():
@@ -200,20 +200,20 @@ class gesttare(interna):
             #     return []
 
             # while q.next():
-            #     proin.append(q.value("codproyecto"))
-            return [{'criterio': 'codproyecto__in', 'valor': proin, 'tipo': 'q'}]
+            #     proin.append(q.value("idproyecto"))
+            return [{'criterio': 'idproyecto__in', 'valor': proin, 'tipo': 'q'}]
         return filters
 
     def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
         if accion == "delete":
             nombreUsuario = qsatype.FLUtil.nameUser()
             idcompanyUser = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", u"idusuario = '" + nombreUsuario + u"'")
-            idcompanyProject = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"idcompany", ustr(u" codproyecto = '", pk, "'"))
+            idcompanyProject = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"idcompany", ustr(u" idproyecto = '", pk, "'"))
             if idcompanyUser != idcompanyProject:
                 return False
         if template == "formRecord":
             nombreUsuario = qsatype.FLUtil.nameUser()
-            pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", pk, "'"))
+            pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND idproyecto = '", pk, "'"))
             if not pertenece:
                 return False
         return True
@@ -222,9 +222,9 @@ class gesttare(interna):
         data = []
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto")
-        q.setSelect(u"p.codproyecto, t.nombre")
-        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto LEFT JOIN gt_clientes c ON c.idcliente = t.idcliente")
-        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND (UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') OR UPPER(c.codcliente) LIKE UPPER('%" + oParam["val"] + "%'))AND NOT archivado GROUP BY p.codproyecto, t.nombre  ORDER BY t.nombre LIMIT 7")
+        q.setSelect(u"p.idproyecto, t.nombre")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto LEFT JOIN gt_clientes c ON c.idcliente = t.idcliente")
+        q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND (UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') OR UPPER(c.codcliente) LIKE UPPER('%" + oParam["val"] + "%'))AND NOT archivado GROUP BY p.idproyecto, t.nombre  ORDER BY t.nombre LIMIT 7")
         # q.setWhere(u"p.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND UPPER(t.nombre) like UPPER('%" + oParam["val"] + "%') AND t.idcompania = 1  ORDER BY t.nombre LIMIT 7")
 
         if not q.exec_():
@@ -237,7 +237,7 @@ class gesttare(interna):
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
             des = str(q.value(1))
-            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.codproyecto = '" + q.value(0) + "'") or None
+            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + str(q.value(0)) + "'") or None
             if codcliente:
                 des = "#" + codcliente + " " + des
             # if q.value(2):
@@ -245,7 +245,7 @@ class gesttare(interna):
             #     codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(q.value(2)), u"'"))
             #     if codcliente:
             #         des = "#" + str(codcliente) + " " + des 
-            data.append({"codproyecto": q.value(0), "nombre": des, "suggestion": q.value(1)})
+            data.append({"idproyecto": q.value(0), "nombre": des, "suggestion": q.value(1)})
 
         return data
 
@@ -253,8 +253,8 @@ class gesttare(interna):
         response = {}
         if "email" not in oParam:
             # "Javier Cantos Cañete" <javier.cantos@makinando.es>
-            # val = str(cursor.valueBuffer("codproyecto")) + "@convert.dailyjob.io"
-            val = '"' + str(cursor.valueBuffer("nombre")) + '" <' + str(cursor.valueBuffer("codproyecto")) + "@convert.dailyjob.io" + '>'
+            # val = str(cursor.valueBuffer("idproyecto")) + "@convert.dailyjob.io"
+            val = '"' + str(cursor.valueBuffer("nombre")) + '" <' + str(cursor.valueBuffer("idproyecto")) + "@convert.dailyjob.io" + '>'
             response['status'] = -1
             response['data'] = {}
             response['buttons'] = False
@@ -307,7 +307,7 @@ class gesttare(interna):
                 return response
             else:
                 print("aqui enviamos la invitacion")
-                codifica = oParam["email"] + cursor.valueBuffer("codproyecto")
+                codifica = oParam["email"] + cursor.valueBuffer("idproyecto")
                 hashcode = hashlib.md5(codifica.encode('utf-8')).hexdigest()
                 curInvitacion = qsatype.FLSqlCursor(u"aqn_invitations")
                 curInvitacion.setModeAccess(curInvitacion.Insert)
@@ -315,7 +315,7 @@ class gesttare(interna):
                 curInvitacion.setValueBuffer(u"email", oParam["email"])
                 curInvitacion.setValueBuffer(u"hashcode", hashlib.md5(hashcode.encode('utf-8')).hexdigest())
                 curInvitacion.setValueBuffer(u"idcompany", idcompany)
-                curInvitacion.setValueBuffer(u"codproyecto", cursor.valueBuffer("codproyecto"))
+                curInvitacion.setValueBuffer(u"idproyecto", cursor.valueBuffer("idproyecto"))
                 curInvitacion.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
                 curInvitacion.setValueBuffer(u"activo", True)
                 curInvitacion.setValueBuffer(u"tipo", "pp")
@@ -382,7 +382,7 @@ class gesttare(interna):
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         valor = None
         if fN == u"hdedicadas":
-            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(hdedicadas)", ustr(u"codproyecto = '", cursor.valueBuffer(u"codproyecto"), u"'")) or 0
+            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(hdedicadas)", ustr(u"idproyecto = '", cursor.valueBuffer(u"idproyecto"), u"'")) or 0
             if isNaN(valor):
                 valor = 0
             # valor = flgesttare_def.iface.time_to_seconds(valor)
@@ -394,7 +394,7 @@ class gesttare(interna):
             valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"costetotal")
 
         if fN == u"costeinterno":
-            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"codproyecto = '", cursor.valueBuffer(u"codproyecto"), u"'"))
+            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"idproyecto = '", cursor.valueBuffer(u"idproyecto"), u"'"))
             if isNaN(valor):
                 valor = 0
             valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"costeinterno")
@@ -502,10 +502,10 @@ class gesttare(interna):
         where = where + " AND gt_particproyecto.idusuario = " + str(usuario)
         query = {}
         query["tablesList"] = ("gt_proyectos, gt_particproyecto")
-        query["select"] = ("gt_proyectos.codproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.fechainicio, gt_proyectos.fechaterminado, gt_proyectos.idcliente")
-        query["from"] = ("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.codproyecto = gt_particproyecto.codproyecto")
+        query["select"] = ("gt_proyectos.idproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.fechainicio, gt_proyectos.fechaterminado, gt_proyectos.idcliente")
+        query["from"] = ("gt_proyectos INNER JOIN gt_particproyecto ON gt_proyectos.idproyecto = gt_particproyecto.idproyecto")
         query["where"] = (where)
-        query["groupby"] = ("gt_proyectos.codproyecto")
+        query["groupby"] = ("gt_proyectos.idproyecto")
         return query
 
     def gesttare_iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
@@ -526,22 +526,22 @@ class gesttare(interna):
         response = {}
         response["url"] = "/gesttare/gt_tareas/master"
         response["prefix"] = "gt_tareas"
-        response["filter"] = '{"codproyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
+        response["filter"] = '{"idproyecto": "' + str(cursor.valueBuffer("idproyecto")) + '"}'
         return response
 
     def gesttare_verTrackingProyecto(self, cursor):
         response = {}
         response["url"] = "/gesttare/gt_timetracking/master"
         response["prefix"] = "mastertimetracking"
-        response["filter"] = '{"proyecto": "' + str(cursor.valueBuffer("codproyecto")) + '"}'
+        response["filter"] = '{"proyecto": "' + str(cursor.valueBuffer("idproyecto")) + '"}'
         return response
 
     def gesttare_gotoNuevoProyecto(self, model, oParam):
         user_name = qsatype.FLUtil.nameUser()
-        #idc_diario = qsatype.FLUtil().quickSqlSelect("gt_proyectos", "codproyecto", "idusuario = '{}'".format(user_name))
+        #idc_diario = qsatype.FLUtil().quickSqlSelect("gt_proyectos", "idproyecto", "idusuario = '{}'".format(user_name))
 
-        # codproyecto = "nuevoP2"
-        # url = '/gesttare/gt_proyectos/newRecord?p_codproyecto=' + str(codproyecto) + '&p_idusuario=' + str(user_name)
+        # idproyecto = "nuevoP2"
+        # url = '/gesttare/gt_proyectos/newRecord?p_idproyecto=' + str(idproyecto) + '&p_idusuario=' + str(user_name)
         url='/gesttare/gt_proyectos/newRecord'
         resul = {}
         resul["url"] = url
@@ -582,18 +582,18 @@ class gesttare(interna):
             curCopia.setValueBuffer("idcompany", cursor.valueBuffer("idcompany"))
             if not curCopia.commitBuffer():
                 return False
-            # if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"codproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"codproyecto")])):
+            # if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"idproyecto")])):
             #         return False
-            if not _i.copiarHitosProyecto(cursor, curCopia.valueBuffer("codproyecto")):
+            if not _i.copiarHitosProyecto(cursor, curCopia.valueBuffer("idproyecto")):
                 return False
-            response["url"] = "/gesttare/gt_proyectos/" + str(curCopia.valueBuffer("codproyecto"))
+            response["url"] = "/gesttare/gt_proyectos/" + str(curCopia.valueBuffer("idproyecto"))
             return response
         response['status'] = 2
         msg = "Vas a copiar el proyecto con todos los hitos y tareas que contiene. No se copiaran datos de fechas, responsables, participantes, comentarios o registros de tiempo asociados a proyectos y tareas. \n ¿Quieres continuar?"
         response['confirm'] = msg
         return response
 
-    def gesttare_copiarTareasHito(self, curHito, codproyecto, idhito):
+    def gesttare_copiarTareasHito(self, curHito, idproyecto, idhito):
         curTarea = qsatype.FLSqlCursor(u"gt_tareas")
         curTarea.select(ustr(u"idhito = '", curHito.valueBuffer("idhito"), u"'"))
         while curTarea.next():
@@ -607,17 +607,17 @@ class gesttare(interna):
             curCopia.setValueBuffer("resuelta", False)
             curCopia.setValueBuffer("codestado", "Por Hacer")
             curCopia.setValueBuffer("nombre", curTarea.valueBuffer("nombre"))
-            curCopia.setValueBuffer("codproyecto", codproyecto)
+            curCopia.setValueBuffer("idproyecto", idproyecto)
             curCopia.setValueBuffer("idhito", idhito)
             if not curCopia.commitBuffer():
                 return False
         # return False
         return True
 
-    def gesttare_copiarHitosProyecto(self, cursor, codproyecto):
+    def gesttare_copiarHitosProyecto(self, cursor, idproyecto):
         _i = self.iface
         curHito = qsatype.FLSqlCursor(u"gt_hitosproyecto")
-        curHito.select(ustr(u"codproyecto = '", cursor.valueBuffer("codproyecto"), u"'"))
+        curHito.select(ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"'"))
         while curHito.next():
             curHito.setModeAccess(curHito.Browse)
             curHito.refreshBuffer()
@@ -626,10 +626,10 @@ class gesttare(interna):
             curCopia.refreshBuffer()
             curCopia.setValueBuffer("resuelta", False)
             curCopia.setValueBuffer("nombre", curHito.valueBuffer("nombre"))
-            curCopia.setValueBuffer("codproyecto", codproyecto)
+            curCopia.setValueBuffer("idproyecto", idproyecto)
             if not curCopia.commitBuffer():
                 return False
-            if not _i.copiarTareasHito(curHito, codproyecto, curCopia.valueBuffer("idhito")):
+            if not _i.copiarTareasHito(curHito, idproyecto, curCopia.valueBuffer("idhito")):
                 return False
         return True
 
@@ -720,11 +720,11 @@ class gesttare(interna):
     def copiarProyecto(self, oParam, cursor):
         return self.ctx.gesttare_copiarProyecto(oParam, cursor)
 
-    def copiarTareasHito(self, cursor, codproyecto, idhito):
-        return self.ctx.gesttare_copiarTareasHito(cursor, codproyecto, idhito)
+    def copiarTareasHito(self, cursor, idproyecto, idhito):
+        return self.ctx.gesttare_copiarTareasHito(cursor, idproyecto, idhito)
 
-    def copiarHitosProyecto(self, cursor, codproyecto):
-        return self.ctx.gesttare_copiarHitosProyecto(cursor, codproyecto)
+    def copiarHitosProyecto(self, cursor, idproyecto):
+        return self.ctx.gesttare_copiarHitosProyecto(cursor, idproyecto)
 
 
 # @class_declaration head #

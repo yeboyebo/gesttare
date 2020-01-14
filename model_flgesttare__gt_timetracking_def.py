@@ -33,13 +33,13 @@ class gesttare(interna):
                 while curProyectos.next():
                     curProyectos.setModeAccess(curProyectos.Browse)
                     curProyectos.refreshBuffer()
-                    # proin.append(curProyectos.valueBuffer("codproyecto"))
-                    proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+                    # proin.append(curProyectos.valueBuffer("idproyecto"))
+                    proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
                 proin = proin + " null)"
-                where_filter += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
+                where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
-            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
+            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
 
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTracking": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
@@ -55,17 +55,17 @@ class gesttare(interna):
         while curProyectos.next():
             curProyectos.setModeAccess(curProyectos.Browse)
             curProyectos.refreshBuffer()
-            # proin.append(curProyectos.valueBuffer("codproyecto"))
-            if curProyectos.valueBuffer("codproyecto"):
-                proin = proin + "'" + curProyectos.valueBuffer("codproyecto") + "', "
+            # proin.append(curProyectos.valueBuffer("idproyecto"))
+            if curProyectos.valueBuffer("idproyecto"):
+                proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
 
         proin = proin + " null)"
-        where += " AND (gt_proyectos.codproyecto IN " + proin + " OR gt_tareas.codproyecto IS NULL)"
+        where += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
         if filters:
             print(filters)
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
-                where += " AND gt_proyectos.codproyecto = '{}'".format(filters["[proyecto]"])
+                where += " AND gt_proyectos.idproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":
                 where += " AND UPPER(gt_tareas.nombre) like '%{}%'".format(filters["[tarea]"].upper())
             if "[usuario]" in filters and filters["[usuario]"] != "":
@@ -82,7 +82,7 @@ class gesttare(interna):
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, aqn_user, gt_hitosproyecto")
         query["select"] = ("gt_timetracking.idtracking, gt_hitosproyecto.nombre, gt_timetracking.fecha, gt_timetracking.horainicio, gt_timetracking.horafin, gt_timetracking.totaltiempo, gt_tareas.nombre, gt_proyectos.nombre, aqn_user.usuario, gt_proyectos.idcliente, aqn_user.nombre")
-        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.codproyecto = gt_proyectos.codproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_hitosproyecto.idhito = gt_tareas.idhito")
+        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_hitosproyecto.idhito = gt_tareas.idhito")
         query["where"] = (where)
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
         return query
@@ -250,9 +250,9 @@ class gesttare(interna):
         #         curTracking.setModeAccess(curTracking.Browse)
         #         curTracking.refreshBuffer()
         #         # idtarea = curTracking.valueBuffer("idtarea")
-        #         # codproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"codproyecto", ustr(u"idtarea = '", idtarea, u"'"))
+        #         # idproyecto = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idproyecto", ustr(u"idtarea = '", idtarea, u"'"))
         #         # nombreUsuario = qsatype.FLUtil.nameUser()
-        #         # pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND codproyecto = '", codproyecto, "'"))
+        #         # pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND idproyecto = '", idproyecto, "'"))
         #         pertenece = str(curTracking.valueBuffer("idusuario")) == str(usuario)
         #         print(usuario)
         #         print(curTracking.valueBuffer("idusuario"))
@@ -282,13 +282,13 @@ class gesttare(interna):
         return True
 
     def gesttare_field_proyecto(self, model):
-        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "codproyecto = '{}'".format(model.codproyecto)) or ""
+        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model.idproyecto)) or ""
         proyecto = model['gt_proyectos.nombre']
         try:
             idcliente = model['gt_proyectos.idcliente']
             if idcliente:
                 codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
-                # codcliente = model.codproyecto.idcliente.codcliente
+                # codcliente = model.idproyecto.idcliente.codcliente
                 if codcliente:
                     proyecto = "#" + codcliente + " " + proyecto
         except:

@@ -55,13 +55,14 @@ class gesttare(yblogin_sass):
     def gesttare_login(self, request, error=None):
         redirect_uri = request.GET.get("redirect_uri", None)
         state = request.GET.get("state", None)
-        if request.user.is_authenticated():
-            if redirect_uri and redirect_uri != None and redirect_uri != "None":
-                email = qsatype.FLUtil.sqlSelect(u"aqn_user", u"email", u"idusuario = '" + str(request.user.username) + u"'")
-                url = redirect_uri + "?state=" + state + "&code=" + str(email) + "&token=prueba"
-                return HttpResponseRedirect(url)
         if not error:
             error = ""
+        if request.user.is_authenticated():
+            if redirect_uri and redirect_uri != None and redirect_uri != "None":
+                return render(request, "portal/login.html", {"error": error, "redirect_uri": redirect_uri, "state": state})
+                # email = qsatype.FLUtil.sqlSelect(u"aqn_user", u"email", u"idusuario = '" + str(request.user.username) + u"'")
+                # url = redirect_uri + "?state=" + state + "&code=" + str(email) + "&token=prueba"
+                # return HttpResponseRedirect(url)
         return render(request, "portal/login.html", {"error": error, "redirect_uri": redirect_uri, "state": state})
 
     def login(self, request, error=None):
@@ -101,15 +102,15 @@ class gesttare(yblogin_sass):
                 if usuario[0].password != md5passwd:
                     return self.iface.login(request, 'Error de autentificación')
                 idusuario = usuario[0].idusuario
+                if redirect_uri and redirect_uri != None and redirect_uri != "None":
+                    url = redirect_uri + "?state=" + state + "&code=" + username + "&token=prueba"
+                    return HttpResponseRedirect(url)
                 user = authenticate(username=idusuario, password="ybllogin")
                 if user is not None:
                     login_auth(request, user)
                 else:
                     return self.iface.login(request, "Error de autentificación")
                 accessControl.accessControl.registraAC()
-                if redirect_uri and redirect_uri != None and redirect_uri != "None":
-                    url = redirect_uri + "?state=" + state + "&code=" + username + "&token=prueba"
-                    return HttpResponseRedirect(url)
                 return HttpResponseRedirect("/")
         return self.iface.login(request)
 

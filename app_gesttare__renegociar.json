@@ -41,7 +41,7 @@
                         },
                        
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre","width": 180, "title": true, "link": "codproyecto"},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre","width": 180, "title": true, "link": "idproyecto"},
                         {
                             "tipo": "act",
                             "key": "upFecha",

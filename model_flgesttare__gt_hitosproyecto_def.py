@@ -35,8 +35,8 @@ class gesttare(interna):
         # print(model, data, ident, template, where_filter)
         if template == "formRecord" and isinstance(data, list):
             if data:
-                codproyecto = data[0]["codproyecto"]
-                abiertas = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", codproyecto, u"' AND not resuelta"))
+                idproyecto = data[0]["idproyecto"]
+                abiertas = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"idproyecto = '", idproyecto, u"' AND not resuelta"))
                 if abiertas == 0:
                     return {"hitosproyecto": "<div class='textRojo'>No pudes crear tareas sobre este proyecto</div>"}
         return None
@@ -95,16 +95,16 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         # cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idusuario", usuario)
-        if cursor.valueBuffer("codproyecto"):
+        if cursor.valueBuffer("idproyecto"):
             curP = qsatype.FLSqlCursor("gt_proyectos")
-            curP.select(ustr("codproyecto = '", cursor.valueBuffer("codproyecto"), "'"))
+            curP.select(ustr("idproyecto = '", cursor.valueBuffer("idproyecto"), "'"))
             if not curP.first():
                 return False
             cursor.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
 
-        # tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+        # tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
 
-        tieneHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+        tieneHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
 
         if cursor.valueBuffer("nombre") == None and not tieneHitos:
             cursor.setValueBuffer("nombre", "Coordinación")
@@ -114,13 +114,13 @@ class gesttare(interna):
 
     def gesttare_getHitosProyecto(self, oParam):
         data = []
-        if "codproyecto" not in oParam:
+        if "idproyecto" not in oParam:
             return data
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_hitosproyecto")
         q.setSelect(u"h.idhito, h.nombre")
-        q.setFrom(u"gt_proyectos p INNER JOIN gt_hitosproyecto h ON p.codproyecto = h.codproyecto")
-        q.setWhere(u"p.codproyecto = '" + str(oParam['codproyecto']) + "' AND (UPPER(h.nombre) LIKE UPPER('%" + oParam["val"] + "%')) AND h.resuelta = false  ORDER BY h.nombre LIMIT 8")
+        q.setFrom(u"gt_proyectos p INNER JOIN gt_hitosproyecto h ON p.idproyecto = h.idproyecto")
+        q.setWhere(u"p.idproyecto = '" + str(oParam['idproyecto']) + "' AND (UPPER(h.nombre) LIKE UPPER('%" + oParam["val"] + "%')) AND h.resuelta = false  ORDER BY h.nombre LIMIT 8")
 
         if not q.exec_():
             print("Error inesperado")
@@ -139,7 +139,7 @@ class gesttare(interna):
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_hitosproyecto, gt_particproyecto")
         q.setSelect(u"h.idhito, h.nombre, p.nombre")
-        q.setFrom(u"gt_proyectos p INNER JOIN gt_hitosproyecto h ON p.codproyecto = h.codproyecto INNER JOIN gt_particproyecto pp ON p.codproyecto = pp.codproyecto")
+        q.setFrom(u"gt_proyectos p INNER JOIN gt_hitosproyecto h ON p.idproyecto = h.idproyecto INNER JOIN gt_particproyecto pp ON p.idproyecto = pp.idproyecto")
         q.setWhere(u"pp.idusuario = '" + qsatype.FLUtil.nameUser() + "' AND (UPPER(h.nombre) LIKE UPPER('%" + oParam["val"] + "%')) AND h.resuelta = false  ORDER BY h.nombre LIMIT 8")
 
         if not q.exec_():
@@ -158,7 +158,7 @@ class gesttare(interna):
         resul = {}
         usuario = qsatype.FLUtil.nameUser()
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
-        numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"codproyecto = '", str(cursor.valueBuffer("codproyecto")), u"'"))
+        numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
         if "confirmacion" in oParam and oParam["confirmacion"]:
             if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
                 cursor.setModeAccess(cursor.Del)
@@ -201,7 +201,7 @@ class gesttare(interna):
         resuelta = cursor.valueBuffer("resuelta")
         if (not oParam or "confirmacion" not in oParam) and not resuelta:
             # renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
-            hitosActivos = qsatype.FLUtil.quickSqlSelect("gt_hitosproyecto", "COUNT(idhito)", "resuelta = false AND codproyecto = '{}' and idhito <> '{}'".format(cursor.valueBuffer("codproyecto"), cursor.valueBuffer("idhito"))) or 0
+            hitosActivos = qsatype.FLUtil.quickSqlSelect("gt_hitosproyecto", "COUNT(idhito)", "resuelta = false AND idproyecto = '{}' and idhito <> '{}'".format(cursor.valueBuffer("idproyecto"), cursor.valueBuffer("idhito"))) or 0
             print(hitosActivos)
             q = qsatype.FLSqlQuery()
             q.setTablesList(u"gt_tareas")
@@ -286,8 +286,8 @@ class gesttare(interna):
 
     def gesttare_validateCursor(self, cursor):
         presupuestoHito = cursor.valueBuffer("presupuesto") or 0
-        presupuestoProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"presupuesto", ustr(u"codproyecto = '", str(cursor.valueBuffer(u"codproyecto")), "'")) or 0
-        sumaPresupuestos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"SUM(presupuesto)", ustr(u"codproyecto = '", str(cursor.valueBuffer(u"codproyecto")), "' AND idhito <> ", cursor.valueBuffer("idhito"), "")) or 0
+        presupuestoProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"presupuesto", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), "'")) or 0
+        sumaPresupuestos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"SUM(presupuesto)", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), "' AND idhito <> ", cursor.valueBuffer("idhito"), "")) or 0
         if presupuestoHito > presupuestoProyecto:
             qsatype.FLUtil.ponMsgError("El presupesto del hito es mayor al del proyecto")
             return False

@@ -10,13 +10,13 @@ class gesttare(yblogin):
 
     def gesttare_getUsuariosProyecto(self, oParam):
         data = []
-        if "codproyecto" not in oParam:
+        if "idproyecto" not in oParam:
             return data
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user")
         q.setSelect(u"DISTINCT(p.idusuario), u.usuario")
-        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
-        q.setWhere(u"t.codproyecto = '" + str(oParam['codproyecto']) + "' AND (UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') OR UPPER(u.email) LIKE UPPER('%" + oParam["val"] + "%')) AND u.activo  ORDER BY u.usuario LIMIT 7")
+        q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
+        q.setWhere(u"t.idproyecto = '" + str(oParam['idproyecto']) + "' AND (UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') OR UPPER(u.email) LIKE UPPER('%" + oParam["val"] + "%')) AND u.activo  ORDER BY u.usuario LIMIT 7")
 
         if not q.exec_():
             print("Error inesperado")
@@ -35,7 +35,7 @@ class gesttare(yblogin):
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_tareas, gt_particproyecto, aqn_user")
         q.setSelect(u"p.idusuario, u.usuario")
-        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
+        q.setFrom(u"gt_tareas t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
         q.setWhere(u"t.idtarea = '" + str(oParam['pk']) + "' AND UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%')  ORDER BY u.usuario LIMIT 7")
 
         if not q.exec_():
@@ -80,7 +80,7 @@ class gesttare(yblogin):
         q.setTablesList(u"gt_particproyecto, aqn_user")
         q.setSelect(u"DISTINCT(p.idusuario), u.usuario")
         q.setFrom(u"gt_particproyecto p INNER JOIN aqn_user u ON p.idusuario = u.idusuario")
-        q.setWhere(u"p.codproyecto in (select p.codproyecto from gt_particproyecto p INNER JOIN aqn_user u  ON p.idusuario = u.idusuario where p.idusuario = '" + str(usuario) + "') AND UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') AND u.activo  ORDER BY u.usuario LIMIT 7")
+        q.setWhere(u"p.idproyecto in (select p.idproyecto from gt_particproyecto p INNER JOIN aqn_user u  ON p.idusuario = u.idusuario where p.idusuario = '" + str(usuario) + "') AND UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') AND u.activo  ORDER BY u.usuario LIMIT 7")
         # q.setWhere(u"t.idtarea = '" + str(oParam['pk']) + "' AND UPPER(u.nombre) LIKE UPPER('%" + oParam["val"] + "%')  ORDER BY u.nombre LIMIT 7")
 
         if not q.exec_():
@@ -235,17 +235,17 @@ class gesttare(yblogin):
         data = []
         #q = qsatype.FLSqlQuery()
         #q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        #q.setSelect(u"DISTINCT(t.nombre), t.codproyecto, SUM(tt.totaltiempo)")
-        #q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.codproyecto=p.codproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        #q.setWhere(where + " GROUP BY t.codproyecto, p.idusuario ORDER BY t.codproyecto LIMIT 20")
+        #q.setSelect(u"DISTINCT(t.nombre), t.idproyecto, SUM(tt.totaltiempo)")
+        #q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto INNER JOIN aqn_user u ON u.idusuario = p.idusuario INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        #q.setWhere(where + " GROUP BY t.idproyecto, p.idusuario ORDER BY t.idproyecto LIMIT 20")
 
         q = qsatype.FLSqlQuery()
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
-        q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
-        # q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
-        # q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
+        q.setSelect("t.nombre, t.idproyecto, SUM(tt.totaltiempo)")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
+        q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere(where + " GROUP BY t.idproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
 
         if not q.exec_():
             return []
@@ -254,14 +254,14 @@ class gesttare(yblogin):
 
         while q.next():
             valor = q.value(2)
-            # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
+            # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where idproyecto = '" + q.value(1) + "') ")
             nombre = q.value(0)
             if valor:
                 valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
                 valor = flgesttare_def.iface.time_to_hours(str(valor)) or 0
             else:
                 valor = 0
-            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.codproyecto = '" + q.value(1) + "'") or None
+            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + q.value(1) + "'") or None
             if codcliente:
                 nombre = "#" + codcliente + " " + nombre
             data.append({"name": nombre, "value": int(valor)})
@@ -320,17 +320,17 @@ class gesttare(yblogin):
         otros = 0
         q = qsatype.FLSqlQuery()
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
-        q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
-        q.setWhere(where + " GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
-        # q.setWhere(where + " GROUP BY t.codproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
-        # q.setWhere("{} GROUP BY t.codproyecto ORDER BY SUM(tt.totaltiempo) DESC".format(where))
+        q.setSelect("t.nombre, t.idproyecto, SUM(tt.totaltiempo)")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
+        q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere(where + " GROUP BY t.idproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        # q.setWhere("{} GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) DESC".format(where))
 
         # q = qsatype.FLSqlQuery()
         # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking")
-        # q.setSelect("t.nombre, t.codproyecto, SUM(tt.totaltiempo)")
-        # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
-        # q.setWhere("{} GROUP BY t.codproyecto ORDER BY t.codproyecto".format(where))
+        # q.setSelect("t.nombre, t.idproyecto, SUM(tt.totaltiempo)")
+        # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea")
+        # q.setWhere("{} GROUP BY t.idproyecto ORDER BY t.idproyecto".format(where))
 
         if not q.exec_():
             return []
@@ -339,7 +339,7 @@ class gesttare(yblogin):
 
         # total = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
-        total = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
+        total = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
         if total:
             total = flgesttare_def.iface.seconds_to_time(total.total_seconds(), all_in_hours=True)
@@ -351,7 +351,7 @@ class gesttare(yblogin):
         i = 0
         while q.next():
             valor = q.value(2)
-            # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where codproyecto = '" + q.value(1) + "') ")
+            # valor = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idusuario = " + usuario + " AND idtarea IN (Select idtarea from gt_tareas where idproyecto = '" + q.value(1) + "') ")
             if valor:
                 valor = flgesttare_def.iface.seconds_to_time(valor.total_seconds(), all_in_hours=True)
                 valor = flgesttare_def.iface.time_to_hours(str(valor))
@@ -365,7 +365,7 @@ class gesttare(yblogin):
                 if total != 0 and total != None:
                     porcentaje = 100*(valor/total)
                 nombre = q.value(0)
-                codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.codproyecto = '" + q.value(1) + "'") or None
+                codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + q.value(1) + "'") or None
                 if codcliente:
                     nombre = "#" + codcliente + " " + nombre
                 data.append({"name": nombre, "value": round(porcentaje,2)})
@@ -451,7 +451,7 @@ class gesttare(yblogin):
 
         where += " AND tt.idusuario = {}".format(usuario)
         # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
-        tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
+        tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
         totalPresupuesto = 0
         totalCostes = 0
@@ -462,10 +462,10 @@ class gesttare(yblogin):
 
         whereProduccion = where + " AND tt.totaltiempo != '00:00:00'"
 
-        #tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario =tt.idusuario ", "COUNT(u.idusuario)", whereCompletadas)
+        #tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario =tt.idusuario ", "COUNT(u.idusuario)", whereCompletadas)
         tareasCompletadas = self.iface.calculaTareasCompletadas(oParam)
 
-        # tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.codproyecto=ta.codproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario = tt.idusuario ", "COUNT(u.idusuario)", whereProduccion)
+        # tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea  INNER JOIN aqn_user u ON u.idusuario = tt.idusuario ", "COUNT(u.idusuario)", whereProduccion)
 
         tareasProduccion =  qsatype.FLUtil.sqlSelect("gt_tareas ta INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea", "COUNT(DISTINCT(tt.idtarea))", whereProduccion)
         if tareasCompletadas == None:
@@ -512,7 +512,7 @@ class gesttare(yblogin):
         query = {}
         query["tablesList"] = ("gt_proyectos, gt_tareas, gt_timetracking, aqn_user")
         query["select"] = ("t.idtarea, a.usuario, tt.totaltiempo, t.nombre, tt.fecha, p.nombre")
-        query["from"] = ("aqn_user a INNER JOIN gt_particproyecto pp ON a.idusuario = pp.idusuario INNER JOIN gt_proyectos p ON pp.codproyecto = p.codproyecto INNER JOIN gt_tareas t ON p.codproyecto = t.codproyecto INNER JOIN gt_timetracking tt ON t.idtarea = tt.idtarea")
+        query["from"] = ("aqn_user a INNER JOIN gt_particproyecto pp ON a.idusuario = pp.idusuario INNER JOIN gt_proyectos p ON pp.idproyecto = p.idproyecto INNER JOIN gt_tareas t ON p.idproyecto = t.idproyecto INNER JOIN gt_timetracking tt ON t.idtarea = tt.idtarea")
         query["where"] = "{} AND tt.totaltiempo < (SELECT MAX(tt.totaltiempo) FROM gt_timetracking tt)".format(where)
         query["orderby"] = (" tt.totaltiempo DESC")
 
@@ -556,7 +556,7 @@ class gesttare(yblogin):
         print("___________________________________")
         if "email" not in oParam:
             # "Javier Cantos Cañete" <javier.cantos@makinando.es>
-            # val = str(cursor.valueBuffer("codproyecto")) + "@convert.dailyjob.io"
+            # val = str(cursor.valueBuffer("idproyecto")) + "@convert.dailyjob.io"
             apellidos = cursor.valueBuffer("apellidos") or ""
             val = '"' + str(cursor.valueBuffer("nombre")) + ' ' + str(apellidos) + '" <' + str(cursor.valueBuffer("usuario")) + "@convert.dailyjob.io" + '>'
             response['status'] = -1

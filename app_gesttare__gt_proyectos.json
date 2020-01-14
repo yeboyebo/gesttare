@@ -2,7 +2,7 @@
     "querystring": {},
     "schema": {
         "gt_particproyecto": {
-            "rel": "codproyecto",
+            "rel": "idproyecto",
             "querystring": {
                 "p_l": 10,
                 "p_c": 1,
@@ -10,7 +10,7 @@
             }
         },
         "gt_hitosproyecto": {
-            "rel": "codproyecto",
+            "rel": "idproyecto",
             "querystring": {
                 "p_l": 10,
                 "p_c": 1,

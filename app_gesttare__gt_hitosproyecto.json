@@ -107,7 +107,7 @@
                                 "gb__proyecto": {
                                     "title": "",
                                     "fields": {
-                                        "codproyecto": {
+                                        "idproyecto": {
                                             "disabled": true,
                                             "showpk": false
                                         }
@@ -127,7 +127,7 @@
                                             "combolimit": 1,
                                             "showpk": false,
                                             "function": "getUsuariosProyecto",
-                                            "params": {"codproyecto": "codproyecto"}
+                                            "params": {"idproyecto": "idproyecto"}
                                         },
                                         "fechainicio": {},
                                         "fechaterminado": {}

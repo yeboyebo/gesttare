@@ -48,10 +48,10 @@
                             "filterType": "custom",
                             "tipo": 55,
                             "rel": "gt_proyectos",
-                            "key": "codproyecto",
-                            "tofield": "codproyecto",
+                            "key": "idproyecto",
+                            "tofield": "idproyecto",
                             "desc": "nombre",
-                            "fN": "gt_proyectos.codproyecto",
+                            "fN": "gt_proyectos.idproyecto",
                             "showpk": false,
                             "function": "getProyectosUsuario"
                         },
