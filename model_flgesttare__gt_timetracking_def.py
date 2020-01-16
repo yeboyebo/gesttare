@@ -34,7 +34,7 @@ class gesttare(interna):
                     curProyectos.setModeAccess(curProyectos.Browse)
                     curProyectos.refreshBuffer()
                     # proin.append(curProyectos.valueBuffer("idproyecto"))
-                    proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
+                    proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
                 proin = proin + " null)"
                 where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
@@ -57,7 +57,7 @@ class gesttare(interna):
             curProyectos.refreshBuffer()
             # proin.append(curProyectos.valueBuffer("idproyecto"))
             if curProyectos.valueBuffer("idproyecto"):
-                proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
+                proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
 
         proin = proin + " null)"
         where += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"

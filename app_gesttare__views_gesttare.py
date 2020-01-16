@@ -44,6 +44,9 @@ class gesttare(interna):
         #     nombre_tarea = nombre_tarea[sObject] +"..."+ " // Proyecto: " +nombre_proyecto
 
         nombre_proyecto = " // Proyecto: "
+        codcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto INNER JOIN gt_clientes c on p.idcliente = c.idcliente", "c.codcliente", "ta.idtarea = {}".format(tareaactiva))
+        if codcliente:
+            nombre_proyecto += codcliente + " " 
         nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
         nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
 

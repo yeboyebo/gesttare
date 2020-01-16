@@ -261,7 +261,7 @@ class gesttare(yblogin):
                 valor = flgesttare_def.iface.time_to_hours(str(valor)) or 0
             else:
                 valor = 0
-            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + q.value(1) + "'") or None
+            codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + str(q.value(1)) + "'") or None
             if codcliente:
                 nombre = "#" + codcliente + " " + nombre
             data.append({"name": nombre, "value": int(valor)})
@@ -365,7 +365,7 @@ class gesttare(yblogin):
                 if total != 0 and total != None:
                     porcentaje = 100*(valor/total)
                 nombre = q.value(0)
-                codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + q.value(1) + "'") or None
+                codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + str(q.value(1)) + "'") or None
                 if codcliente:
                     nombre = "#" + codcliente + " " + nombre
                 data.append({"name": nombre, "value": round(porcentaje,2)})
