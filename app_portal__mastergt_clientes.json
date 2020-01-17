@@ -38,11 +38,6 @@
                     "success": [{ "slot": "goto"}]
                 }
             ]
-        },
-        "newRecordTarea": {
-            "componente": "YBNewRecord",
-            "class": "info",
-            "icon": "add"
         }
     },
     "acciones": {
@@ -53,7 +48,7 @@
         },
         "nuevoCliente": {
             "action": "legacy",
-            "prefix": "gt_proyectos",
+            "prefix": "gt_clientes",
             "serverAction": "gotonuevoCliente",
             "icon": "add_circle"
         }

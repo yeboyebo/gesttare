@@ -7,6 +7,21 @@
             "className": "gbTareas gbTareasBox",
             "style": {},
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -19,7 +34,7 @@
                     "successmsg": "Cliente creado",
                     "success": [{"slot": "return"}],
                     "groupbox": "acordeon",
-                    "return": true,
+                    "return": false,
                     "saveEdit": true,
                     "saveReturn": true,
                     "fields": {
@@ -37,6 +52,9 @@
         }
     },
     "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
         "accessControl": {
             "action": "goto",
             "prefix": "auth_user",

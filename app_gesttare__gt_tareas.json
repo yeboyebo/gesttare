@@ -155,7 +155,18 @@
                             "componente": "YBButton",
                             "prefix": "gt_tareas",
                             "label": "Iniciar tarea",
-                            "className": "floatLeft",
+                            "className": "floatLeft inciarTarea",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "iniciarTimeTracking",
+                                "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "pararTrackingButton": {
+                            "componente": "YBButton",
+                            "prefix": "gt_tareas",
+                            "label": "Parar tarea",
+                            "className": "floatLeft inciarTarea",
                             "buttonType": "raised",
                             "action": {
                                 "key": "iniciarTimeTracking",
@@ -395,6 +406,10 @@
         "groupBoxPadre": {
             "completar": "drawif_completartarea",
             "abrir": "drawif_abrirtarea"
+        },
+        "groupBoxLeft": {
+            "iniciarTrackingButton": "drawif_iniciartarea",
+            "pararTrackingButton": "drawif_parartarea"
         }
     }
 }

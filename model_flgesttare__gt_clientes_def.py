@@ -63,7 +63,7 @@ class gesttare(interna):
 
     def gesttare_gotonuevoCliente(self, model, oParam):
         # user_name = qsatype.FLUtil.nameUser()
-        url='/gesttare/gt_clientes/newRecord'
+        url='/system/gt_clientes/newRecord'
         resul = {}
         resul["url"] = url
         resul['status'] = 1

@@ -1116,6 +1116,23 @@ class gesttare(interna):
         if cursor.valueBuffer("resuelta") == False:
             return "hidden"
 
+    def gesttare_drawif_iniciartarea(self, cursor):
+        user_name = qsatype.FLUtil.nameUser()
+
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(user_name))
+        print("el res es: ",tareaactiva)
+
+        if tareaactiva == cursor.valueBuffer("idtarea"):
+            return "hidden"
+
+    def gesttare_drawif_parartarea(self, cursor):
+        user_name = qsatype.FLUtil.nameUser()
+        
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(user_name))
+
+        if tareaactiva != cursor.valueBuffer("idtarea"):
+            return "hidden"
+
     def gesttare_iniciaValoresCursor(self, cursor=None):
         # usuario = qsatype.FLUtil.nameUser()
         cursor.setValueBuffer("codestado", "Por Hacer")
@@ -1295,6 +1312,12 @@ class gesttare(interna):
 
     def drawif_abrirtarea(self, cursor):
         return self.ctx.gesttare_drawif_abrirtarea(cursor)
+
+    def drawif_iniciartarea(self, cursor):
+        return self.ctx.gesttare_drawif_iniciartarea(cursor)
+
+    def drawif_parartarea(self, cursor):
+        return self.ctx.gesttare_drawif_parartarea(cursor)
 
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)

@@ -52,14 +52,14 @@ class gesttare(yblogin):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
-        # if template == "mastertimetracking":
-            # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
-        # if template == "formRecord":
-        #     return []
-        # fields = [
-        #     {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-        #     {'verbose_name': 'usuario', 'func': 'field_nombre'}
-        # ]
+        if template == "mastertimetracking":
+            return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
+        if template == "formRecord":
+            return []
+        fields = [
+            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+            {'verbose_name': 'usuario', 'func': 'field_nombre'}
+        ]
         return fields
 
     def gesttare_field_nombre(self, model):
@@ -243,7 +243,7 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.idproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
-        q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
+        q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.idproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
 
@@ -266,7 +266,6 @@ class gesttare(yblogin):
                 nombre = "#" + codcliente + " " + nombre
             data.append({"name": nombre, "value": int(valor)})
         # data = [{"name": "Nombre", "value": 20, "color": "red"}, {"name": "Dos", "value": 80, "color": "orange"}]
-
         return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75", "text": "Tiempo invertido en proyectos"}
 
     def gesttare_graficostareasporestado(self, oParam):

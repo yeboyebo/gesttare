@@ -719,9 +719,27 @@ a.btn-primary:hover {
     border-bottom: none;
 }*/
 
-.YBTableActionsCell[title=TimeTracking] {
-    margin-top: -3px;
-    color: #50d2ce;
+.YBTableActionsCell[title=TimeTracking] img{
+    /*margin-top: -3px;
+    color: #50d2ce;*/
+    background-color: orange;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px !important;
+    height: 30px !important;
+    margin-top: -7px !important;
+    margin-left: 2px;
+}
+
+/* Icono timetracking vista móvil */
+.YBListItemSecondaryAction img[src="/static/dist/img/icons/timetrakcer.svg"]{
+    background-color: orange;
+    padding: 2px;
+    border-radius: 50%;
+    width: 28px !important;
+    height: 28px !important;
+    margin-bottom: -2px !important;
+    margin-left: 2px;
 }
 
 
@@ -1243,4 +1261,17 @@ a.btn-primary:hover {
 
 .groupBoxNuevoComentario .YBButtonElement {
     margin-right: 20px !important;
+}
+
+/* Color de botón iniciar tarea e icono timetraking listado tareas */
+
+.inciarTarea .YBButtonRaised{
+    background-color: orange;
+    border: none;
+}
+
+/* Buscador en  master de usuarios y clientes */
+
+.masterUsuarios .buscador, .masterClientes .buscador {
+    margin-left: 12px !important;
 }
