@@ -356,6 +356,8 @@ class gesttare(interna):
 
     def gesttare_checkProyectosFormDraw(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
+        if str(cursor.valueBuffer("idresponsable")) == str(usuario):
+            return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
         if not is_superuser:
             return "hidden"

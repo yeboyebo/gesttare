@@ -114,7 +114,7 @@ class gesttare(interna):
             curProyectos.setModeAccess(curProyectos.Browse)
             curProyectos.refreshBuffer()
             # proin.append(curProyectos.valueBuffer("idproyecto"))
-            proin = proin + "'" + curProyectos.valueBuffer("idproyecto") + "', "
+            proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
         proin = proin + " null)"
         query = {}
         query["tablesList"] = ("gt_tareas, aqn_user, gt_proyectos")
@@ -156,8 +156,8 @@ class gesttare(interna):
         return True
 
     def gesttare_ren_field_proyecto(self, model):
-        proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model["gt_tareas.idproyecto"])) or ""
-        idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(model["gt_tareas.idproyecto"])) or None
+        proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(str(model["gt_tareas.idproyecto"]))) or ""
+        idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(str(model["gt_tareas.idproyecto"]))) or None
         if idcliente:
             codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
             if codcliente:
@@ -726,7 +726,7 @@ class gesttare(interna):
                 response["username"] = oParam["email"]
                 return response
         else:
-            usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"usuario = '", oParam["person"], u"'"))
+            usuario = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idusuario", ustr(u"UPPER(usuario) = '", oParam["person"].upper(), u"'"))
         if not usuario:
             response["result"] = False
             response["error"] = "No existe el usuario de dailyjob, por tanto no tienes permisos para crear posibles tareas"

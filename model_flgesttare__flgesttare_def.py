@@ -312,7 +312,7 @@ class gesttare(interna):
         elif tipo in ["responsable", "responsablepro", "partictarea", "delpartictarea", "delparticproyecto", "particproyecto"]:
             if tipo == "responsable" and not cursor.valueBuffer("idusuario"):
                 return True
-            if str(idUsuario) != str(cursor.valueBuffer("idusuario")):
+            if str(idUsuario) != str(cursor.valueBuffer("idusuario")) and cursor.valueBuffer("idusuario"):
                 if _i.creaNotificacionUsuario(idActualizacion, cursor.valueBuffer("idusuario"), tipo_objeto, idobjeto, tipo, cursor):
                     return True
         return True
