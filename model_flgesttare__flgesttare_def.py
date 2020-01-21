@@ -192,13 +192,13 @@ class gesttare(interna):
         return True
 
     def gesttare_eliminarNotificacionesProyecto(self, curPart):
-        qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idactualizacion IN (SELECT idactualizacion from gt_actualizaciones where tipobjeto = 'proyecto' AND idobjeto = '" + curPart.valueBuffer("idproyecto") + "')")
-        qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idactualizacion IN (SELECT idactualizacion from gt_actualizaciones where idtarea in (SELECT idtarea from gt_tareas where idproyecto = '" + curPart.valueBuffer("idproyecto") + "'))")
+        qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idactualizacion IN (SELECT idactualizacion from gt_actualizaciones where tipobjeto = 'proyecto' AND idobjeto = '" + str(curPart.valueBuffer("idproyecto")) + "')")
+        qsatype.FLSqlQuery().execSql("DELETE FROM gt_actualizusuario where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idactualizacion IN (SELECT idactualizacion from gt_actualizaciones where idtarea in (SELECT idtarea from gt_tareas where idproyecto = '" + str(curPart.valueBuffer("idproyecto")) + "'))")
         # qsatype.FLSqlQuery().execSql("DELETE FROM gt_partictarea where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idtarea IN (SELECT idtarea from gt_tareas where idproyecto = '" + curPart.valueBuffer("idproyecto") + "')")
         return True
 
     def gesttare_desasignarTareasProyecto(self, curPart):
-        qsatype.FLSqlQuery().execSql("DELETE FROM gt_partictarea where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idtarea IN (SELECT idtarea from gt_tareas where idproyecto = '" + curPart.valueBuffer("idproyecto") + "')")
+        qsatype.FLSqlQuery().execSql("DELETE FROM gt_partictarea where idusuario = " + str(curPart.valueBuffer("idusuario")) + " AND idtarea IN (SELECT idtarea from gt_tareas where idproyecto = '" + str(curPart.valueBuffer("idproyecto")) + "')")
         return True
 
     def gesttare_compruebaNotificacion(self, tipo, cursor):
@@ -209,7 +209,7 @@ class gesttare(interna):
             idobjeto = cursor.valueBuffer("idtarea")
         elif tipo in ["particproyecto", "archivado", "desarchivado", "responsablepro", "delparticproyecto"]:
             tipo_objeto = "gt_proyecto"
-            idobjeto = cursor.valueBuffer("idproyecto")
+            idobjeto = str(cursor.valueBuffer("idproyecto"))
         # elif tipo in ["comentario"]:
         #     tipo_objeto = "gt_comentario"
         #     idobjeto = cursor.valueBuffer("idcomentario")
@@ -237,7 +237,7 @@ class gesttare(interna):
         if tipo in ["deltarea", "responsable", "resuelta", "abierta", "cambioFechaEjecucion"]:
             mensaje = "Tarea: " + cursor.valueBuffer("nombre")
         elif tipo in ["particproyecto", "delparticproyecto", "archivado", "desarchivado", "delproyecto", "responsablepro"]:
-            mensaje = "Proyecto: " + qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", "idproyecto = '{}'".format(cursor.valueBuffer(u"idproyecto")))
+            mensaje = "Proyecto: " + qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"nombre", "idproyecto = '{}'".format(str(cursor.valueBuffer(u"idproyecto"))))
         elif tipo in ["comentario", "partictarea", "delpartictarea"]:
             mensaje = "Tarea: " + qsatype.FLUtil.sqlSelect(u"gt_tareas", u"nombre", "idtarea = '{}'".format(cursor.valueBuffer(u"idtarea")))
         elif tipo in ["anotacion"]:
@@ -255,7 +255,8 @@ class gesttare(interna):
         curActualiz.setValueBuffer(u"otros", mensaje)
         curActualiz.setValueBuffer(u"fecha", datetime.date.today())
         curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
-        curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
+        if idUsuario:
+            curActualiz.setValueBuffer(u"idusuarioorigen", idUsuario)
         if not curActualiz.commitBuffer():
             return False
         return _i.notificarUsuarios(curActualiz.valueBuffer("idactualizacion"), tipo_objeto, idobjeto, tipo, cursor)
@@ -291,7 +292,7 @@ class gesttare(interna):
             qryParticipantes.setTablesList(u"gt_particproyecto")
             qryParticipantes.setSelect(u"idparticipante,idusuario")
             qryParticipantes.setFrom(ustr(u"gt_particproyecto"))
-            qryParticipantes.setWhere("idproyecto = '{}' AND idusuario <> {}".format(cursor.valueBuffer(u"idproyecto"), idUsuario))
+            qryParticipantes.setWhere("idproyecto = '{}' AND idusuario <> {}".format(str(cursor.valueBuffer(u"idproyecto")), idUsuario))
 
             try:
                 qryParticipantes.setForwardOnly(True)
@@ -486,7 +487,7 @@ class gesttare(interna):
     def gesttare_comprobarUsuarioResponsableProyecto(self, curProyecto):
         if curProyecto.modeAccess() == curProyecto.Insert:
             idUsuario = str(qsatype.FLUtil.nameUser())
-            if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([idUsuario, curProyecto.valueBuffer(u"idproyecto")])):
+            if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([idUsuario, str(curProyecto.valueBuffer(u"idproyecto"))])):
                 return False
             if idUsuario != str(curProyecto.valueBuffer("idresponsable")):
                 if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"idproyecto")])):
@@ -495,7 +496,7 @@ class gesttare(interna):
             if curProyecto.valueBuffer("idresponsable") and (curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable")):
                 if qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idparticipante", ustr(u"idusuario = '", str(curProyecto.valueBuffer("idresponsable")), u"' AND idproyecto = '", str(curProyecto.valueBuffer("idproyecto")), "'")):
                     return True
-                if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"idproyecto")])):
+                if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), str(curProyecto.valueBuffer(u"idproyecto"))])):
                     return False
 
         return True

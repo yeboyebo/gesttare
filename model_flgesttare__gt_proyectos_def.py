@@ -307,7 +307,7 @@ class gesttare(interna):
                 return response
             else:
                 print("aqui enviamos la invitacion")
-                codifica = oParam["email"] + cursor.valueBuffer("idproyecto")
+                codifica = oParam["email"] + str(cursor.valueBuffer("idproyecto"))
                 hashcode = hashlib.md5(codifica.encode('utf-8')).hexdigest()
                 curInvitacion = qsatype.FLSqlCursor(u"aqn_invitations")
                 curInvitacion.setModeAccess(curInvitacion.Insert)
@@ -384,7 +384,7 @@ class gesttare(interna):
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         valor = None
         if fN == u"hdedicadas":
-            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(hdedicadas)", ustr(u"idproyecto = '", cursor.valueBuffer(u"idproyecto"), u"'")) or 0
+            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(hdedicadas)", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), u"'")) or 0
             if isNaN(valor):
                 valor = 0
             # valor = flgesttare_def.iface.time_to_seconds(valor)
@@ -396,7 +396,7 @@ class gesttare(interna):
             valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"costetotal")
 
         if fN == u"costeinterno":
-            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"idproyecto = '", cursor.valueBuffer(u"idproyecto"), u"'"))
+            valor = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), u"'"))
             if isNaN(valor):
                 valor = 0
             valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_proyectos", u"costeinterno")
@@ -619,7 +619,7 @@ class gesttare(interna):
     def gesttare_copiarHitosProyecto(self, cursor, idproyecto):
         _i = self.iface
         curHito = qsatype.FLSqlCursor(u"gt_hitosproyecto")
-        curHito.select(ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"'"))
+        curHito.select(ustr(u"idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
         while curHito.next():
             curHito.setModeAccess(curHito.Browse)
             curHito.refreshBuffer()
