@@ -28,6 +28,9 @@ class gesttare(interna):
     def gesttare_field_adjunto(self, model):
         nombre = None
         file = gesDoc.getFiles("gt_comentarios", model.pk)
+        # for file in files:
+        #     print(file)
+        # return None
         if file:
             return file["nombre"]
         return nombre
