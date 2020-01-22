@@ -1275,3 +1275,11 @@ a.btn-primary:hover {
 .masterUsuarios .buscador, .masterClientes .buscador {
     margin-left: 12px !important;
 }
+
+/* Botón agrupar tarea */
+
+@media (min-width: 769px) {
+    .agruparTarea {
+        margin-right: 15px;
+    }
+}

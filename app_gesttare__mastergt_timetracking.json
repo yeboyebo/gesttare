@@ -5,6 +5,11 @@
             "query": {
                 "p_l": 25
             }
+        },
+        "mastertimetrackingagrupado": {
+            "query": {
+                "p_l": 25
+            }
         }
     },
     "layout": {
@@ -13,6 +18,35 @@
             "className": " ",
             "style": {},
             "layout": {
+                "botonera": {
+                    "componente": "YBGroupBox",
+                    "className": "actionGB",
+                    "style": {"zIndex": 3, "position": "relative"},
+                    "layout": {
+                        "vistaNoAgrupada": {
+                            "componente": "YBButton",
+                            "prefix": "gt_timetracking",
+                            "label": "NO AGRUPAR POR TAREA",
+                            "className": "floatRight agruparTarea",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "vistaNoAgrupada",
+                                "success": [{"slot": "recargar"}]
+                            }
+                        },
+                        "vistaAgrupada": {
+                            "componente": "YBButton",
+                            "prefix": "gt_timetracking",
+                            "label": "AGRUPAR POR TAREA",
+                            "className": "floatRight agruparTarea",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "vistaAgrupada",
+                                "success": [{"slot": "recargar"}]
+                            }
+                        }
+                    }
+                },
                 "separator": {
                     "componente": "YBSeparator"
                 },
@@ -106,7 +140,82 @@
                         "label": "Genera XLS",
                         "success": []
                     }]
+                },
+                "masterTimeTrackingAgrupado": {
+                    "componente": "YBGrid",
+                    "type": "query",
+                    "prefix": "mastertimetrackingagrupado",
+                    "autofilter": false,
+                    "cansavefilter": true,
+                    "className": "",
+                    "buscador": false,
+                    "paginacion": false,
+                    "filter": {
+                        "usuario": {
+                            "label": "Usuario",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "aqn_user",
+                            "key": "idusuario",
+                            "tofield": "idusuario",
+                            "desc": "usuario",
+                            "fN": "aqn_user.idusuario",
+                            "showpk": false,
+                            "function": "getParticProyectosUsu"
+                        },
+                        "tarea": {
+                            "label": "Tarea",
+                            "filterType": "custom",
+                            "tipo": 3,
+                            "key": "tarea"
+                        },
+                        "proyecto": {
+                            "label": "Proyecto",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_proyectos",
+                            "key": "idproyecto",
+                            "tofield": "idproyecto",
+                            "desc": "nombre",
+                            "fN": "gt_proyectos.idproyecto",
+                            "showpk": false,
+                            "function": "getProyectosUsuario"
+                        },
+                        "hito": {
+                            "label": "Hito",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_hitosproyecto",
+                            "key": "idhito",
+                            "tofield": "idhito",
+                            "desc": "nombre",
+                            "fN": "gt_hitosproyecto.idhito",
+                            "showpk": false,
+                            "function": "getHitosProyectosUsu"
+                        },
+                        "cliente": {
+                            "label": "Cliente",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_clientes",
+                            "key": "idcliente",
+                            "tofield": "idcliente",
+                            "desc": "nombre",
+                            "fN": "gt_clientes.idcliente",
+                            "showpk": false,
+                            "function": "getClientesCompaniaUsu"
+                        },
+                        "fecha": {
+                            "filterType": "interval"
+                        }
+                    },
+                    "columns": [
+                        {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 370},
+                        {"tipo": "foreignfield", "listpos": "body", "key": "Proyecto", "label": "Proyecto", "title": true,"width": 180},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "suma","label": "Total tiempo", "width": 5}
+                    ]
                 }
+
             }
         }
     },
@@ -131,6 +240,26 @@
             "prefix": "gt_timetracking",
             "icon": "delete",
             "msg": "El registro de tiempo será eliminado"
+        },
+        "vistaNoAgrupada": {
+            "action": "legacy",
+            "serverAction": "set_estado_noagrupado",
+            "icon": "icon"
+        },
+        "vistaAgrupada": {
+            "action": "legacy",
+            "serverAction": "set_estado_agrupado",
+            "icon": "icon"
+        }
+    },
+    "drawIf": {
+        "groupBoxPadre": {
+            "masterTimeTracking": "drawif_noagrupado",
+            "masterTimeTrackingAgrupado": "drawif_agrupado"
+        },
+        "botonera": {
+            "vistaNoAgrupada": "drawif_botonnoagrupado",
+            "vistaAgrupada": "drawif_botonagrupado"
         }
     }
 }
