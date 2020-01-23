@@ -27,12 +27,18 @@ class gesttare(interna):
 
     def gesttare_field_adjunto(self, model):
         nombre = None
-        file = gesDoc.getFiles("gt_comentarios", model.pk)
-        # for file in files:
-        #     print(file)
-        # return None
-        if file:
-            return file["nombre"]
+        ficheros = gesDoc.getFiles("gt_comentarios", model.pk)
+        adjuntos = []
+        if ficheros:
+            files = ""
+            for file in ficheros:
+                print(ficheros[file]["nombre"])
+                adjuntos.append({"id": file, "name": ficheros[file]["nombre"]})
+            return adjuntos
+            #     files = file + "./."
+            # return files
+        # if file:
+        #     return file["nombre"]
         return nombre
 
     def gesttare_field_nombreUsuario(self, model):
