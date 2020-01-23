@@ -13,6 +13,7 @@ class interna(qsatype.objetoBase):
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from datetime import datetime
+from YBUTILS.viewREST import cacheController
 from models.flgesttare import flgesttare_def
 
 
@@ -43,6 +44,28 @@ class gesttare(interna):
 
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTracking": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
+
+        elif template == "mastertimetrackingagrupado":
+            ntareas = ident["PAG"]["COUNT"] or 0
+            if not where_filter:
+                where_filter = "1 = 1"
+                usuario = qsatype.FLUtil.nameUser()
+                curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+                curProyectos.select("idusuario = '" + str(usuario) + "'")
+                proin = "("
+                while curProyectos.next():
+                    curProyectos.setModeAccess(curProyectos.Browse)
+                    curProyectos.refreshBuffer()
+                    # proin.append(curProyectos.valueBuffer("idproyecto"))
+                    proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
+                proin = proin + " null)"
+                where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
+
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
+            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
+
+            tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
+            return {"masterTimeTrackingAgrupado": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
         return None
 
     def gesttare_queryGrid_mastertimetracking(self, model, filters):
@@ -87,6 +110,49 @@ class gesttare(interna):
         query["orderby"] = ("gt_timetracking.fecha DESC, gt_timetracking.horainicio DESC")
         return query
 
+    def gesttare_queryGrid_mastertimetrackingagrupado(self, model, filters):
+        where = "1 = 1"
+        usuario = qsatype.FLUtil.nameUser()
+        curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+        curProyectos.select("idusuario = '" + str(usuario) + "'")
+        proin = "("
+
+        while curProyectos.next():
+            curProyectos.setModeAccess(curProyectos.Browse)
+            curProyectos.refreshBuffer()
+            # proin.append(curProyectos.valueBuffer("idproyecto"))
+            if curProyectos.valueBuffer("idproyecto"):
+                proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
+
+        proin = proin + " null)"
+        where += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
+
+        if filters:
+            print(filters)
+            if "[proyecto]" in filters and filters["[proyecto]"] != "":
+                where += " AND gt_proyectos.idproyecto = '{}'".format(filters["[proyecto]"])
+            if "[tarea]" in filters and filters["[tarea]"] != "":
+                where += " AND UPPER(gt_tareas.nombre) like '%{}%'".format(filters["[tarea]"].upper())
+            if "[usuario]" in filters and filters["[usuario]"] != "":
+                where += " AND aqn_user.idusuario = '{}'".format(filters["[usuario]"])
+            if "[d_fecha]" in filters and filters["[d_fecha]"] != "":
+                where += " AND gt_timetracking.fecha >= '{}'".format(filters["[d_fecha]"])
+            if "[h_fecha]" in filters and filters["[h_fecha]"] != "":
+                where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
+            if "[fecha]" in filters and filters["[fecha]"] != "":
+                where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+            if "[buscador]" in filters and filters["[buscador]"] != "":
+                where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
+
+        query = {}
+        query["tablesList"] = ("gt_timetracking, gt_tareas, gt_proyectos")
+        query["select"] = ("SUM(gt_timetracking.totaltiempo), gt_tareas.nombre, gt_proyectos.nombre")
+        query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
+        query["where"] = (where)
+        query["groupby"] = "gt_timetracking.idtarea, gt_tareas.idtarea, gt_proyectos.idproyecto"
+        query["orderby"] = ("gt_tareas.nombre ASC")
+        return query
+
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
         if template == "mastertimetracking":
@@ -96,6 +162,12 @@ class gesttare(interna):
                 {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'},
                 {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
                 {'verbose_name': 'Cliente', 'func': 'field_cliente'}
+            ]
+        elif template == "mastertimetrackingagrupado":
+            fields = [
+                {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+                {'verbose_name': 'suma', 'func': 'field_sumTotalTiempo'}
+
             ]
         return fields
 
@@ -302,11 +374,52 @@ class gesttare(interna):
             cliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"nombre", ustr(u"idcliente = '", str(idcliente), u"'"))
         return cliente
 
+    def gesttare_field_sumTotalTiempo(self, model):
+        # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model.idproyecto)) or ""
+        suma = model['SUM(gt_timetracking.totaltiempo)']
+        tiempototal = flgesttare_def.iface.seconds_to_time(suma.total_seconds(), all_in_hours=True)
+
+        return tiempototal
+
+    def gesttare_get_estado(self):
+        estado = cacheController.getSessionVariable("estado_timetracking", None)
+
+        if not estado:
+            self.iface.set_estado("noagrupado")
+            estado = "noagrupado"
+
+        return estado
+
+    def gesttare_set_estado(self, estado):
+        cacheController.setSessionVariable("estado_timetracking", estado)
+        response = {}
+        response["msg"] = ""
+        return response
+
+    def gesttare_drawif_noagrupado(self, cursor):
+        if self.iface.get_estado() != "noagrupado":
+            return "hidden"
+
+    def gesttare_drawif_agrupado(self, cursor):
+        if self.iface.get_estado() != "agrupado":
+            return "hidden"
+
+    def gesttare_drawif_botonnoagrupado(self, cursor):
+        if self.iface.get_estado() == "noagrupado":
+            return "hidden"
+
+    def gesttare_drawif_botonagrupado(self, cursor):
+        if self.iface.get_estado() == "agrupado":
+            return "hidden"
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def field_proyecto(self, model):
         return self.ctx.gesttare_field_proyecto(model)
+
+    def field_sumTotalTiempo(self, model):
+        return self.ctx.gesttare_field_sumTotalTiempo(model)
 
     def field_cliente(self, model):
         return self.ctx.gesttare_field_cliente(model)
@@ -325,6 +438,9 @@ class gesttare(interna):
 
     def queryGrid_mastertimetracking(self, model, filters):
         return self.ctx.gesttare_queryGrid_mastertimetracking(model, filters)
+
+    def queryGrid_mastertimetrackingagrupado(self, model, filters):
+        return self.ctx.gesttare_queryGrid_mastertimetrackingagrupado(model, filters)
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
@@ -355,6 +471,25 @@ class gesttare(interna):
 
     def color_usuario(self, model):
         return self.ctx.gesttare_color_usuario(model)
+
+    def get_estado(self):
+        return self.ctx.gesttare_get_estado()
+
+    def set_estado(self, estado):
+        return self.ctx.gesttare_set_estado(estado)
+
+    def drawif_noagrupado(self, cursor):
+        return self.ctx.gesttare_drawif_noagrupado(cursor)
+
+    def drawif_agrupado(self, cursor):
+        return self.ctx.gesttare_drawif_agrupado(cursor)
+
+    def drawif_botonnoagrupado(self, cursor):
+        return self.ctx.gesttare_drawif_botonnoagrupado(cursor)
+
+    def drawif_botonagrupado(self, cursor):
+        return self.ctx.gesttare_drawif_botonagrupado(cursor)
+
 
 
 # @class_declaration head #

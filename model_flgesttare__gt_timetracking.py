@@ -19,6 +19,10 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def queryGrid_mastertimetracking(model, filters):
         return form.iface.queryGrid_mastertimetracking(model, filters)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_mastertimetrackingagrupado(model, filters):
+        return form.iface.queryGrid_mastertimetrackingagrupado(model, filters)
+
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def editartt(self, oParam, cursor):
         return form.iface.editarTT(oParam, cursor)
@@ -45,8 +49,31 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def field_proyecto(self):
         return form.iface.field_proyecto(self)
 
+    def field_sumTotalTiempo(self):
+        return form.iface.field_sumTotalTiempo(self)
+
     def field_cliente(self):
         return form.iface.field_cliente(self)
+
+    @helpers.decoradores.accion(aqparam=[])
+    def set_estado_agrupado(self):
+        return form.iface.set_estado("agrupado")
+
+    @helpers.decoradores.accion(aqparam=[])
+    def set_estado_noagrupado(self):
+        return form.iface.set_estado("noagrupado")
+
+    def drawif_noagrupado(cursor):
+        return form.iface.drawif_noagrupado(cursor)
+
+    def drawif_agrupado(cursor):
+        return form.iface.drawif_agrupado(cursor)
+
+    def drawif_botonnoagrupado(cursor):
+        return form.iface.drawif_botonnoagrupado(cursor)
+
+    def drawif_botonagrupado(cursor):
+        return form.iface.drawif_botonagrupado(cursor)
 
     class Meta:
         proxy = True

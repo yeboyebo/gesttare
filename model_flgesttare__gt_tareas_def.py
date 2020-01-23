@@ -31,6 +31,13 @@ class gesttare(interna):
             return {"masterTareas": "Nº DE TAREAS: {}".format(ident["COUNT"])}
         if template == "master":
             return {"masterTareas": "Nº DE TAREAS: {}".format(ident["PAG"]["COUNT"])}
+        if template == "formRecord":
+            idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(data["idproyecto"])) or None
+
+            if idcliente:
+                codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"nombre", ustr(u"idcliente = '", str(idcliente), u"'"))
+                if codcliente:
+                    return {"tareasForm": "Información - Cliente: {}".format(codcliente)}
         return None
 
     def get_model_info(self, model, data, ident, template, where_filter):
@@ -1120,7 +1127,6 @@ class gesttare(interna):
         user_name = qsatype.FLUtil.nameUser()
 
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(user_name))
-        print("el res es: ",tareaactiva)
 
         if tareaactiva == cursor.valueBuffer("idtarea"):
             return "hidden"
