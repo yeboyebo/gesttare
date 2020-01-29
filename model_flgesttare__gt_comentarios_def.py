@@ -32,7 +32,6 @@ class gesttare(interna):
         if ficheros:
             files = ""
             for file in ficheros:
-                print(ficheros[file]["nombre"])
                 adjuntos.append({"id": file, "name": ficheros[file]["nombre"]})
             return adjuntos
             #     files = file + "./."

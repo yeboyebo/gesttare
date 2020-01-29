@@ -4,8 +4,8 @@
             "type": "insertAfterNode",
             "path": "/portal/authentication",
             "value": {
-                "tokenAuth": {
-                    "url": "token_auth",
+                "getToken": {
+                    "url": "getToken",
                     "func": "token_auth"
                 }
             }

@@ -4,6 +4,7 @@ from django.http import HttpResponse
 import json
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
+from YBUTILS.APIQSA import APIQSA
 
 
 class gesttare(yblogin_sass):
@@ -21,26 +22,60 @@ class gesttare(yblogin_sass):
             username = request.POST.get("username", None)
             password = request.POST.get("password", None)
 
+        # Comprobamos usuario con pineboo
+        try:
+            authusername = APIQSA.login(username, password)
+            if authusername:
+                user = User.objects.filter(username=str(authusername))
+                if user.exists():
+                    authuser = authenticate(username=str(authusername), password=password)
+                    if authuser is None:
+                        user = User.objects.get(username__exact=str(authusername))
+                        user.set_password(password)
+                        user.save()
+                        authuser = authenticate(username=str(authusername), password=password)
+                else:
+                    user = User.objects.create_user(username=str(authusername), password=password)
+                    user.is_staff = False
+                    user.save()
+                    authuser = authenticate(username=str(authusername), password=password)
+                token, _ = Token.objects.get_or_create(user=authuser)
+                resul = HttpResponse(json.dumps({'token': token.key}), status=200)
+        except Exception as e:
+            print("-----------------------")
+            print(e)
+            resul = HttpResponse(json.dumps({'error': str(e)}), status=404)
+        resul['Access-Control-Allow-Origin'] = '*'
+        return resul
+        # try:
+        #     params = json.loads(request.body.decode("utf-8"))
+        #     username = params["username"]
+        #     password = params["password"]
 
-        usuario = aqn_user.objects.filter(email__exact=username)
-        if len(usuario) == 0:
-            return HttpResponse(json.dumps({'error': 'No existe el usuario'}),
-                            status=404)
-        if usuario[0].activo is False:
-            return HttpResponse(json.dumps({'error': 'No existe el usuario'}),
-                            status=404)
-        md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
-        if usuario[0].password != md5passwd:
-            return HttpResponse(json.dumps({'error': 'Contraseña invalida'}),
-                            status=404)
-        idusuario = usuario[0].idusuario
-        user = authenticate(username=idusuario, password="ybllogin")
-        if not user:
-            return HttpResponse(json.dumps({'error': 'Usuario y contraseña no coinciden'}),
-                            status=404)
-        token, _ = Token.objects.get_or_create(user=user)
+        # except Exception:
+        #     username = request.POST.get("username", None)
+        #     password = request.POST.get("password", None)
 
-        return HttpResponse(json.dumps({'token': token.key}), status=200)
+
+        # usuario = aqn_user.objects.filter(email__exact=username)
+        # if len(usuario) == 0:
+        #     return HttpResponse(json.dumps({'error': 'No existe el usuario'}),
+        #                     status=404)
+        # if usuario[0].activo is False:
+        #     return HttpResponse(json.dumps({'error': 'No existe el usuario'}),
+        #                     status=404)
+        # md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
+        # if usuario[0].password != md5passwd:
+        #     return HttpResponse(json.dumps({'error': 'Contraseña invalida'}),
+        #                     status=404)
+        # idusuario = usuario[0].idusuario
+        # user = authenticate(username=idusuario, password="ybllogin")
+        # if not user:
+        #     return HttpResponse(json.dumps({'error': 'Usuario y contraseña no coinciden'}),
+        #                     status=404)
+        # token, _ = Token.objects.get_or_create(user=user)
+
+        # return HttpResponse(json.dumps({'token': token.key}), status=200)
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -91,27 +126,46 @@ class gesttare(yblogin_sass):
                     else:
                         return self.iface.login(request, 'Error de autentificación')
                     return HttpResponseRedirect("/")
+                try:
+                    authusername = APIQSA.login(username, password)
+                    if authusername:
+                        usuario = aqn_user.objects.filter(email__exact=username)
+                        if usuario.exists():
+                            authuser = authenticate(username=str(authusername), password=password)
+                            if authuser is None:
+                                user = User.objects.get(username__exact=str(authusername))
+                                user.set_password(password)
+                                user.save()
+                                authuser = authenticate(username=str(authusername), password=password)
+                        else:
+                            usuario = User.objects.create_user(username=str(authusername), password=password)
+                            usuario.is_staff = False
+                            usuario.save()
+                            authuser = authenticate(username=str(authusername), password=password)
 
-                usuario = aqn_user.objects.filter(email__exact=username)
-                if len(usuario) == 0:
-                    return self.iface.login(request, 'No existe el usuario')
-                if usuario[0].activo is False:
-                    return self.iface.login(request, 'No existe el usuario')
-                md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
-                # print("falla por aqui??", md5passwd, usuario[0].password)
-                if usuario[0].password != md5passwd:
-                    return self.iface.login(request, 'Error de autentificación')
-                idusuario = usuario[0].idusuario
-                if redirect_uri and redirect_uri != None and redirect_uri != "None":
-                    url = redirect_uri + "?state=" + state + "&code=" + username + "&token=prueba"
-                    return HttpResponseRedirect(url)
-                user = authenticate(username=idusuario, password="ybllogin")
-                if user is not None:
-                    login_auth(request, user)
-                else:
-                    return self.iface.login(request, "Error de autentificación")
-                accessControl.accessControl.registraAC()
-                return HttpResponseRedirect("/")
+                        # if len(usuario) == 0:
+                        #     return self.iface.login(request, 'No existe el usuario')
+                        # if usuario[0].activo is False:
+                        #     return self.iface.login(request, 'No existe el usuario')
+                        # md5passwd = hashlib.md5(password.encode('utf-8')).hexdigest()
+                        # # print("falla por aqui??", md5passwd, usuario[0].password)
+                        # if usuario[0].password != md5passwd:
+                        #     return self.iface.login(request, 'Error de autentificación')
+                        idusuario = authusername
+                        if redirect_uri and redirect_uri != None and redirect_uri != "None":
+                            url = redirect_uri + "?state=" + state + "&code=" + username + "&token=prueba"
+                            return HttpResponseRedirect(url)
+                        # user = authenticate(username=idusuario, password="ybllogin")
+                        if authuser is not None:
+                            login_auth(request, authuser)
+                        else:
+                            return self.iface.login(request, "Error de autentificación")
+                        accessControl.accessControl.registraAC()
+                        return HttpResponseRedirect("/")
+                    else:
+                        return self.iface.login(request, 'No existe el usuario')
+                except Exception as e:
+                    return self.iface.login(request, str(e))
         return self.iface.login(request)
 
     def auth_login(self, request):
