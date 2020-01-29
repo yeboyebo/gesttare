@@ -291,13 +291,16 @@ class gesttare(interna):
         # if not qsatype.FLUtil.sqlInsert(u"gt_comentarios", ["idtarea", "fecha", "hora", "comentario", "hdedicadas", "costehora", "coste", "idusuario"], [model.idtarea, str(qsatype.Date())[:10], str(qsatype.Date())[-8:], oParam['comentario'], 0, 0, 0, idUsuario]):
         #     print("algo salio mal?")
         #     return False
+        comentario = ""
+        if "comentario" in oParam:
+            comentario = oParam['comentario']
         cursor = qsatype.FLSqlCursor(u"gt_comentarios")
         cursor.setModeAccess(cursor.Insert)
         cursor.refreshBuffer()
         cursor.setValueBuffer(u"idtarea", model.idtarea)
         cursor.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
         cursor.setValueBuffer(u"hora", str(qsatype.Date())[-8:])
-        cursor.setValueBuffer(u"comentario", oParam['comentario'])
+        cursor.setValueBuffer(u"comentario", comentario)
         cursor.setValueBuffer(u"hdedicadas", 0)
         cursor.setValueBuffer(u"costehora", 0)
         cursor.setValueBuffer(u"coste", 0)

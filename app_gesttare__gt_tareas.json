@@ -267,8 +267,8 @@
                                             "prefix": "otros",
                                             "className": "",
                                             "key": "comentario",
-                                            "label": "Escribe un comentario ...",
-                                            "tipo": 6,
+                                            "label": " ",
+                                            "tipo": 7,
                                             "style": {
                                                 "width": "100%"
                                             }

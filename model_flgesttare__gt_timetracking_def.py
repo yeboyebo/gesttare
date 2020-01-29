@@ -150,7 +150,7 @@ class gesttare(interna):
         query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
         query["where"] = (where)
         query["groupby"] = "gt_timetracking.idtarea, gt_tareas.idtarea, gt_proyectos.idproyecto"
-        query["orderby"] = ("gt_tareas.nombre ASC")
+        query["orderby"] = ("SUM(gt_timetracking.totaltiempo) DESC")
         return query
 
     def gesttare_getForeignFields(self, model, template=None):
