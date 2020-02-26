@@ -45,8 +45,8 @@ class gesttare(interna):
         #     if not _i.crearHitoInicial(curProyecto):
         #         return False
 
-        if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
-            return False
+        # if not _i.comprobarUsuarioResponsableProyecto(curProyecto):
+        #     return False
 
         if not _i.comprobarClienteProyecto(curProyecto):
             return False
