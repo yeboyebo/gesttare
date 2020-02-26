@@ -111,7 +111,9 @@
                                 "gb__body": {
                                     "title": "",
                                     "fields": {
-                                        "descripcion": {},
+                                        "descripcion": {
+                                            "label": " "
+                                        },
                                         "idproyecto": {
                                             "combolimit": 1, 
                                             "showpk": false,
@@ -236,6 +238,15 @@
                         },
                         "separator3": {
                             "componente": "YBSeparator"
+                        },
+                        "adjuntosTareas": {
+                            "componente":"YBAttachmentContainer",
+                            "prefix": "gt_tareas",
+                            "field": "adjuntoTarea",
+                            "action": "uploadFileTarea"
+                        },
+                        "separator4": {
+                            "componente": "YBSeparator"
                         }
                     }
                 },
@@ -311,8 +322,8 @@
                                 },
                                 {
                                     "tipo": "act",
-                                    "key": "deleteComentario",
-                                    "label": "Borrar Linea",
+                                    "key": "delete",
+                                    "label": "Borrar Comentario",
                                     "success": [
                                         {
                                             "slot": "refrescar"
@@ -386,9 +397,10 @@
             "title": "Participantes",
             "serverAction": "actNuevoPartic"
         },
-        "deleteComentario": {
+        "delete": {
             "action": "deleteRow",
             "icon": "delete",
+            "prefix": "gt_comentarios",
             "msg": "El comentario será eliminado"
         },
         "deleteParticipante": {

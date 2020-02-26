@@ -229,6 +229,7 @@ class gesttare(interna):
                 return resul
             resul['status'] = 2
             resul['confirm'] = "Vas a validar el mes con los siguientes datos: " + str(cursor.valueBuffer("horasordinariasstring")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            resul["msg"] = "Validado como trabajador"
             return resul
         else:
             now = str(qsatype.Date())
@@ -253,6 +254,7 @@ class gesttare(interna):
             nombre = qsatype.FLUtil().quickSqlSelect("aqn_user", "concat(nombre, ' ', apellidos)", "idusuario = {}".format(cursor.valueBuffer("idusuario")))
             resul['status'] = 2
             resul['confirm'] = "Vas a validar el mes de " + nombre + " con los siguientes datos: " + str(cursor.valueBuffer("horasordinariasstring")) + " como tiempo de trabajo ordinario, y " + str(cursor.valueBuffer("horasextra")) + " como tiempo de trabajo extraordinario. ¿Son correctos los datos?"
+            resul["msg"] = "Validado como responsable"
             return resul
         else:
             usuario = qsatype.FLUtil.nameUser()
@@ -268,7 +270,6 @@ class gesttare(interna):
         return True
 
     def gesttare_drawif_desbloquear_user(self, cursor):
-        print("pasa por aqu", cursor.valueBuffer("validado_user"))
         if cursor.valueBuffer("validado_admin"):
             return "disabled"
 

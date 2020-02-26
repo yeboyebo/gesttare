@@ -1145,6 +1145,8 @@ a.btn-primary:hover {
 
 .modalHeaderAnotaciones {
     justify-content: left;
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 .anotacionNombre,.anotacionDescripcion {
@@ -1155,6 +1157,10 @@ a.btn-primary:hover {
 .anotacionNombreOtros,.anotacionDescripcionTipobjeto {
     font-weight: normal;
     font-size: 14px;
+}
+
+.modalHeaderAnotaciones .closeM {
+    right: 25px !important;
 }
 
 /*Permiso denegado*/
@@ -1290,7 +1296,31 @@ a.btn-primary:hover {
     margin: 15px;
 }
 
-/* Diseño de adjungar archivos */
+.masterTimeTrackingAgrupado .YBTableHeaderRow > :first-child {
+    flex-grow: 3 !important;
+}
+
+.masterTimeTrackingAgrupado .YBTableRowClick > :first-child {
+    flex-grow: 3 !important;
+}
+
+/* Diseño de adjuntar archivos */
+
+#fileDataTarea {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 1px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    visibility: hidden;
+}
 
 .contenedorYBFileInput {
     display: grid;
@@ -1313,4 +1343,99 @@ a.btn-primary:hover {
 
 .groupBoxNuevoComentario {
     margin: 7px;
+}
+
+.comentariosGrid ul {
+    list-style-type: disc;
+    margin-top: -10px;
+}
+
+.comentariosGrid li {
+    margin: -10px 0;
+}
+
+.comentariosGrid ol {
+    margin-top: -10px;
+}
+
+.comentariosGrid .YBListItemPrimaryBody {
+    font-family: sans-serif !important;
+}   
+
+.textotituloAdjuntos {
+    color: #2D95C1;
+    font-size: 17px;
+    position: relative;
+    font-weight: bold;
+    margin-top: 2px;
+    margin-left: -10px;
+    text-transform: uppercase;
+}
+
+.archivosAdjuntos {
+    margin-left: 18px;
+}
+
+.tituloInfo {
+    margin-top: 23px;
+    margin-bottom: 40px;
+}
+
+/* Botonera control mensual */
+
+.botoneraMensual .YBButtonRaised {
+    margin-right: 10px !important;
+}
+
+
+/* wysigig */
+
+.App .cke_top {
+    display: none;
+}
+
+.cke_bottom {
+    display: none !important;
+}
+
+.cke_chrome {
+    border-radius: 16px;
+    border: 1px solid #bababa !important;
+}
+
+.App * {
+    background: none !important;
+}
+
+.cke_editable {
+    background-color: none !important;
+}
+
+.cke_contents {
+    border-radius: 16px;
+    /*border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;*/
+}
+
+.comentariosGrid ol, .comentariosGrid ul {
+    margin-block-start: -10px;
+    margin-block-end: -20px;
+}
+
+.contieneAdjuntos {
+    margin-top: 0px !important;
+    width: 62.66% !important;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.contieneAdjuntos .YBLabelText {
+    //background-image: linear-gradient(to bottom, #89e3dc, #4abed8);
+    border: 2px solid #4abed8;
+    color: #4abed8;
+    //color: white;
+    border-radius: 8px;
 }

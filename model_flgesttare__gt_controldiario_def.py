@@ -22,7 +22,9 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = [
-            {'verbose_name': 'usuario', 'func': 'field_usuario'}
+            {'verbose_name': 'usuario', 'func': 'field_usuario'},
+            {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
+            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
         ]
 
         return fields
@@ -160,15 +162,19 @@ class gesttare(interna):
             cursor.setValueBuffer("validado", True)
             if not cursor.commitBuffer():
                 return False
-
+            resul = {}
+            # resul['status'] = True
+            resul["msg"] = "Día validado correctamente"
+            return resul
         return True
 
     def gesttare_validar_dia(self, model, oParam, cursor):
         if cursor.valueBuffer("validado"):
-            resul = {}
-            resul["status"] = 1
-            resul["msg"] = "El día ya esta validado"
-            return resul
+            # resul = {}
+            # resul["status"] = 1
+            # resul["msg"] = "El día ya esta validado"
+            # return resul
+            return self.iface.desbloquear(model, oParam, cursor)
         return self.iface.validar(model, oParam, cursor)
 
     def gesttare_desbloquear(self, model, oParam, cursor):
@@ -191,6 +197,10 @@ class gesttare(interna):
             cursor.setValueBuffer("validado", False)
             if not cursor.commitBuffer():
                 return False
+            resul = {}
+            # resul['status'] = True
+            resul["msg"] = "Día desbloqueado correctamente"
+            return resul
 
         return True
 
@@ -267,6 +277,22 @@ class gesttare(interna):
         url = '/gesttare/gt_controldiario/' + str(model.idc_diario)
         return url
 
+    def gesttare_field_completaIcon(self, model):
+        if model.validado:
+            return "check_box"
+        else:
+            return "check_box_outline_blank"
+
+        return ""
+
+    def gesttare_field_completaTitle(self, model):
+        if model.validado:
+            return "Desbloquear día"
+        else:
+            return "Validar día"
+
+        return ""
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -317,6 +343,12 @@ class gesttare(interna):
 
     def gotoControlDiario(self, model):
         return self.ctx.gesttare_gotoControlDiario(model)
+
+    def field_completaIcon(self, model):
+        return self.ctx.gesttare_field_completaIcon(model)
+
+    def field_completaTitle(self, model):
+        return self.ctx.gesttare_field_completaTitle(model)
 
 
 # @class_declaration head #

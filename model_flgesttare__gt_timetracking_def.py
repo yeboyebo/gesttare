@@ -38,9 +38,22 @@ class gesttare(interna):
                     proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
                 proin = proin + " null)"
                 where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
+            else:
+                where_filter = "1 = 1 AND " + where_filter
+                usuario = qsatype.FLUtil.nameUser()
+                curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+                curProyectos.select("idusuario = '" + str(usuario) + "'")
+                proin = "("
+                while curProyectos.next():
+                    curProyectos.setModeAccess(curProyectos.Browse)
+                    curProyectos.refreshBuffer()
+                    # proin.append(curProyectos.valueBuffer("idproyecto"))
+                    proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
+                proin = proin + " null)"
+                where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
-            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_proyectos.idproyecto = gt_hitosproyecto.idproyecto", "SUM(totaltiempo)", where_filter) or 0
+            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_proyectos.idproyecto = gt_hitosproyecto.idproyecto", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
 
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTracking": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
@@ -60,9 +73,22 @@ class gesttare(interna):
                     proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
                 proin = proin + " null)"
                 where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
+            else:
+                where_filter = "1 = 1 AND " + where_filter
+                usuario = qsatype.FLUtil.nameUser()
+                curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+                curProyectos.select("idusuario = '" + str(usuario) + "'")
+                proin = "("
+                while curProyectos.next():
+                    curProyectos.setModeAccess(curProyectos.Browse)
+                    curProyectos.refreshBuffer()
+                    # proin.append(curProyectos.valueBuffer("idproyecto"))
+                    proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
+                proin = proin + " null)"
+                where_filter += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
-            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "SUM(totaltiempo)", where_filter) or 0
-            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
+            tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_proyectos.idproyecto = gt_hitosproyecto.idproyecto", "SUM(totaltiempo)", where_filter) or 0
+            ntareas = qsatype.FLUtil.quickSqlSelect("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario INNER JOIN gt_hitosproyecto ON gt_proyectos.idproyecto = gt_hitosproyecto.idproyecto", "COUNT(DISTINCT(gt_tareas.idtarea))", where_filter) or 0
 
             tiempototal = flgesttare_def.iface.seconds_to_time(tiempototal.total_seconds(), all_in_hours=True)
             return {"masterTimeTrackingAgrupado": "Tiempo total: {} - Nº DE TAREAS: {}".format(tiempototal, ntareas)}
@@ -86,7 +112,6 @@ class gesttare(interna):
         where += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
         if filters:
-            print(filters)
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
                 where += " AND gt_proyectos.idproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":
@@ -99,6 +124,8 @@ class gesttare(interna):
                 where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
             if "[fecha]" in filters and filters["[fecha]"] != "":
                 where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+            if "[hito]" in filters and filters["[hito]"] != "":
+                where += " AND gt_hitosproyecto.idhito = '{}'".format(filters["[hito]"])
             if "[buscador]" in filters and filters["[buscador]"] != "":
                 where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
@@ -128,7 +155,6 @@ class gesttare(interna):
         where += " AND (gt_proyectos.idproyecto IN " + proin + " OR gt_tareas.idproyecto IS NULL)"
 
         if filters:
-            print(filters)
             if "[proyecto]" in filters and filters["[proyecto]"] != "":
                 where += " AND gt_proyectos.idproyecto = '{}'".format(filters["[proyecto]"])
             if "[tarea]" in filters and filters["[tarea]"] != "":
@@ -141,12 +167,14 @@ class gesttare(interna):
                 where += " AND gt_timetracking.fecha <= '{}'".format(filters["[h_fecha]"])
             if "[fecha]" in filters and filters["[fecha]"] != "":
                 where += " AND gt_timetracking.fecha = '{}'".format(filters["[fecha]"])
+            if "[hito]" in filters and filters["[hito]"] != "":
+                where += " AND gt_hitosproyecto.idhito = '{}'".format(filters["[hito]"])
             if "[buscador]" in filters and filters["[buscador]"] != "":
                 where += " AND UPPER(gt_proyectos.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(gt_tareas.nombre) LIKE '%" + filters["[buscador]"].upper() + "%' OR UPPER(aqn_user.nombre) LIKE '%" + filters["[buscador]"].upper() + "%'"
 
         query = {}
         query["tablesList"] = ("gt_timetracking, gt_tareas, gt_proyectos")
-        query["select"] = ("SUM(gt_timetracking.totaltiempo), gt_tareas.nombre, gt_proyectos.nombre")
+        query["select"] = ("gt_tareas.idtarea, gt_tareas.nombre, gt_proyectos.nombre,SUM(gt_timetracking.totaltiempo)")
         query["from"] = ("gt_timetracking INNER JOIN gt_tareas ON gt_timetracking.idtarea = gt_tareas.idtarea LEFT OUTER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN aqn_user ON gt_timetracking.idusuario = aqn_user.idusuario")
         query["where"] = (where)
         query["groupby"] = "gt_timetracking.idtarea, gt_tareas.idtarea, gt_proyectos.idproyecto"
@@ -335,6 +363,7 @@ class gesttare(interna):
         return True
 
     def gesttare_verTarea(self, model, cursor):
+        print("entra")
         url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
         return url
 

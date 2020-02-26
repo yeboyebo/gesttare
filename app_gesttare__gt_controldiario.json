@@ -42,7 +42,7 @@
                         "validar": {
                             "componente": "YBButton",
                             "title": "Validar",
-                            "icon": "check",
+                            "icon": "check_box_outline_blank",
                             "prefix": "gt_controldiario",
                             "className": "floatRight",
                             "buttonType": "icon",
@@ -57,10 +57,11 @@
                         },
                         "desbloquear": {
                             "componente": "YBButton",
+                            "title": "Desbloquear",
+                            "icon": "check_box",
                             "prefix": "gt_controldiario",
-                            "label": "desbloquear",
                             "className": "floatRight",
-                            "buttonType": "raised",
+                            "buttonType": "icon",
                             "action": {
                                 "key": "desbloquear",
                                 "success": [{"slot": "refrescar"}]

@@ -21,6 +21,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from YBUTILS.APIQSA import APIQSA
 from models.flgesttare.gt_controlhorario import gt_controlhorario as controlhorario
 import urllib
 
@@ -63,16 +64,42 @@ class gesttare(interna):
             {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
             {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
             {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
-            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
+            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}        
         ]
 
-        if template == "calendarioTareas":
+        if template == "formRecordcalendarioTareas":
             return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
+
+        if template == "formRecord":
+            return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
 
         return fields
 
     def gesttare_getDesc(self):
         return "nombre"
+
+    def gesttare_field_adjunto(self, model):
+        nombre = None
+        # ficheros = gesDoc.getFiles("gt_comentarios", model.pk)
+        idUsuario = qsatype.FLUtil.nameUser()
+        pk = model.pk
+        params = {
+            'pk': pk,
+            'prefix': "gt_tareas"
+        }
+        # ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
+        ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
+        adjuntos = []
+        if ficheros:
+            files = ""
+            for file in ficheros:
+                adjuntos.append({"id": file, "name": ficheros[file]["nombre"]})
+            return adjuntos
+            #     files = file + "./."
+            # return files
+        # if file:
+        #     return file["nombre"]
+        return nombre
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
         if template == "formRecord":
@@ -294,23 +321,43 @@ class gesttare(interna):
         comentario = ""
         if "comentario" in oParam:
             comentario = oParam['comentario']
-        cursor = qsatype.FLSqlCursor(u"gt_comentarios")
-        cursor.setModeAccess(cursor.Insert)
-        cursor.refreshBuffer()
-        cursor.setValueBuffer(u"idtarea", model.idtarea)
-        cursor.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
-        cursor.setValueBuffer(u"hora", str(qsatype.Date())[-8:])
-        cursor.setValueBuffer(u"comentario", comentario)
-        cursor.setValueBuffer(u"hdedicadas", 0)
-        cursor.setValueBuffer(u"costehora", 0)
-        cursor.setValueBuffer(u"coste", 0)
-        cursor.setValueBuffer(u"idusuario", idUsuario)
-        if not cursor.commitBuffer():
-            print("algo salio mal")
-            return False
-        if not gesDoc.fileUpload("gt_comentarios", cursor.valueBuffer("idcomentario"), oParam['FILES']):
-            return False
-        return True
+
+        if len(oParam["FILES"]) > 0 or "comentario" in oParam:
+            cursor = qsatype.FLSqlCursor(u"gt_comentarios")
+            cursor.setModeAccess(cursor.Insert)
+            cursor.refreshBuffer()
+            cursor.setValueBuffer(u"idtarea", model.idtarea)
+            cursor.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
+            cursor.setValueBuffer(u"hora", str(qsatype.Date())[-8:])
+            cursor.setValueBuffer(u"comentario", comentario)
+            cursor.setValueBuffer(u"hdedicadas", 0)
+            cursor.setValueBuffer(u"costehora", 0)
+            cursor.setValueBuffer(u"coste", 0)
+            cursor.setValueBuffer(u"idusuario", idUsuario)
+            if not cursor.commitBuffer():
+                print("algo salio mal")
+                return False
+            if not gesDoc.fileUpload("gt_comentarios", cursor.valueBuffer("idcomentario"), oParam['FILES']):
+                return False
+            return True
+
+        resul = {}
+        resul["return_data"] = False
+        resul["msg"] = "Escribe un comentario o adjunta un archivo"
+
+        return resul
+
+    def gesttare_uploadFileTarea(self, model, oParam):
+        # if not gesDoc.fileUpload("gt_tareas", model.idtarea, oParam['FILES']):
+        #     return False
+        if len(oParam["FILES"]) > 0:
+            return True
+
+        resul = {}
+        resul["return_data"] = False
+        resul["msg"] = "No hay seleccionado archivo para adjuntar"
+
+        return resul
 
     def gesttare_login(self, oParam):
         data = []
@@ -463,7 +510,7 @@ class gesttare(interna):
 
         tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(user_name))
         if not tramoactivo:
-            start = controlhorario.getIface().start({})
+            start = controlhorario.getIface().start({}, oParam)
             if "resul" in start and start["resul"] != True:
                 return start
 
@@ -868,7 +915,6 @@ class gesttare(interna):
                 curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
                 if not curPartic.commitBuffer():
                     return False
-        print("sale por true", cursor.valueBuffer("idhito"))
         return True
 
     def gesttare_getFilters(self, model, name, template=None):
@@ -937,6 +983,13 @@ class gesttare(interna):
                     return False
             else:
                 return False
+
+        # if accion == "delete":
+        #     nombreUsuario = qsatype.FLUtil.nameUser()
+        #     idcompanyUser = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", u"idusuario = '" + nombreUsuario + u"'")
+        #     idcompanyProject = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"idcompany", ustr(u" idproyecto = '", pk, "'"))
+        #     if idcompanyUser != idcompanyProject:
+        #         return False
         return True
 
     def gesttare_borrar_tarea(self, model, oParam, cursor):
@@ -1118,6 +1171,15 @@ class gesttare(interna):
         response["url"] = '/gesttare/gt_tareas/newRecord' + params
         return response
 
+    def gesttare_drawif_checkAdjuntos(self, cursor):
+        # if cursor.valueBuffer("resuelta") == True:
+        if cursor.valueBuffer("idactualizacion"):
+            adjunto = qsatype.FLUtil.quickSqlSelect("gd_objetosdoc", "clave", "clave = '{}'".format(cursor.valueBuffer("idactualizacion")))
+            if adjunto:
+                return True
+        
+
+        return "hidden"
     def gesttare_drawif_completartarea(self, cursor):
         if cursor.valueBuffer("resuelta") == True:
             return "hidden"
@@ -1144,15 +1206,23 @@ class gesttare(interna):
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
         # usuario = qsatype.FLUtil.nameUser()
+        hoy = qsatype.Date()
+        fechacreacion = str(hoy)[:10]
         cursor.setValueBuffer("codestado", "Por Hacer")
-        if cursor.valueBuffer("nombre").startswith("gt_ac_"):
+        cursor.setValueBuffer("fechacreacion", fechacreacion)
+        if cursor.valueBuffer("idactualizacion"):
             nombre = cursor.valueBuffer("nombre")
-            idactualizacion = nombre[6:len(nombre)]
+            idactualizacion = cursor.valueBuffer("idactualizacion")
             nombre = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones", "otros", "idactualizacion = {}".format(idactualizacion)) or None
             descripcion = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones", "tipobjeto", "idactualizacion = {}".format(idactualizacion)) or None
             cursor.setValueBuffer("nombre", nombre)
             cursor.setValueBuffer("descripcion", descripcion)
+            cursor.setValueBuffer("idactualizacion", idactualizacion)
         return True
+
+    def gesttare_verTarea(self, model, cursor):
+        url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
+        return url
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -1234,6 +1304,9 @@ class gesttare(interna):
 
     def uploadFile(self, model, oParam):
         return self.ctx.gesttare_uploadFile(model, oParam)
+
+    def uploadFileTarea(self, model, oParam):
+        return self.ctx.gesttare_uploadFileTarea(model, oParam)
 
     def login(self, oParam):
         return self.ctx.gesttare_login(oParam)
@@ -1319,6 +1392,9 @@ class gesttare(interna):
     def drawif_completartarea(self, cursor):
         return self.ctx.gesttare_drawif_completartarea(cursor)
 
+    def drawif_checkAdjuntos(self, cursor):
+        return self.ctx.gesttare_drawif_checkAdjuntos(cursor)
+
     def drawif_abrirtarea(self, cursor):
         return self.ctx.gesttare_drawif_abrirtarea(cursor)
 
@@ -1330,6 +1406,12 @@ class gesttare(interna):
 
     def iniciaValoresCursor(self, cursor=None):
         return self.ctx.gesttare_iniciaValoresCursor(cursor)
+
+    def verTarea(self, model, cursor):
+        return self.ctx.gesttare_verTarea(model, cursor)
+
+    def field_adjunto(self, model):
+        return self.ctx.gesttare_field_adjunto(model)
 
 # @class_declaration head #
 class head(gesttare):

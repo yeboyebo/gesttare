@@ -81,10 +81,9 @@
                     {
                         "tipo": "act",
                         "key": "validar",
-                        "label": "Validar día",
-                        "success": [
-                            {"slot": "refrescar"}
-                        ]
+                        "calculatelabel": "completaTitle",
+                        "calculateicon": "completaIcon",
+                        "success": [{"custom": "gt_controlhorario", "slot": "refrescar"}]
                     },
                     {"tipo": "field", "listpos": "title", "key": "gt_controldiario.fecha", "label": "Fecha", "width": 10},
                     {"tipo": "foreignfield", "listpos": "subtitle", "key": "aqn_user.usuario", "label": "Usuario", "color": "Color usuario", "width": 5},

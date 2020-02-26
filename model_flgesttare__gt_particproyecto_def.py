@@ -42,13 +42,20 @@ class gesttare(interna):
         return usuario
 
     def gesttare_borrarPartic(self, oParam, cursor):
-        cursor.setModeAccess(cursor.Del)
-        cursor.refreshBuffer()
-        if not cursor.commitBuffer():
-            return False
+        idproyecto = cursor.valueBuffer("idproyecto")
+        usuario = qsatype.FLUtil.nameUser()
+        responsable = qsatype.FLUtil.sqlSelect("gt_proyectos", "idresponsable", "idproyecto = '{}'".format(idproyecto))
         resul = {}
-        resul["return_data"] = False
-        resul["msg"] = "Participante eliminado correctamente"
+        if int(usuario) == responsable:
+            cursor.setModeAccess(cursor.Del)
+            cursor.refreshBuffer()
+            if not cursor.commitBuffer():
+                return False
+            resul["return_data"] = False
+            resul["msg"] = "Participante eliminado correctamente"
+        else:
+            resul["return_data"] = False
+            resul["msg"] = "Solo puede eliminar participantes el responsable de proyecto"
         return resul
 
     def __init__(self, context=None):

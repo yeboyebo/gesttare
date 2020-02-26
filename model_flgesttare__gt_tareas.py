@@ -37,6 +37,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def uploadFile(self, oParam):
         return form.iface.uploadFile(self, oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def uploadFileTarea(self, oParam):
+        return form.iface.uploadFileTarea(self, oParam)
+
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def cambiarFecha(self, oParam, cursor):
         return form.iface.cambiarFecha(self, oParam, cursor)
@@ -176,6 +180,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def drawif_completartarea(cursor):
         return form.iface.drawif_completartarea(cursor)
 
+    def drawif_checkAdjuntos(cursor):
+        return form.iface.drawif_checkAdjuntos(cursor)
+
     def drawif_abrirtarea(cursor):
         return form.iface.drawif_abrirtarea(cursor)
 
@@ -193,6 +200,14 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def verTarea(self, cursor):
+        return form.iface.verTarea(self, cursor)
+
+    def field_adjunto(self):
+        return form.iface.field_adjunto(self)
+
 
 
 # @class_declaration gt_tareas #

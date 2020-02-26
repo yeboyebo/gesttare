@@ -149,7 +149,8 @@ class gesttare(interna):
         query["tablesList"] = ("gt_actualizusuario,gt_actualizaciones,aqn_user")
         query["select"] = ("gt_actualizaciones.idactualizacion, gt_actualizusuario.idactualizusuario, gt_actualizaciones.otros, gt_actualizaciones.idtarea, gt_actualizaciones.tipo,gt_actualizaciones.idcomentario,gt_actualizaciones.fecha,gt_actualizaciones.hora,gt_actualizusuario.idusuario,gt_tareas.nombre, gt_actualizaciones.idusuarioorigen")
         query["from"] = ("gt_actualizusuario INNER JOIN gt_actualizaciones ON gt_actualizusuario.idactualizacion = gt_actualizaciones.idactualizacion INNER JOIN aqn_user ON gt_actualizusuario.idusuario = aqn_user.idusuario LEFT JOIN gt_tareas ON gt_tareas.idtarea = gt_actualizaciones.idtarea")
-        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND (gt_actualizaciones.tipo = 'anotacion' OR gt_actualizaciones.tipo = 'inbox'))) AND gt_actualizaciones.fecha BETWEEN '2019-11-16' AND '2500-12-20' ORDER BY gt_actualizaciones.fecha DESC")
+        query["where"] = ("gt_actualizusuario.idusuario = '" + idUsuario + "' AND (gt_actualizaciones.idusuarioorigen <> '" + idUsuario + "' OR (gt_actualizaciones.idusuarioorigen = '" + idUsuario + "' AND (gt_actualizaciones.tipo = 'anotacion' OR gt_actualizaciones.tipo = 'inbox'))) AND gt_actualizaciones.fecha BETWEEN '2019-11-16' AND '2500-12-20'")
+        query["orderby"] = "gt_actualizaciones.fecha DESC"
         return query
 
     def gesttare_queryGrid_notificacionesUsuarioViejas(self, model):
@@ -172,9 +173,27 @@ class gesttare(interna):
         if cursor.valueBuffer("tipo") == "anotacion" or cursor.valueBuffer("tipo") == "inbox":
             response["status"] = 2
             response["confirm"] = "<div class='anotacionNombre'>Nombre: </div><div class='anotacionNombreOtros'>" + cursor.valueBuffer("otros") + "</div></br>" + "<div class='anotacionDescripcion'>Descripción: </div><div class='anotacionDescripcionTipobjeto'>" + cursor.valueBuffer("tipobjeto") + "</div>"
+            if cursor.valueBuffer("tipo") == "inbox":
+                clave = qsatype.FLUtil.sqlSelect("gd_objetosdoc", "clave", "clave = '{}'".format(cursor.valueBuffer("idactualizacion")))
+                if clave:
+                    documentos = ""
+                    q = qsatype.FLSqlQuery()
+                    q.setTablesList(u"gd_objetosdoc, gd_documentos")
+                    q.setSelect("gd_documentos.nombre")
+                    q.setFrom("gd_objetosdoc INNER JOIN gd_documentos ON gd_objetosdoc.iddocumento = gd_documentos.iddocumento")
+                    q.setWhere(u"gd_objetosdoc.clave = '" + str(cursor.valueBuffer("idactualizacion")) + "'")
+
+                    if not q.exec_():
+                        print("Error inesperado")
+                        return []
+                    if q.size() > 200:
+                        return []
+
+                    while q.next():
+                        documentos += "<li>" + str(q.value(0)) + " </li> "
+                    response["confirm"] += "</br><div class='anotacionDescripcion'>Adjuntos: </div><div class='anotacionDescripcionTipobjeto'>" + documentos + "</div>"
             response["customButtons"] = []
-            # print(response)
-            return response
+                    # print(response)
             # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
         elif cursor.valueBuffer("tipobjeto") in ["proyecto", "gt_proyecto"]:
             response["url"] = '/gesttare/gt_proyectos/' + str(cursor.valueBuffer("idobjeto"))
@@ -220,7 +239,8 @@ class gesttare(interna):
         # descripcion.replace('\t', "")
         # descripcion.replace('<', "")
         # response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ str(model.otros) + "&p_descripcion=" + descripcion
-        response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ "gt_ac_" + str(model.idactualizacion)
+        # response["url"] = '/gesttare/gt_tareas/newRecord?p_nombre='+ "gt_ac_" + str(model.idactualizacion)
+        response["url"] = '/gesttare/gt_tareas/newRecord?p_idactualizacion=' + str(model.idactualizacion)
         return response
 
     def gesttare_transpasarAnotacion(self, model, oParam):

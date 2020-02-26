@@ -4,7 +4,8 @@ import re
 import hashlib
 from YBLEGACY import qsatype
 from YBUTILS import notifications
-
+import datetime
+import time
 
 class interna(qsatype.objetoBase):
 
@@ -418,11 +419,13 @@ class gesttare(interna):
 
     def gesttare_iniciaValoresCursor(self, cursor=None):
         usuario = qsatype.FLUtil.nameUser()
+        hoy = qsatype.Date()
+        fechacreacion = str(hoy)[:10]
         idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
         cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idresponsable", usuario)
-
-        qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(cursor)
+        cursor.setValueBuffer("fechacreacion", fechacreacion)
+        # qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(cursor)
         return True
 
     def gesttare_archivar_proyecto(self, oParam, cursor):
@@ -563,7 +566,8 @@ class gesttare(interna):
             curCopia = qsatype.FLSqlCursor("gt_proyectos")
             curCopia.setModeAccess(curCopia.Insert)
             curCopia.refreshBuffer()
-            qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(curCopia)
+            # qsatype.FactoriaModulos.get('formRecordgt_proyectos').iface.iniciaValoresCursor(curCopia)
+            self.iface.iniciaValoresCursor(curCopia)
             curCopia.setValueBuffer("idresponsable", user_name)
             curCopia.setValueBuffer("nombre", nombre)
             curCopia.setValueBuffer("descripcion", "")
