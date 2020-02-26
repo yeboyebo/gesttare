@@ -39,8 +39,8 @@ class gesttare(interna):
 
     def gesttare_afterCommit_gt_proyectos(self, curProyecto):
         _i = self.iface
-        # if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
-        #     return False
+        if not qsatype.FactoriaModulos.get('flgesttare').iface.afterCommit_gt_proyectos(curProyecto):
+            return False
 
         # if curProyecto.modeAccess() == curProyecto.Insert:
         #     if not _i.crearHitoInicial(curProyecto):
@@ -498,19 +498,25 @@ class gesttare(interna):
     def gesttare_comprobarUsuarioResponsableProyecto(self, curProyecto):
         if curProyecto.modeAccess() == curProyecto.Insert:
             idUsuario = str(qsatype.FLUtil.nameUser())
-            if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([idUsuario, str(curProyecto.valueBuffer(u"idproyecto"))])):
-                return False
             if idUsuario != str(curProyecto.valueBuffer("idresponsable")):
                 if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"idproyecto")])):
                     return False
-        elif curProyecto.modeAccess() == curProyecto.Edit:
-            if curProyecto.valueBuffer("idresponsable") and (curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable")):
-                if qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idparticipante", ustr(u"idusuario = '", str(curProyecto.valueBuffer("idresponsable")), u"' AND idproyecto = '", str(curProyecto.valueBuffer("idproyecto")), "'")):
-                    return True
-                if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), str(curProyecto.valueBuffer(u"idproyecto"))])):
-                    return False
-
         return True
+        # if curProyecto.modeAccess() == curProyecto.Insert:
+        #     idUsuario = str(qsatype.FLUtil.nameUser())
+        #     if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([idUsuario, str(curProyecto.valueBuffer(u"idproyecto"))])):
+        #         return False
+        #     if idUsuario != str(curProyecto.valueBuffer("idresponsable")):
+        #         if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), curProyecto.valueBuffer(u"idproyecto")])):
+        #             return False
+        # elif curProyecto.modeAccess() == curProyecto.Edit:
+        #     if curProyecto.valueBuffer("idresponsable") and (curProyecto.valueBuffer("idresponsable") != curProyecto.valueBufferCopy("idresponsable")):
+        #         if qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idparticipante", ustr(u"idusuario = '", str(curProyecto.valueBuffer("idresponsable")), u"' AND idproyecto = '", str(curProyecto.valueBuffer("idproyecto")), "'")):
+        #             return True
+        #         if not qsatype.FLUtil.sqlInsert(u"gt_particproyecto", qsatype.Array([u"idusuario", u"idproyecto"]), qsatype.Array([curProyecto.valueBuffer("idresponsable"), str(curProyecto.valueBuffer(u"idproyecto"))])):
+        #             return False
+
+        # return True
 
     def gesttare_comprobarClienteProyecto(self, curProyecto):
         if curProyecto.modeAccess() == curProyecto.Edit:
