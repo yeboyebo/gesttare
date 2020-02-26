@@ -628,6 +628,22 @@
             {
                 "path": "apps/portal/viewset/",
                 "name": "app_portal__views_portal.py"
+            },
+            {
+                "name": "model_flcolagedo__gd_objetosdoc_def.py",
+                "path": "models/flcolagedo/"
+            },
+            {
+                "name": "model_flcolagedo__gd_objetosdoc.py",
+                "path": "models/flcolagedo/"
+            },
+            {
+                "name": "model_flcolagedo__gd_documentos_def.py",
+                "path": "models/flcolagedo/"
+            },
+            {
+                "name": "model_flcolagedo__gd_documentos.py",
+                "path": "models/flcolagedo/"
             }
         ]
     }

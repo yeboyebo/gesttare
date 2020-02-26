@@ -23,6 +23,11 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "labelAdjunto": {
+                    "componente": "YBLabel",
+                    "text": "Contiene archivos adjuntos",
+                    "className": "contieneAdjuntos"
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -42,7 +47,9 @@
                             "title": "",
                             "fields": {
                                 "nombre": {"className": "col-sm-12"},
-                                "descripcion": {},
+                                "descripcion": {
+                                    "label": " "
+                                },
                                 "idproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
                                 "idhito": {
                                     "combolimit": 8, 
@@ -72,5 +79,9 @@
             "action": "return"
         }
     },
-    "drawIf": {}
+    "drawIf": {
+        "groupBoxPadre" :{
+            "labelAdjunto": "drawif_checkAdjuntos"
+        }
+    }
 }

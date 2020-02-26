@@ -58,6 +58,12 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     def gotoControlDiario(self):
         return form.iface.gotoControlDiario(self)
 
+    def field_completaTitle(self):
+        return form.iface.field_completaTitle(self)
+        
+    def field_completaIcon(self):
+        return form.iface.field_completaIcon(self)
+
 
 # @class_declaration gt_controldiario #
 class gt_controldiario(gesttare_gt_controldiario, helpers.MixinConAcciones):

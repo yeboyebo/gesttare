@@ -78,7 +78,8 @@
                         {
                             "tipo": "act",
                             "key": "validarDia",
-                            "label": "Validar",
+                            "calculatelabel": "completaTitle",
+                            "calculateicon": "completaIcon",
                             "success": [
                                 {"slot": "refrescar"}
                             ]
@@ -95,7 +96,7 @@
                 },
                 "botonera": {
                     "componente": "YBGroupBox",
-                    "className": "actionGB",
+                    "className": "actionGB botoneraMensual",
                     "style": {"zIndex": 3, "position": "relative"},
                     "layout": {
                         "validarUser": {
@@ -154,8 +155,8 @@
         "validarDia": {
             "prefix": "gt_controldiario",
             "action": "legacy",
-            "serverAction": "validar",
-            "icon": "check"
+            "serverAction": "validar_dia",
+            "icon": "check_box_outline_blank"
         },
         "validar_admin": {
             "action": "legacy",

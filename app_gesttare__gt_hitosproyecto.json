@@ -26,7 +26,7 @@
                 },
                 "completar": {
                     "componente": "YBButton",
-                    "title": "Completar tarea",
+                    "title": "Completar hito",
                     "prefix": "gt_hitosproyecto",
                     "icon": "check_box_outline_blank",
                     "className": "floatRight",
@@ -58,7 +58,7 @@
                 },
                 "borrarTareaButton": {
                     "componente": "YBButton",
-                    "title": "Borrar Tarea",
+                    "title": "Borrar Hito",
                     "style": {
                         "padding": "0px 20px",
                         "marginTop": "5px"

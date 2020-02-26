@@ -111,14 +111,17 @@
                                 "title": "",
                                 "fields": {
                                     "nombre": {},
-                                    "descripcion": {},
+                                    "descripcion": {
+                                        "label": " "
+                                    },
                                     "estado": {},
                                     "fechainicio": {},
                                     "fechaterminado": {},
                                     "idresponsable": {
                                         "combolimit": 1,
                                         "showpk": false,
-                                        "function": "getParticCompaniaUsu"
+                                        "function": "getParticCompaniaUsu",
+                                        "required": true
                                     },
                                     "presupuesto": {},
                                     "idcliente": {

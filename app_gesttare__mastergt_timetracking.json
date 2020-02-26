@@ -13,40 +13,40 @@
         }
     },
     "layout": {
+        "botonera": {
+            "componente": "YBGroupBox",
+            "className": "actionGB",
+            "style": {"zIndex": 3, "position": "relative"},
+            "layout": {
+                "vistaNoAgrupada": {
+                    "componente": "YBButton",
+                    "prefix": "gt_timetracking",
+                    "label": "NO AGRUPAR POR TAREA",
+                    "className": "floatRight agruparTarea",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "vistaNoAgrupada",
+                        "success": [{"slot": "recargar"}]
+                    }
+                },
+                "vistaAgrupada": {
+                    "componente": "YBButton",
+                    "prefix": "gt_timetracking",
+                    "label": "AGRUPAR POR TAREA",
+                    "className": "floatRight agruparTarea",
+                    "buttonType": "raised",
+                    "action": {
+                        "key": "vistaAgrupada",
+                        "success": [{"slot": "recargar"}]
+                    }
+                }
+            }
+        },
         "groupBoxPadre": {
             "componente": "YBGroupBox",
             "className": " ",
             "style": {},
             "layout": {
-                "botonera": {
-                    "componente": "YBGroupBox",
-                    "className": "actionGB",
-                    "style": {"zIndex": 3, "position": "relative"},
-                    "layout": {
-                        "vistaNoAgrupada": {
-                            "componente": "YBButton",
-                            "prefix": "gt_timetracking",
-                            "label": "NO AGRUPAR POR TAREA",
-                            "className": "floatRight agruparTarea",
-                            "buttonType": "raised",
-                            "action": {
-                                "key": "vistaNoAgrupada",
-                                "success": [{"slot": "recargar"}]
-                            }
-                        },
-                        "vistaAgrupada": {
-                            "componente": "YBButton",
-                            "prefix": "gt_timetracking",
-                            "label": "AGRUPAR POR TAREA",
-                            "className": "floatRight agruparTarea",
-                            "buttonType": "raised",
-                            "action": {
-                                "key": "vistaAgrupada",
-                                "success": [{"slot": "recargar"}]
-                            }
-                        }
-                    }
-                },
                 "separator": {
                     "componente": "YBSeparator"
                 },
@@ -210,10 +210,11 @@
                         }
                     },
                     "columns": [
-                        {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 370},
+                        {"tipo": "foreignfield", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 570},
                         {"tipo": "foreignfield", "listpos": "body", "key": "Proyecto", "label": "Proyecto", "title": true,"width": 180},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "suma","label": "Total tiempo", "width": 5}
-                    ]
+                    ],
+                    "rowclick": "gototarea"
                 }
 
             }
@@ -228,6 +229,12 @@
         "gototimetracking": {
             "action": "goto",
             "template": "form"
+        },
+        "gototarea": {
+            "action": "goto",
+            "prefix": "gt_tareas",
+            "serverAction": "verTarea",
+            "icon": "assignment"
         },
         "editarTT": {
             "action": "legacy",

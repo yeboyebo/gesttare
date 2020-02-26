@@ -24,9 +24,9 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
     def queryGrid_control_diario(model, filters):
         return form.iface.queryGrid_control_diario(model, filters)
 
-    @helpers.decoradores.accion(aqparam=[])
-    def start(self):
-        return form.iface.start(self)
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def start(self, oParam):
+        return form.iface.start(self, oParam)
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def pause(self, oParam):
@@ -69,6 +69,12 @@ class gesttare_gt_controlhorario(interna_gt_controlhorario, helpers.MixinConAcci
 
     def iniciaValoresCursor(cursor=None):
         return form.iface.iniciaValoresCursor(cursor)
+
+    def field_completaTitle(self):
+        return form.iface.field_completaTitle(self)
+        
+    def field_completaIcon(self):
+        return form.iface.field_completaIcon(self)
 
 
 # @class_declaration gt_controlhorario #

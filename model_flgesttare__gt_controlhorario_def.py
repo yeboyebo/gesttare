@@ -23,7 +23,7 @@ class gesttare(interna):
     def gesttare_getDesc(self):
         return None
 
-    def gesttare_start(self, model):
+    def gesttare_start(self, model, oParam):
         user_name = qsatype.FLUtil.nameUser()
         now = str(qsatype.Date())
         fecha = now[:10]
@@ -51,9 +51,36 @@ class gesttare(interna):
         response["resul"] = False
         response["msg"] = ""
         if qsatype.FLUtil().quickSqlSelect("gt_controldiario", "validado", "fecha = '{}' AND idusuario = '{}'".format(now[:10], user_name)):
-            response["status"] = 1
-            response["msg"] = "El dia ya esta validado"
-            return response
+            # response["status"] = 1
+            # response["msg"] = "El día ya está validado. Debe desbloquear el día para iniciar tracking"
+            # return response
+            mes = str(fecha).split("-")[1]
+            mesvalid = qsatype.FLUtil.sqlSelect("gt_controlmensual", "validado_user", "mes = '{}'".format(mes))
+            if mesvalid:
+                resul = {}
+                resul['status'] = 1
+                resul['msg'] = "Error. Debes desbloquear primero el mes"
+                return resul
+            if not oParam or "confirmacion" not in oParam:
+                response['status'] = 2
+                response['confirm'] = "El día está bloqueado. Vas a desbloquear el día"
+                response["serverAction"] = "start"
+                return response
+            else:
+                if not qsatype.FLSqlQuery().execSql("UPDATE gt_controldiario set validado = {} WHERE fecha = '{}' AND idusuario = '{}'".format(False, now[:10], user_name)):
+                    return False
+                return self.iface.start(model, oParam)
+                # curDiario = qsatype.FLSqlCursor(u"gt_controldiario")
+                # curDiario.setModeAccess(curDiario.Edit)
+                # curDiario.refreshBuffer()
+                # if not curDiario.valueBuffer("validado"):
+                #     return True
+                # print("????????")    
+                # curDiario.setValueBuffer("validado", False)
+                # if not curDiario.commitBuffer():
+                #     return False
+
+            return True
 
         if qsatype.FLUtil().quickSqlSelect("gt_controlmensual", "validado_user", "mes = '{}' AND idusuario = '{}'".format(mes, user_name)):
             response["status"] = 1
@@ -124,7 +151,9 @@ class gesttare(interna):
             # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
         fields = [
             {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}
+            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'},
+            {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
+            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
         ]
         return fields
 
@@ -291,6 +320,22 @@ class gesttare(interna):
         cursor.setValueBuffer(u"fechafin", fechainicio)
         return True
 
+    def gesttare_field_completaIcon(self, model):
+        if model["gt_controldiario.validado"]:
+            return "check_box"
+        else:
+            return "check_box_outline_blank"
+
+        return ""
+
+    def gesttare_field_completaTitle(self, model):
+        if model["gt_controldiario.validado"]:
+            return "Validar día"
+        else:
+            return "Desbloquear día"
+
+        return ""
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -300,8 +345,8 @@ class gesttare(interna):
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
 
-    def start(self, model):
-        return self.ctx.gesttare_start(model)
+    def start(self, model, oParam):
+        return self.ctx.gesttare_start(model, oParam)
 
     def pause(self, model, oParam):
         return self.ctx.gesttare_pause(model, oParam)
@@ -350,6 +395,12 @@ class gesttare(interna):
 
     def getForeignFields(self, model, template=None):
         return self.ctx.gesttare_getForeignFields(model, template)
+
+    def field_completaIcon(self, model):
+        return self.ctx.gesttare_field_completaIcon(model)
+
+    def field_completaTitle(self, model):
+        return self.ctx.gesttare_field_completaTitle(model)
 
 
 # @class_declaration head #

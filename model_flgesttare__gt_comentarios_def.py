@@ -12,7 +12,10 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from YBUTILS.APIQSA import APIQSA
 from YBUTILS import gesDoc
+import traceback
+import sys
 
 
 class gesttare(interna):
@@ -27,7 +30,15 @@ class gesttare(interna):
 
     def gesttare_field_adjunto(self, model):
         nombre = None
-        ficheros = gesDoc.getFiles("gt_comentarios", model.pk)
+        # ficheros = gesDoc.getFiles("gt_comentarios", model.pk)
+        idUsuario = qsatype.FLUtil.nameUser()
+        pk = model.pk
+        params = {
+            'pk': pk,
+            'prefix': "gt_comentarios"
+        }
+        # ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
+        ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
         adjuntos = []
         if ficheros:
             files = ""
@@ -45,6 +56,16 @@ class gesttare(interna):
         nombre = "@" + model.idusuario.usuario
         return nombre
 
+    def gesttare_check_permissions(self, model, prefix, pk, template, acl, accion):
+
+        if accion == "delete":
+            nombreUsuario = qsatype.FLUtil.nameUser()
+            idUsuario = qsatype.FLUtil.sqlSelect("gt_comentarios","idusuario",str("idcomentario = {} AND idusuario = {}".format(pk, nombreUsuario)))
+            # idcompanyProject = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"idcompany", ustr(u" idproyecto = '", pk, "'"))
+            if not idUsuario:
+                return False
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -59,6 +80,9 @@ class gesttare(interna):
 
     def field_nombreUsuario(self, model):
         return self.ctx.gesttare_field_nombreUsuario(model)
+
+    def check_permissions(self, model, prefix, pk, template, acl, accion=None):
+        return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
 
 
 # @class_declaration head #

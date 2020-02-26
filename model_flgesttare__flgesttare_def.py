@@ -16,6 +16,7 @@ import time
 from models.flgesttare.gt_proyectos import gt_proyectos as proyectos
 from models.flgesttare.gt_tareas import gt_tareas as tareas
 import datetime
+from YBUTILS.APIQSA import APIQSA
 
 
 class gesttare(interna):
@@ -106,6 +107,16 @@ class gesttare(interna):
 
         if not _i.controlCosteProyecto(curTarea):
             return False
+
+        if curTarea.modeAccess() == curTarea.Insert:
+            params = {
+                'clave': curTarea.valueBuffer("idactualizacion"),
+                'idtarea': curTarea.valueBuffer("idtarea")
+            }
+            clave = qsatype.FLUtil.sqlSelect("gd_objetosdoc", "clave", "clave = '{}'".format(curTarea.valueBuffer("idactualizacion")))
+            if clave:
+                usuario = qsatype.FLUtil.nameUser()
+                APIQSA.entry_point('delete_objetosdoc', "gd_objetosdoc", usuario, params)
 
         return True
     def gesttare_controlCosteProyecto(self, curT):
