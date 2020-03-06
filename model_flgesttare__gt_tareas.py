@@ -162,7 +162,7 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def gototarea(self):
         return form.iface.gotoTarea(self)
 
-    @helpers.decoradores.accion(tipo="O", aqparam=["oParam"])
+    @helpers.decoradores.accion(aqparam=["oParam"])
     def gotoNewRecordAnotacion(self, oParam):
         return form.iface.gotoNewRecordAnotacion(oParam)
 
@@ -173,7 +173,7 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def getParticipantesProyecto(self, oParam):
         return form.iface.getParticipantesProyecto(self, oParam)
 
-    @helpers.decoradores.accion(tipo="O", aqparam=["oParam"])
+    @helpers.decoradores.accion(aqparam=["oParam"])
     def gotonewrecordtarea(self, oParam):
         return form.iface.gotonewrecordtarea(oParam)
 

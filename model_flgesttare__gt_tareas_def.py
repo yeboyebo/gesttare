@@ -10,6 +10,7 @@ from models.flgesttare import flgesttare_def
 
 import hashlib
 import json
+import calendar
 
 class interna(qsatype.objetoBase):
 
@@ -48,31 +49,30 @@ class gesttare(interna):
         return 30
 
     def gesttare_getForeignFields(self, model, template=None):
+        fields = []
         if template == "renegociacion":
             return [
                 {'verbose_name': 'renegociaProyecto', 'func': 'ren_field_proyecto'},
                 {'verbose_name': 'renegociacolorfechavencimiento', 'func': 'ren_color_fecha'},
                 {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega'}
             ]
-        fields = [
-            {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
-            {'verbose_name': 'Responsable', 'func': 'field_usuario'},
-            {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
-            {'verbose_name': 'Color nombre', 'func': 'color_nombre'},
-            {'verbose_name': 'Color nombre proyecto', 'func': 'color_nombreProyecto'},
-            {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
-            {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
-            {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
-            {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
-            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}        
-        ]
-
+        if template == "master":
+            fields = [
+                {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+                {'verbose_name': 'Responsable', 'func': 'field_usuario'},
+                {'verbose_name': 'Color fecha', 'func': 'color_fecha'},
+                {'verbose_name': 'Color nombre', 'func': 'color_nombre'},
+                {'verbose_name': 'Color nombre proyecto', 'func': 'color_nombreProyecto'},
+                {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
+                {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
+                {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
+                {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
+                {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
+            ]
         if template == "formRecordcalendarioTareas":
             return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
-
         if template == "formRecord":
             return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
-
         return fields
 
     def gesttare_getDesc(self):
@@ -91,14 +91,9 @@ class gesttare(interna):
         ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
         adjuntos = []
         if ficheros:
-            files = ""
             for file in ficheros:
                 adjuntos.append({"id": file, "name": ficheros[file]["nombre"]})
             return adjuntos
-            #     files = file + "./."
-            # return files
-        # if file:
-        #     return file["nombre"]
         return nombre
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
@@ -128,12 +123,27 @@ class gesttare(interna):
 
     def gesttare_queryGrid_calendarioTareas_initFilter(self):
         initFilter = {}
+
+        today = qsatype.Date()
+        thismonth = today.getMonth()
+        formatmonth = today.getMonth() if len(str(today.getMonth())) == 2 else "0" + str(today.getMonth())
+        thisyear = today.getYear()
+        firstday = qsatype.Date(str(thisyear) + "-" + str(formatmonth) + "-01")
+
+        lastmonthday = calendar.monthrange(thisyear, thismonth)[1]
+        lastday = qsatype.Date(str(thisyear) + "-" + str(formatmonth) + "-" + str(lastmonthday))
+
+        fechaDesde = str(firstday - datetime.timedelta(days=7))
+        fechaHasta = str(lastday + datetime.timedelta(days=7))
+        # fromyear = thisyear if thismonth > 1 else thisyear - 1
+        # toyear = thisyear if thismonth < 12 else thisyear + 1
         # existe = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idtarea", ustr(u"extract(month from gt_tareas.fechavencimiento) = ", qsatype.Date().getMonth()))
         # if not existe:
         #     return initFilter
-        initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2020"
-        initFilter['where'] += u" AND extract(month from gt_tareas.fechavencimiento) = " + str(qsatype.Date().getMonth())
-        initFilter['filter'] = {"s_extract(year from gt_tareas.fechavencimiento)__exact": "2020", "s_extract(month from gt_tareas.fechavencimiento)__exact": str(qsatype.Date().getMonth())}
+        # initFilter['where'] = u" AND extract(year from gt_tareas.fechavencimiento) = 2020"
+        initFilter['where'] = u" AND gt_tareas.fechavencimiento >= '" + fechaDesde[:10] + "' AND gt_tareas.fechavencimiento <= '" + fechaHasta[:10] + "'"
+        # initFilter['where'] += u" AND extract(month from gt_tareas.fechavencimiento) = " + str(qsatype.Date().getMonth())
+        initFilter['filter'] = {"s_gt_tareas.fechavencimiento__gt": fechaDesde[:10], "s_gt_tareas.fechavencimiento__lt": fechaHasta[:10]}
         return initFilter
 
     def gesttare_queryGrid_calendarioTareas(self, model):
@@ -207,23 +217,29 @@ class gesttare(interna):
                 codcliente = model.idproyecto.idcliente.codcliente
                 if codcliente:
                     proyecto = "#" + codcliente + " " + proyecto
-        except:
+        except Exception:
             pass
         return proyecto
 
     def gesttare_field_completaIcon(self, model):
-        if model.resuelta:
-            return "check_box"
-        else:
-            return "check_box_outline_blank"
+        try:
+            if model.resuelta:
+                return "check_box"
+            else:
+                return "check_box_outline_blank"
+        except Exception:
+            pass
 
         return ""
 
     def gesttare_field_completaTitle(self, model):
-        if model.resuelta:
-            return "Abrir tarea"
-        else:
-            return "Completar tarea"
+        try:
+            if model.resuelta:
+                return "Abrir tarea"
+            else:
+                return "Completar tarea"
+        except Exception:
+            pass
 
         return ""
 
