@@ -38,7 +38,7 @@
                     "componente": "YBSeparator"
                 },
                 "graficosAnalisis": {
-                    "label": "Informe individual",
+                    "label": " ",
                     "componente": "YBChart",
                     "filter": {
                         "idusuario": {

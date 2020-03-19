@@ -1,10 +1,40 @@
 {
     "modifications": [
         {
+            "type": "deleteNode",
+            "path": "/querystring/s_activo__exact",
+            "value": null
+        },
+        {
+            "type": "insertAfterItem",
+            "path": "/layout/masterUsuarios/columns[root]",
+            "value": {
+                "tipo": "act",
+                "key": "activar",
+                "calculatelabel": "completaTitle",
+                "calculateicon": "completaIcon",
+                "success": [
+                    {
+                        "slot": "refrescar"
+                    }
+                ]
+            }
+        },
+        {
             "type": "insertAfterNode",
             "path": "/layout/masterUsuarios/columns[nombre]/avatar",
             "value": {
                 "width": 600
+            }
+        },
+        {
+            "type": "insertAfterItem",
+            "path": "/layout/masterUsuarios/columns[nombre]",
+            "value": {
+                "tipo": "field",
+                "listpos": "subtitle",
+                "key": "activo",
+                "width": 100
             }
         },
         {
@@ -34,6 +64,28 @@
             "value": {
                 "label": "Usuario"
             }
+        },
+        {
+            "type": "deleteItem",
+            "path": "/layout/masterUsuarios/columns[desactivarUsu]",
+            "value": null
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/acciones/delete",
+            "value": {
+                "activar": {
+                    "action": "legacy",
+                    "prefix": "aqn_user",
+                    "serverAction": "activar",
+                    "icon": "check_box_outline_blank"
+                }
+            }
+        },
+        {
+            "type": "deleteNode",
+            "path": "/acciones/desactivarUsu",
+            "value": null
         }
     ]
 }

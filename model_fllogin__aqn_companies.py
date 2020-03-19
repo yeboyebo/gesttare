@@ -6,3 +6,6 @@ class gesttare_aqn_companies(yblogin_aqn_companies, helpers.MixinConAcciones):
     class Meta:
         proxy = True
 
+    def field_periodicidad(self):
+        return form.iface.field_periodicidad(self)
+

@@ -118,6 +118,7 @@ class gesttare(yblogin_sass):
                 print(e)
 
             if action == "login":
+                print("entra?")
                 if username == "admin":
                     user = authenticate(username=username, password=password)
                     if user is not None:
@@ -129,6 +130,11 @@ class gesttare(yblogin_sass):
                 try:
                     authusername = APIQSA.login(username, password)
                     if authusername:
+                        id_usuario = qsatype.FLUtil.sqlSelect("aqn_user", "idusuario", "email = '" + str(username) + "'")
+                        ultimo_login = qsatype.FLUtil.sqlSelect("auth_user", "last_login", "username = '" + str(id_usuario) + "'")
+                        if ultimo_login is None:
+                            APIQSA.entry_point('post', "aqn_companies", "", str(username), "enviar_wiki")
+                        # APIQSA.entry_point('post', "aqn_companies", "", "", "enviar_wiki")
                         usuario = aqn_user.objects.filter(email__exact=username)
                         if usuario.exists():
                             authuser = authenticate(username=str(authusername), password=password)
@@ -168,6 +174,157 @@ class gesttare(yblogin_sass):
                     return self.iface.login(request, str(e))
         return self.iface.login(request)
 
+    def gesttare_erroractivecompany_request(self, request, hashparam):
+        return self.iface.erroractivecompany(request)
+
+    def gesttare_emailenviado_request(self, request, hashparam):
+
+        if request.method == "POST":
+            action = request.POST.get("action", None)
+
+            if action == "reenviaremail":
+
+                email = qsatype.FLUtil.sqlSelect("aqn_invitations", "email", "hashcode = '" + str(hashparam) + u"'")
+                id_compania = qsatype.FLUtil.sqlSelect("aqn_invitations", "idcompany", "hashcode = '" + str(hashparam) + u"'")
+
+                params = {
+                    "email": email,
+                    "hashcode": hashparam,
+                    "id_compania": id_compania
+                }
+                APIQSA.entry_point('post', "aqn_companies", "", params, "reenviar")
+        return self.iface.emailenviado(request, hashparam)
+
+    def gesttare_emailreenviado_request(self, request):
+        return self.iface.emailreenviado(request)
+
+    def gesttare_activecompany_request(self, request, hashparam):
+
+        # API.sdsd(hashparam)
+        cursor = qsatype.FLSqlCursor(u"aqn_invitations")
+        cursor.select("hashcode = '{}'".format(hashparam))
+        if not cursor.first():
+            return HttpResponseRedirect("/403")
+        cursor.setModeAccess(cursor.Browse)
+        cursor.refreshBuffer()
+        email = cursor.valueBuffer("email")
+        id_company = cursor.valueBuffer("idcompany")
+        params = {
+            "email": email,
+            "id_company": id_company
+        }
+        # idinvitation = cursor.valueBuffer("id")
+        # Activamos compañia la damos por validada y activamos el usuario
+        if not APIQSA.entry_point('post', "aqn_companies", "", params, 'validar'):
+            return False
+            # return self.iface.error_activar(request)
+
+
+        return self.iface.activecompany(request)
+
+    def gesttare_newcompany_request(self, request):
+        if request.method == "POST":
+            action = request.POST.get("action", None)
+            username = request.POST.get("username", None)
+            nombre = request.POST.get("nombre", None)
+            email = request.POST.get("email", None)
+            apellidos = request.POST.get("apellidos", None)
+            password = request.POST.get("password", None)
+            password2 = request.POST.get("password2", None)
+            nombre_company = request.POST.get("nombrecompany", None)
+            descripcion = request.POST.get("planes", None)
+            modalidad = request.POST.get("modalidad", None)
+
+            # if not re.match('^[(a-z0-9\_\-\.)]+@[(a-z0-9\_\-\.)]+\.[(a-z)]{2,15}$', email.lower()):
+            #     return self.iface.newcompany(request, email, "El email no tiene el formato correcto")
+            if action == "newcompany":
+                id_plan = qsatype.FLUtil.sqlSelect("aqn_planes", "idplan", "descripcion = '" + str(descripcion) + "' AND modalidad = '" + str(modalidad) + "'")
+                params = {
+                    'nombre': nombre_company,
+                    "idplan": id_plan,
+                    "descripcion": nombre_company,
+                    "usuario": {
+                        'email': email,
+                        'usuario': username,
+                        'nombre': nombre,
+                        'apellidos': apellidos,
+                        'password': password,
+                        'password2': password2,
+                    }
+                }
+                try:
+                    resultado = APIQSA.entry_point('post', "aqn_companies", username, params)
+                    id_compania = resultado[0]
+                    id_usuario = resultado[1]
+                    hashcode = resultado[2]
+                except Exception as exc:
+                    print("----------------------------")
+                    print(str(exc))
+                    print("----------------------------/")
+                    return self.iface.newcompany(request, str(exc))
+                if not id_compania:
+                    return self.iface.newcompany(request, "Error no se puede crear usuario y compañia")
+
+                user = User.objects.create_user(username=id_usuario, password="ybllogin", first_name=username)
+                user.save()
+                if not qsatype.FLUtil.sqlUpdate("auth_user", "is_superuser", True, "username = '" + str(id_usuario) + "'"):
+                    return False
+                # return self.iface.login(request, None, "Bienvenido a dailyjob, es necesario validar email")
+                url = "/emailenviado/" + hashcode
+                return HttpResponseRedirect(url)
+
+        return self.iface.newcompany(request, "")
+
+    def gesttare_newcompany(self, request, error):
+        username = request.POST.get("username", None) or ""
+        nombre = request.POST.get("nombre", None) or ""
+        apellidos = request.POST.get("apellidos", None) or ""
+        nombrecompany = request.POST.get("nombrecompany", None) or ""
+
+        return render(request, "portal/newcompany.html", {"error": error, "nombrecompany":nombrecompany, "nombre": nombre, "apellidos": apellidos, "username": username})
+
+    def gesttare_erroractivecompany(self, request):
+        return render(request, "portal/erroractivecompany.html")
+
+    def gesttare_activecompany(self, request):
+        return render(request, "portal/activecompany.html")
+
+    def gesttare_emailenviado(self, request, hashparam):
+        return render(request, "portal/emailenviado.html", {"hashparam": hashparam})
+
+    def gesttare_emailreenviado(self, request):
+        return render(request, "portal/emailreenviado.html")
+
     def auth_login(self, request):
         return self.iface.gesttare_auth_login(request)
+
+    def newcompany_request(self, request):
+        return self.iface.gesttare_newcompany_request(request)
+
+    def newcompany(self, request, error):
+        return self.iface.gesttare_newcompany(request, error)
+
+    def activecompany_request(self, request, hashparam):
+        return self.iface.gesttare_activecompany_request(request, hashparam)
+
+    def activecompany(self, request):
+        return self.iface.gesttare_activecompany(request)
+
+    def erroractivecompany_request(self, request, hashparam):
+        return self.iface.gesttare_erroractivecompany_request(request, hashparam)
+
+    def erroractivecompany(self, request):
+        return self.iface.gesttare_erroractivecompany(request)
+
+    def emailenviado_request(self, request, hashparam):
+        return self.iface.gesttare_emailenviado_request(request, hashparam)
+
+    def emailenviado(self, request, hashparam):
+        return self.iface.gesttare_emailenviado(request, hashparam)
+
+    def emailreenviado_request(self, request):
+        return self.iface.gesttare_emailreenviado_request(request)
+
+    def emailreenviado(self, request):
+        return self.iface.gesttare_emailreenviado(request)
 

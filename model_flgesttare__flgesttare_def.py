@@ -603,6 +603,7 @@ class gesttare(interna):
             costehora = cursor.valueBuffer(u"costehora")
             if not costehora:
                 costehora = qsatype.FLUtil.sqlSelect(u"aqn_user", u"costehora", ustr(u"idusuario = ", cursor.valueBuffer(u"idusuario"))) or 0
+
             hdedicadas = _i.time_to_hours(cursor.valueBuffer("totaltiempo"))
             valor = costehora * hdedicadas
             valor = qsatype.FLUtil.roundFieldValue(valor, u"gt_timetracking", u"coste")
@@ -695,7 +696,7 @@ class gesttare(interna):
         horasordinarias = self.iface.calcula_horasordinarias_diario(cur_diario)
         if horasordinarias:
             cur_diario.setValueBuffer("horasordinarias", horasordinarias)
-            cur_diario.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(int(horasordinarias), all_in_hours=True))
+            cur_diario.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(horasordinarias, all_in_hours=True))
 
         if not cur_diario.commitBuffer():
             print("Ocurrió un error al actualizar el registro diario")
@@ -724,7 +725,7 @@ class gesttare(interna):
         # cur_mensual.setValueBuffer("horasordinarias", str(self.iface.calcula_horasordinarias_diario(cur_mensual)))
         horasordinarias = self.iface.calcula_horasordinarias_diario(cur_mensual)
         cur_mensual.setValueBuffer("horasordinarias", horasordinarias)
-        cur_mensual.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(int(horasordinarias), all_in_hours=True))
+        cur_mensual.setValueBuffer("horasordinariasstring", self.iface.seconds_to_time(horasordinarias, all_in_hours=True))
         if not cur_mensual.commitBuffer():
             print("Ocurrió un error al actualizar el registro mensual")
             return False
@@ -945,6 +946,68 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_compruebaPermisosPlan(self, accion):
+        # saco usuario
+        # saco plan
+        try:
+            usuario = qsatype.FLUtil.nameUser()
+            id_compania = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
+            id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania)) or None
+                
+        except Exception as e:
+            print(e)
+            return True
+        if accion == "startstop" and id_plan == 1:
+            response = {}
+            response["resul"] = True
+            response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
+            return response
+
+        if accion == "start" and id_plan == 1 or accion == "start" and id_plan == 2 or accion == "start" and id_plan == 5:
+            response = {}
+            response["resul"] = True
+            response["msg"] = "Debes tener un plan de pago Senior u Optimizado"
+            return response
+
+        if accion == "informes_horizontal" and id_plan == 1:
+            data = [{"name": "Proyecto 1", "value": 20, "color": "red"}, {"name": "Proyecto 2", "value": 80, "color": "orange"}]
+            return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75", "text": "Tiempo invertido en proyectos"}
+
+        if accion == "informes_pie" and id_plan == 1:
+            data = [{"name": "Proyecto 1", "value": 20, "color": "red"}, {"name": "Proyecto 2", "value": 80, "color": "orange"}]
+            return {"type": "pieDonutChart", "data": data, "size": 80, "innerText": True, "text": "Distribución del tiempo en proyectos"}
+
+        if accion == "informes_info" and id_plan == 1:
+            horasStyle = {
+            "border": "1px solid #dfdfdf",
+            "backgroundColor": "white",
+            "color": "grey"
+            }
+
+            presupuestoStyle = {
+                "backgroundColor": "#bababa",
+                "color": "#ffffff"
+            }
+
+            rentabilidadStyle = {
+                "backgroundImage": "linear-gradient(to right, #e79b21, #ffc68d)",
+                "color": "#ffffff"
+            }
+            data = [{"name": "Horas Invertidas", "value": "50", "style": horasStyle} , {"name": "Tareas Completadas", "value": "6", "style": presupuestoStyle}, {"name": "Tareas En Producción", "value": "20", "style" :rentabilidadStyle}]
+            return {"type": "labelInfo", "data": data}
+
+        if accion == "titulo_analisis" and id_plan == 1:
+            return {"graficosAnalisis": "Datos ficticios"}
+
+        if accion == "porcentaje_hito" and id_plan == 1:
+            valor = qsatype.FLUtil.roundFieldValue(0, u"gt_proyectos", u"rentabilidad")
+            return valor
+
+        if accion == "rentabilidad_proyecto" and id_plan == 1:
+            return [{"type": "pieDonutChart", "data": [{"name": "Rentabilidad", "value": 100, "color": "#50d2ce"}, {"name": "Resto", "value": 0, "color": "#bababa"}], "innerText": True, "animate": True, "size": 90, "showInfo": False}]            
+
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -1088,6 +1151,9 @@ class gesttare(interna):
 
     def borrarTareasHito(self, curHito):
         return self.ctx.gesttare_borrarTareasHito(curHito)
+
+    def compruebaPermisosPlan(self, accion):
+        return self.ctx.gesttare_compruebaPermisosPlan(accion)
 
 
 # @class_declaration head #

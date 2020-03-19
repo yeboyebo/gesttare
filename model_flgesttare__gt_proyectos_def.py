@@ -492,6 +492,9 @@ class gesttare(interna):
         # resto = str("{:,.2f}".format(100 - model.rentabilidad).replace(".", ",")) + "%"
         # rentabilidad = str("{:,.2f}".format(model.rentabilidad).replace(".", ",")) + "%"
         # print("rentabilidad: ", rentabilidad)
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("rentabilidad_proyecto")
+        if tengopermiso != True:
+            return tengopermiso
 
         return [{"type": "pieDonutChart", "data": [{"name": "Rentabilidad", "value": model.rentabilidad, "color": "#50d2ce"}, {"name": "Resto", "value": ("{0:.2f}".format(100 - model.rentabilidad)), "color": "#bababa"}], "innerText": True, "animate": True, "size": 90, "showInfo": False}]
         # return [

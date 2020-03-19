@@ -7,6 +7,21 @@
             "className": "gbTareas gbTareasBox ",
             "style": {},
             "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -18,7 +33,7 @@
                     "label": "Información",
                     "submit": "update",
                     "saveReturn": true,
-                    "return": true,
+                    "return": false,
                     "fields": {
                         "gb__info": {
                             "title": "",
@@ -39,7 +54,11 @@
             }
         }
     },
-    "acciones": {},
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        }
+    },
     "drawIf": {
         "gb__info": {
             "horainicio": "drawif_horaeditable",

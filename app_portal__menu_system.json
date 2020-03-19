@@ -12,7 +12,7 @@
             "path": "/items[usuarios]",
             "value": {
                 "NAME": "empresa",
-                "TEXT": "EMPRESA",
+                "TEXT": "COMPAÑÍA",
                 "URL": "system/aqn_companies/master",
                 "COLOR": "#2D95C1",
                 "ICON": "insert_chart"

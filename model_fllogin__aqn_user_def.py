@@ -5,8 +5,20 @@ import datetime
 from datetime import date
 import calendar
 import locale
+from YBUTILS.APIQSA import APIQSA
 
 class gesttare(yblogin):
+
+    def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        if template == "analisis":
+            tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("titulo_analisis")
+            if tengopermiso != True:
+                return tengopermiso
+            return {"graficosAnalisis": "Informe individual"}
+        return None
+
+    def get_model_info(self, model, data, ident, template, where_filter):
+        return self.ctx.gesttare_get_model_info(model, data, ident, template, where_filter)
 
     def gesttare_getUsuariosProyecto(self, oParam):
         data = []
@@ -56,6 +68,8 @@ class gesttare(yblogin):
             return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
         if template == "formRecord":
             return []
+        if template == "master":
+            return [{'verbose_name': 'completaIcon', 'func': 'field_completaIcon'}, {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}]
         fields = [
             {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
             {'verbose_name': 'usuario', 'func': 'field_nombre'}
@@ -151,29 +165,73 @@ class gesttare(yblogin):
             return [{'criterio': 'idcompany__exact', 'valor': idcompany}]
         return filters
 
-    def gesttare_desactivar_usuario(self, model, oParam, cursor):
+
+    def gesttare_field_completaIcon(self, model):
+        if model.activo:
+            return "check_box"
+        else:
+            return "check_box_outline_blank"
+
+        return ""
+
+    def gesttare_field_completaTitle(self, model):
+        if model.activo:
+            return "Desactivar usuario"
+        else:
+            return "Activar usuario"
+
+        return ""
+
+    def gesttare_activar(self, model, oParam, cursor):
         response = {}
-        if "confirmacion" in oParam and oParam["confirmacion"]:
-            cursor.setModeAccess(cursor.Edit)
-            cursor.refreshBuffer()
-            cursor.setValueBuffer("activo", False)
-            if not cursor.commitBuffer():
-                response["status"] = 1
-                response["msg"] = "No se puedo desactivar usuario"
+        if cursor.valueBuffer("activo"):
+            if "confirmacion" in oParam and oParam["confirmacion"]:
+                usuario = cursor.valueBuffer("idusuario")
+                datos_usuario = {
+                    "aqn_user": {
+                        "activo": False
+                    }
+                }
+                cursor_usuario = APIQSA.entry_point('post', "aqn_user", usuario, datos_usuario, "desactivar_usuario")
+
+                if not cursor_usuario:
+                    response["status"] = 1
+                    response["msg"] = "No se pudo desactivar usuario"
+                    return response
+                if not qsatype.FLUtil.sqlDelete("gt_partictarea", "idusuario = " + str(usuario)):
+                    response["status"] = 1
+                    response["msg"] = "No se pudo desactivar usuario"
+                    return response
+                if not qsatype.FLUtil.sqlDelete("gt_particproyecto", "idusuario = " + str(usuario)):
+                    response["status"] = 1
+                    response["msg"] = "No se pudo desactivar usuario"
+                    return response
+                response["resul"] = True
+                response["msg"] = "Usuario " + cursor_usuario.valueBuffer("usuario") + " desactivado"
                 return response
-            if not qsatype.FLUtil.sqlDelete(u"gt_partictarea", ustr(u"idusuario = ", cursor.valueBuffer("idusuario"))):
-                response["status"] = 1
-                response["msg"] = "No se puedo desactivar usuario"
-                return response
-            if not qsatype.FLUtil.sqlDelete(u"gt_particproyecto", ustr(u"idusuario = ", cursor.valueBuffer("idusuario"))):
-                response["status"] = 1
-                response["msg"] = "No se puedo desactivar usuario"
-                return response
-            response["resul"] = True
-            response["msg"] = "Usuario " + cursor.valueBuffer("usuario") + " desactivado"
+
+            response["status"] = 2
+            response["confirm"] = "¿Seguro que quieres desactivar usuario?"
             return response
+
+        if "confirmacion" in oParam and oParam["confirmacion"]:
+                usuario = cursor.valueBuffer("idusuario")
+                datos_usuario = {
+                    "aqn_user": {
+                        "activo": True
+                    }
+                }
+                cursor_usuario = APIQSA.entry_point('post', "aqn_user", usuario, datos_usuario, "activar_usuario")
+                if not cursor_usuario:
+                    response["status"] = 1
+                    response["msg"] = "No se puede activar usuario"
+                    return response
+                response["resul"] = True
+                response["msg"] = "Usuario " + cursor_usuario.valueBuffer("usuario") + " activado"
+                return response
+
         response["status"] = 2
-        response["confirm"] = "¿Seguro que quieres desactivar usuario?"
+        response["confirm"] = "¿Seguro que quieres activar usuario?"
         return response
 
     def gesttare_checkCambiaPassword(self, cursor):
@@ -209,6 +267,10 @@ class gesttare(yblogin):
         return True
 
     def gesttare_graficoproyectosportiempo(self, oParam):
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("informes_horizontal")
+        if tengopermiso != True:
+            return tengopermiso
+
         where = "1=1 "
         usuario = qsatype.FLUtil.nameUser()
         if not oParam:
@@ -243,7 +305,7 @@ class gesttare(yblogin):
         q.setTablesList("gt_proyectos, gt_particproyecto, aqn_user, gt_tareas, gt_timetracking")
         q.setSelect("t.nombre, t.idproyecto, SUM(tt.totaltiempo)")
         q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
-        q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
+        q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.idproyecto HAVING SUM(tt.totaltiempo) > '01:00:00' ORDER BY SUM(tt.totaltiempo) DESC LIMIT 20")
         # q.setWhere(where + " GROUP BY t.idproyecto ORDER BY SUM(tt.totaltiempo) ASC LIMIT 20")
 
@@ -292,6 +354,10 @@ class gesttare(yblogin):
         return {"type": "pieDonutChart", "data": data, "size": 80, "innerText": True, "text": "Dristribución"}
 
     def gesttare_graficohorasporproyecto(self, oParam):
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("informes_pie")
+        if tengopermiso != True:
+            return tengopermiso
+
         where = "1=1 "
         usuario = qsatype.FLUtil.nameUser()
         if not oParam:
@@ -419,6 +485,9 @@ class gesttare(yblogin):
             "color": "#ffffff"
         }
 
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("informes_info")
+        if tengopermiso != True:
+            return tengopermiso
 
         where = "1=1"
         usuario = qsatype.FLUtil.nameUser()
@@ -615,8 +684,8 @@ class gesttare(yblogin):
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)
 
-    def desactivar_usuario(self, model, oParam, cursor):
-        return self.ctx.gesttare_desactivar_usuario(model, oParam, cursor)
+    def activar(self, model, oParam, cursor):
+        return self.ctx.gesttare_activar(model, oParam, cursor)
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
@@ -662,4 +731,10 @@ class gesttare(yblogin):
 
     def dameEmailCreaAnotacion(self, oParam, cursor):
         return self.ctx.gesttare_dameEmailCreaAnotacion(oParam, cursor)
+
+    def field_completaIcon(self, model):
+        return self.ctx.gesttare_field_completaIcon(model)
+
+    def field_completaTitle(self, model):
+        return self.ctx.gesttare_field_completaTitle(model)
 

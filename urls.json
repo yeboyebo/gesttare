@@ -12,6 +12,56 @@
         },
         {
             "type": "insertAfterNode",
+            "path": "/portal/join",
+            "value": {
+                "newcompany": {
+                    "url": "newcompany$",
+                    "func": "newcompany_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/newcompany",
+            "value": {
+                "activecompany": {
+                    "url": "activecompany/(?P<hashparam>\\w+)$",
+                    "func": "activecompany_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/activecompany",
+            "value": {
+                "erroractivecompany": {
+                    "url": "erroractivecompany/(?P<hashparam>\\w+)$",
+                    "func": "erroractivecompany_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/erroractivecompany",
+            "value": {
+                "emailenviado": {
+                    "url": "emailenviado/(?P<hashparam>\\w+)$",
+                    "func": "emailenviado_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/emailenviado",
+            "value": {
+                "emailreenviado": {
+                    "url": "emailreenviado/(?P<hashparam>\\w+)$",
+                    "func": "emailreenviado_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
             "path": "/portal",
             "value": {
                 "gesttare": {
@@ -98,6 +148,13 @@
             "path": "/models/fllogin/aqn_modules",
             "value": {
                 "aqn_modulescompanies": null
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/models/fllogin/aqn_modulescompanies",
+            "value": {
+                "aqn_planes": null
             }
         }
     ]

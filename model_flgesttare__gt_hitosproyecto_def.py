@@ -12,7 +12,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
-
+from models.flgesttare import flgesttare_def
 
 class gesttare(interna):
 
@@ -65,6 +65,9 @@ class gesttare(interna):
         return ""
 
     def gesttare_fun_porcentaje(self, model):
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("porcentaje_hito")
+        if tengopermiso != True:
+            return tengopermiso
         costeInterno = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"SUM(coste)", ustr(u"idhito = '", model.idhito, u"'"))
         if isNaN(costeInterno):
             costeInterno = 0

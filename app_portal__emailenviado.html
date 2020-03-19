@@ -1,0 +1,31 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+
+    <div class="loginPanel">
+        <div class="loginPanelHeader">
+            <div class="logError">{{error}}</div>
+            <img src="{% static 'dist/img/logo/logo.png' %}" alt="logo" className="logo" style="margin-left:17%"></img>
+        </div>
+
+        <div class="loginPanelBody">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="reenviaremail">
+                <div class="loginPanelFooter">
+                    Se ha enviado un correo de validación a tu dirección email, comprueba el correo.
+                    <button name="loginSubmit" href="javascript:void(0)" class="btn btn-flat btn-primary loginButton">Volver a enviar correo</button>
+                    <!--button name="reenvio" onClick="location.href='/emailreenviado'" class="btn btn-flat btn-primary loginButton">Volver a enviar correo</button-->
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}

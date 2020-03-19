@@ -26,23 +26,50 @@
                 "separator0": {
                     "componente": "YBSeparator"
                 },
-                "formRecordAuthUser": {
+                "formRecordAuthCompanies": {
                     "prefix": "aqn_companies",
                     "componente": "YBForm",
+                    "label": " ",
                     "class": "claseGrid",
                     "submit": "update",
                     "success": [],
-                    "groupbox": "acordeon",
                     "return": false,
                     "fields": {
                         "gb__principal": {
-                            "title": "",
+                            "title": "DATOS GENERALES",
                             "fields": {
-                                "descripcion": {"label": "Razón social"},
-                                "ccc": {},
-                                "cif": {}
+                                "descripcion": {"label": "Nombre", "className": "col-sm-4"},
+                                "idplan": {
+                                    "disabled": true,
+                                    "className": "col-sm-2"
+                                },
+                                "Modalidad de pago": {
+                                    "disabled": true,
+                                    "className": "col-sm-2"
+                                },
+                                "email": {"className": "col-sm-4"},
+                                "telefono": {}
+                            }
+                        },
+                        "gb__datosfacturacion": {
+                            "title": "DATOS FACTURACIÓN",
+                            "fields": {
+                                "nombre": {"label": "Razón Social"},
+                                "cif": {},
+                                "direccion": {},
+                                "localidad": {},
+                                "cp": {},
+                                "provincia": {},
+                                "pais": {}
+                            }
+                        },
+                        "gb__datosccc": {
+                            "title": "CONTROL HORARIO",
+                            "fields": {
+                                "ccc": {}
                             }
                         }
+
                     }
                 }
             }

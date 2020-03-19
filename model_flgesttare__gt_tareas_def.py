@@ -67,12 +67,15 @@ class gesttare(interna):
                 {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
                 {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
                 {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
-                {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
+                {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}        
             ]
+
         if template == "formRecordcalendarioTareas":
             return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
+
         if template == "formRecord":
             return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
+
         return fields
 
     def gesttare_getDesc(self):
@@ -91,9 +94,14 @@ class gesttare(interna):
         ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
         adjuntos = []
         if ficheros:
+            files = ""
             for file in ficheros:
                 adjuntos.append({"id": file, "name": ficheros[file]["nombre"]})
             return adjuntos
+            #     files = file + "./."
+            # return files
+        # if file:
+        #     return file["nombre"]
         return nombre
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
@@ -123,7 +131,6 @@ class gesttare(interna):
 
     def gesttare_queryGrid_calendarioTareas_initFilter(self):
         initFilter = {}
-
         today = qsatype.Date()
         thismonth = today.getMonth()
         formatmonth = today.getMonth() if len(str(today.getMonth())) == 2 else "0" + str(today.getMonth())
@@ -217,29 +224,23 @@ class gesttare(interna):
                 codcliente = model.idproyecto.idcliente.codcliente
                 if codcliente:
                     proyecto = "#" + codcliente + " " + proyecto
-        except Exception:
+        except:
             pass
         return proyecto
 
     def gesttare_field_completaIcon(self, model):
-        try:
-            if model.resuelta:
-                return "check_box"
-            else:
-                return "check_box_outline_blank"
-        except Exception:
-            pass
+        if model.resuelta:
+            return "check_box"
+        else:
+            return "check_box_outline_blank"
 
         return ""
 
     def gesttare_field_completaTitle(self, model):
-        try:
-            if model.resuelta:
-                return "Abrir tarea"
-            else:
-                return "Completar tarea"
-        except Exception:
-            pass
+        if model.resuelta:
+            return "Abrir tarea"
+        else:
+            return "Completar tarea"
 
         return ""
 
@@ -511,6 +512,20 @@ class gesttare(interna):
         user_name = qsatype.FLUtil.nameUser()
         msg = ""
         response = {}
+        # id_compania = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(user_name))
+        # id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania))
+        
+        # if id_plan == 1:
+        #     response = {}
+        #     response["resul"] = True
+        #     response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
+        #     return response
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("startstop")
+        # response = self.plan_compania(user_name)
+        if tengopermiso != True:
+            return tengopermiso
+
+
 
         tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(user_name))
         if not tramoactivo:
@@ -1011,6 +1026,10 @@ class gesttare(interna):
         return resul
 
     def gesttare_gotoGestionarTiempo(self, model, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        response = self.plan_compania(usuario)
+        if response:
+            return response
         return "/gesttare/gt_timetracking/newRecord?p_idtarea=" + str(cursor.valueBuffer("idtarea"))
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
@@ -1228,6 +1247,21 @@ class gesttare(interna):
         url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
         return url
 
+    def gesttare_plan_compania(self, usurio):
+        print("entra valor es: ")
+        try:
+            id_compania = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usurio))
+            id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania)) or None
+            print(id_plan)
+            if id_plan == 1:
+                response = {}
+                response["resul"] = True
+                response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
+                return response
+        except Exception as e:
+            print(e)
+        return False
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -1416,6 +1450,9 @@ class gesttare(interna):
 
     def field_adjunto(self, model):
         return self.ctx.gesttare_field_adjunto(model)
+
+    def plan_compania(self, usuario):
+        return self.ctx.gesttare_plan_compania(usuario)
 
 # @class_declaration head #
 class head(gesttare):

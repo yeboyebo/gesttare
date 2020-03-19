@@ -25,6 +25,12 @@ class gesttare(interna):
 
     def gesttare_start(self, model, oParam):
         user_name = qsatype.FLUtil.nameUser()
+        # response = self.plan_compania(user_name)
+        # if response:
+        #     return response
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("start")
+        if tengopermiso != True:
+            return tengopermiso
         now = str(qsatype.Date())
         fecha = now[:10]
         hora = now[-8:]
@@ -151,10 +157,12 @@ class gesttare(interna):
             # return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
         fields = [
             {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'},
-            {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
-            {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}
+            {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'}      
         ]
+        if template == "control_diario":
+            fields.append({'verbose_name': 'completaIcon', 'func': 'field_completaIcon'})
+            fields.append({'verbose_name': 'completaTitle', 'func': 'field_completaTitle'})
+            
         return fields
 
 
@@ -325,6 +333,7 @@ class gesttare(interna):
             return "check_box"
         else:
             return "check_box_outline_blank"
+        
 
         return ""
 
@@ -333,8 +342,16 @@ class gesttare(interna):
             return "Validar día"
         else:
             return "Desbloquear día"
-
         return ""
+
+    def gesttare_plan_compania(self, usurio):
+        id_compania = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usurio))
+        id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania))
+        if id_plan == 1 or id_plan == 2 or id_plan == 5:
+            response = {}
+            response["resul"] = True
+            response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
+            return response
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -401,6 +418,9 @@ class gesttare(interna):
 
     def field_completaTitle(self, model):
         return self.ctx.gesttare_field_completaTitle(model)
+
+    def plan_compania(self, usuario):
+        return self.ctx.gesttare_plan_compania(usuario)
 
 
 # @class_declaration head #

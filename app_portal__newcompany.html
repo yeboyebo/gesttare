@@ -1,0 +1,78 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+
+    <div class="loginPanel">
+        <div class="loginPanelHeader">
+            <div class="logError">{{error}}</div>
+            <img src="{% static 'dist/img/logo/logo.png' %}" alt="logo" className="logo" style="margin-left:17%"></img>
+        </div>
+
+        <div class="loginPanelBody">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="newcompany">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Email</label>
+                    <input type="email" name="email" required=true class="loginInput form-control" value="{{email}}">
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Compañia</label>
+                    <input type="text" name="nombrecompany" required=true value="{{nombrecompany}}" class="loginInput form-control">
+                </div>
+                <div class="form-group label-floating planes">
+                    <label class="control-label" for="focusedInput1">Elige un plan:</label>
+                    <select class="loginInput form-control" id="planes" name="planes">
+                            <option value="Junior">Junior</option>
+                            <option value="Profesional">Profesional</option>
+                            <option value="Senior">Senior</option>
+                            <option value="Optimizado">Optimizado</option>
+                    </select>
+                </div>
+                <div class="form-group label-floating modalidad" id="modalidadDiv">
+                    <label class="control-label" for="focusedInput1">Modalidad:</label>
+                    <select class="loginInput form-control" id="modalidad"  name="modalidad">
+                            <option value="anual">Anual</option>
+                            <option value="mensual">Mensual</option>
+                    </select>
+                </div>
+                <div class="form-group label-floating">
+                </div>
+                <div class="form-group label-floating">
+                    <a href="http://dailyjob.io/precios.html" target="_blank">Ver contenido y precio de los planes</a>
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Usuario</label>
+                    <input type="text" name="username" required=true value="{{username}}" class="loginInput form-control">
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Nombre</label>
+                    <input type="text" name="nombre" required=true value="{{nombre}}" class="loginInput form-control">
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Apellidos</label>
+                    <input type="text" name="apellidos" required=true value="{{apellidos}}" class="loginInput form-control">
+                </div>
+                <div class="form-group label-floating loginInputPass">
+                    <label class="control-label" for="focusedInput1">Contraseña</label>
+                    <input type="password" name="password" class="loginInput form-control">
+                </div>
+                <div class="form-group label-floating loginInputPass">
+                    <label class="control-label" for="focusedInput1">Repite Contraseña</label>
+                    <input type="password" name="password2" class="loginInput form-control">
+                </div>
+                <div class="loginPanelFooter crearNewCompany">
+                    <button name="loginSubmit" href="javascript:void(0)" class="btn btn-flat btn-primary loginButton botonNewCompany">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}

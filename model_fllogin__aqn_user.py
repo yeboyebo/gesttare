@@ -27,8 +27,8 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
         return form.iface.getParticCompaniaUsu(oParam)
 
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
-    def desactivar_usuario(self, oParam, cursor):
-        return form.iface.desactivar_usuario(self, oParam, cursor)
+    def activar(self, oParam, cursor):
+        return form.iface.activar(self, oParam, cursor)
 
     def checkCambiaPassword(cursor):
         return form.iface.checkCambiaPassword(cursor)
@@ -63,4 +63,10 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def dameEmailCreaAnotacion(self, oParam, cursor):
         return form.iface.dameEmailCreaAnotacion(oParam, cursor)
+
+    def field_completaTitle(self):
+        return form.iface.field_completaTitle(self)
+
+    def field_completaIcon(self):
+        return form.iface.field_completaIcon(self)
 

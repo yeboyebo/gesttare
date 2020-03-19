@@ -1420,6 +1420,7 @@ a.btn-primary:hover {
 .comentariosGrid ol, .comentariosGrid ul {
     margin-block-start: -10px;
     margin-block-end: -20px;
+    //margin-top: -45px;
 }
 
 .contieneAdjuntos {
@@ -1438,4 +1439,32 @@ a.btn-primary:hover {
     color: #4abed8;
     //color: white;
     border-radius: 8px;
+}
+
+/* Texto comentario versión movil */
+
+@media (max-width: 420px) {
+   .groupBoxComentarios {
+    color: black !important;
+   }
+}
+
+/* Label para versión de prueba */
+
+.prueba{
+    height: 32px;
+    /* display: flex; */
+    position: fixed;
+    margin-top: 90px;
+    justify-content: center;
+    width: 100%;
+    background-image: linear-gradient(to bottom, #89e3dc, #4abed8);
+    background-color: initial !important;
+}
+
+/* Datos compañía */
+
+.formRecordAuthCompanies .formGroupBoxTitle {
+    cursor: default !important;
+    margin-top: 50px;
 }

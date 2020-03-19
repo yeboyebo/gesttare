@@ -205,6 +205,10 @@ class gesttare(interna):
         return True
 
     def gesttare_gotoNuevoTramoFecha(self, model, oParam):
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("start")
+        if tengopermiso != True:
+            return tengopermiso
+
         resul = {}
         resul['status'] = 1
         if "fecha" in oParam:

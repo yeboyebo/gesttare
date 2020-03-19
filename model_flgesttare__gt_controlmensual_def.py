@@ -204,13 +204,12 @@ class gesttare(interna):
             return "hidden"
 
         if not cursor.valueBuffer("validado_user"):
-            # responsable = 
-            if not permiso:
-                return "hidden"
+            return "disabled"
 
         if cursor.valueBuffer("validado_admin"):
             return "hidden"
 
+        # return "hidden"
         # reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))
         # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))
         # reg_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(reg_name))
@@ -293,19 +292,18 @@ class gesttare(interna):
                 permiso = True
         elif im_superuser:
             permiso = True
+ 
+        if not permiso:
+            return "hidden"
 
         if not cursor.valueBuffer("validado_admin"):
             return "hidden"
 
-        if not permiso:
-            return "hidden"
-
         if not cursor.valueBuffer("validado_user"):
-            return "hidden"
+            return "disabled"
 
         if cursor.valueBuffer("validado_admin"):
-            if permiso:
-                return ""
+            return ""
 
         # reg_name = qsatype.FLUtil.sqlSelect("gt_controlmensual", "idusuario", "idc_mensual = {}".format(cursor.valueBuffer("idusuario")))
         # my_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(my_name))

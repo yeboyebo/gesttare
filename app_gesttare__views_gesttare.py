@@ -20,8 +20,15 @@ class gesttare(interna):
         tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
 
         if not tareaactiva:
-            if not tengomodulo:
-                return {}
+            # if not tengomodulo:
+            #     return {}
+            # return {
+            #         "appConfiguration": [{
+            #             "key": "controlhorario",
+            #             "text": "Control horario",
+            #             "href": "/gesttare/gt_controlhorario/custom/control_horario"
+            #         }]
+            #     }
             return {
                     "appConfiguration": [{
                         "key": "controlhorario",
@@ -30,18 +37,6 @@ class gesttare(interna):
                     }]
                 }
 
-
-        # nombre_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
-
-        # if len(nombre_proyecto) > 100:
-        #     sObject = slice(100)
-        #     nombre_proyecto[sObject]
-        
-        # nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva)) + " // Proyecto: " +nombre_proyecto
-
-        # if len(nombre_tarea) > 100:
-        #     sObject = slice(100)
-        #     nombre_tarea = nombre_tarea[sObject] +"..."+ " // Proyecto: " +nombre_proyecto
 
         nombre_proyecto = " // Proyecto: "
         codcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto INNER JOIN gt_clientes c on p.idcliente = c.idcliente", "c.codcliente", "ta.idtarea = {}".format(tareaactiva))
@@ -77,8 +72,14 @@ class gesttare(interna):
         }
 
 
-        if tengomodulo:
-            appinfo["appConfiguration"] =  [{
+        # if tengomodulo:
+        #     appinfo["appConfiguration"] =  [{
+        #             "key": "controlhorario",
+        #             "text": "Control horario",
+        #             "href": "/gesttare/gt_controlhorario/custom/control_horario"
+        #         }]
+
+        appinfo["appConfiguration"] =  [{
                     "key": "controlhorario",
                     "text": "Control horario",
                     "href": "/gesttare/gt_controlhorario/custom/control_horario"
@@ -104,8 +105,8 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser() 
         idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
         tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
-        if not tengomodulo:
-            return "hidden"
+        # if not tengomodulo:
+        #     return "hidden"
         if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario)):
             return "hidden"
         return True

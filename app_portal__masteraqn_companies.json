@@ -8,6 +8,21 @@
             }
         },
         {
+            "type": "updateNode",
+            "path": "/layout/masterUsuarios/label",
+            "value": "Compañías"
+        },
+        {
+            "type": "deleteItem",
+            "path": "/layout/masterUsuarios/columns[delete]",
+            "value": null
+        },
+        {
+            "type": "deleteNode",
+            "path": "/layout/masterUsuarios/filter",
+            "value": null
+        },
+        {
             "type": "deleteNode",
             "path": "/layout/newRecordTelest",
             "value": null
