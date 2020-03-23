@@ -118,7 +118,6 @@ class gesttare(yblogin_sass):
                 print(e)
 
             if action == "login":
-                print("entra?")
                 if username == "admin":
                     user = authenticate(username=username, password=password)
                     if user is not None:

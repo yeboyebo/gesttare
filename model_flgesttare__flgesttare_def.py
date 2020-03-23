@@ -958,22 +958,24 @@ class gesttare(interna):
             return True
         if accion == "startstop" and id_plan == 1:
             response = {}
+            response["status"] = 1
             response["resul"] = True
-            response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
+            response["msg"] = "Debes tener un plan PROFESIONAL o superior para usar esta funcionalidad"
             return response
 
         if accion == "start" and id_plan == 1 or accion == "start" and id_plan == 2 or accion == "start" and id_plan == 5:
             response = {}
+            response["status"] = 1
             response["resul"] = True
-            response["msg"] = "Debes tener un plan de pago Senior u Optimizado"
+            response["msg"] = "Debes tener un plan SENIOR o superior para usar esta funcionalidad"
             return response
 
         if accion == "informes_horizontal" and id_plan == 1:
-            data = [{"name": "Proyecto 1", "value": 20, "color": "red"}, {"name": "Proyecto 2", "value": 80, "color": "orange"}]
+            data = [{"name": "Proyecto 2", "value": 10, "color": "rgb(204, 41, 22)"}, {"name": "Proyecto 4", "value": 12, "color": "rgb(157, 236, 172)"}, {"name": "Proyecto 1", "value": 20, "color": "rgb(66, 173, 170)"}, {"name": "Proyecto 5", "value": 28, "color": "rgb(255, 198, 141)"}, {"name": "Proyecto 3", "value": 40, "color": "rgb(80 210 206)"}]
             return {"type": "horizontalBarChart", "data": data, "innerText": True, "size": "75", "text": "Tiempo invertido en proyectos"}
 
         if accion == "informes_pie" and id_plan == 1:
-            data = [{"name": "Proyecto 1", "value": 20, "color": "red"}, {"name": "Proyecto 2", "value": 80, "color": "orange"}]
+            data = [{"name": "Proyecto 1", "value": 20, "color": "rgb(204, 41, 22)"}, {"name": "Proyecto 2", "value": 10, "color": "rgb(157, 236, 172)"}, {"name": "Proyecto 3", "value": 40, "color": "rgb(66, 173, 170)"}, {"name": "Proyecto 4", "value": 12, "color": "rgb(255, 198, 141)"}, {"name": "Proyecto 5", "value": 28, "color": "rgb(80 210 206)"}]
             return {"type": "pieDonutChart", "data": data, "size": 80, "innerText": True, "text": "Distribución del tiempo en proyectos"}
 
         if accion == "informes_info" and id_plan == 1:

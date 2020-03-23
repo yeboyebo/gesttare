@@ -38,7 +38,7 @@
                         "gb__principal": {
                             "title": "DATOS GENERALES",
                             "fields": {
-                                "descripcion": {"label": "Nombre", "className": "col-sm-4"},
+                                "nombre": {"label": "Nombre", "className": "col-sm-4"},
                                 "idplan": {
                                     "disabled": true,
                                     "className": "col-sm-2"
@@ -54,7 +54,7 @@
                         "gb__datosfacturacion": {
                             "title": "DATOS FACTURACIÓN",
                             "fields": {
-                                "nombre": {"label": "Razón Social"},
+                                "descripcion": {"label": "Razón Social", "className": "col-sm-4"},
                                 "cif": {},
                                 "direccion": {},
                                 "localidad": {},

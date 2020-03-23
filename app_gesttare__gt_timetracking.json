@@ -49,7 +49,7 @@
                     "label": "Registro de tiempo",
                     "icon": "info",
                     "saveReturn": true,
-                    "return": true,
+                    "return": false,
                     "success": [{"slot": "return"}],
                     "fields": {
                         "gb__tracking": {
