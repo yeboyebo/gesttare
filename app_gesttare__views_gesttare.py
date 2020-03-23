@@ -94,9 +94,9 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser() 
         tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario))
         idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
-        tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
-        if not tengomodulo:
-            return "hidden"
+        # tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
+        # if not tengomodulo:
+        #     return "hidden"
         if not tramoactivo:
             return "hidden"
         return True
