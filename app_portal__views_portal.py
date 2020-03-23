@@ -258,12 +258,9 @@ class gesttare(yblogin_sass):
                     id_usuario = resultado[1]
                     hashcode = resultado[2]
                 except Exception as exc:
-                    print("----------------------------")
-                    print(str(exc))
-                    print("----------------------------/")
                     return self.iface.newcompany(request, str(exc))
                 if not id_compania:
-                    return self.iface.newcompany(request, "Error no se puede crear usuario y compañia")
+                    return self.iface.newcompany(request, "Error no se puede crear usuario y compañía")
 
                 user = User.objects.create_user(username=id_usuario, password="ybllogin", first_name=username)
                 user.save()

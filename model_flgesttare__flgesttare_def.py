@@ -955,7 +955,6 @@ class gesttare(interna):
             id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania)) or None
                 
         except Exception as e:
-            print(e)
             return True
         if accion == "startstop" and id_plan == 1:
             response = {}

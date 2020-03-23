@@ -1026,6 +1026,10 @@ class gesttare(interna):
         return resul
 
     def gesttare_gotoGestionarTiempo(self, model, cursor):
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("startstop")
+        # response = self.plan_compania(user_name)
+        if tengopermiso != True:
+            return tengopermiso
         usuario = qsatype.FLUtil.nameUser()
         response = self.plan_compania(usuario)
         if response:
