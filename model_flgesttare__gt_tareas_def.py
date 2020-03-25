@@ -67,7 +67,8 @@ class gesttare(interna):
                 {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
                 {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
                 {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
-                {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}        
+                {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'},
+                {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}
             ]
 
         if template == "formRecordcalendarioTareas":
