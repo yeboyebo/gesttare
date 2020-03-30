@@ -57,7 +57,6 @@ class gesttare(interna):
                 des = str(des) + " #" +  str(q.value(2))
             # data.append({"idcliente": q.value(0), "nombre": des})
             data.append({"idcliente": q.value(0), "nombre": q.value(1)})
-            print("data: ",data)
         return data
 
     def gesttare_getDesc(self):
