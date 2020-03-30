@@ -565,6 +565,10 @@
             {
                 "name": "model_fllogin__aqn_planes_def.py",
                 "path": "models/fllogin/"
+            },
+            {
+                "name": "app_portal__planes.html",
+                "path": "apps/portal/templates/portal/"
             }
         ],
         "replaceFile": [

@@ -54,6 +54,26 @@
             "type": "insertAfterNode",
             "path": "/portal/emailenviado",
             "value": {
+                "planes": {
+                    "url": "planes/(?P<idplan>\\w+)$",
+                    "func": "planes_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/planes",
+            "value": {
+                "cambiaplan": {
+                    "url": "cambiaplan/(?P<idplan>\\w+)$",
+                    "func": "cambiaplan_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/cambiaplan",
+            "value": {
                 "emailreenviado": {
                     "url": "emailreenviado/(?P<hashparam>\\w+)$",
                     "func": "emailreenviado_request"

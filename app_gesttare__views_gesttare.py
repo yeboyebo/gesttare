@@ -98,9 +98,7 @@ class gesttare(interna):
         # tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
         # if not tengomodulo:
         #     return "hidden"
-        print("entra")
         if id_plan == 2 or id_plan == 5:
-            print("entra??")
             return "hidden"
         if not tramoactivo:
             return "hidden"
@@ -108,8 +106,8 @@ class gesttare(interna):
 
     def gesttare_drawIfstartControl(self, cursor):
         usuario = qsatype.FLUtil.nameUser() 
-        idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
-        tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
+        # idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
+        # tengomodulo = qsatype.FLUtil.quickSqlSelect("aqn_modulescompanies", "id", "idcompany = '{}'".format(idcompany))
         idc_horario = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(usuario))
         id_compania = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usuario))
         id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania)) or None

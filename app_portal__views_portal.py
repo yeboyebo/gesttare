@@ -194,6 +194,17 @@ class gesttare(yblogin_sass):
                 APIQSA.entry_point('post', "aqn_companies", "", params, "reenviar")
         return self.iface.emailenviado(request, hashparam)
 
+    def gesttare_planes_request(self, request, idplan):
+        return render(request, "portal/planes.html", {"idplan": idplan})
+
+    def gesttare_cambiaplan_request(self, request, idplan):
+        print("????????cambioplan", idplan)
+        id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = " + str(request.user))
+        email = qsatype.FLUtil.sqlSelect("aqn_user", "email", "idusuario = " + str(request.user))
+        print("el id es: ",id_compania)
+        print("el email es: ",email)
+        return render(request, "portal/planes.html", {"idplan": idplan})
+
     def gesttare_emailreenviado_request(self, request):
         return self.iface.emailreenviado(request)
 
@@ -323,4 +334,10 @@ class gesttare(yblogin_sass):
 
     def emailreenviado(self, request):
         return self.iface.gesttare_emailreenviado(request)
+
+    def planes_request(self, request, idplan):
+        return self.iface.gesttare_planes_request(request, idplan)
+
+    def cambiaplan_request(self, request, idplan):
+        return self.iface.gesttare_cambiaplan_request(request, idplan)
 

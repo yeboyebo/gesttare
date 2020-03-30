@@ -23,6 +23,7 @@ class gesttare(interna):
         return None
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
+        print("el filtro es: ", where_filter)
         if template == "mastertimetracking":
             ntareas = ident["PAG"]["COUNT"] or 0
             if not where_filter:
@@ -363,7 +364,6 @@ class gesttare(interna):
         return True
 
     def gesttare_verTarea(self, model, cursor):
-        print("entra")
         url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
         return url
 

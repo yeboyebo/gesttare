@@ -38,7 +38,7 @@ class gesttare(interna):
                 idproyecto = data[0]["idproyecto"]
                 abiertas = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"idproyecto = '", idproyecto, u"' AND not resuelta"))
                 if abiertas == 0:
-                    return {"hitosproyecto": "<div class='textRojo'>No pudes crear tareas sobre este proyecto</div>"}
+                    return {"hitosproyecto": "<div class='textRojo'>No puedes crear tareas sobre este proyecto</div>"}
         return None
 
     def get_model_info(self, model, data, ident, template, where_filter):

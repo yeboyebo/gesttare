@@ -67,13 +67,13 @@ class gesttare(yblogin):
         if template == "mastertimetracking":
             return [{'verbose_name': 'nombreusuario', 'func': 'field_nombre'}]
         if template == "formRecord":
-            return []
+            return [{'verbose_name': 'usuario', 'func': 'field_nombreform'}]
         if template == "master":
-            return [{'verbose_name': 'completaIcon', 'func': 'field_completaIcon'}, {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}]
-        fields = [
-            {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
-            {'verbose_name': 'usuario', 'func': 'field_nombre'}
-        ]
+            return [{'verbose_name': 'completaIcon', 'func': 'field_completaIcon'}, {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'}, {'verbose_name': 'Color usuario', 'func': 'color_usuario'}, {'verbose_name': 'usuario', 'func': 'field_nombre'}]
+        # fields = [
+            # {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
+            # {'verbose_name': 'usuario', 'func': 'field_nombre'}
+        # ]
         return fields
 
     def gesttare_field_nombre(self, model):
@@ -83,6 +83,14 @@ class gesttare(yblogin):
             # if hasattr(model.idusuario, 'usuario'):
             #     nombre = "@" + model.idusuario.usuario
             #     print("el nombre es: ",nombre)
+        except Exception as e:
+            print(e)
+        return nombre
+
+    def gesttare_field_nombreform(self, model):
+        nombre = ""
+        try:
+            nombre = model.usuario
         except Exception as e:
             print(e)
         return nombre
@@ -722,6 +730,9 @@ class gesttare(yblogin):
 
     def field_nombre(self, model):
         return self.ctx.gesttare_field_nombre(model)
+
+    def field_nombreform(self, model):
+        return self.ctx.gesttare_field_nombreform(model)
 
     def color_usuario(self, model):
         return self.ctx.gesttare_color_usuario(model)
