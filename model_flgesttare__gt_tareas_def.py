@@ -69,7 +69,7 @@ class gesttare(interna):
                 {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
                 {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
                 {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'},
-                {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}
+                {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}       
             ]
 
         if template == "formRecordcalendarioTareas":
@@ -1191,12 +1191,19 @@ class gesttare(interna):
         #     ]
         #     return response
         # else:
+        usuario = qsatype.FLUtil.nameUser()
+        response = {}
+        curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+        curProyectos.select("idusuario = '" + str(usuario) + "'")
+        if not curProyectos.first():
+            response["status"] = 1
+            response["msg"] = "Debes participar en un proyecto para anotar tareas"
+            return response
         params = ""
         if "nombre" in oParam:
             params += "?p_nombre=" + urllib.parse.quote(str(oParam["nombre"]))
             if "descripcion" in oParam:
                 params += "&p_descripcion=" + urllib.parse.quote(str(oParam["descripcion"]))
-        response = {}
         response["url"] = '/gesttare/gt_tareas/newRecord' + params
         return response
 
@@ -1253,20 +1260,6 @@ class gesttare(interna):
         url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
         return url
 
-    def gesttare_plan_compania(self, usurio):
-        print("entra valor es: ")
-        try:
-            id_compania = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(usurio))
-            id_plan = qsatype.FLUtil.quickSqlSelect("aqn_companies", "idplan", "idcompany = '{}'".format(id_compania)) or None
-            print(id_plan)
-            if id_plan == 1:
-                response = {}
-                response["resul"] = True
-                response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
-                return response
-        except Exception as e:
-            print(e)
-        return False
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -1457,8 +1450,6 @@ class gesttare(interna):
     def field_adjunto(self, model):
         return self.ctx.gesttare_field_adjunto(model)
 
-    def plan_compania(self, usuario):
-        return self.ctx.gesttare_plan_compania(usuario)
 
 # @class_declaration head #
 class head(gesttare):

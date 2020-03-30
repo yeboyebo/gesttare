@@ -34,6 +34,10 @@ class gesttare(yblogin):
 
         return ""
 
+    def gesttare_verPlanes(self, model, cursor):
+        url = "/planes/" + str(cursor.valueBuffer("idplan"))
+        return url
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -45,4 +49,7 @@ class gesttare(yblogin):
 
     def field_periodicidad(self, model):
         return self.ctx.gesttare_field_periodicidad(model)
+
+    def verPlanes(self, model, cursor):
+        return self.ctx.gesttare_verPlanes(model, cursor)
 

@@ -1,0 +1,102 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+{% if idplan == "2" %}
+    <div> Hola mundo</div>
+{% endif %}
+{{ idplan }}
+<div class="contenedor">
+    <div class ="listaPlanes">
+        <br><br>
+    <div class="columns">
+  <ul class="price">
+    <li class="header">JUNIOR</li>
+    <li style="height: 200px;" class="subheader">Para equipos que quieren contar con un espacio ágil y efectivo para compartir proyectos y tareas</li>
+    <li class="grey"><strong>Precio por usuario</strong></li>
+    <li class="grey">GRATIS</li>
+    <li class="grey">(usuarios ilimitados)</li>
+    <li>Crea y comparte proyectos y tareas</li>
+    <li>Gestiona notificaciones a través de la bandeja de entrada</li>
+    <li>Convierte emails en tareas</li>
+    <li><strike>Mide automáticamente el tiempo invertido en cada tarea</strike></li>
+    <li><strike>Analiza la rentabilidad de cada proyecto e hito</strike></li>
+    <li><strike>Analiza el desempeño de cada persona del equipo</strike></li>
+    <li><strike>Registra la jornada laboral</strike></li>
+    <li><strike>Integra los datos con tu ERP para optimizar procesos la jornada laboral</strike></li>
+    <li>1GB espacio</li>
+    <li class="grey"><a href="/cambiaplan/1" class="button">CAMBIAR PLAN</a></li>
+  </ul>
+</div>
+         <div class="columns">
+  <ul class="price">
+    <li class="header">PROFESIONAL</li>
+    <li style="height: 200px;" class="subheader">Para equipos que van un paso más allá, no solo comparten sino que analizan la información para tomar mejores decisiones.</li>
+    <li class="grey"><strong>Precio por usuario</strong></li>
+    <li class="grey">4,50€ * / mes (anual)</li>
+    <li class="grey">6,00€ * / mes (mensual)</li>
+    <li>Crea y comparte proyectos y tareas</li>
+    <li>Gestiona notificaciones a través de la bandeja de entrada</li>
+    <li>Convierte emails en tareas</li>
+    <li>Mide automáticamente el tiempo invertido en cada tarea</li>
+    <li>Analiza la rentabilidad de cada proyecto e hito</li>
+    <li>Analiza el desempeño de cada persona del equipo</li>
+    <li><strike>Registra la jornada laboral</strike></li>
+    <li><strike>Integra los datos con tu ERP para optimizar procesos la jornada laboral</strike></li>
+    <li>5GB espacio</li>
+    <li class="grey"><a href="/cambiaplan/2" class="button">CAMBIAR PLAN</a></li>
+  </ul>
+</div>
+         <div class="columns">
+  <ul class="price">
+    <li class="header">SENIOR</li>
+    <li style="height: 200px;" class="subheader">Para equipos que además de compartir y analizar la información, quieren cumplir con la normativa del registro horario, todo en dailyjob.</li>
+    <li class="grey"><strong>Precio por usuario</strong></li>
+    <li class="grey">6,00€ * / mes (anual)</li>
+    <li class="grey">8,00€ * / mes (mensual)</li>
+    <li>Crea y comparte proyectos y tareas</li>
+    <li>Gestiona notificaciones a través de la bandeja de entrada</li>
+    <li>Convierte emails en tareas</li>
+    <li>Mide automáticamente el tiempo invertido en cada tarea</li>
+    <li>Analiza la rentabilidad de cada proyecto e hito</li>
+    <li>Analiza el desempeño de cada persona del equipo</li>
+    <li>Registra la jornada laboral</li>
+      <li><strike>Integra los datos con tu ERP para optimizar procesos la jornada laboral</strike></li>
+    <li>5GB espacio</li>
+    <li class="grey"><a href="/cambiaplan/3" class="button">CAMBIAR PLAN</a></li>
+  </ul>
+</div>
+    <div class="columns">
+        <ul class="price">
+            <li class="header">OPTIMIZADO</li>
+            <li style="height: 200px;" class="subheader">Para equipos que además de compartir y analizar la información, quieren sincornizar datos con su propio ERP a través de la API de dailyjob.</li>
+            <li class="grey"><strong>Precio por usuario</strong></li>
+            <li class="grey">8,00€ * / mes (anual)</li>
+            <li class="grey">10,50€ * / mes (mensual)</li>
+            <li>Crea y comparte proyectos y tareas</li>
+            <li>Gestiona notificaciones a través de la bandeja de entrada</li>
+            <li>Convierte emails en tareas</li>
+            <li>Mide automáticamente el tiempo invertido en cada tarea</li>
+            <li>Analiza la rentabilidad de cada proyecto e hito</li>
+            <li>Analiza el desempeño de cada persona del equipo</li>
+            <li>Registra la jornada laboral</li>
+            <li>Integra los datos con tu ERP para optimizar procesos la jornada laboral</li>
+            <li>5GB espacio</li>
+            <li class="grey"><a href="/cambiaplan/4" class="button">CAMBIAR PLAN</a></li>
+        </ul>
+    </div>
+        <br>
+        <br>
+        <span><strong>* Los precios no incluyen IVA.</strong></span>
+        <br>
+        <br>
+</div>
+</div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}

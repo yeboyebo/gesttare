@@ -42,6 +42,9 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
     def field_nombre(self):
         return form.iface.field_nombre(self)
 
+    def field_nombreform(self):
+        return form.iface.field_nombreform(self)
+
     def color_usuario(self):
         return form.iface.color_usuario(self)
 
