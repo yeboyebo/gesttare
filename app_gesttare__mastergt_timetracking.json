@@ -144,7 +144,7 @@
                 "masterTimeTrackingAgrupado": {
                     "componente": "YBGrid",
                     "type": "query",
-                    "prefix": "mastertimetrackingagrupado",
+                    "prefix": "mastertimetracking",
                     "autofilter": false,
                     "cansavefilter": true,
                     "className": "",

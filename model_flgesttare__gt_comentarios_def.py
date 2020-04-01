@@ -30,15 +30,15 @@ class gesttare(interna):
 
     def gesttare_field_adjunto(self, model):
         nombre = None
-        # ficheros = gesDoc.getFiles("gt_comentarios", model.pk)
+        ficheros = gesDoc.getFiles("gt_comentarios", model.pk)
         idUsuario = qsatype.FLUtil.nameUser()
-        pk = model.pk
-        params = {
-            'pk': pk,
-            'prefix': "gt_comentarios"
-        }
+        # pk = model.pk
+        # params = {
+        #     'pk': pk,
+        #     'prefix': "gt_comentarios"
+        # }
+        # # ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
         # ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
-        ficheros = APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'getFiles')
         adjuntos = []
         if ficheros:
             files = ""

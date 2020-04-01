@@ -23,7 +23,6 @@ class gesttare(interna):
         return None
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
-        print("el filtro es: ", where_filter)
         if template == "mastertimetracking":
             ntareas = ident["PAG"]["COUNT"] or 0
             if not where_filter:

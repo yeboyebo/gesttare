@@ -264,7 +264,6 @@ class gesttare(interna):
             return {"chForm": "Nuevo registro para " + formateaFecha[2] + "-" + formateaFecha[1] + "-" + formateaFecha[0]}
 
         elif template == "formRecord":
-            print("aqui fecha")
             if isinstance(data, list):
                 return None
 

@@ -62,7 +62,8 @@
     "drawIf": {
         "gb__info": {
             "horainicio": "drawif_horaeditable",
-            "horafin": "drawif_horaeditable"
+            "horafin": "drawif_horaeditable",
+            "fechafin": "drawif_horaeditable"
         }
     }
 }

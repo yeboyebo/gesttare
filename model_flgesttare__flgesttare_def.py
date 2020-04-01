@@ -108,6 +108,22 @@ class gesttare(interna):
         if not _i.controlCosteProyecto(curTarea):
             return False
 
+        if curTarea.modeAccess() == curTarea.Edit:
+            if curTarea.valueBuffer("idusuario"):
+                if not _i.comprobarUsuarioParticProyecto(curTarea):
+                    qsatype.FLUtil.ponMsgError(qsatype.FLUtil.translate(u"El responsable no participa en el proyecto"))
+
+                    return False
+
+            partic_tarea = qsatype.FLSqlCursor(u"gt_partictarea")
+            partic_tarea.select(u"idtarea = " + str(curTarea.valueBuffer("idtarea")))
+            while partic_tarea.next():
+                if not _i.comprobarUsuarioParticProyectoTarea(partic_tarea.valueBuffer("idusuario"), curTarea.valueBuffer("idproyecto")):
+                    partic_tarea.setModeAccess(partic_tarea.Del)
+                    partic_tarea.refreshBuffer()
+                    if not partic_tarea.commitBuffer():
+                        return False
+
         if curTarea.modeAccess() == curTarea.Insert:
             params = {
                 'clave': curTarea.valueBuffer("idactualizacion"),
@@ -530,6 +546,19 @@ class gesttare(interna):
                 if not qsatype.FLUtil.sqlSelect(u"gt_partictarea", u"idparticipante", ustr(u"idusuario = ", curTarea.valueBuffer(u"idusuario"), u" AND idtarea = ", curTarea.valueBuffer(u"idtarea"))):
                     if not qsatype.FLUtil.sqlInsert(u"gt_partictarea", qsatype.Array([u"idusuario", u"idtarea"]), qsatype.Array([curTarea.valueBuffer(u"idusuario"), curTarea.valueBuffer(u"idtarea")])):
                         return False
+        return True
+
+    def gesttare_comprobarUsuarioParticProyecto(self, curTarea=None):
+        if curTarea.valueBuffer("idusuario"):
+            participa = qsatype.FLUtil.sqlSelect("gt_particproyecto", "idparticipante", "idusuario = " + str(curTarea.valueBuffer("idusuario")) + " AND idproyecto = " + str(curTarea.valueBuffer("idproyecto")))
+            if participa == None:
+                return False
+        return True
+
+    def gesttare_comprobarUsuarioParticProyectoTarea(self, idusuario, idproyecto):
+        participa = qsatype.FLUtil.sqlSelect("gt_particproyecto", "idparticipante", "idusuario = " + str(idusuario) + " AND idproyecto = " + str(idproyecto))
+        if participa == None:
+            return False
         return True
 
     def gesttare_comprobarActualizacionesTareas(self, curTarea=None):
@@ -1035,6 +1064,12 @@ class gesttare(interna):
 
     def comprobarUsuarioResponsable(self, curTarea=None):
         return self.ctx.gesttare_comprobarUsuarioResponsable(curTarea)
+
+    def comprobarUsuarioParticProyecto(self, curTarea=None):
+        return self.ctx.gesttare_comprobarUsuarioParticProyecto(curTarea)
+
+    def comprobarUsuarioParticProyectoTarea(self, idusuario, idproyecto):
+        return self.ctx.gesttare_comprobarUsuarioParticProyectoTarea(idusuario, idproyecto)
 
     def comprobarActualizacionesTareas(self, curTarea=None):
         return self.ctx.gesttare_comprobarActualizacionesTareas(curTarea)
