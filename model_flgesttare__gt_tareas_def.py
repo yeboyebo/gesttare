@@ -54,7 +54,8 @@ class gesttare(interna):
             return [
                 {'verbose_name': 'renegociaProyecto', 'func': 'ren_field_proyecto'},
                 {'verbose_name': 'renegociacolorfechavencimiento', 'func': 'ren_color_fecha'},
-                {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega'}
+                {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega'},
+                {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}
             ]
         if template == "master":
             fields = [
@@ -72,7 +73,7 @@ class gesttare(interna):
             ]
 
         if template == "formRecordcalendarioTareas":
-            return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
+            return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}, {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}]
 
         if template == "formRecord":
             return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
