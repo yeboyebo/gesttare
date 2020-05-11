@@ -92,7 +92,7 @@ html, #parent-container{
 .YBSideBarItemLink:hover{
     color: white;
 }
-.controlTiempoButton > .YBButtonRaised{
+.YBNavBarActions .controlTiempoButton > .YBButtonRaised{
     background-color: orange;
     border-radius: 5px;
     border: 0px;
@@ -1271,9 +1271,10 @@ a.btn-primary:hover {
 
 /* Color de botón iniciar tarea e icono timetraking listado tareas */
 
-.inciarTarea .YBButtonRaised{
-    background-color: orange;
-    border: none;
+.YBButton.inciarTarea .YBButtonRaised{
+    background-color: orange !important;
+    color: white !important;
+    border: none !important;
 }
 
 /* Buscador en  master de usuarios y clientes */
@@ -1345,19 +1346,6 @@ a.btn-primary:hover {
     margin: 7px;
 }
 
-.comentariosGrid ul {
-    list-style-type: disc;
-    margin-top: -45px;
-}
-
-.comentariosGrid li {
-    margin: -10px 0;
-}
-
-.comentariosGrid ol {
-   margin-top: -45px;
-}
-
 .comentariosGrid .YBListItemPrimaryBody {
     font-family: sans-serif !important;
 }   
@@ -1409,6 +1397,7 @@ a.btn-primary:hover {
 
 .cke_editable {
     background-color: none !important;
+    font-size: 15px !important;
 }
 
 .cke_contents {
@@ -1421,6 +1410,49 @@ a.btn-primary:hover {
     //margin-block-start: -10px;
     margin-block-end: -20px;
     
+}
+
+.comentariosGrid ul {
+    list-style-type: disc;
+    margin-top: -37px;
+    margin-bottom: 9px;
+}
+
+.comentariosGrid li ul {
+    list-style-type: circle;
+    margin-top: -32px;
+    margin-bottom: -45px;
+}
+
+.comentariosGrid li:first-child ul{
+    margin-top: -43px;
+}
+
+.comentariosGrid li ul li ul{
+    margin-top: -32px !important;
+    list-style-type: square;
+}
+
+.comentariosGrid li {
+    margin: -10px 0;
+}
+
+.comentariosGrid ol {
+    margin-top: -37px;
+    margin-bottom: 9px;
+}
+
+.comentariosGrid .YBListItemPrimaryBody div.divEditor{
+    /*display: inline-block;
+    vertical-align: top;*/
+    margin-top: -30px;
+}
+
+.comentariosGrid .YBListItemPrimaryBody div.divEditor:nth-child(1){
+    /*display: inline-block;
+    vertical-align: top;*/
+    //line-height: 0.1;
+    margin-top: 17px
 }
 
 .contieneAdjuntos {
@@ -1440,6 +1472,29 @@ a.btn-primary:hover {
     //color: white;
     border-radius: 8px;
 }
+
+.comentariosGrid .YBListItemPrimaryBody {
+    font-size: 15px;
+}
+
+.comentariosGrid .YBListItemPrimaryTitle {
+    margin-bottom: 10px;
+}
+
+.comentariosGrid .YBListItemPrimaryBody a{
+    line-height: 1.6;
+}
+/*.comentariosGrid .YBListItemPrimaryBody div:nth-child(2) {
+    display: inline-table;
+}
+
+.comentariosGrid .YBListItemPrimaryBody div:nth-child(odd) > a{
+    margin-left: -4px;
+}
+
+.comentariosGrid .YBListItemPrimaryBody div {
+   margin-bottom: 10px;
+}*/
 
 /* Texto comentario versión movil */
 
@@ -1467,4 +1522,183 @@ a.btn-primary:hover {
 .formRecordAuthCompanies .formGroupBoxTitle {
     cursor: default !important;
     margin-top: 50px;
+}
+
+/*Cambios diseño listados*/
+.YBTableHeaderCell {
+    text-transform: uppercase;
+    width: 76px;
+    font-family: Rubik;
+    font-size: 18px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #293333;
+}
+
+/*Diseño botones*/
+
+.groupbox .YBButtonSecondary.YBButtonRaised {
+    background-color: #50d2ce;
+    border: 1px solid #50d2ce;
+    color: #fff;
+    border-radius: 5px;
+    text-transform: none;
+}
+
+.groupbox .YBButtonPrimary.YBButtonRaised {
+    background-color: white ;
+    border: 1px solid #50d2ce ;
+    color: #50d2ce ;
+    border-radius: 5px;
+    text-transform: none;
+}
+
+.YBButtonPrimary.YBButtonFlat, .YBButtonSecondary.YBButtonFlat {
+    background-color: white ;
+    border: 1px solid #50d2ce ;
+    color: #50d2ce ;
+    border-radius: 5px;
+    text-transform: none;
+}
+
+.groupbox .aniadirTiempo  .YBButtonPrimary.YBButtonRaised {
+    background-color: white ;
+    color: #f9a825 ;
+    border: none;
+    text-transform: none;
+    padding: 0px 0px;
+
+}
+
+.contenedorYBAttachmentContainer .YBButtonSecondary.YBButtonRaised, .groupBoxNuevoComentario .YBButtonSecondary.YBButtonRaised, .gbFilterForm .YBButtonSecondary.YBButtonFlat {
+    background-color: white ;
+    border: 1px solid #50d2ce ;
+    color: #50d2ce ;
+    border-radius: 5px;
+    text-transform: none;
+}
+
+.groupbox .YBButtonLabel {
+    margin-right: 2px;
+    margin-left: 0px !important;
+}
+
+.groupbox .YBButtonSecondary.YBButtonRaised:hover, .gbFilterForm .YBButtonSecondary.YBButtonFlat:hover, .YBButtonPrimary.YBButtonFlat:hover, .YBButtonSecondary.YBButtonFlat:hover {
+    opacity: 0.5;
+}
+
+/* Cambios en textos modal eliminar */
+
+.modalBody > .modalCuerpo {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modalBody .modalHeader ~ .modalCuerpo {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.paginacion .withripple {
+    background-color: white ;
+    border: 1px solid #50d2ce ;
+    color: #50d2ce ;
+    border-radius: 5px;
+    margin-left: 3px;
+}
+
+.paginacion .withripple:hover {
+    opacity: 0.5;
+}
+
+/*Títulos listados*/
+.parentGroupBox > div > .groupBoxComponent {
+    background-color: inherit;
+    //margin-top: -25px;
+}
+
+.YBComponentInfo.padreTareas {
+    color: #293333;
+    font-size: 17px;
+    text-transform: uppercase;
+    float: right;
+    margin-right: 15px;
+    margin-top: -3px;
+    margin-bottom: 25px;
+}
+
+.groupBoxPadre .groupBoxComponent .YBComponentInfo {
+    color: #2D95C1;
+    font-size: 17px;
+    text-transform: uppercase;
+    float: none;
+}
+
+.groupBoxComponent + .groupBoxComponent {
+    background-color: white;
+}
+
+/*#componentContainer {
+     margin: 0px !important; 
+}
+
+.parentgroupbox {
+    padding: 25px 28px;
+}*/
+
+   
+/* Estilos de tabs control horario */
+
+.tabElement {
+    float: left;
+}
+.tab {
+    float: left;
+    cursor: pointer;
+    padding:10px 20px;
+    margin-right: 10px;
+    background: #9b9b9b;
+    display:inline-block;
+    color:#fff;
+    border-radius:5px 5px 0px 0px;
+    box-shadow: 0 -1px 5px 0 rgba(41, 51, 51, 0.15);
+    text-transform: uppercase;
+    font-family: Rubik;
+}
+
+.tabActivo{
+    background: #fff;
+    color:#000;
+}
+
+.groupBoxDiario, .groupBoxMensual{
+    box-shadow: 0 10px 5px 0 rgba(41, 51, 51, 0.15);
+    background-color: #ffffff;
+    border-radius: 0px 16px 16px 16px;
+}
+
+.tabElement .tabdiario:first-child{
+    background: #fff;
+    color:#000;
+}
+
+.groupBoxDiario .YBComponentInfo {
+    color: #293333;
+    font-size: 17px;
+    text-transform: uppercase;
+    float: right;
+    margin-right: 15px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+/* Listado de hitos en proyecto */
+
+.hitosproyecto .YBTableActionsCell img {
+    width: 24px !important;
+    height: 24px !important;
 }

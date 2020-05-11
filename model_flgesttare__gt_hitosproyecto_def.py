@@ -13,6 +13,7 @@ class interna(qsatype.objetoBase):
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from models.flgesttare import flgesttare_def
+import urllib
 
 class gesttare(interna):
 
@@ -302,6 +303,23 @@ class gesttare(interna):
 
         return True
 
+    def gesttare_creartareahito(self, oParam, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        response = {}
+        curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+        curProyectos.select("idusuario = '" + str(usuario) + "'")
+        if not curProyectos.first():
+            response["status"] = 1
+            response["msg"] = "Debes participar en un proyecto para anotar tareas"
+            return response
+        params = ""
+        if cursor.valueBuffer("idhito"):
+            params += "?p_idproyecto=" + urllib.parse.quote(str(cursor.valueBuffer("idproyecto")))
+            params += "&p_idhito=" + urllib.parse.quote(str(cursor.valueBuffer("idhito")))
+            
+        response["url"] = '/gesttare/gt_tareas/newRecord' + params
+        return response
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -325,6 +343,9 @@ class gesttare(interna):
 
     def color_responsable(self, model):
         return self.ctx.gesttare_color_responsable(model)
+
+    def creartareahito(self, oParam, cursor):
+        return self.ctx.gesttare_creartareahito(oParam, cursor)
 
     def fun_porcentaje(self, model):
         return self.ctx.gesttare_fun_porcentaje(model)

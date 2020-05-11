@@ -23,6 +23,36 @@
                             "success": [{"slot": "return"}]
                         }
                 },
+                "cambioPlanTo": {
+                    "componente": "YBButton",
+                    "prefix": "aqn_companies",
+                    "label": "Cambiar plan",
+                    "className": "floatRight",
+                    "buttonType": "raised",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "13px",
+                        "visibility": "hidden"
+                    },
+                    "action": {
+                        "key": "gotoPlanesMailTo"
+                    }
+                },
+                "cambioPlan": {
+                        "componente": "YBButton",
+                        "prefix": "aqn_companies",
+                        "label": "Cambiar plan",
+                        "className": "floatRight",
+                        "buttonType": "raised",
+                        "style": {
+                            "marginTop": "5px",
+                            "marginRight": "13px",
+                            "visibility": "hidden"
+                        },
+                        "action": {
+                            "key": "gotoPlanes"
+                        }
+                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -78,6 +108,17 @@
     "acciones": {
         "acctionVolver": {
             "action": "return"
+        },
+        "gotoPlanes": {
+            "action": "goto",
+            "prefix": "aqn_companies",
+            "serverAction": "verPlanes"
+        },
+        "gotoPlanesMailTo": {
+            "action": "goto",
+            "prefix": "aqn_companies",
+            "newtab": true,
+            "serverAction": "mailTo"
         }
     },
     "drawIf": {}

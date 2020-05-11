@@ -45,6 +45,7 @@
             "label": "ANOTAR",
             "action": "legacy",
             "title": "Crear tarea",
+            "pk": "NF",
             "iconurl": "/static/dist/img/icons/anotar_blanco.svg",
             "prefix": "gt_tareas",
             "serverAction": "gotoNewRecordAnotacion"

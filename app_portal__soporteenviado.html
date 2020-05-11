@@ -1,0 +1,29 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+
+ <div class="loginPanel soporte">
+        <div class="loginPanelHeader">
+            <div class="logError">{{error}}</div>
+            <img src="{% static 'dist/img/logo/logo.png' %}" alt="logo" className="logo"></img>
+        </div>
+
+        <div class="loginPanelBody soporteenviado">
+            <p style="text-align: center;">Gracias, la petición se ha enviado correctamente.</p>
+            <p style="text-align: center;">En breve nos pondremos en contacto contigo.</p>    
+            <div class="loginPanelFooter crearNewCompany">
+                <button name="loginSubmit" onClick="javascript:history.go(-5)" class="btn btn-flat btn-primary loginButton botonNewCompany">Volver</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}

@@ -105,6 +105,8 @@ class gesttare(interna):
 
         _i.comprobarActualizacionesTareas(curTarea)
 
+        _i.comprobarClienteTarea(curTarea)
+
         if not _i.controlCosteProyecto(curTarea):
             return False
 
@@ -132,7 +134,7 @@ class gesttare(interna):
             clave = qsatype.FLUtil.sqlSelect("gd_objetosdoc", "clave", "clave = '{}'".format(curTarea.valueBuffer("idactualizacion")))
             if clave:
                 usuario = qsatype.FLUtil.nameUser()
-                APIQSA.entry_point('delete_objetosdoc', "gd_objetosdoc", usuario, params)
+                APIQSA.entry_point('post', "gd_objetosdoc", usuario, params, "delete_objetosdoc")
 
         return True
     def gesttare_controlCosteProyecto(self, curT):
@@ -540,6 +542,22 @@ class gesttare(interna):
                 qsatype.FLSqlQuery().execSql("UPDATE gt_tareas SET idcliente = " + str(curProyecto.valueBuffer("idcliente")) + " where idproyecto = '" + str(curProyecto.valueBuffer("idproyecto")) + "' ")
         return True
 
+    def gesttare_comprobarClienteTarea(self, curTarea):
+        if curTarea.modeAccess() == curTarea.Insert:
+            id_cliente = qsatype.FLUtil.sqlSelect("gt_proyectos", u"idcliente", "idproyecto = " + str(curTarea.valueBuffer("idproyecto")))
+            if id_cliente:
+                qsatype.FLSqlQuery().execSql("UPDATE gt_tareas SET idcliente = " + str(id_cliente) + " where idproyecto = '" + str(curTarea.valueBuffer("idproyecto")) + "' ")
+
+        if curTarea.modeAccess() == curTarea.Edit:
+            if curTarea.valueBufferCopy(u"idproyecto") != curTarea.valueBuffer(u"idproyecto"): 
+                id_cliente = qsatype.FLUtil.sqlSelect("gt_proyectos", u"idcliente", "idproyecto = " + str(curTarea.valueBuffer("idproyecto")))
+                if id_cliente:
+                    qsatype.FLSqlQuery().execSql("UPDATE gt_tareas SET idcliente = " + str(id_cliente) + " where idproyecto = '" + str(curTarea.valueBuffer("idproyecto")) + "' ")
+                else:
+                    qsatype.FLSqlQuery().execSql("UPDATE gt_tareas SET idcliente = null where idproyecto = '" + str(curTarea.valueBuffer("idproyecto")) + "' ")
+
+        return True
+
     def gesttare_comprobarUsuarioResponsable(self, curTarea=None):
         if curTarea.valueBuffer(u"idusuario"):
             if curTarea.valueBufferCopy(u"idusuario") != curTarea.valueBuffer(u"idusuario") or (curTarea.modeAccess() == curTarea.Insert and curTarea.valueBuffer(u"idusuario")):
@@ -658,6 +676,8 @@ class gesttare(interna):
 
     def gesttare_beforeCommit_gt_controlhorario(self, cursor=None):
         # _i = self.iface
+        if cursor.modeAccess() == cursor.Del:
+            return True
         if not cursor.valueBuffer("idc_diario"):
             now = str(qsatype.Date())
             fecha = now[:10]
@@ -1103,6 +1123,9 @@ class gesttare(interna):
 
     def comprobarClienteProyecto(self, curProyecto):
         return self.ctx.gesttare_comprobarClienteProyecto(curProyecto)
+
+    def comprobarClienteTarea(self, curTarea):
+        return self.ctx.gesttare_comprobarClienteTarea(curTarea)
 
     def calcula_costetiempo(self, tipo, cursor):
         return self.ctx.gesttare_calcula_costetiempo(tipo, cursor)

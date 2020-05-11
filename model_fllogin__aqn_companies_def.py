@@ -35,7 +35,11 @@ class gesttare(yblogin):
         return ""
 
     def gesttare_verPlanes(self, model, cursor):
-        url = "/planes/" + str(cursor.valueBuffer("idplan"))
+        url = "/planes/" + str(cursor.valueBuffer("idplan")) + "/" + str(cursor.valueBuffer("idcompany"))
+        return url
+
+    def gesttare_mailTo(self, model, cursor):
+        url = "mailto:soporte@dailyjob.io"
         return url
 
     def __init__(self, context=None):
@@ -52,4 +56,7 @@ class gesttare(yblogin):
 
     def verPlanes(self, model, cursor):
         return self.ctx.gesttare_verPlanes(model, cursor)
+
+    def mailTo(self, model, cursor):
+        return self.ctx.gesttare_mailTo(model, cursor)
 

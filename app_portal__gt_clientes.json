@@ -34,7 +34,7 @@
                     "label": "Información de clientes",
                     "icon": "info",
                     "groupbox": "acordeon",
-                    "return": true,
+                    "return": false,
                     "saveEdit": true,
                     "saveReturn": true,
                     "fields": {

@@ -112,7 +112,8 @@
                                     "title": "",
                                     "fields": {
                                         "descripcion": {
-                                            "label": " "
+                                            "label": " ",
+                                            "wysiwyg": true
                                         },
                                         "idproyecto": {
                                             "combolimit": 1, 
@@ -142,17 +143,6 @@
                         "separator1": {
                             "componente": "YBSeparator"
                         },
-                        "nuevoTimeTrackingButton": {
-                            "componente": "YBButton",
-                            "prefix": "gt_tareas",
-                            "label": "Añadir tiempo",
-                            "className": "floatLeft",
-                            "buttonType": "raised",
-                            "action": {
-                                "key": "gestionarTiempo",
-                                "success": [{"slot": "return"}]
-                            }
-                        },
                         "iniciarTrackingButton": {
                             "componente": "YBButton",
                             "prefix": "gt_tareas",
@@ -173,6 +163,17 @@
                             "action": {
                                 "key": "iniciarTimeTracking",
                                 "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "nuevoTimeTrackingButton": {
+                            "componente": "YBButton",
+                            "prefix": "gt_tareas",
+                            "label": "+ Añadir tiempo",
+                            "className": "floatLeft aniadirTiempo",
+                            "buttonType": "raised",
+                            "action": {
+                                "key": "gestionarTiempo",
+                                "success": [{"slot": "return"}]
                             }
                         },
                         "labelTiempo": {
@@ -279,6 +280,7 @@
                                             "className": "",
                                             "key": "comentario",
                                             "label": " ",
+                                            "wysiwyg": true,
                                             "tipo": 7,
                                             "style": {
                                                 "width": "100%"

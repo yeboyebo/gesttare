@@ -48,7 +48,8 @@
                             "fields": {
                                 "nombre": {"className": "col-sm-12"},
                                 "descripcion": {
-                                    "label": " "
+                                    "label": " ",
+                                    "wysiwyg": true
                                 },
                                 "idproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
                                 "idhito": {

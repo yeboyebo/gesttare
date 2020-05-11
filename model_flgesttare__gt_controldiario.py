@@ -23,6 +23,9 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     def field_usuario(self):
         return form.iface.field_usuario(self)
 
+    def drawif_borrarButton(cursor):
+        return form.iface.drawif_borrarButton(cursor)
+
     def drawif_validar(cursor):
         return form.iface.drawif_validar(cursor)
 
@@ -42,6 +45,10 @@ class gesttare_gt_controldiario(interna_gt_controldiario, helpers.MixinConAccion
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def validar_dia(self, oParam, cursor):
         return form.iface.validar_dia(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def borrar_dia(self, oParam, cursor):
+        return form.iface.borrar_dia(self, oParam, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def desbloquear(self, oParam, cursor):

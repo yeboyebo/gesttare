@@ -24,23 +24,23 @@ class gesttare(yblogin_sass):
 
         # Comprobamos usuario con pineboo
         try:
-            authusername = APIQSA.login(username, password)
-            if authusername:
-                user = User.objects.filter(username=str(authusername))
-                if user.exists():
-                    authuser = authenticate(username=str(authusername), password=password)
-                    if authuser is None:
-                        user = User.objects.get(username__exact=str(authusername))
-                        user.set_password(password)
-                        user.save()
-                        authuser = authenticate(username=str(authusername), password=password)
-                else:
-                    user = User.objects.create_user(username=str(authusername), password=password)
-                    user.is_staff = False
-                    user.save()
-                    authuser = authenticate(username=str(authusername), password=password)
-                token, _ = Token.objects.get_or_create(user=authuser)
-                resul = HttpResponse(json.dumps({'token': token.key}), status=200)
+            authuser = APIQSA.login(username, password)
+            if authuser:
+                # user = User.objects.filter(username=str(authusername))
+                # if user.exists():
+                #     authuser = authenticate(username=str(authusername), password=password)
+                #     if authuser is None:
+                #         user = User.objects.get(username__exact=str(authusername))
+                #         user.set_password(password)
+                #         user.save()
+                #         authuser = authenticate(username=str(authusername), password=password)
+                # else:
+                #     user = User.objects.create_user(username=str(authusername), password=password)
+                #     user.is_staff = False
+                #     user.save()
+                #     authuser = authenticate(username=str(authusername), password=password)
+                # token, _ = Token.objects.get_or_create(user=authuser)
+                resul = HttpResponse(json.dumps({'token': authuser["token"]}), status=200)
         except Exception as e:
             print("-----------------------")
             print(e)
@@ -127,16 +127,32 @@ class gesttare(yblogin_sass):
                         return self.iface.login(request, 'Error de autentificación')
                     return HttpResponseRedirect("/")
                 try:
-                    authusername = APIQSA.login(username, password)
+                    authuser = APIQSA.login(username, password)
+                    authusername = authuser["user"]
+
                     if authusername:
                         id_usuario = qsatype.FLUtil.sqlSelect("aqn_user", "idusuario", "email = '" + str(username) + "'")
-                        ultimo_login = qsatype.FLUtil.sqlSelect("auth_user", "last_login", "username = '" + str(id_usuario) + "'")
-                        if ultimo_login is None:
-                            APIQSA.entry_point('post', "aqn_companies", "", str(username), "enviar_wiki")
+
+                        # ultimo_login = qsatype.FLUtil.sqlSelect("auth_user", "last_login", "username = '" + str(id_usuario) + "'")
+                        # if ultimo_login is None:
+                        #     APIQSA.entry_point('post', "aqn_companies", "", str(username), "enviar_wiki")
                         # APIQSA.entry_point('post', "aqn_companies", "", "", "enviar_wiki")
                         usuario = aqn_user.objects.filter(email__exact=username)
                         if usuario.exists():
                             authuser = authenticate(username=str(authusername), password=password)
+                            id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = " + str(authusername))
+                            cantidad_compania = qsatype.FLUtil.sqlSelect("aqn_user", "COUNT(idusuario)", "idcompany = " + str(id_compania))
+                            is_superuser = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '" + str(authusername) + "'")
+                            if cantidad_compania == 1 and not is_superuser:
+                                # user = User.objects.create_user(username=id_usuario, password="ybllogin", first_name=username)
+                                nombre = qsatype.FLUtil.sqlSelect("aqn_user", "usuario", "idusuario = " + str(authusername))
+
+                                user = User.objects.get(username__exact=str(authusername))
+                                user.is_superuser = True
+                                user.first_name = nombre
+                                user.save()
+                                # qsatype.FLUtil.sqlUpdate("auth_user", "is_superuser", True, "username = '" + str(authusername) + "'")
+                                # qsatype.FLUtil.sqlUpdate("auth_user", "is_superuser", True, "username = '" + str(authusername) + "'")
                             if authuser is None:
                                 user = User.objects.get(username__exact=str(authusername))
                                 user.set_password(password)
@@ -170,6 +186,8 @@ class gesttare(yblogin_sass):
                     else:
                         return self.iface.login(request, 'No existe el usuario')
                 except Exception as e:
+                    print("_____________________")
+                    print(e)
                     return self.iface.login(request, str(e))
         return self.iface.login(request)
 
@@ -194,16 +212,64 @@ class gesttare(yblogin_sass):
                 APIQSA.entry_point('post', "aqn_companies", "", params, "reenviar")
         return self.iface.emailenviado(request, hashparam)
 
-    def gesttare_planes_request(self, request, idplan):
-        return render(request, "portal/planes.html", {"idplan": idplan})
+    def gesttare_planes_request(self, request, idplan, idcompany):
+        if request.method == "POST":
+            action = request.POST.get("action", None)
+            descripcion = request.POST.get("planes", None)
+            modalidad = request.POST.get("modalidad", None)
+            cantidad_usuarios = request.POST.get("cantidadUsuarios", None)
+            # print("el valor de url_pago es: ", url_pago)
+            # return render(request, "portal/pago.html", {"idplan": idplan, "idcompany": idcompany, "descripcion": descripcion, "modalidad": modalidad, "url_pago":url_pago })
+            if action == "cambioPlan":
+                url = "/cambiaplan/" + str(idcompany) + "/" + str(descripcion) + "/" + str(modalidad) + "/" + str(cantidad_usuarios)
+                return HttpResponseRedirect(url)
+        return render(request, "portal/planes.html", {"idplan": idplan, "idcompany": idcompany})
 
-    def gesttare_cambiaplan_request(self, request, idplan):
-        print("????????cambioplan", idplan)
-        id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = " + str(request.user))
-        email = qsatype.FLUtil.sqlSelect("aqn_user", "email", "idusuario = " + str(request.user))
-        print("el id es: ",id_compania)
-        print("el email es: ",email)
-        return render(request, "portal/planes.html", {"idplan": idplan})
+    def gesttare_soporte_request(self, request, idusuario):
+        if request.method == "GET":
+            action = request.GET.get("action", None)
+            asunto = request.GET.get("subject", None)
+            cuerpo = request.GET.get("body", None)
+            # imagen = request.GET.get("imagen", None)
+
+            # print("imagen:", imagen)
+
+            idusuario_activo = qsatype.FLUtil.nameUser()
+            email = qsatype.FLUtil.sqlSelect("aqn_user", "email", "idusuario = " + str(idusuario_activo))
+
+            if action == "enviarEmail":
+                params = {
+                    "asunto": asunto,
+                    "cuerpo": cuerpo,
+                    "email": email
+                }
+                APIQSA.entry_point('post', "aqn_user", idusuario, params, "soporte")
+
+                url = "/soporteenviado"
+                return HttpResponseRedirect(url)
+        return render(request, "portal/soporte.html")
+
+
+    def gesttare_soporteenviado_request(self, request):
+        return render(request, "portal/soporteenviado.html")
+
+
+    def gesttare_cambiaplan_request(self, request, idcompany, descripcion, modalidad, cantidad_usuarios):
+        # id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = " + str(request.user))
+        # email = qsatype.FLUtil.sqlSelect("aqn_user", "email", "idusuario = " + str(request.user))
+        # print("el id es: ",id_compania)
+        # print("el email es: ",email)
+        idusuario_activo = qsatype.FLUtil.nameUser()
+        nuevo_plan = qsatype.FLUtil.sqlSelect("aqn_planes", "idplan", "descripcion = '" + str(descripcion) + "' AND modalidad = '" + str(modalidad) + "'")
+        params = {
+            "pk": idcompany,
+            "can_usuarios": cantidad_usuarios,
+            "id_plan": nuevo_plan
+        }
+        url_pago = APIQSA.entry_point('post', "aqn_companies", idusuario_activo, params, "url_pago")
+        url_pago = url_pago.decode("utf-8")
+        url_pago = url_pago[10:-2]
+        return render(request, "portal/pago.html", {"idcompany": idcompany, "idplan": nuevo_plan, "url_pago": url_pago, "cantidad_usuarios": cantidad_usuarios})
 
     def gesttare_emailreenviado_request(self, request):
         return self.iface.emailreenviado(request)
@@ -335,9 +401,15 @@ class gesttare(yblogin_sass):
     def emailreenviado(self, request):
         return self.iface.gesttare_emailreenviado(request)
 
-    def planes_request(self, request, idplan):
-        return self.iface.gesttare_planes_request(request, idplan)
+    def planes_request(self, request, idplan, idcompany):
+        return self.iface.gesttare_planes_request(request, idplan, idcompany)
 
-    def cambiaplan_request(self, request, idplan):
-        return self.iface.gesttare_cambiaplan_request(request, idplan)
+    def soporte_request(self, request, idusuario):
+        return self.iface.gesttare_soporte_request(request, idusuario)
+
+    def soporteenviado_request(self, request):
+        return self.iface.gesttare_soporteenviado_request(request)
+
+    def cambiaplan_request(self, request, idcompany, descripcion, modalidad, cantidad_usuarios):
+        return self.iface.gesttare_cambiaplan_request(request, idcompany,  descripcion, modalidad, cantidad_usuarios)
 

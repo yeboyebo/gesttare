@@ -21,7 +21,7 @@
                 "vistaNoAgrupada": {
                     "componente": "YBButton",
                     "prefix": "gt_timetracking",
-                    "label": "NO AGRUPAR POR TAREA",
+                    "label": "No agrupar por tarea",
                     "className": "floatRight agruparTarea",
                     "buttonType": "raised",
                     "action": {
@@ -32,7 +32,7 @@
                 "vistaAgrupada": {
                     "componente": "YBButton",
                     "prefix": "gt_timetracking",
-                    "label": "AGRUPAR POR TAREA",
+                    "label": "Agrupar por tarea",
                     "className": "floatRight agruparTarea",
                     "buttonType": "raised",
                     "action": {
@@ -144,7 +144,7 @@
                 "masterTimeTrackingAgrupado": {
                     "componente": "YBGrid",
                     "type": "query",
-                    "prefix": "mastertimetracking",
+                    "prefix": "mastertimetrackingagrupado",
                     "autofilter": false,
                     "cansavefilter": true,
                     "className": "",

@@ -62,9 +62,29 @@
                             "prefix": "gt_controldiario",
                             "className": "floatRight",
                             "buttonType": "icon",
+                            "style": {
+                                "marginTop": "5px",
+                                "marginRight": "5px"
+                            },
                             "action": {
                                 "key": "desbloquear",
                                 "success": [{"slot": "refrescar"}]
+                            }
+                        },
+                        "borrarButton": {
+                            "componente": "YBButton",
+                            "title": "Borrar",
+                            "prefix": "gt_controldiario",
+                            "icon": "delete",
+                            "className": "floatRight",
+                            "buttonType": "icon",
+                            "style": {
+                                "marginTop": "5px",
+                                "marginRight": "5px"
+                            },
+                            "action": {
+                                "key": "borrar",
+                                "success": [{"slot": "return"}]
                             }
                         }
                     }
@@ -150,6 +170,11 @@
             "serverAction": "validar",
             "icon": "icon"
         },
+        "borrar": {
+            "action": "legacy",
+            "serverAction": "borrar_dia",
+            "icon": "icon"
+        },
         "desbloquear": {
             "action": "legacy",
             "serverAction": "desbloquear",
@@ -164,7 +189,8 @@
     "drawIf": {
         "botonera": {
             "validar": "drawif_validar",
-            "desbloquear": "drawif_desbloquear"
+            "desbloquear": "drawif_desbloquear",
+            "borrarButton": "drawif_borrarButton"
         },
         "controlhorario": {
             "delete": {

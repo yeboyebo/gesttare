@@ -24,9 +24,9 @@ class gesttare(interna):
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
         if template == "list":
-            return {"masterProyectos": "Nº DE PROYECTOS: {}".format(ident["COUNT"])}
+            return {"groupBoxPadre": "Nº DE PROYECTOS: {}".format(ident["COUNT"])}
         if template == "master":
-            return {"masterProyectos": "Nº DE PROYECTOS: {}".format(ident["PAG"]["COUNT"])}
+            return {"groupBoxPadre": "Nº DE PROYECTOS: {}".format(ident["PAG"]["COUNT"])}
         return None
 
     def get_model_info(self, model, data, ident, template, where_filter):
@@ -315,7 +315,8 @@ class gesttare(interna):
                 curInvitacion.refreshBuffer()
                 curInvitacion.setValueBuffer(u"email", oParam["email"])
                 curInvitacion.setValueBuffer(u"hashcode", hashlib.md5(hashcode.encode('utf-8')).hexdigest())
-                curInvitacion.setValueBuffer(u"idcompany", idcompany)
+                # curInvitacion.setValueBuffer(u"idcompany", idcompany)
+                curInvitacion.setValueBuffer(u"idcompany", cursor.valueBuffer("idcompany"))
                 curInvitacion.setValueBuffer(u"idproyecto", cursor.valueBuffer("idproyecto"))
                 curInvitacion.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
                 curInvitacion.setValueBuffer(u"activo", True)
@@ -608,13 +609,14 @@ class gesttare(interna):
         while curTarea.next():
             curTarea.setModeAccess(curTarea.Browse)
             curTarea.refreshBuffer()
+            estado = curTarea.valueBuffer("codestado")
             curCopia = qsatype.FLSqlCursor("gt_tareas")
             curCopia.setModeAccess(curCopia.Insert)
             curCopia.refreshBuffer()
             curCopia.setValueBuffer("coste", 0)
             curCopia.setValueBuffer("hdedicadas", 0)
             curCopia.setValueBuffer("resuelta", False)
-            curCopia.setValueBuffer("codestado", "Por Hacer")
+            curCopia.setValueBuffer("codestado", estado)
             curCopia.setValueBuffer("nombre", curTarea.valueBuffer("nombre"))
             curCopia.setValueBuffer("idproyecto", idproyecto)
             curCopia.setValueBuffer("idhito", idhito)

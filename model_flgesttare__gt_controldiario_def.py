@@ -110,6 +110,19 @@ class gesttare(interna):
 
         if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idc_diario = {} AND horafin IS NULL".format(cursor.valueBuffer("idc_diario"))):
             return "disabled"
+            
+    def gesttare_drawif_borrarButton(self, cursor):
+        if cursor.valueBuffer("validado"):
+            return "hidden"
+
+        if qsatype.FLUtil.nameUser() != str(cursor.valueBuffer("idusuario")):
+            return "disabled"
+
+        # if not cursor.valueBuffer("horasextra"):
+        #     return "disabled"
+
+        if qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idc_diario = {} AND horafin IS NULL".format(cursor.valueBuffer("idc_diario"))):
+            return "hidden"
 
     def gesttare_drawif_desbloquear(self, cursor):
         if cursor.valueBuffer("validado"):
@@ -177,6 +190,37 @@ class gesttare(interna):
             return self.iface.desbloquear(model, oParam, cursor)
         return self.iface.validar(model, oParam, cursor)
 
+    def gesttare_borrar_dia(self, model, oParam, cursor):
+        resul = {}
+        if not cursor.valueBuffer("validado"):
+            if "confirmacion" not in oParam:
+                fecha = cursor.valueBuffer("fecha")
+                resul['status'] = 2
+                resul['confirm'] = "Vas a eliminar el registro diario con fecha: " + str(datetime.strptime(fecha, '%Y-%m-%d').strftime("%d/%m/%y")) + ". ¿Quieres continuar?"
+                return resul
+            else:
+                usuario = qsatype.FLUtil.nameUser()
+                # control_horario = qsatype.FLSqlCursor("gt_controlhorario")
+                # control_horario.select("idusuario = " + str(usuario) + " AND idc_diario = " + str(cursor.valueBuffer("idc_diario")))
+                # control_horario.setModeAccess(control_horario.Del)
+                # control_horario.refreshBuffer()
+                # if not control_horario.commitBuffer():
+                #     return False
+                if not qsatype.FLUtil.sqlDelete("gt_controlhorario", "idusuario = " + str(usuario) + " AND idc_diario = " + str(cursor.valueBuffer("idc_diario"))):
+                    return False
+                cursor.setModeAccess(cursor.Del)
+                cursor.refreshBuffer()
+                if not cursor.commitBuffer():
+                    return False
+                resul["return_data"] = False
+                resul["msg"] = "Registro diario eliminado"
+                return resul
+        else:
+            resul['status'] = 1
+            resul["msg"] = "No se puede eliminar un registro diario validado"
+            return resul
+        return True
+
     def gesttare_desbloquear(self, model, oParam, cursor):
         mesvalid = qsatype.FLUtil.sqlSelect("gt_controlmensual", "validado_user", "idc_mensual = {}".format(cursor.valueBuffer("idc_mensual")))
         if mesvalid:
@@ -224,7 +268,6 @@ class gesttare(interna):
                     return resul
             idc_diario = qsatype.FLUtil().quickSqlSelect("gt_controldiario", "idc_diario", "idusuario = '{}' AND fecha = '{}'".format(user_name, oParam["fecha"]))
             url = '/gesttare/gt_controlhorario/newRecord?p_idc_diario=' + str(idc_diario) + '&p_idusuario=' + str(user_name)
-            print(url)
             resul["url"] = url
         else:
             resul['msg']  = "Debes indicar una fecha para crear registro de tiempo"
@@ -315,6 +358,9 @@ class gesttare(interna):
     def getFilters(self, model, name, template=None):
         return self.ctx.gesttare_getFilters(model, name, template)
 
+    def drawif_borrarButton(self, cursor):
+        return self.ctx.gesttare_drawif_borrarButton(cursor)
+
     def drawif_validar(self, cursor):
         return self.ctx.gesttare_drawif_validar(cursor)
 
@@ -332,6 +378,9 @@ class gesttare(interna):
 
     def validar_dia(self, model, oParam, cursor):
         return self.ctx.gesttare_validar_dia(model, oParam, cursor)
+
+    def borrar_dia(self, model, oParam, cursor):
+        return self.ctx.gesttare_borrar_dia(model, oParam, cursor)
 
     def desbloquear(self, model, oParam, cursor):
         return self.ctx.gesttare_desbloquear(model, oParam, cursor)

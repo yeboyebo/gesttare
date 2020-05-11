@@ -52,7 +52,7 @@
                                     "fields": {
                                         "idproyecto": {"disabled": true, "visible": false},
                                         "nombre": {"className": "col-sm-12"},
-                                        "descripcion": {"label": " ", "tipo": 6},
+                                        "descripcion": {"label": " ", "tipo": 6, "wysiwyg": true},
                                         "estado": {},
                                         "fechainicio": {},
                                         "fechaterminado": {},

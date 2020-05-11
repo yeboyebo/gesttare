@@ -55,7 +55,7 @@
             "path": "/portal/emailenviado",
             "value": {
                 "planes": {
-                    "url": "planes/(?P<idplan>\\w+)$",
+                    "url": "planes/(?P<idplan>\\w+)/(?P<idcompany>\\w+)$",
                     "func": "planes_request"
                 }
             }
@@ -64,8 +64,28 @@
             "type": "insertAfterNode",
             "path": "/portal/planes",
             "value": {
+                "soporte": {
+                    "url": "soporte/(?P<idusuario>\\w+)$",
+                    "func": "soporte_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/soporte",
+            "value": {
+                "soporteenviado": {
+                    "url": "soporteenviado$",
+                    "func": "soporteenviado_request"
+                }
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/portal/soporteenviado",
+            "value": {
                 "cambiaplan": {
-                    "url": "cambiaplan/(?P<idplan>\\w+)$",
+                    "url": "cambiaplan/(?P<idcompany>\\w+)/(?P<descripcion>\\w+)/(?P<modalidad>\\w+)/(?P<cantidad_usuarios>\\w+)$",
                     "func": "cambiaplan_request"
                 }
             }

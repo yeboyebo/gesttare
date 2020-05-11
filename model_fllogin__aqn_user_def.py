@@ -195,17 +195,24 @@ class gesttare(yblogin):
         if cursor.valueBuffer("activo"):
             if "confirmacion" in oParam and oParam["confirmacion"]:
                 usuario = cursor.valueBuffer("idusuario")
-                datos_usuario = {
-                    "aqn_user": {
-                        "activo": False
-                    }
-                }
-                cursor_usuario = APIQSA.entry_point('post', "aqn_user", usuario, datos_usuario, "desactivar_usuario")
+                # datos_usuario = {
+                #     "params": {
+                #         "aqn_user": {
+                #             "activo": False
+                #         }
+                #     }
 
-                if not cursor_usuario:
-                    response["status"] = 1
-                    response["msg"] = "No se pudo desactivar usuario"
-                    return response
+                # }
+                datos_usuario =  {
+                    "pk": usuario,
+                    "activo": False
+                }
+                APIQSA.entry_point('patch', "aqn_user", usuario, datos_usuario)
+
+                # if not cursor_usuario:
+                #     response["status"] = 1
+                #     response["msg"] = "No se pudo desactivar usuario"
+                #     return response
                 if not qsatype.FLUtil.sqlDelete("gt_partictarea", "idusuario = " + str(usuario)):
                     response["status"] = 1
                     response["msg"] = "No se pudo desactivar usuario"
@@ -215,7 +222,9 @@ class gesttare(yblogin):
                     response["msg"] = "No se pudo desactivar usuario"
                     return response
                 response["resul"] = True
-                response["msg"] = "Usuario " + cursor_usuario.valueBuffer("usuario") + " desactivado"
+                # response["msg"] = "Usuario " + cursor_usuario.valueBuffer("usuario") + " desactivado"
+                response["msg"] = "Usuario " + cursor.valueBuffer("nombre") + " desactivado"
+
                 return response
 
             response["status"] = 2
@@ -224,18 +233,26 @@ class gesttare(yblogin):
 
         if "confirmacion" in oParam and oParam["confirmacion"]:
                 usuario = cursor.valueBuffer("idusuario")
-                datos_usuario = {
-                    "aqn_user": {
-                        "activo": True
-                    }
+                datos_usuario =  {
+                    "pk": usuario,
+                    "activo": True
                 }
-                cursor_usuario = APIQSA.entry_point('post', "aqn_user", usuario, datos_usuario, "activar_usuario")
-                if not cursor_usuario:
-                    response["status"] = 1
-                    response["msg"] = "No se puede activar usuario"
-                    return response
+                APIQSA.entry_point('patch', "aqn_user", usuario, datos_usuario)
+                # datos_usuario = {
+                #     "params": {
+                #         "aqn_user": {
+                #             "activo": True
+                #         }
+                #     }
+                # }
+                # cursor_usuario = APIQSA.entry_point('post', "aqn_user", usuario, datos_usuario, "activar_usuario")
+                # if not cursor_usuario:
+                #     response["status"] = 1
+                #     response["msg"] = "No se puede activar usuario"
+                #     return response
                 response["resul"] = True
-                response["msg"] = "Usuario " + cursor_usuario.valueBuffer("usuario") + " activado"
+                # response["msg"] = "Usuario " + cursor_usuario.valueBuffer("usuario") + " activado"
+                response["msg"] = "Usuario " + cursor.valueBuffer("nombre") + " activado"
                 return response
 
         response["status"] = 2

@@ -112,7 +112,8 @@
                                 "fields": {
                                     "nombre": {},
                                     "descripcion": {
-                                        "label": " "
+                                        "label": " ",
+                                        "wysiwyg": true
                                     },
                                     "estado": {},
                                     "fechainicio": {},
@@ -151,7 +152,16 @@
                             {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 67},
                             {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
                             {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto", "aux": "presupuesto", "title": "presupuesto_title"},
-                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 40, "label": "Pte"}
+                            {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 40, "label": "Pte"},
+                            {
+                                "tipo": "act",
+                                "key": "nuevaTarea",
+                                "iconurl" : "/static/dist/img/icons/anotar_modal.svg",
+                                "label": "Nueva tarea",
+                                "success": [
+                                    {"slot": "goto"}
+                                ]
+                            }
                         ],
                         "rowclick": "link",
                         "accionesGrid": [
@@ -400,6 +410,12 @@
         "actNuevoHito": {
             "action": "newRow",
             "icon": "add_circle"
+        },
+        "nuevaTarea": {
+            "action": "legacy",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "creartareahito",
+            "icon": "alarm"
         },
         "actInvitarExterno": {
             "title": "Invitación de usuarios externos",

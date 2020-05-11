@@ -15,110 +15,114 @@
         }
     },
     "layout": {
-        "separator": {
-            "componente": "YBSeparator"
-        },
-        "masterProyectos": {
-            "componente": "YBGrid",
-            "prefix": "gt_proyectos",
-            "cansavefilter": true,
-            "buscador": {"fields":["nombre"]},
-            "className": "",
-            "filter": {
-                "estado": null,
-                "fechainicio": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "padreTareas",
+            "style": {},
+            "layout": {
+                "masterProyectos": {
+                    "componente": "YBGrid",
+                    "prefix": "gt_proyectos",
+                    "cansavefilter": true,
+                    "buscador": {"fields":["nombre"]},
+                    "className": "",
+                    "filter": {
+                        "estado": null,
+                        "fechainicio": {
 
-                    "filterType": "interval"
-                },
-                "fechaterminado": {
-                    "filterType": "interval"
-                },
-                "idcliente": {
-                    "showpk": false,
-                    "function": "getClientesCompaniaUsu"
-                },
-                "idresponsable": {
-                    "showpk": false,
-                    "function": "getParticProyectosUsu"
-                }
-            },
-            "multiselectable": false,
-            "avatar": false,
-            "columns": [
-                {
-                    "tipo": "act",
-                    "key": "copiarProyecto",
-                    "label": "Copiar proyecto",
-                    "success": [
-                        {"slot": "refrescar"}
+                            "filterType": "interval"
+                        },
+                        "fechaterminado": {
+                            "filterType": "interval"
+                        },
+                        "idcliente": {
+                            "showpk": false,
+                            "function": "getClientesCompaniaUsu"
+                        },
+                        "idresponsable": {
+                            "showpk": false,
+                            "function": "getParticProyectosUsu"
+                        }
+                    },
+                    "multiselectable": false,
+                    "avatar": false,
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "copiarProyecto",
+                            "label": "Copiar proyecto",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "archivarProyecto",
+                            "label": "Archivar proyecto",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "title", "key": "nombre", "width": 270, "flex":2, "title": true, "link": true},
+                        {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": "Responsable"},
+                        {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
+                        {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
+                        {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "color": "Color fondo estado", "width": 30}
+                    ],
+                    "rowclick": "",
+                    "rowlistclick": "link",
+                    "accionesGrid": [
+                        {
+                            "key": "getReport",
+                            "label": "Genera XLS",
+                            "success": []
+                        },
+                        {
+                            "key": "nuevoProyecto",
+                            "label": "Nuevo",
+                            "success": [{ "slot": "goto"}]
+                        }
                     ]
                 },
-                {
-                    "tipo": "act",
-                    "key": "archivarProyecto",
-                    "label": "Archivar proyecto",
-                    "success": [
-                        {"slot": "refrescar"}
-                    ]
+                "separator": {
+                    "componente": "YBSeparator"
                 },
-                {"tipo": "field", "listpos": "title", "key": "nombre", "width": 270, "flex":2, "title": true, "link": true},
-                {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": "Responsable"},
-                {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
-                {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 80, "label": "Fecha Inicio"},
-                {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 80},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "estado", "color": "Color fondo estado", "width": 30}
-            ],
-            "rowclick": "",
-            "rowlistclick": "link",
-            "accionesGrid": [
-                {
-                    "key": "getReport",
-                    "label": "Genera XLS",
-                    "success": []
-                },
-                {
-                    "key": "nuevoProyecto",
-                    "label": "Nuevo",
-                    "success": [{ "slot": "goto"}]
+                "proyectosArchivados": {
+                    "componente": "YBGrid",
+                    "type": "query",
+                    "prefix": "proyectosarchivados",
+                    "className": "",
+                    "label": "Proyectos archivados",
+                    "buscador": false,
+                    "filter": {
+                        "gt_proyectos.nombre": null,
+                        "gt_proyectos.estado": null,
+                        "gt_proyectos.fechainicio": {
+                            "filterType": "interval"
+                        },
+                        "gt_proyectos.fechaterminado": {
+                            "filterType": "interval"
+                        }
+                    },
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "desarchivarProyecto",
+                            "label": "Borrar Linea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "title", "key": "gt_proyectos.nombre", "width": 120, "flex": 2, "title": true},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "gt_proyectos.estado", "width": 40},
+                        {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechainicio", "width": 80},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechaterminado", "width": 80}
+                    ],
+                    "rowclick": ""
                 }
-            ]
-        },
-        "separator": {
-            "componente": "YBSeparator"
-        },
-        "proyectosArchivados": {
-            "componente": "YBGrid",
-            "type": "query",
-            "prefix": "proyectosarchivados",
-            "className": "",
-            "label": "Proyectos archivados",
-            "buscador": false,
-            "filter": {
-                "gt_proyectos.nombre": null,
-                "gt_proyectos.estado": null,
-                "gt_proyectos.fechainicio": {
-                    "filterType": "interval"
-                },
-                "gt_proyectos.fechaterminado": {
-                    "filterType": "interval"
-                }
-            },
-            "columns": [
-                {
-                    "tipo": "act",
-                    "key": "desarchivarProyecto",
-                    "label": "Borrar Linea",
-                    "success": [
-                        {"slot": "refrescar"}
-                    ]
-                },
-                {"tipo": "field", "listpos": "title", "key": "gt_proyectos.nombre", "width": 120, "flex": 2, "title": true},
-                {"tipo": "field", "listpos": "secondaryitem", "key": "gt_proyectos.estado", "width": 40},
-                {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
-                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechainicio", "width": 80},
-                {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechaterminado", "width": 80}
-            ],
-            "rowclick": ""
+            }
         }
     },
     "acciones": {

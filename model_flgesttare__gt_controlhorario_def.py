@@ -338,9 +338,9 @@ class gesttare(interna):
 
     def gesttare_field_completaTitle(self, model):
         if model["gt_controldiario.validado"]:
-            return "Validar día"
-        else:
             return "Desbloquear día"
+        else:
+            return "Validar día"
         return ""
 
     def gesttare_plan_compania(self, usurio):

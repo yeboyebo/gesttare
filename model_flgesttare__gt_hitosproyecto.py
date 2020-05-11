@@ -53,6 +53,10 @@ class gesttare_gt_hitosproyecto(interna_gt_hitosproyecto, helpers.MixinConAccion
     def completar_hito(self, oParam, cursor):
         return form.iface.completar_hito(self, oParam, cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def creartareahito(self, oParam, cursor):
+        return form.iface.creartareahito(oParam, cursor)
+
     @helpers.decoradores.accion(aqparam=["cursor"])
     def abrir_hito(self, cursor):
         return form.iface.abrir_hito(self, cursor)

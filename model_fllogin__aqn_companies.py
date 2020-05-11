@@ -13,3 +13,7 @@ class gesttare_aqn_companies(yblogin_aqn_companies, helpers.MixinConAcciones):
     def verPlanes(self, cursor):
         return form.iface.verPlanes(self, cursor)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def mailTo(self, cursor):
+        return form.iface.mailTo(self, cursor)
+

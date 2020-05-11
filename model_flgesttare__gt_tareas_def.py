@@ -30,9 +30,9 @@ class gesttare(interna):
 
     def gesttare_get_model_info(self, model, data, ident, template, where_filter):
         if template == "list":
-            return {"masterTareas": "Nº DE TAREAS: {}".format(ident["COUNT"])}
+            return {"groupBoxPadre": "Nº DE TAREAS: {}".format(ident["COUNT"])}
         if template == "master":
-            return {"masterTareas": "Nº DE TAREAS: {}".format(ident["PAG"]["COUNT"])}
+            return {"groupBoxPadre": "Nº DE TAREAS: {}".format(ident["PAG"]["COUNT"])}
         if template == "formRecord":
             idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(data["idproyecto"])) or None
 
@@ -54,8 +54,7 @@ class gesttare(interna):
             return [
                 {'verbose_name': 'renegociaProyecto', 'func': 'ren_field_proyecto'},
                 {'verbose_name': 'renegociacolorfechavencimiento', 'func': 'ren_color_fecha'},
-                {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega'},
-                {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}
+                {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega'}
             ]
         if template == "master":
             fields = [
@@ -73,7 +72,7 @@ class gesttare(interna):
             ]
 
         if template == "formRecordcalendarioTareas":
-            return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}, {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}]
+            return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
 
         if template == "formRecord":
             return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
@@ -636,29 +635,69 @@ class gesttare(interna):
         return response
 
     def gesttare_incrementar_dia(self, model, cursor):
-        response = {}
-        fecha = cursor.valueBuffer("fechavencimiento")
-        if fecha:
-            fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
-
-            increDia = fecha + datetime.timedelta(days=1)
-
-            cursor.setValueBuffer("fechavencimiento", increDia)
-
-            if not cursor.commitBuffer():
-                print("Ocurrió un error al actualizar la tarea")
-                return False
-
-            response["resul"] = True
-            response["msg"] = "Tarea planificada para el día siguiente"
-
-        else:
-            response["resul"] = True
-            response["msg"] = "No hay fecha de ejecución"
+        # response = {}
+        # fecha = cursor.valueBuffer("fechavencimiento")
         # if fecha:
-        #     response["msg"] = "Tarea planificada para mañana"
+        #     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
+
+        #     increDia = fecha + datetime.timedelta(days=1)
+
+        #     cursor.setValueBuffer("fechavencimiento", increDia)
+
+        #     if not cursor.commitBuffer():
+        #         print("Ocurrió un error al actualizar la tarea")
+        #         return False
+
+        #     response["resul"] = True
+        #     response["msg"] = "Tarea planificada para el día siguiente"
+
         # else:
+        #     response["resul"] = True
         #     response["msg"] = "No hay fecha de ejecución"
+        # # if fecha:
+        # #     response["msg"] = "Tarea planificada para mañana"
+        # # else:
+        # #     response["msg"] = "No hay fecha de ejecución"
+        response = {}
+        response['status'] = -1
+        response['data'] = {}
+        response["prefix"] = "gt_tareas"
+        response["title"] = "Crear nueva tarea"
+        response["serverAction"] = "gotoNewRecordAnotacion"
+        response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": "NF", "nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+        
+        response['params'] = [
+            {
+                "componente": "YBFieldDB",
+                "prefix": "otros",
+                "tipo": 3,
+                "verbose_name": "Nombre",
+                "key": "nombre",
+                "validaciones": None,
+                "maxlength": 200,
+                "required": True
+            },
+            {
+                "componente": "YBFieldDB",
+                "prefix": "otros",
+                "tipo": 3,
+                "verbose_name": "Descripción",
+                "key": "descripcion",
+                "validaciones": None,
+                "required": False
+            },
+            {
+                "componente": "YBFieldDB",
+                "prefix": "otros",
+                "tipo": 3,
+                "verbose_name": "Nombre",
+                "key": "abierto",
+                "validaciones": None,
+                "required": False,
+                "visible": False,
+                "value": "True"
+            }
+        ]
         return response
 
     def gesttare_creartarea(self, oParam):
@@ -1032,10 +1071,6 @@ class gesttare(interna):
         # response = self.plan_compania(user_name)
         if tengopermiso != True:
             return tengopermiso
-        usuario = qsatype.FLUtil.nameUser()
-        response = self.plan_compania(usuario)
-        if response:
-            return response
         return "/gesttare/gt_timetracking/newRecord?p_idtarea=" + str(cursor.valueBuffer("idtarea"))
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
@@ -1099,7 +1134,7 @@ class gesttare(interna):
             response["prefix"] = "gt_tareas"
             response["title"] = "Crear nueva tarea"
             response["serverAction"] = "gotoNewRecordAnotacion"
-            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction","nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+            response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": "NF", "nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
             if "abierto" in oParam:
                 response["error"] = "El campo nombre es obligatorio"
             response['params'] = [
@@ -1210,7 +1245,9 @@ class gesttare(interna):
     def gesttare_drawif_checkAdjuntos(self, cursor):
         # if cursor.valueBuffer("resuelta") == True:
         if cursor.valueBuffer("idactualizacion"):
+            print("entra??")
             adjunto = qsatype.FLUtil.quickSqlSelect("gd_objetosdoc", "clave", "clave = '{}'".format(cursor.valueBuffer("idactualizacion")))
+            print("el valor es: ",adjunto)
             if adjunto:
                 return True
         

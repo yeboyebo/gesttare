@@ -46,9 +46,12 @@ class gesttare(interna):
             params = {
                 'pk': iddocumento
             }
-            APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'delete')
+            msg = "Adjunto eliminado"
+            if not APIQSA.entry_point('post', "gd_documentos", idUsuario, params, 'delete'):
+                msg = "Error al eliminar adjunto"
+                resul['status'] = 1
             resul["return_data"] = False
-            resul["msg"] = "Adjunto eliminado"
+            resul["msg"] = msg
             return resul
 
 

@@ -1,0 +1,39 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+{% if idplan == "2" %}
+    <div> Hola mundo</div>
+{% endif %}
+{{ nuevo_plan }}
+{{ idcompany }}
+{{ url_pago }}
+ <div class="loginPanel soporte">
+        <div class="loginPanelHeader">
+            <div class="logError">{{error}}</div>
+            <img src="{% static 'dist/img/logo/logo.png' %}" alt="logo" className="logo" style="margin-left:15%"></img>
+        </div>
+
+        <div class="loginPanelBody">
+            <iframe title="titulo" src="{{ url_pago }}" width='400' height='325' frameBorder='0' marginHeight='0' marginWidth='0' scrolling='no'>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group label-floating pago">
+                    
+                </div>
+                <div class="loginPanelFooter crearNewCompany">
+                    <button name="loginSubmit" href="javascript:void(0)" class="btn btn-flat btn-primary loginButton botonNewCompany">Cambiar plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}

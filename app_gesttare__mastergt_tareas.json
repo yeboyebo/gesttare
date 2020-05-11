@@ -15,12 +15,9 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": " ",
+            "className": "padreTareas",
             "style": {},
             "layout": {
-                "separator": {
-                    "componente": "YBSeparator"
-                },
                 "masterTareas": {
                     "componente": "YBGrid",
                     "prefix": "gt_tareas",

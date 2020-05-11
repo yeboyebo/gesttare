@@ -1,0 +1,64 @@
+{% extends "YBWEB/dashboard.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load includeJSX %}
+{% load YBtools %}
+
+{% block main %}
+
+ <div class="loginPanel soporte">
+        <div class="loginPanelHeader">
+            <div class="logError">{{error}}</div>
+            <img src="{% static 'dist/img/logo/logo.png' %}" alt="logo" className="logo" style="margin-left:15%"></img>
+        </div>
+
+        <div class="loginPanelBody">
+            <form action="" method="GET">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="enviarEmail">
+                <!-- <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Asunto:</label>
+                    <input name="subject" id="subject" type="text" class="loginInput form-control">
+                </div> -->
+                <div class="form-group label-floating asuntos">
+                    <label class="control-label" for="focusedInput1">Asunto:</label>
+                    <select class="loginInput form-control" id="subject" name="subject">
+                            <option value="Problema técnico">Problema técnico</option>
+                            <option value="Facturación">Facturación</option>
+                            <option value="Cambio de plan">Cambio de plan</option>
+                            <option value="Propuesta de nueva funcionalidad">Propuesta de nueva funcionalidad</option>
+                    </select>
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label" for="focusedInput1">Mensaje:</label>
+                    <textarea class="textarea loginInput form-control" name="body" id="body" required></textarea>
+                </div>
+
+
+                <!-- <div class="form-group label-floating">
+                    <label for="avatar">Choose a profile picture:</label>
+
+                    <input type="file"
+                           id="imagen" name="imagen"
+                           accept="image/png, image/jpeg" class="loginInput form-control">
+                </div> -->
+                <!-- <div class="form-group label-floating">"mailto:soporte@dailyjob.io target="_blank"
+                    <a href="http://dailyjob.io/precios.html" target="_blank">Ver contenido y precio de los planes</a>
+                </div> -->
+                <div class="loginPanelFooter crearNewCompany soporteDiv">
+                    <button name="loginSubmit" onClick="javascript:void(0)" class="btn btn-flat btn-primary loginButton botonNewCompany">Enviar</button>
+                    
+                </div>
+            </form>
+            <!-- <div class="loginPanelFooter crearNewCompany soporteDiv">
+                <button name="loginSubmit" onClick="location.href='/'" class="btn btn-flat btn-primary loginButton botonNewCompany">Volver</button>
+            </div> -->
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block endjs %}
+{% endblock %}
