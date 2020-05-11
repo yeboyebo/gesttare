@@ -569,6 +569,18 @@
             {
                 "name": "app_portal__planes.html",
                 "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "app_portal__pago.html",
+                "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "app_portal__soporte.html",
+                "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "app_portal__soporteenviado.html",
+                "path": "apps/portal/templates/portal/"
             }
         ],
         "replaceFile": [
@@ -598,6 +610,10 @@
             },
             {
                 "name": "app_portal__login.html",
+                "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "app_portal__cooperate.html",
                 "path": "apps/portal/templates/portal/"
             }
         ],
