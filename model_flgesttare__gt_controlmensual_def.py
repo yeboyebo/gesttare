@@ -71,8 +71,9 @@ class gesttare(interna):
                 return ""
             if not model.idusuario.idcompany:
                 return ""
-
-            return model.idusuario.idcompany.descripcion
+            descripcion = qsatype.FLUtil.sqlSelect("aqn_companies", "descripcion", "idcompany = {}".format(model.idusuario.idcompany))    
+            # return model.idusuario.idcompany.descripcion
+            return descripcion
         except Exception:
             return ""
 
@@ -82,8 +83,9 @@ class gesttare(interna):
                 return ""
             if not model.idusuario.idcompany:
                 return ""
-
-            return model.idusuario.idcompany.cif
+            cif = qsatype.FLUtil.sqlSelect("aqn_companies", "cif", "idcompany = {}".format(model.idusuario.idcompany))
+            # return model.idusuario.idcompany.cif
+            return cif
         except Exception:
             return ""
 
@@ -93,8 +95,9 @@ class gesttare(interna):
                 return ""
             if not model.idusuario.idcompany:
                 return ""
-
-            return model.idusuario.idcompany.ccc
+            ccc = qsatype.FLUtil.sqlSelect("aqn_companies", "ccc", "idcompany = {}".format(model.idusuario.idcompany))
+            # return model.idusuario.idcompany.ccc
+            return ccc
         except Exception:
             return ""
 

@@ -52,9 +52,28 @@
             }
         },
         {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/success",
+            "value": {
+                "icon": "info"
+            }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/icon",
+            "value": {
+                "label": "Información de tarea"
+            }
+        },
+        {
             "type": "updateNode",
             "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/return",
             "value": false
+        },
+        {
+            "type": "updateNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal/title",
+            "value": ""
         },
         {
             "type": "insertAfterNode",
@@ -84,6 +103,24 @@
                     "function": "getParticCompaniaUsu"
                 }
             }
+        },
+        {
+            "type": "insertAfterNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/fields/gb__principal",
+            "value": {
+                "gb__opciones": {
+                    "title": "OPCIONES DE CONFIGURACIÓN",
+                    "fields": {
+                        "nomenclatura": {},
+                        "fentregaobligatoria": {}
+                    }
+                }
+            }
+        },
+        {
+            "type": "deleteNode",
+            "path": "/layout/groupBoxPadre/layout/formRecordAuthUser/groupbox",
+            "value": null
         },
         {
             "type": "insertAfterNode",

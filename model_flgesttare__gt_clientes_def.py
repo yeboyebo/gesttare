@@ -20,7 +20,6 @@ class gesttare(interna):
     def gesttare_getFilters(self, model, name, template=None):
         filters = []
         usuario = qsatype.FLUtil.nameUser()
-        print("getfilters", name)
         if name == 'clientesCompania' and usuario != "admin":
             idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
             return [{'criterio': 'idcompany__exact', 'valor': idcompany}]

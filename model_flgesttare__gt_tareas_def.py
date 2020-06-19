@@ -7,7 +7,7 @@ from models.flgesttare.gt_timetracking import gt_timetracking as timetracking
 import datetime
 import time
 from models.flgesttare import flgesttare_def
-
+from datetime import date
 import hashlib
 import json
 import calendar
@@ -76,6 +76,12 @@ class gesttare(interna):
 
         if template == "formRecord":
             return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
+
+        if template == "revisionTareas":
+            return [ {'verbose_name': 'Color fondo estado revision', 'func': 'color_fondo_estado_revision'}]
+
+        if template == "revisionTareasTreinta":
+            return [ {'verbose_name': 'Color fondo estado revision', 'func': 'color_fondo_estado_revision'}]
 
         return fields
 
@@ -284,6 +290,18 @@ class gesttare(interna):
             elif model.codestado.codestado == "Hecho":
                 return "verde"
             elif model.codestado.codestado == "En espera":
+                return "amarillo"
+        return ""
+
+    def gesttare_color_fondo_estado_revision(self, model):
+        if model["gt_tareas.codestado"]:
+            if model["gt_tareas.codestado"] == "Por Hacer":
+                return "naranja"
+            elif model["gt_tareas.codestado"] == "Recurrente":
+                return "lila"
+            elif model["gt_tareas.codestado"] == "Hecho":
+                return "verde"
+            elif model["gt_tareas.codestado"] == "En espera":
                 return "amarillo"
         return ""
 
@@ -634,70 +652,270 @@ class gesttare(interna):
             response["msg"] = "Tarea abierta"
         return response
 
-    def gesttare_incrementar_dia(self, model, cursor):
-        # response = {}
+    def gesttare_un_dia(self, model, cursor):
+        response = {}
         # fecha = cursor.valueBuffer("fechavencimiento")
         # if fecha:
-        #     fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
+        fecha = datetime.datetime.strptime(str(datetime.date.today()), '%Y-%m-%d').date()
 
-        #     increDia = fecha + datetime.timedelta(days=1)
+        increDia = fecha.today() + datetime.timedelta(days=1)
 
-        #     cursor.setValueBuffer("fechavencimiento", increDia)
+        cursor.setValueBuffer("fechavencimiento", increDia)
 
-        #     if not cursor.commitBuffer():
-        #         print("Ocurrió un error al actualizar la tarea")
-        #         return False
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea")
+            return False
 
-        #     response["resul"] = True
-        #     response["msg"] = "Tarea planificada para el día siguiente"
+        response["resul"] = True
+        response["msg"] = "Tarea planeada para el día siguiente"
 
         # else:
         #     response["resul"] = True
         #     response["msg"] = "No hay fecha de ejecución"
-        # # if fecha:
-        # #     response["msg"] = "Tarea planificada para mañana"
-        # # else:
-        # #     response["msg"] = "No hay fecha de ejecución"
+        # if fecha:
+        #     response["msg"] = "Tarea planificada para mañana"
+        # else:
+        #     response["msg"] = "No hay fecha de ejecución"
+        return response
+
+    def gesttare_semana_siguiente(self, model, cursor):
+        response = {}
+        # fecha = cursor.valueBuffer("fechavencimiento")
+        # if fecha:
+        fecha = datetime.datetime.strptime(str(datetime.date.today()), '%Y-%m-%d').date()
+
+        increDia = fecha + datetime.timedelta(days=(7 - fecha.weekday()))
+
+        cursor.setValueBuffer("fechavencimiento", increDia)
+
+        if not cursor.commitBuffer():
+            print("Ocurrió un error al actualizar la tarea")
+            return False
+
+        response["resul"] = True
+        response["msg"] = "Tarea planeada para el Lunes siguiente"
+
+        # else:
+        #     response["resul"] = True
+        #     response["msg"] = "No hay fecha de ejecución"
+        # if fecha:
+        #     response["msg"] = "Tarea planificada para mañana"
+        # else:
+        #     response["msg"] = "No hay fecha de ejecución"
+        return response
+
+    def gesttare_elegir_fecha(self, model, cursor):
         response = {}
         response['status'] = -1
         response['data'] = {}
         response["prefix"] = "gt_tareas"
-        response["title"] = "Crear nueva tarea"
-        response["serverAction"] = "gotoNewRecordAnotacion"
-        response["customButtons"] = [{"accion": "serverAction","nombre": "Crear posible tarea", "serverAction": "gotoNewRecordAnotacion", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": "NF", "nombre": "Ir a completar tarea >", "serverAction": "gotonewrecordtarea", "className": "anotacionToTareaButton"}]
+        response["title"] = "Elegir fecha"
+        # response["confirm"] = "</br></br> ¿Quieres continuar?"
+        response["serverAction"] = "elegir_fecha"
+        response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "Programar fecha", "serverAction": "fecha_elegida", "className": "creaAnotacionButton"}]
         
         response['params'] = [
             {
-                "componente": "YBFieldDB",
-                "prefix": "otros",
-                "tipo": 3,
-                "verbose_name": "Nombre",
-                "key": "nombre",
-                "validaciones": None,
-                "maxlength": 200,
-                "required": True
-            },
-            {
-                "componente": "YBFieldDB",
-                "prefix": "otros",
-                "tipo": 3,
-                "verbose_name": "Descripción",
-                "key": "descripcion",
-                "validaciones": None,
-                "required": False
-            },
-            {
-                "componente": "YBFieldDB",
-                "prefix": "otros",
-                "tipo": 3,
-                "verbose_name": "Nombre",
-                "key": "abierto",
-                "validaciones": None,
-                "required": False,
-                "visible": False,
-                "value": "True"
+                "tipo": 26,
+                "verbose_name": "Fecha",
+                "key": "fecha",
+                "validaciones": None
             }
         ]
+        
+        return response
+
+    def gesttare_fecha_elegida(self, model, oParam, cursor):
+        response = {}
+        # fecha = cursor.valueBuffer("fechavencimiento")
+        fecha_terminado_hito = qsatype.FLUtil().quickSqlSelect("gt_hitosproyecto", "fechaterminado", "idhito = {}".format(cursor.valueBuffer("idhito")))
+        hoy = datetime.date.today()
+        if oParam["fecha"]:
+            if fecha_terminado_hito:
+                if str(fecha_terminado_hito) >= oParam["fecha"]:
+                    if str(hoy) <= oParam["fecha"]:
+                        if cursor.valueBuffer("fechaentrega"):
+                            if cursor.valueBuffer("fechaentrega") >= oParam["fecha"]:
+                                increDia = oParam["fecha"]
+
+                                cursor.setValueBuffer("fechavencimiento", increDia)
+
+                                if not cursor.commitBuffer():
+                                    print("Ocurrió un error al actualizar la tarea")
+                                    return False
+
+                                response["resul"] = True
+                                response["msg"] = "Tarea planeada para la fecha elegida"
+                            else:
+                                response["status"] = 1
+                                response["msg"] = "La fecha de ejecución no puede ser superior a la fecha de entrega"
+                        else:
+                            increDia = oParam["fecha"]
+
+                            cursor.setValueBuffer("fechavencimiento", increDia)
+
+                            if not cursor.commitBuffer():
+                                print("Ocurrió un error al actualizar la tarea")
+                                return False
+
+                            response["resul"] = True
+                            response["msg"] = "Tarea planeada para la fecha elegida"
+                    else:
+                        response["status"] = 1
+                        response["msg"] = "La fecha de ejecución no puede ser antarior al día de hoy"
+
+                else:
+                    response["status"] = 1
+                    response["msg"] = "La fecha de finalización del hito es {}. Selecciona una fecha anterior o igual a esa fecha, o modifica la fecha de finalización del hito pulsando <a href='https://app.dailyjob.io/gesttare/gt_hitosproyecto/{}' target='_blank'>aquí</a>".format(str(datetime.datetime.strptime(str(fecha_terminado_hito), '%Y-%m-%d').strftime("%d/%m/%y")), cursor.valueBuffer("idhito"))
+            else:
+                if str(hoy) <= oParam["fecha"]:
+                    if cursor.valueBuffer("fechaentrega"):
+                        if cursor.valueBuffer("fechaentrega") >= oParam["fecha"]:
+                            increDia = oParam["fecha"]
+
+                            cursor.setValueBuffer("fechavencimiento", increDia)
+
+                            if not cursor.commitBuffer():
+                                print("Ocurrió un error al actualizar la tarea")
+                                return False
+
+                            response["resul"] = True
+                            response["msg"] = "Tarea planeada para la fecha elegida"
+                        else:
+                            response["status"] = 1
+                            response["msg"] = "La fecha de ejecución no puede ser superior a la fecha de entrega"
+                    else:
+                        increDia = oParam["fecha"]
+
+                        cursor.setValueBuffer("fechavencimiento", increDia)
+
+                        if not cursor.commitBuffer():
+                            print("Ocurrió un error al actualizar la tarea")
+                            return False
+
+                        response["resul"] = True
+                        response["msg"] = "Tarea planeada para la fecha elegida"
+                else:
+                    response["status"] = 1
+                    response["msg"] = "La fecha de ejecución no puede ser antarior al día de hoy"
+        else:
+            response["status"] = 1
+            response["msg"] = "Hay que indicar una fecha"
+        return response
+
+    def gesttare_quitar_fecha_modal(self, model, cursor):
+        response = {}
+        response['status'] = -1
+        response['data'] = {}
+        response["prefix"] = "gt_tareas"
+        response["title"] = "Selecciona el estado de la tarea"
+        # response["confirm"] = "</br></br> ¿Quieres continuar?"
+        response["serverAction"] = "quitar_fecha"
+        response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "En espera", "serverAction": "quitar_fecha_espera", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "Por Hacer", "serverAction": "quitar_fecha_hacer", "className": "creaAnotacionButton"}]
+        
+        response['params'] = [
+        ]
+        
+        return response
+
+    def gesttare_quitar_fecha_espera(self, model, cursor):
+        response = {}
+        fecha = cursor.valueBuffer("fechavencimiento")
+        if fecha:
+
+            cursor.setValueBuffer("fechavencimiento", None)
+            cursor.setValueBuffer("codestado", "En espera")
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar la tarea")
+                return False
+
+            response["resul"] = True
+            response["msg"] = "Fecha de ejecución eliminada y tarea en espera"
+
+        else:
+            response["resul"] = True
+            response["msg"] = "No hay fecha de ejecución"
+        # if fecha:
+        #     response["msg"] = "Tarea planificada para mañana"
+        # else:
+        #     response["msg"] = "No hay fecha de ejecución"
+        return response
+
+    def gesttare_quitar_fecha_hacer(self, model, cursor):
+        response = {}
+        fecha = cursor.valueBuffer("fechavencimiento")
+        if fecha:
+
+            cursor.setValueBuffer("fechavencimiento", None)
+            cursor.setValueBuffer("codestado", "Por Hacer")
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar la tarea")
+                return False
+
+            response["resul"] = True
+            response["msg"] = "Fecha de ejecución eliminada y tarea en por hacer"
+
+        else:
+            response["resul"] = True
+            response["msg"] = "No hay fecha de ejecución"
+        # if fecha:
+        #     response["msg"] = "Tarea planificada para mañana"
+        # else:
+        #     response["msg"] = "No hay fecha de ejecución"
+        return response
+
+
+    def gesttare_ejecucion_hoy(self, model, cursor):
+        response = {}
+        fecha = cursor.valueBuffer("fechavencimiento")
+        if fecha:
+            fecha = datetime.datetime.strptime(fecha, '%Y-%m-%d').date()
+
+            increDia = fecha.today()
+
+            cursor.setValueBuffer("fechavencimiento", increDia)
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar la tarea")
+                return False
+
+            response["resul"] = True
+            response["msg"] = "Tarea planeada para hoy"
+
+        else:
+            increDia = date.today() 
+
+            cursor.setValueBuffer("fechavencimiento", increDia)
+
+            if not cursor.commitBuffer():
+                print("Ocurrió un error al actualizar la tarea")
+                return False
+
+            response["resul"] = True
+            response["msg"] = "Tarea planeada para hoy"
+        # if fecha:
+        #     response["msg"] = "Tarea planificada para mañana"
+        # else:
+        #     response["msg"] = "No hay fecha de ejecución"
+        return response
+
+
+    def gesttare_incrementar_dia(self, model, cursor):
+        response = {}
+        response['status'] = -1
+        response['data'] = {}
+        response["prefix"] = "gt_tareas"
+        response["title"] = "Posponer tarea"
+        # response["confirm"] = "</br></br> ¿Quieres continuar?"
+        response["serverAction"] = "incrementar dia"
+        response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "Hoy", "serverAction": "ejecucion_hoy", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "Mañana", "serverAction": "un_dia", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "Próximo lunes", "serverAction": "semana_siguiente", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "Elegir fecha", "serverAction": "elegir_fecha", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idtarea"), "nombre": "quitar fecha", "serverAction": "quitar_fecha_modal", "className": "creaAnotacionButton"}]
+        
+        response['params'] = [
+            
+        ]
+        
         return response
 
     def gesttare_creartarea(self, oParam):
@@ -926,6 +1144,8 @@ class gesttare(interna):
                     "opts": opts
                 }
             ]
+            if not qsatype.FLUtil.sqlUpdate("gt_tareas", "ultimamodificacion", qsatype.Date().toString()[:10], "idtarea = " + str(cursor.valueBuffer("idtarea"))):
+                return False
             return response
         else:
             participantes = json.loads(oParam["idusuario"])
@@ -961,7 +1181,7 @@ class gesttare(interna):
             cursor.setNull("idhito")
             numHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"COUNT(idhito)", ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"' AND resuelta = false"))
             if numHitos == 1:
-                cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"'")))
+                cursor.setValueBuffer("idhito", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"idhito", ustr(u"idproyecto = '", cursor.valueBuffer("idproyecto"), u"' AND resuelta = false")))
             elif numHitos == 0:
                 qsatype.FLUtil.ponMsgError("No es posible crear tareas para este proyecto, no tiene hitos activos")
         if fN == "idusuario":
@@ -975,6 +1195,9 @@ class gesttare(interna):
                 curPartic.setValueBuffer("idtarea", cursor.valueBuffer("idtarea"))
                 if not curPartic.commitBuffer():
                     return False
+        if fN == "idhito":
+            cursor.setValueBuffer("fechaentrega", qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"fechaterminado", ustr(u"idhito = '", cursor.valueBuffer("idhito"), u"'")))
+
         return True
 
     def gesttare_getFilters(self, model, name, template=None):
@@ -1104,6 +1327,43 @@ class gesttare(interna):
         query["orderby"] = ("gt_tareas.fechavencimiento, gt_tareas.fechavencimiento")
         query["limit"] = 50
         return query
+        
+
+    def gesttare_queryGrid_revisionTareas(self, model):
+        usuario = qsatype.FLUtil.nameUser()
+        valores = flgesttare_def.iface.revisar_indicadores(usuario)
+        tain = "("
+        if "idtarea" in valores and valores["idtarea"]:
+            for e in valores["idtarea"]:
+                tain = tain + "" + str(e) + ", "
+        tain = tain + " null)"
+        where_filter = "(gt_tareas.idtarea IN " + tain + " OR gt_tareas.idtarea IS NULL)"
+        query = {}
+        query["tablesList"] = ("gt_tareas")
+        query["select"] = ("gt_tareas.idtarea, gt_tareas.nombre, gt_proyectos.nombre, gt_tareas.fechavencimiento, gt_tareas.fechaentrega, gt_tareas.codestado")
+        query["from"] = ("gt_tareas INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto")
+        query["where"] = where_filter
+        query["orderby"] = ("gt_tareas.fechavencimiento")
+        query["limit"] = 50
+        return query
+
+    def gesttare_queryGrid_revisionTareasTreinta(self, model):
+        usuario = qsatype.FLUtil.nameUser()
+        valores = flgesttare_def.iface.revisar_indicadores(usuario)
+        tain = "("
+        if "idtarea_planear" in valores and valores["idtarea_planear"]:
+            for e in valores["idtarea_planear"]:
+                tain = tain + "" + str(e) + ", "
+        tain = tain + " null)"
+        where_filter = "(gt_tareas.idtarea IN " + tain + " OR gt_tareas.idtarea IS NULL)"
+        query = {}
+        query["tablesList"] = ("gt_tareas")
+        query["select"] = ("gt_tareas.idtarea, gt_tareas.nombre, gt_proyectos.nombre, gt_tareas.fechavencimiento, gt_tareas.fechaentrega, gt_tareas.codestado")
+        query["from"] = ("gt_tareas INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto")
+        query["where"] = where_filter
+        query["orderby"] = ("gt_tareas.fechavencimiento")
+        query["limit"] = 50
+        return query
 
     def gesttare_getParticipantesProyecto(self, model, oParam):
         data = []
@@ -1195,6 +1455,7 @@ class gesttare(interna):
 
         return True
 
+
     def gesttare_gotonewrecordtarea(self, oParam):
         # if "nombre" not in oParam:
         #     response = {}
@@ -1245,14 +1506,21 @@ class gesttare(interna):
     def gesttare_drawif_checkAdjuntos(self, cursor):
         # if cursor.valueBuffer("resuelta") == True:
         if cursor.valueBuffer("idactualizacion"):
-            print("entra??")
             adjunto = qsatype.FLUtil.quickSqlSelect("gd_objetosdoc", "clave", "clave = '{}'".format(cursor.valueBuffer("idactualizacion")))
-            print("el valor es: ",adjunto)
             if adjunto:
                 return True
-        
-
         return "hidden"
+
+    def gesttare_drawif_checkActu2(self, cursor):
+        if cursor.valueBuffer("idactualizacion") != None:
+            return True
+        return "hidden"
+
+    def gesttare_drawif_checkNormal(self, cursor):
+        if cursor.valueBuffer("idactualizacion"):
+            return "hidden"
+        return True
+
     def gesttare_drawif_completartarea(self, cursor):
         if cursor.valueBuffer("resuelta") == True:
             return "hidden"
@@ -1283,6 +1551,7 @@ class gesttare(interna):
         fechacreacion = str(hoy)[:10]
         cursor.setValueBuffer("codestado", "Por Hacer")
         cursor.setValueBuffer("fechacreacion", fechacreacion)
+        cursor.setValueBuffer("ultimamodificacion", fechacreacion)
         if cursor.valueBuffer("idactualizacion"):
             nombre = cursor.valueBuffer("nombre")
             idactualizacion = cursor.valueBuffer("idactualizacion")
@@ -1297,6 +1566,322 @@ class gesttare(interna):
         url = "/gesttare/gt_tareas/" + str(cursor.valueBuffer("idtarea"))
         return url
 
+    def gesttare_validateCursor(self, cursor):
+        msg = ""
+        # if not cursor.valueBuffer("nombre"):
+        #     msg += "El campo Nombre no puede ser nulo <br/><br/>"
+        error = False
+
+        user_name = qsatype.FLUtil.nameUser()
+        
+        fecha_entrega_activa = qsatype.FLUtil.quickSqlSelect("aqn_user", "fentregaobligatoria", "idusuario = {}".format(str(user_name)))
+        nomenclatura_activa = qsatype.FLUtil.quickSqlSelect("aqn_user", "nomenclatura", "idusuario = {}".format(str(user_name)))
+        if not cursor.valueBuffer("idproyecto"):
+            msg += "El campo Proyecto no puede estar vacío<br/><br/>"
+            error = True
+
+        if not cursor.valueBuffer("idhito"):
+            msg += "El campo Hito no puede estar vacío<br/><br/>"
+            error = True
+        if fecha_entrega_activa:
+            if not cursor.valueBuffer("fechaentrega"):
+                msg += "El campo Fecha de entrega no puede estar vacío<br/><br/>"
+                error = True
+
+            elif cursor.valueBuffer("fechaentrega"):
+                hito_fechat = qsatype.FLUtil.quickSqlSelect("gt_hitosproyecto", "fechaterminado", "idhito = {}".format(cursor.valueBuffer("idhito"))) or None 
+                if hito_fechat:
+                    if str(hito_fechat) < cursor.valueBuffer("fechaentrega"):
+                        msg += "La Fecha de entrega no puede ser superior que la fecha de terminado del hito. Selecciona una fecha anterior o igual a esa fecha, o modifica la fecha de finalización del hito pulsando <a href='http://127.0.0.1:8000/gesttare/gt_hitosproyecto/{}' target='_blank'>aquí</a><br/><br/>".format(cursor.valueBuffer("idhito"))
+                        error = True
+
+        if nomenclatura_activa:
+            if cursor.modeAccess() == cursor.Insert and cursor.valueBuffer("nombre"):
+                nombre = cursor.valueBuffer("nombre")
+                
+                valor = nombre.strip()
+                if nombre[0] == "#":
+                    if " " in nombre:
+                        valor = nombre.split(" ", 1)
+                        valor = valor[1].split(" ", 1)
+                        if valor[0][-2:] != "ar" and valor[0][-2:] != "er" and valor[0][-2:] != "ir":
+                            # qsatype.FLUtil.ponMsgError(msg + "Las tareas deben empezar por verbo en infinitivo")
+                            msg += "Las tareas deben empezar por verbo en infinitivo"
+                            error = True
+                            # return False
+                    else:
+                        msg += "Además del hashtag, debes establecer un nombre para la tarea"
+                        error = True
+
+                else:
+                    if " " in valor:
+                        valor = valor.split(" ", 1)
+                        if valor[0][-2:] != "ar" and valor[0][-2:] != "er" and valor[0][-2:] != "ir":
+                            # qsatype.FLUtil.ponMsgError(msg + "Las tareas deben empezar por verbo en infinitivo")
+                            msg += "Las tareas deben empezar por verbo en infinitivo"
+                            error = True
+                            # return False
+
+                    else:
+                        if valor[-2:] != "ar" and valor[-2:] != "er" and valor[-2:] != "ir":
+                            # qsatype.FLUtil.ponMsgError(msg + "Las tareas deben empezar por verbo en infinitivo")
+                            msg += "Las tareas deben empezar por verbo en infinitivo"
+                            error = True
+                            # return False
+
+        if not cursor.valueBuffer("nombre"):
+            msg += "El campo Nombre no puede estar vacío"
+            error = True
+
+
+        # if not cursor.valueBuffer("nombre") or not cursor.valueBuffer("idproyecto") or not cursor.valueBuffer("idhito") or not cursor.valueBuffer("fechaentrega"):
+            # qsatype.FLUtil.ponMsgError(msg)
+            # return False
+
+        if error:
+            qsatype.FLUtil.ponMsgError(msg)
+            return False
+           
+        return True
+
+
+    def gesttare_gotomomentos(self):
+        # response = {}
+        # response["newtab"] = True
+        # response["url"] = "http://doc.dailyjob.io/"
+        # return response
+        url = "https://doc.dailyjob.io/"
+        return url
+        
+
+    def gesttare_gotoNewRecordRecordatorioAtrasada(self, oParam):
+        response = {}
+        if not oParam or "confirmacion" not in oParam:
+            # valores = flgesttare_def.iface.revisar_indicadores(user_name)
+            # # atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
+            # # if atrasada > 0:
+            # if 'atrasadas' in valores and valores['atrasadas']:
+            response["status"] = 2
+            response["confirm"] = "Contar con tareas cuya fecha está atrasada te hace perder el control sobre la actividad pendiente, y puede evitar que acabes haciendo las tareas más prioritarias.</br></br> ¿Quieres renegociar ahora?"
+            response["serverAction"] = "gotoNewRecordRecordatorioAtrasada"
+            response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}, {"accion": "cancel","nombre": "No"}]
+            # response["goto"] = {"nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}
+            return response
+
+        return True
+
+    def gesttare_gotoNewRecordRecordatorioBandeja(self, oParam):
+        response = {}
+        if not oParam or "confirmacion" not in oParam:
+            # valores = flgesttare_def.iface.revisar_indicadores(user_name)
+            # # atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
+            # # if atrasada > 0:
+            # if 'atrasadas' in valores and valores['atrasadas']:
+            response["status"] = 2
+            response["confirm"] = "La bandeja de entrada es un punto de entrada de comunicaciones del resto del equipo. No revisarla con regularidad puede hacer perder la confianza del resto de personas sobre la lectura de lo que comentan o los cambios que hacen. </br> Si la comunicación no se canaliza por ahí, es posible que se creen otros medios alternativos que provoquen interrupciones innecesarias.</br></br> ¿Quieres revisar la bandeja de entrada?"
+            response["serverAction"] = "gotoNewRecordRecordatorioBandeja"
+            response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_actualizaciones/master"}, {"accion": "cancel","nombre": "No"}]
+            # response["goto"] = {"nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}
+            return response
+
+        return True
+
+
+    def gesttare_gotoNewRecordRecordatorioEspera(self, oParam):
+        response = {}
+        if not oParam or "confirmacion" not in oParam:
+            # valores = flgesttare_def.iface.revisar_indicadores(user_name)
+            # # atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
+            # # if atrasada > 0:
+            # if 'atrasadas' in valores and valores['atrasadas']:
+            response["status"] = 2
+            response["confirm"] = 'Tienes tareas en "en espera" con más de 7 días sin revisión. ¿Quieres tomar alguna decisión con ellas?'
+            response["serverAction"] = "gotoNewRecordRecordatorioBandejaEspera"
+            response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_tareas/custom/recordatorio"}, {"accion": "cancel","nombre": "No"}]
+            # response["goto"] = {"nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}
+            return response
+
+        return True
+
+
+    def gesttare_gotoReturnActualizacion(self, oParam):
+        response = {}
+
+        if not oParam or "confirmacion" not in oParam:
+            # valores = flgesttare_def.iface.revisar_indicadores(user_name)
+            # # atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
+            # # if atrasada > 0:
+            # if 'atrasadas' in valores and valores['atrasadas']:
+            response["status"] = 2
+            response["confirm"] = "La tarea no ha sido guardada, si continuas perderás la información. </br></br> ¿Quieres salir de la página?"
+            response["serverAction"] = "gotoReturnActualizacion"
+            response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_actualizaciones/master"}, {"accion": "cancel","nombre": "No"}]
+            # response["goto"] = {"nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}
+            return response
+
+        return True
+
+
+    def gesttare_opciones_recordatorio(self, oParam):
+        user_name = qsatype.FLUtil.nameUser()
+        valores = flgesttare_def.iface.revisar_indicadores(user_name)
+        # msgp = []
+        msg = []
+        botones = []
+        clase = []
+        titulo_acordeon = []
+        response = {}
+        if 'atrasadas' in valores and valores['atrasadas']:
+            clase.append("atrasada")
+            # msg.append("<strong>CONSEJO: </strong> Contar con tareas cuya fecha está atrasada te hace perder el control sobre la actividad pendiente, y puede evitar que acabes haciendo las tareas más prioritarias.")
+            msg.append("<img src='/static/dist/img/icons/diagrama-tareas-atrasadas.svg' style='width:600px; height:300px; margin-top:-30px; margin-left:auto; margin-right:auto; display:block; margin-bottom:-60px;'></img><br/> <a href='http://doc.dailyjob.io/books/manual-de-usuario/page/posponer-y-renegociar-las-tareas' class='btn btn-primary btn-submit modal-btn' target='_blank'>Aprender más</a>")
+            # msgp.append("¿Quieres renegociar ahora?")
+            if valores['atrasadas'] > 1:
+                nombre = "Tienes {} tareas atrasadas".format(valores['atrasadas'])
+            else:
+                nombre = "Tienes {} tarea atrasada".format(valores['atrasadas'])
+            titulo_acordeon.append(nombre)
+            botones.append({"accion": "goto","nombre": "Renegociar tareas", "url": "/gesttare/gt_tareas/custom/renegociar"})
+
+        if 'revisada' in valores and valores['revisada']:
+            clase.append("revisada")
+            # msg.append("<strong>CONSEJO: </strong>La bandeja de entrada es un punto de entrada de comunicaciones del resto del equipo. No revisarla con regularidad puede hacer perder la confianza del resto de personas sobre la lectura de lo que comentan o los cambios que hacen. <br/>Si la comunicación no se canaliza por ahí, es posible que se creen otros medios alternativos que provoquen interrupciones innecesarias.")
+            # msgp.append("¿Quieres revisar la bandeja de entrada?")
+            msg.append("<img src='/static/dist/img/icons/diagrama-tareas-bandeja-entrada.svg' style='width:600px; height:300px; margin-top:-30px; margin-left:auto; margin-right:auto; display:block; margin-bottom:-60px;'></img><br/> <a href='http://doc.dailyjob.io/books/manual-de-usuario/page/revisi%C3%B3n-de-la-bandeja-de-entrada' class='btn btn-primary btn-submit modal-btn' target='_blank'>Aprender más</a>")
+            if valores['revisada'] > 1:
+                nombre = "Tienes {} notificaciones sin revisar".format(valores['revisada'])
+            else:
+                nombre = "Tienes {} notificación sin revisar".format(valores['revisada'])
+            titulo_acordeon.append(nombre)
+            botones.append({"accion": "goto","nombre": "Revisar bandeja", "url": "/gesttare/gt_actualizaciones/master"})
+
+        if "espera_sin" in valores and valores["espera_sin"]:
+            clase.append("espera_sin")
+            # msg.append('<strong>CONSEJO: </strong>Establecemos el estado "en espera" para indicar que esa tarea sobre la que tenemos responsabilidad está pendiente de una tercera persona, normalmente externa al equipo. <br/> <br/> El objetivo es hacer seguimiento regular a estas tareas para determinar si reclamamos, esperamos, retomamos o completamos.<br/> <br/> Te animamos revises las tareas en estado "en espera" y que añadas comentarios sobre tu estado de modo que veas el histórico de su seguimiento.')
+            msg.append("<img src='/static/dist/img/icons/diagrama-tareas-en-espera.svg' style='width:600px; height:300px; margin-top:-30px; margin-left:auto; margin-right:auto; display:block; margin-bottom:-60px;'></img> <br/> <a href='javascript:void(0)' class='btn btn-primary btn-submit modal-btn' target='_blank'>Aprender más</a>")
+            # msgp.append("¿Quieres tomar alguna decisión con ellas?")
+            # response["atrasadas"] = "espera_sin"
+            if valores["espera_sin"] > 1:
+                nombre = "Tienes {} tareas en espera sin revisar".format(valores['espera_sin'])
+            else:
+                nombre = "Tienes {} tarea en espera sin revisar".format(valores['espera_sin'])
+            titulo_acordeon.append(nombre)
+            botones.append({"accion": "goto","nombre": "Revisar tareas", "url": "/gesttare/gt_tareas/custom/recordatorio"})
+
+        if 'atrasadas' not in valores and 'revisada' not in valores and "espera_sin" not in valores:
+            response["resul"] = True
+            response["msg"] = "No tienes alertas en el momento producir"
+            return response
+
+        response['status'] = 4
+        response['data'] = {}
+        response["clase"] = clase
+        response["titulo_acordeon"] = titulo_acordeon
+        response["msg"]= msg
+        # response["msgp"]= msgp
+        response["prefix"] = "gt_tareas"
+        response["title"] = "Alertas del Momento Producir"
+        response["serverAction"] = "opciones_recordatorio"
+        response["customButtons"] = botones
+        
+        response['params'] = [
+            
+        ]
+
+        
+        return response
+
+
+    def gesttare_opciones_recordatorio_anotar(self, oParam):
+        user_name = qsatype.FLUtil.nameUser()
+        valores = flgesttare_def.iface.revisar_indicadores(user_name)
+        # msgp = []
+        msg = []
+        botones = []
+        clase = []
+        titulo_acordeon = []
+        response = {}
+        if 'revisada_anotar' in valores and valores['revisada_anotar']:
+            clase.append("revisada_anotar")
+            # msg.append("<strong>CONSEJO: </strong>La bandeja de entrada es un punto de entrada de comunicaciones del resto del equipo. No revisarla con regularidad puede hacer perder la confianza del resto de personas sobre la lectura de lo que comentan o los cambios que hacen. <br/>Si la comunicación no se canaliza por ahí, es posible que se creen otros medios alternativos que provoquen interrupciones innecesarias.")
+            # msgp.append("¿Quieres revisar la bandeja de entrada?")
+            msg.append("<img src='/static/dist/img/icons/diagrama-tareas-posibles-tareas.svg' style='width:600px; height:300px; margin-top:-30px; margin-left:auto; margin-right:auto; display:block; margin-bottom:-60px;'></img><br/> <a href='http://doc.dailyjob.io/books/manual-de-usuario/page/anotar-tareas' class='btn btn-primary btn-submit modal-btn' target='_blank'>Aprender más</a>")
+            if valores['revisada_anotar'] > 1:
+                nombre = "Tienes {} posibles tareas sin revisar".format(valores['revisada_anotar'])
+            else:
+                nombre = "Tienes {} posible tarea sin revisar".format(valores['revisada_anotar'])
+            titulo_acordeon.append(nombre)
+            botones.append({"accion": "goto","nombre": "Ver posibles tareas", "url": "/gesttare/gt_actualizaciones/master"})
+
+            response['status'] = 4
+            response['data'] = {}
+            response["clase"] = clase
+            response["titulo_acordeon"] = titulo_acordeon
+            response["msg"]= msg
+            # response["msgp"]= msgp
+            response["prefix"] = "gt_tareas"
+            response["title"] = "Alertas del Momento Anotar"
+            response["serverAction"] = "opciones_recordatorio_anotar"
+            response["customButtons"] = botones
+            
+            response['params'] = [
+                
+            ]
+        
+            return response
+
+        response["resul"] = True
+        response["msg"] = "No tienes alertas en el momento anotar"
+        return response
+
+    def gesttare_opciones_recordatorio_planear(self, oParam):
+        user_name = qsatype.FLUtil.nameUser()
+        valores = flgesttare_def.iface.revisar_indicadores(user_name)
+        # msgp = []
+        msg = []
+        botones = []
+        clase = []
+        titulo_acordeon = []
+        response = {}
+        if 'tarea_sin' in valores and valores['tarea_sin']:
+            clase.append("revisada_anotar")
+            # msg.append("<strong>CONSEJO: </strong>Tienes tareas en sin fecha de ejecución que llevan más de 30 días sin movimiento. Te aconsejamos que las revises para poder incluirlas en tu próxima planeación semanal, o bien para deshacer el compromiso.")
+            # msgp.append("¿Quieres revisar la bandeja de entrada?")
+            msg.append("<img src='/static/dist/img/icons/diagrama-tareas-sin-planear.svg' style='width:600px; height:300px; margin-top:-30px; margin-left:auto; margin-right:auto; display:block; margin-bottom:-60px;'></img><br/> <a href='http://doc.dailyjob.io/books/manual-de-usuario/chapter/momento-planear' class='btn btn-primary btn-submit modal-btn' target='_blank'>Aprender más</a>")
+            if valores["tarea_sin"] > 1:
+                nombre = "Tienes {} tareas sin planificar".format(valores['tarea_sin'])
+            else:
+                nombre = "Tienes {} tarea sin planificar".format(valores['tarea_sin'])
+            titulo_acordeon.append(nombre)
+            botones.append({"accion": "goto","nombre": "Revisar tareas", "url": "/gesttare/gt_tareas/custom/recordatorioPlanear"})
+
+            response['status'] = 4
+            response['data'] = {}
+            response["clase"] = clase
+            response["titulo_acordeon"] = titulo_acordeon
+            response["msg"]= msg
+            # response["msgp"]= msgp
+            response["prefix"] = "gt_tareas"
+            response["title"] = "Alertas del Momento Planear"
+            response["serverAction"] = "opciones_recordatorio_anotar"
+            response["customButtons"] = botones
+            
+            response['params'] = [
+            ]
+            
+            return response
+
+        response["resul"] = True
+        response["msg"] = "No tienes alertas en el momento planear"
+        return response
+
+    def gesttare_opciones_recordatorio_analizar(self, oParam):
+        
+        response = {}
+
+        response["resul"] = True
+        response["msg"] = "No tienes alertas en el momento analizar"
+        return response
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -1373,6 +1958,9 @@ class gesttare(interna):
     def color_fondo_estado(self, model):
         return self.ctx.gesttare_color_fondo_estado(model)
 
+    def color_fondo_estado_revision(self, model):
+        return self.ctx.gesttare_color_fondo_estado_revision(model)
+
     def color_responsable(self, model):
         return self.ctx.gesttare_color_responsable(model)
 
@@ -1411,6 +1999,30 @@ class gesttare(interna):
 
     def incrementar_dia(self, model, cursor):
         return self.ctx.gesttare_incrementar_dia(model, cursor)
+
+    def ejecucion_hoy(self, model, cursor):
+        return self.ctx.gesttare_ejecucion_hoy(model, cursor)
+
+    def un_dia(self, model, cursor):
+        return self.ctx.gesttare_un_dia(model, cursor)
+
+    def semana_siguiente(self, model, cursor):
+        return self.ctx.gesttare_semana_siguiente(model, cursor)
+
+    def elegir_fecha(self, model, cursor):
+        return self.ctx.gesttare_elegir_fecha(model, cursor)
+
+    def fecha_elegida(self, model, oParam, cursor):
+        return self.ctx.gesttare_fecha_elegida(model, oParam, cursor)
+
+    def quitar_fecha_modal(self, model, cursor):
+        return self.ctx.gesttare_quitar_fecha_modal(model, cursor)
+
+    def quitar_fecha_espera(self, model, cursor):
+        return self.ctx.gesttare_quitar_fecha_espera(model, cursor)
+
+    def quitar_fecha_hacer(self, model, cursor):
+        return self.ctx.gesttare_quitar_fecha_hacer(model, cursor)
 
     def calcula_totaltiempo(self, cursor):
         return self.ctx.gesttare_calcula_totaltiempo(cursor)
@@ -1454,11 +2066,29 @@ class gesttare(interna):
     def gotoTarea(self, model):
         return self.ctx.gesttare_gotoTarea(model)
 
+    def gotoReturnActualizacion(self, oParam):
+        return self.ctx.gesttare_gotoReturnActualizacion(oParam)
+
     def queryGrid_renegociacion(self, model):
         return self.ctx.gesttare_queryGrid_renegociacion(model)
 
+    def queryGrid_revisionTareas(self, model):
+        return self.ctx.gesttare_queryGrid_revisionTareas(model)
+
+    def queryGrid_revisionTareasTreinta(self, model):
+        return self.ctx.gesttare_queryGrid_revisionTareasTreinta(model)
+
     def gotoNewRecordAnotacion(self, oParam):
         return self.ctx.gesttare_gotoNewRecordAnotacion(oParam)
+
+    def gotoNewRecordRecordatorioAtrasada(self, oParam):
+        return self.ctx.gesttare_gotoNewRecordRecordatorioAtrasada(oParam)
+
+    def gotoNewRecordRecordatorioBandeja(self, oParam):
+        return self.ctx.gesttare_gotoNewRecordRecordatorioBandeja(oParam)
+
+    def gotoNewRecordRecordatorioEspera(self, oParam):
+        return self.ctx.gesttare_gotoNewRecordRecordatorioEspera(oParam)
 
     def gotonewrecordtarea(self, oParam):
         return self.ctx.gesttare_gotonewrecordtarea(oParam)
@@ -1468,6 +2098,12 @@ class gesttare(interna):
 
     def drawif_checkAdjuntos(self, cursor):
         return self.ctx.gesttare_drawif_checkAdjuntos(cursor)
+
+    def drawif_checkActu2(self, cursor):
+        return self.ctx.gesttare_drawif_checkActu2(cursor)
+
+    def drawif_checkNormal(self, cursor):
+        return self.ctx.gesttare_drawif_checkNormal(cursor)
 
     def drawif_abrirtarea(self, cursor):
         return self.ctx.gesttare_drawif_abrirtarea(cursor)
@@ -1487,6 +2123,23 @@ class gesttare(interna):
     def field_adjunto(self, model):
         return self.ctx.gesttare_field_adjunto(model)
 
+    def validateCursor(self, cursor):
+        return self.ctx.gesttare_validateCursor(cursor)
+
+    def gotomomentos(self):
+        return self.ctx.gesttare_gotomomentos()
+
+    def opciones_recordatorio(self, oParam):
+        return self.ctx.gesttare_opciones_recordatorio(oParam)
+
+    def opciones_recordatorio_anotar(self, oParam):
+        return self.ctx.gesttare_opciones_recordatorio_anotar(oParam)
+
+    def opciones_recordatorio_planear(self, oParam):
+        return self.ctx.gesttare_opciones_recordatorio_planear(oParam)
+
+    def opciones_recordatorio_analizar(self, oParam):
+        return self.ctx.gesttare_opciones_recordatorio_analizar(oParam)
 
 # @class_declaration head #
 class head(gesttare):

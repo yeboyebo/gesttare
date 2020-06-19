@@ -91,6 +91,11 @@
                         "key": "getReport",
                         "label": "Genera XLS",
                         "success": []
+                    },
+                    {
+                        "key": "nuevaTarea",
+                        "label": "Nueva tarea",
+                        "success": [{ "slot": "goto"}]
                     }]
                 }
             }
@@ -130,6 +135,12 @@
             "prefix": "gt_tareas",
             "serverAction": "incrementar_dia",
             "icon": "update"
+        },
+        "nuevaTarea": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "gotonewrecordtarea",
+            "icon": "add_circle"
         }
     }
 }

@@ -581,6 +581,134 @@
             {
                 "name": "app_portal__soporteenviado.html",
                 "path": "apps/portal/templates/portal/"
+            },
+            {
+                "name": "mmp.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "model_flgesttare__gt_configuser.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "model_flgesttare__gt_configuser_def.py",
+                "path": "models/flgesttare/"
+            },
+            {
+                "name": "producir_naranja.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__proyectorenta.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "app_gesttare__recordatorio.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "analizar_gris.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anotar_gris.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "planear_gris.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "producir_gris.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anotar_rojo.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "planear_rojo.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__recordatorioPlanear.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "producir_rojo.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "analizar_grisO.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "diagrama-tareas-atrasadas.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "diagrama-tareas-en-espera.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "diagrama-tareas-bandeja-entrada.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "diagrama-tareas-posibles-tareas.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "diagrama-tareas-sin-planear.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "planear_gris_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anotar_rojo_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "producir_gris_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "analizar_rojo_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "analizar_gris_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anlizar_gris_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anotar_gris_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "anlizar_rojo_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "planear_rojo_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "producir_rojo_linea.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "diagrama-tareas-atrasadas2.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "rango.svg",
+                "path": "assets/dist/img/icons/"
             }
         ],
         "replaceFile": [

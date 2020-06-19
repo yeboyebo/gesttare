@@ -42,6 +42,10 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def actInvitarExterno(self, oParam, cursor):
         return form.iface.actInvitarExterno(oParam, cursor)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def invExterno(self, oParam, cursor):
+        return form.iface.invExterno(oParam, cursor)
+
     def field_nombreCliente(self):
         return form.iface.field_nombreCliente(self)
 
@@ -75,9 +79,19 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def color_fondo_estado(self):
         return form.iface.color_fondo_estado(self)
 
+    def color_fondo_estado_query(self):
+        return form.iface.color_fondo_estado_query(self)
+
+    def color_fondo_resultado(self):
+        return form.iface.color_fondo_resultado(self)
+
     @helpers.decoradores.accion(aqparam=["oParam"])
     def queryGrid_proyectosarchivados(model, filters):
         return form.iface.queryGrid_proyectosarchivados(model, filters)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_rentabilidadProyectos(model, filters):
+        return form.iface.queryGrid_rentabilidadProyectos(model, filters)
 
     @helpers.decoradores.accion(aqparam=["cursor"])
     def vertareasproyecto(self, cursor):
@@ -100,6 +114,16 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
 
     def copiarHitosProyecto(self, cursor, idproyecto):
         return form.iface.copiarHitosProyecto(cursor, idproyecto)
+
+    def validateCursor(self):
+        return form.iface.validateCursor(self)
+
+    @helpers.decoradores.accion()
+    def gotoProyecto(self):
+        return form.iface.gotoProyecto(self)
+
+    def drawif_archivado(cursor):
+        return form.iface.drawif_archivado(cursor)
 
 
 # @class_declaration gt_proyectos #

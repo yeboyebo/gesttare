@@ -1,6 +1,6 @@
 {
     "format": "sideBarMenu",
-    "logo": true,
+    "logo": false,
     "default": "gesttare/gt_tareas/master",
     "actions": {
         "gotoNotificacions": {
@@ -8,6 +8,17 @@
             "icon": "notifications",
             "visible": false,
             "url": "gesttare/gt_actualizaciones/master"
+        },
+        "documentacionDaily": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "documentacion",
+            "title": "Documentación sobre dailyjob",
+            "action": "goto",
+            "iconurl": "/static/dist/img/icons/mmp.svg",
+            "prefix": "gt_tareas",
+            "newtab": true,
+            "serverAction": "gotomomentos"
         },
         "startControlHorario": {
             "componente": "YBButton",
@@ -34,6 +45,76 @@
             "prefix": "gt_controlhorario",
             "serverAction": "pause",
             "success": [{"slot": "refrescar"}]
+        },
+        "recordatorioAnalizar": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio recordatorioAnalizar",
+            "title": "Alertas Analizar",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/analizar_gris_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio_analizar"
+        },
+        "recordatorio": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio",
+            "title": "Alertas Producir",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/producir_gris_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio"
+        },
+        "recordatorioCon": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio",
+            "title": "Alertas Producir",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/producir_rojo_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio"
+        },
+        "recordatorioPlanear": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio",
+            "title": "Alertas Planear",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/planear_gris_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio_planear"
+        },
+        "recordatorioPlanearCon": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio",
+            "title": "Alertas Planear",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/planear_rojo_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio_planear"
+        },
+        "recordatorioAnotar": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio",
+            "title": "Alertas Anotar",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/anotar_gris_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio_anotar"
+        },
+        "recordatorioAnotarCon": {
+            "componente": "YBButton",
+            "buttonType": "icon",
+            "className": "recordatorio",
+            "title": "Alertas Anotar",
+            "action": "legacy",
+            "iconurl": "/static/dist/img/icons/anotar_rojo_linea.svg",
+            "prefix": "gt_tareas",
+            "serverAction": "opciones_recordatorio_anotar"
         }
     },
     "title": {
@@ -118,6 +199,15 @@
             "VISIBLE": true,
             "COLOR": "rgb(7, 180, 7)",
             "RESPONSIVE": false
+        },
+        {
+            "NAME": "proyectorenta",
+            "TEXT": "Rentabilidad",
+            "URL": "gesttare/gt_proyectos/custom/proyectorenta",
+            "ICON": "widgets",
+            "COLOR": "rgb(7, 180, 7)",
+            "RESPONSIVE": false,
+            "ADMINISTRADOR": true
         }
     ]
 }

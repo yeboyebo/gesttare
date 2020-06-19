@@ -14,6 +14,8 @@ class interna(qsatype.objetoBase):
 from YBLEGACY.constantes import *
 from models.flgesttare import flgesttare_def
 import urllib
+import datetime
+import time
 
 class gesttare(interna):
 
@@ -100,11 +102,13 @@ class gesttare(interna):
         # cursor.setValueBuffer(u"idcompany", idcompany)
         cursor.setValueBuffer("idusuario", usuario)
         if cursor.valueBuffer("idproyecto"):
+            # fecha_terminado = qsatype.FLUtil.sqlSelect("gt_proyectos", "fechaterminado", "idhito = '").format(cursor.valueBuffer("idproyecto"))
             curP = qsatype.FLSqlCursor("gt_proyectos")
             curP.select(ustr("idproyecto = '", cursor.valueBuffer("idproyecto"), "'"))
             if not curP.first():
                 return False
             cursor.setValueBuffer("fechainicio", curP.valueBuffer("fechainicio"))
+            cursor.setValueBuffer("fechaterminado", curP.valueBuffer("fechaterminado"))
 
         # tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
 
@@ -206,7 +210,6 @@ class gesttare(interna):
         if (not oParam or "confirmacion" not in oParam) and not resuelta:
             # renegociar = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "resuelta = false AND fechavencimiento < '{}' AND idusuario = '{}'".format(str(qsatype.Date())[:10] ,user_name)) or 0
             hitosActivos = qsatype.FLUtil.quickSqlSelect("gt_hitosproyecto", "COUNT(idhito)", "resuelta = false AND idproyecto = '{}' and idhito <> '{}'".format(cursor.valueBuffer("idproyecto"), cursor.valueBuffer("idhito"))) or 0
-            print(hitosActivos)
             q = qsatype.FLSqlQuery()
             q.setTablesList(u"gt_tareas")
             q.setSelect(u"idtarea")
@@ -215,7 +218,6 @@ class gesttare(interna):
             if not q.exec_():
                 return False
             pendientes = q.size() or 0
-            print(pendientes)
             if pendientes > 0:
                 response["status"] = 2
                 response["confirm"] = "Al completar el hito vas a completar automáticamente todas las tareas que estén pendientes en el hito."
@@ -230,7 +232,6 @@ class gesttare(interna):
                 response["confirm"] = "Recuerda: Vas a cerrar el último hito del proyecto, no podrás crear tareas hasta tener un hito activo."
                 response["confirm"] += "</br></br> ¿Quieres continuar?"
                 response["serverAction"] = "completar_hito"
-                print("deberia salir por aqui???")
                 # response["customButtons"] = [{"serverAction": "completar_hito","nombre": "Sí"}, {"accion": "cancel","nombre": "No"}]
                 return response
         cursor.setValueBuffer("resuelta", not resuelta)
@@ -289,33 +290,68 @@ class gesttare(interna):
         return response
 
     def gesttare_validateCursor(self, cursor):
+        msg = ""
+        error = False
+        # if cursor.modeAccess() == cursor.Insert:
+        #     if not cursor.valueBuffer("fechaterminado") and cursor.valueBuffer("idhito"):
+        #         msg += "El campo fecha fin no puede estar vacío"
+        #         error = True
+        
         presupuestoHito = cursor.valueBuffer("presupuesto") or 0
         presupuestoProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"presupuesto", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), "'")) or 0
         sumaPresupuestos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"SUM(presupuesto)", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), "' AND idhito <> ", cursor.valueBuffer("idhito"), "")) or 0
         if presupuestoHito > presupuestoProyecto:
-            qsatype.FLUtil.ponMsgError("El presupesto del hito es mayor al del proyecto")
-            return False
+            msg += "El presupesto del hito es mayor al del proyecto <br/>"
+            error = True
+            # qsatype.FLUtil.ponMsgError("El presupesto del hito es mayor al del proyecto <br/>")
+            # return False
         sumaPresupuestos = sumaPresupuestos + presupuestoHito
 
         if sumaPresupuestos > presupuestoProyecto:
-            qsatype.FLUtil.ponMsgError("La suma de presupestos de los hitos es mayor que el presupuesto del proyecto")
+            msg += "La suma de presupestos de los hitos es mayor que el presupuesto del proyecto <br/>"
+            error = True
+            # qsatype.FLUtil.ponMsgError("La suma de presupestos de los hitos es mayor que el presupuesto del proyecto <br/>")
+            # return False
+        if error:
+            qsatype.FLUtil.ponMsgError(msg)
             return False
-
         return True
 
     def gesttare_creartareahito(self, oParam, cursor):
         usuario = qsatype.FLUtil.nameUser()
         response = {}
-        curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
-        curProyectos.select("idusuario = '" + str(usuario) + "'")
-        if not curProyectos.first():
+        hoy = qsatype.Date()
+        hoyd = str(hoy)[:10]
+
+        archivado = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "archivado", "idproyecto = '{}'".format(cursor.valueBuffer("idproyecto")))
+
+        if archivado:
             response["status"] = 1
-            response["msg"] = "Debes participar en un proyecto para anotar tareas"
+            response["msg"] = "No se pueden añadir nuevas tareas a un proyecto que está archivado. Si quieres añadir tareas a este hito, activa el proyecto de nuevo"
             return response
+       
+        elif cursor.valueBuffer("resuelta"):
+            response["status"] = 1
+            response["msg"] = "No se pueden añadir nuevas tareas a un hito que está completado. Si quieres añadir tareas a este hito, ábrelo de nuevo"
+            return response
+        elif cursor.valueBuffer("fechaterminado"):
+                if cursor.valueBuffer("fechaterminado") < hoyd:
+                    response["status"] = 1
+                    response["msg"] = "La fecha de terminado está atrasada. Actualiza para poder crear una tarea"
+                    return response
+        
+        # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+        # curProyectos.select("idusuario = '" + str(usuario) + "'")
+        # if not curProyectos.first():
+        #     response["status"] = 1
+        #     response["msg"] = "Debes participar en un proyecto para crear tareas"
+        #     return response
+
         params = ""
         if cursor.valueBuffer("idhito"):
             params += "?p_idproyecto=" + urllib.parse.quote(str(cursor.valueBuffer("idproyecto")))
             params += "&p_idhito=" + urllib.parse.quote(str(cursor.valueBuffer("idhito")))
+            params += "&p_fechaentrega=" + urllib.parse.quote(str(cursor.valueBuffer("fechaterminado")))
             
         response["url"] = '/gesttare/gt_tareas/newRecord' + params
         return response

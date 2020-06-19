@@ -100,6 +100,7 @@
                             "icon": "info",
                             "label": "Información de tarea",
                             "return": false,
+                            "validateform": false,
                             "successmsg": "Tarea actualizada",
                             "fields": {
                                 "gb__titulo": {

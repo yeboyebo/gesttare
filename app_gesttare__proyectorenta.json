@@ -1,0 +1,88 @@
+{
+    "querystring": {
+        "p_l": 10,
+        "p_c": true
+    },
+    "schema": {
+        "rentabilidadProyectos": {
+            "query": {
+                "p_l": 300
+            }
+        }
+    },
+    "title": "Rentabilidad de proyectos",
+    "navbar": true,
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "padreTareas",
+            "style": {},
+            "layout": {
+                "renProyecto": {
+                    "componente": "YBGrid",
+                    "prefix": "rentabilidadProyectos",
+                    "type": "query",
+                    "cansavefilter": true,
+                    "autofilter": false,
+                    "buscador": {"fields":["nombre"]},
+                    "filter": {
+                        "cliente": {
+                            "label": "Cliente",
+                            "filterType": "custom",
+                            "tipo": 55,
+                            "rel": "gt_clientes",
+                            "key": "idcliente",
+                            "tofield": "idcliente",
+                            "desc": "nombre",
+                            "fN": "gt_clientes.idcliente",
+                            "showpk": false,
+                            "function": "getClientesCompaniaUsu"
+                        },
+                        "gt_proyectos.estado": null,
+                        "gt_proyectos.fechainicio": {
+                            "filterType": "interval"
+                        },
+                        "gt_proyectos.fechaterminado": {
+                            "filterType": "interval"
+                        },
+                        "gt_proyectos.archivado":  {
+                            "filterType": "combo",
+                            "key": "archivado",
+                            "label": "Proyectos a mostrar",
+                            "optionlist": {"Proyectos activos":"Activos", "Proyectos archivados":"Archivados", "Todos los proyectos":"Todos"}
+                        }
+                    },
+                    "columns": [
+                        {"tipo": "field", "listpos": "title", "key": "gt_proyectos.nombre", "width": 200, "flex": 2, "title": true},
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "gt_proyectos.estado", "color": "Color fondo estado query", "width": 30},
+                        {"tipo": "foreignfield", "listpos": "body", "key": "nombreCliente", "width": 90, "label": "Cliente"},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.presupuesto", "className":"moneda", "width": 20},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.costetotal", "className":"moneda", "width": 20},
+                        {"tipo": "field", "listpos": "body", "key": "resultado", "align":"right", "className":"moneda", "color": "Color fondo resultado", "width": 20},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.rentabilidad", "className":"porcentaje", "width": 20},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechainicio", "width": 50},
+                        {"tipo": "field", "listpos": "body", "key": "gt_proyectos.fechaterminado", "width": 50}
+                    ],
+                    "rowclick": "gotoproyecto",
+                    "accionesGrid": [{
+                        "key": "getReport",
+                        "label": "Genera XLS",
+                        "success": []
+                    }]
+                }
+            }
+        }
+    },
+    "acciones": {
+        "gotoproyecto": {
+            "action": "goto",
+            "prefix": "gt_proyectos",
+            "serverAction": "gotoProyecto"
+        },
+        "getReport": {
+            "label" : "",
+            "action": "onexport",
+            "icon": "cloud_download"
+        }
+    }
+}

@@ -27,6 +27,8 @@ class gesttare(interna):
             return {"groupBoxPadre": "Nº DE PROYECTOS: {}".format(ident["COUNT"])}
         if template == "master":
             return {"groupBoxPadre": "Nº DE PROYECTOS: {}".format(ident["PAG"]["COUNT"])}
+        if template == "rentabilidadProyectos":
+            return {"groupBoxPadre": "Nº DE PROYECTOS: {}".format(ident["PAG"]["COUNT"])}
         return None
 
     def get_model_info(self, model, data, ident, template, where_filter):
@@ -50,6 +52,12 @@ class gesttare(interna):
                 {'verbose_name': 'nombreCliente', 'func': 'field_queryNombreCliente'}
             ]
 
+        elif template == "rentabilidadProyectos":
+            fields = [
+                {'verbose_name': 'Color fondo estado query', 'func': 'color_fondo_estado_query'},
+                {'verbose_name': 'Color fondo resultado', 'func': 'color_fondo_resultado'},
+                {'verbose_name': 'nombreCliente', 'func': 'field_queryNombreCliente'}
+            ]
         return fields
 
     def gesttare_field_nombreCliente(self, model):
@@ -85,6 +93,7 @@ class gesttare(interna):
         return nombre_usuario
 
     def gesttare_color_fondo_estado(self, model):
+        # try:
         if model.estado:
             if model.estado == "Abierto":
                 return "naranja"
@@ -96,6 +105,38 @@ class gesttare(interna):
                 return "rojo"
             elif model.estado == "Por iniciar":
                 return "amarillo"
+        # except Exception:
+        #     pass
+        return ""
+
+    def gesttare_color_fondo_estado_query(self, model):
+        # try:
+        if model['gt_proyectos.estado']:
+            if model['gt_proyectos.estado'] == "Abierto":
+                return "naranja"
+            elif model['gt_proyectos.estado'] == "Suspendido":
+                return "lila"
+            elif model['gt_proyectos.estado'] == "Terminado":
+                return "verde"
+            elif model['gt_proyectos.estado'] == "Cancelado":
+                return "rojo"
+            elif model['gt_proyectos.estado'] == "Por iniciar":
+                return "amarillo"
+        # except Exception:
+        #     pass
+        return ""
+
+    def gesttare_color_fondo_resultado(self, model):
+        # try:
+        if model['resultado'] or model['resultado'] == 0:
+            if model['resultado'] > 0:
+                return "verdeResultado"
+            elif model['resultado'] < 0:
+                return "rojoResultado"
+            else:
+                return "naranjaResultado"
+        # except Exception:
+        #     pass
         return ""
 
     def gesttare_color_responsable(self, model):
@@ -215,7 +256,13 @@ class gesttare(interna):
         if template == "formRecord":
             nombreUsuario = qsatype.FLUtil.nameUser()
             pertenece = qsatype.FLUtil.sqlSelect(u"gt_particproyecto", u"idusuario", ustr(u"idusuario = '", nombreUsuario, u"' AND idproyecto = '", pk, "'"))
-            if not pertenece:
+            administrador = qsatype.FLUtil.sqlSelect("auth_user", "is_superuser", "username = '{}'".format(str(nombreUsuario)))
+            idcompanyUser = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", u"idusuario = '" + nombreUsuario + u"'")
+            idcompanyProject = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"idcompany", ustr(u" idproyecto = '", pk, "'"))
+            # if not pertenece and not administrador or idcompanyUser != idcompanyProject:
+            # if idcompanyUser != idcompanyProject or (not administrador and not pertenece)not pertenece and not administrador or idcompanyUser != idcompanyProject:
+            # if not ((administrador and (idcompanyUser != idcompanyProject or participante)) or (not administrador and pertenece))
+            if not (pertenece or (administrador and (idcompanyUser == idcompanyProject))):
                 return False
         return True
 
@@ -517,6 +564,48 @@ class gesttare(interna):
         query["groupby"] = ("gt_proyectos.idproyecto")
         return query
 
+    def gesttare_queryGrid_rentabilidadProyectos(self, model, filters):
+        where = "1 = 1"
+        usuario = qsatype.FLUtil.nameUser()
+        # isadmin = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        # if not isadmin:
+        compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = " + str(usuario))
+        if filters:
+            if "[gt_proyectos.nombre]" in filters and filters["[gt_proyectos.nombre]"] != "":
+                where += " AND UPPER(gt_proyectos.nombre) like '%{}%'".format(filters["[gt_proyectos.nombre]"].upper())
+            if "[gt_proyectos.estado]" in filters and filters["[gt_proyectos.estado]"] != "":
+                where += " AND gt_proyectos.estado = '{}'".format(filters["[gt_proyectos.estado]"])
+            if "[cliente]" in filters and filters["[cliente]"] != "":
+                where += " AND gt_proyectos.idcliente = '{}'".format(filters["[cliente]"])
+            if "[d_gt_proyectos.fechainicio]" in filters and filters["[d_gt_proyectos.fechainicio]"] != "":
+                where += " AND gt_proyectos.fechainicio >= '{}'".format(filters["[d_gt_proyectos.fechainicio]"])
+            if "[h_gt_proyectos.fechainicio]" in filters and filters["[h_gt_proyectos.fechainicio]"] != "":
+                where += " AND gt_proyectos.fechainicio <= '{}'".format(filters["[h_gt_proyectos.fechainicio]"])
+            if "[d_gt_proyectos.fechaterminado]" in filters and filters["[d_gt_proyectos.fechaterminado]"] != "":
+                where += " AND gt_proyectos.fechaterminado >= '{}'".format(filters["[d_gt_proyectos.fechaterminado]"])
+            if "[h_gt_proyectos.fechaterminado]" in filters and filters["[h_gt_proyectos.fechaterminado]"] != "":
+                where += " AND gt_proyectos.fechaterminado <= '{}'".format(filters["[h_gt_proyectos.fechaterminado]"])
+
+            if "[buscador]" in filters and filters["[buscador]"] != "":
+                where += " AND UPPER(gt_proyectos.nombre) LIKE '%{}%'".format(filters["[buscador]"].upper())
+
+            if "[cb_gt_proyectos.archivado]" in filters and filters['[cb_gt_proyectos.archivado]'] == "Archivados":
+                where += " AND gt_proyectos.archivado = true"
+            elif "[cb_gt_proyectos.archivado]" in filters and filters['[cb_gt_proyectos.archivado]'] == "Todos":
+                where += ""
+            elif "[cb_gt_proyectos.archivado]" in filters and filters['[cb_gt_proyectos.archivado]'] == "" or ['[cb_gt_proyectos.archivado]'] in filters and filters['[cb_gt_proyectos.archivado]'] == "Activos":
+                where += " AND gt_proyectos.archivado = false"
+        else:
+            where += " AND gt_proyectos.archivado = false"
+        where += " AND gt_proyectos.idcompany = " + str(compania)
+        query = {}
+        query["tablesList"] = ("gt_proyectos")
+        query["select"] = ("gt_proyectos.idproyecto, gt_proyectos.nombre, gt_proyectos.estado, gt_proyectos.idcliente, gt_proyectos.fechainicio, gt_proyectos.fechaterminado, gt_proyectos.presupuesto, gt_proyectos.costetotal, gt_proyectos.rentabilidad, (gt_proyectos.presupuesto - gt_proyectos.costetotal) as Resultado")
+        query["from"] = ("gt_proyectos")
+        query["where"] = (where)
+        #query["groupby"] = ("gt_proyectos.idproyecto")
+        return query
+
     def gesttare_iniciaValoresLabel(self, model=None, template=None, cursor=None, data=None):
         labels = {}
         if template == 'formRecord':
@@ -644,6 +733,63 @@ class gesttare(interna):
                 return False
         return True
 
+    def gesttare_validateCursor(self, cursor):
+        msg = ""
+        error = False
+        if not cursor.valueBuffer("idresponsable"):
+            msg += "Es necesario un responsable de proyecto <br/>"
+            # qsatype.FLUtil.ponMsgError("Es necesario un responsable de proyecto <br/>")
+            # return False
+            error = True
+
+        if cursor.modeAccess() == cursor.Insert:
+            if not cursor.valueBuffer("fechaterminado"):
+                msg += "El campo fecha fin no puede estar vacío"
+                error = True
+
+        if error:
+            qsatype.FLUtil.ponMsgError(msg)
+            return False
+           
+        return True
+
+    def gesttare_gotoProyecto(self, model):
+        url = '/gesttare/gt_proyectos/' + str(model.idproyecto) 
+        return url
+
+    def gesttare_drawif_archivado(self, cursor):
+        # if cursor.valueBuffer("resuelta") == True:
+        if cursor.valueBuffer("idproyecto"):
+            archivado = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "archivado", "archivado = '{}'".format(cursor.valueBuffer("archivado")))
+            if archivado:
+                return True
+        return "hidden"
+
+    def gesttare_invExterno(self, oParam, cursor):
+        response = {}
+        response['status'] = -1
+        response['data'] = {}
+        response["prefix"] = "gt_proyectos"
+        response["title"] = "PInvitación de usuarios externos"
+        # response["confirm"] = "</br></br> ¿Quieres continuar?"
+        response["serverAction"] = ""
+        response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idproyecto"), "nombre": "Colaborador", "serverAction": "actInvitarExterno", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idproyecto"), "nombre": "Observador", "serverAction": "un_dia", "className": "creaAnotacionButton"}]
+        
+        response['params'] = [
+            {
+                "tipo": 3,
+                "verbose_name": "email",
+                "key": "email",
+                "validaciones": None,
+                "select": True,
+                "style": {
+                    "width": "100%"
+                }
+            }
+        ]
+        
+        return response
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -689,6 +835,9 @@ class gesttare(interna):
     def actInvitarExterno(self, oParam, cursor):
         return self.ctx.gesttare_actInvitarExterno(oParam, cursor)
 
+    def invExterno(self, oParam, cursor):
+        return self.ctx.gesttare_invExterno(oParam, cursor)
+
     def envioMailInvitacion(self, email, nombreProyecto, hashcode):
         return self.ctx.gesttare_envioMailInvitacion(email, nombreProyecto, hashcode)
 
@@ -710,6 +859,9 @@ class gesttare(interna):
     def queryGrid_proyectosarchivados(self, model, filters):
         return self.ctx.gesttare_queryGrid_proyectosarchivados(model, filters)
 
+    def queryGrid_rentabilidadProyectos(self, model, filters):
+        return self.ctx.gesttare_queryGrid_rentabilidadProyectos(model, filters)
+
     def vertareasproyecto(self, cursor):
         return self.ctx.gesttare_vertareasproyecto(cursor)
 
@@ -725,6 +877,12 @@ class gesttare(interna):
     def color_fondo_estado(self, model):
         return self.ctx.gesttare_color_fondo_estado(model)
 
+    def color_fondo_estado_query(self, model):
+        return self.ctx.gesttare_color_fondo_estado_query(model)
+
+    def color_fondo_resultado(self, model):
+        return self.ctx.gesttare_color_fondo_resultado(model)
+
     def gotoNuevoProyecto(self, model, oParam):
         return self.ctx.gesttare_gotoNuevoProyecto(model, oParam)
 
@@ -736,6 +894,15 @@ class gesttare(interna):
 
     def copiarHitosProyecto(self, cursor, idproyecto):
         return self.ctx.gesttare_copiarHitosProyecto(cursor, idproyecto)
+
+    def validateCursor(self, cursor):
+        return self.ctx.gesttare_validateCursor(cursor)
+
+    def gotoProyecto(self, model):
+        return self.ctx.gesttare_gotoProyecto(model)
+
+    def drawif_archivado(self, cursor):
+        return self.ctx.gesttare_drawif_archivado(cursor)
 
 
 # @class_declaration head #

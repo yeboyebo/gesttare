@@ -90,6 +90,9 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def color_fondo_estado(self):
         return form.iface.color_fondo_estado(self)
 
+    def color_fondo_estado_revision(self):
+        return form.iface.color_fondo_estado_revision(self)
+
     def color_responsable(self):
         return form.iface.color_responsable(self)
 
@@ -136,6 +139,38 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def incrementar_dia(self, cursor):
         return form.iface.incrementar_dia(self, cursor)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def ejecucion_hoy(self, cursor):
+        return form.iface.ejecucion_hoy(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def un_dia(self, cursor):
+        return form.iface.un_dia(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def semana_siguiente(self, cursor):
+        return form.iface.semana_siguiente(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def elegir_fecha(self, cursor):
+        return form.iface.elegir_fecha(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def fecha_elegida(self, oParam, cursor):
+        return form.iface.fecha_elegida(self, oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def quitar_fecha_modal(self, cursor):
+        return form.iface.quitar_fecha_modal(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def quitar_fecha_espera(self, cursor):
+        return form.iface.quitar_fecha_espera(self, cursor)
+
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def quitar_fecha_hacer(self, cursor):
+        return form.iface.quitar_fecha_hacer(self, cursor)
+
     def bChCursor(fN, cursor):
         return form.iface.bChCursor(fN, cursor)
 
@@ -162,13 +197,43 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def gototarea(self):
         return form.iface.gotoTarea(self)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotoReturnActualizacion(self, oParam):
+        return form.iface.gotoReturnActualizacion(oParam)
+
+    def revisar_indicadores(self, usuario):
+        return form.iface.revisar_indicadores(usuario)
+
+    def revisar_tareas_atrasadas(self, usuario):
+        return self.ctx.revisar_tareas_atrasadas(self, usuario)
+
     # @helpers.decoradores.accion(tipo="O", aqparam=["oParam"])
     @helpers.decoradores.accion(aqparam=["oParam"])
     def gotoNewRecordAnotacion(self, oParam):
         return form.iface.gotoNewRecordAnotacion(oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotoNewRecordRecordatorioAtrasada(self, oParam):
+        return form.iface.gotoNewRecordRecordatorioAtrasada(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotoNewRecordRecordatorioBandeja(self, oParam):
+        return form.iface.gotoNewRecordRecordatorioBandeja(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def gotoNewRecordRecordatorioEspera(self, oParam):
+        return form.iface.gotoNewRecordRecordatorioEspera(oParam)
+
     def queryGrid_renegociacion(model):
         return form.iface.queryGrid_renegociacion(model)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_revisionTareas(model):
+        return form.iface.queryGrid_revisionTareas(model)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def queryGrid_revisionTareasTreinta(model):
+        return form.iface.queryGrid_revisionTareasTreinta(model)
 
     @helpers.decoradores.accion(aqparam=["oParam"])
     def getParticipantesProyecto(self, oParam):
@@ -184,6 +249,12 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def drawif_checkAdjuntos(cursor):
         return form.iface.drawif_checkAdjuntos(cursor)
+
+    def drawif_checkActu2(cursor):
+        return form.iface.drawif_checkActu2(cursor)
+
+    def drawif_checkNormal(cursor):
+        return form.iface.drawif_checkNormal(cursor)
 
     def drawif_abrirtarea(cursor):
         return form.iface.drawif_abrirtarea(cursor)
@@ -209,6 +280,29 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def field_adjunto(self):
         return form.iface.field_adjunto(self)
+
+    def validateCursor(self):
+        return form.iface.validateCursor(self)
+
+    @helpers.decoradores.accion(tipo="O")
+    def gotomomentos(self):
+        return form.iface.gotomomentos()
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def opciones_recordatorio(self, oParam):
+        return form.iface.opciones_recordatorio(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def opciones_recordatorio_anotar(self, oParam):
+        return form.iface.opciones_recordatorio_anotar(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def opciones_recordatorio_planear(self, oParam):
+        return form.iface.opciones_recordatorio_planear(oParam)
+
+    @helpers.decoradores.accion(aqparam=["oParam"])
+    def opciones_recordatorio_analizar(self, oParam):
+        return form.iface.opciones_recordatorio_analizar(oParam)
 
 
 

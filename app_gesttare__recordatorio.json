@@ -1,0 +1,89 @@
+{
+    "querystring": {
+        "p_l": 10,
+        "p_c": true
+    },
+    "schema": {
+        "revisionTareas": {
+            "query": {
+                "p_l": 50
+            }
+        }
+    },
+    "title": "Revisión",
+    "navbar": true,
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "padreTareas",
+            "style": {},
+            "layout": {
+                "masterRevision": {
+                    "componente": "YBGrid",
+                    "prefix": "revisionTareas",
+                    "type": "query",
+                    "cansavefilter": false,
+                    "autofilter": false,
+                    "buscador": false,
+                    "filter": false,
+                    "columns": [
+                        {
+                            "tipo": "act",
+                            "key": "complete",
+                            "label": "Completar tarea",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {
+                            "tipo": "act",
+                            "key": "delete",
+                            "label": "Borrar",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "title": true, "width": 370},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "gt_proyectos.nombre", "width": 180, "title": true},
+                        {
+                            "tipo": "act",
+                            "key": "upFecha",
+                            "label": "Incrementar Día",
+                            "success": [
+                                {"slot": "refrescar"}
+                            ]
+                        },
+                        {"tipo": "field", "listpos": "secondaryitem", "key": "gt_tareas.fechavencimiento", "width": 45},
+                        {"tipo": "field", "key": "gt_tareas.fechaentrega", "width": 45},
+                        {"tipo": "field", "listpos": "body", "key": "gt_tareas.codestado", "color": "Color fondo estado revision", "width": 50}
+                    ],
+                    "rowclick": "gotoTarea"
+                }
+            }
+        }
+    },
+    "acciones": {
+        "gotoTarea": {
+            "action": "goto",
+            "prefix": "gt_tareas",
+            "serverAction": "gotoTarea"
+        },
+        "upFecha": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "incrementar_dia",
+            "icon": "update"
+        },
+        "complete": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "serverAction": "completar_tarea",
+            "icon": "check_box_outline_blank"
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete",
+            "msg": "Se eliminaran todos los comentarios y registros de tiempo"
+        }
+    }
+}

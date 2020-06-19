@@ -255,6 +255,8 @@ class gesttare(interna):
 
         resul = {}
         resul['status'] = 1
+        # oParam["fecha"] = "2020-05-12"
+        # print("el valor es: ",oParam["fecha"])
         if "fecha" in oParam:
             user_name = qsatype.FLUtil.nameUser()
 

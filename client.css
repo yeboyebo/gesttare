@@ -92,6 +92,26 @@ html, #parent-container{
 .YBSideBarItemLink:hover{
     color: white;
 }
+.YBNavBarActions .documentacion img{
+    float: right;
+    margin-top: -5px;
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.YBNavBarActions .recordatorio img{
+    float: right;
+    margin-top: 5px;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+
+.YBNavBarActions .documentacion{
+    float: right;
+    cursor: pointer;
+}
+
 .YBNavBarActions .controlTiempoButton > .YBButtonRaised{
     background-color: orange;
     border-radius: 5px;
@@ -473,6 +493,56 @@ a.btn-primary:hover {
 
 /*Colores para estados de tareas y proyectos*/
 
+/*.YBTableCell[title=Abierto] {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #ffc68d;
+    text-transform: lowercase;
+}
+
+.YBTableCell[title=Suspendido] {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #d0cdf4;
+    text-transform: lowercase;
+}
+
+.YBTableCell[title=Terminado] {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #9decac;    
+    text-transform: lowercase;
+}*/
+
+/*.YBTableCell[title=Por iniciar] {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #ffc68d;
+    text-transform: lowercase;
+}*/
+
+/*.YBTableCell[title=Cancelado] {
+    text-align: center !important;
+    border-radius: 17.5px;
+    background-color: #faeb8c;
+    text-transform: lowercase;
+}*/
+
+.verdeResultado {
+    border-radius: 17.5px;
+    background-color: #9decac;    
+}
+
+.rojoResultado {
+    border-radius: 17.5px;
+    background-color: #cc2916;
+}
+
+.naranjaResultado {
+    border-radius: 17.5px;
+    background-color: #ffc68d;
+}
+
 .naranja {
     text-align: center !important;
     border-radius: 17.5px;
@@ -672,6 +742,15 @@ a.btn-primary:hover {
     .YBListItemSecondaryAction .material-icons {
         margin-right: 5px;
     }
+    /*.navbar-header-right {
+        margin-top: 1px !important;
+        
+    }
+    .navbar-header-center {
+        margin-left: 0px;
+         margin-right: 0px; */
+        /* margin: 20px 20px 0px 20px; */
+    /*//}*/
    /*.toaster{
         left: 37% !important;
     }*/
@@ -719,7 +798,7 @@ a.btn-primary:hover {
     border-bottom: none;
 }*/
 
-.YBTableActionsCell[title=TimeTracking] img{
+.YBTableRow .YBTableActionsCell[title="TimeTracking"] img{
     /*margin-top: -3px;
     color: #50d2ce;*/
     background-color: orange;
@@ -841,7 +920,7 @@ a.btn-primary:hover {
     font-size: 20px !important;
 }*/
 
-.controlmensual .YBTableRow, .hitosproyecto .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .queryGrid_notificacionesUsuarioViejas .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow {
+.controlmensual .YBTableRow, .hitosproyecto .YBTableRow, .queryGrid_notificacionesUsuario .YBTableRow, .queryGrid_notificacionesUsuarioViejas .YBTableRow, .controldiario .YBTableRow, .masterUsuarios .YBTableRow, .masterTimeTracking .YBTableRow, .masterProyectos .YBTableRow, .masterTareas .YBTableRow, .renProyecto .YBTableRow , .masterRevision .YBTableRow {
     margin-bottom: 10px;   
 }
 
@@ -935,6 +1014,7 @@ a.btn-primary:hover {
     display: flex;
     justify-content: center;
     width: 100%;
+    flex-wrap: wrap;
 }
 
 .YBD3ProgressBarDonut {
@@ -971,12 +1051,37 @@ a.btn-primary:hover {
 }
 
 @media (min-width: 769px) {
-    .navbar-user {
+    .navbar-header .navbar-user {
         position: absolute !important;
         top: 10px;
         right: 0;
+        //min-width: 600px;
     }
+    .recordatorio {
+        float: right;
+    }
+    .recordatorioAnalizar {
+        margin-right: 10px;
+    }
+/*    .YBNavBarActions {
+        position: relative;
+        float: none; 
+    }*/
 }
+
+/*@media (max-width: 1320px) {
+    .navbar-header .navbar-user {
+        position: absolute !important;
+        top: 10px;
+        right: 0;
+        min-width: 470px;
+    }
+
+    .YBNavBarActions {
+        position: relative;
+        float: none; 
+    }
+}*/
 
 .navbar-dashboard-img {
     margin-bottom: 10px;
@@ -1049,6 +1154,19 @@ a.btn-primary:hover {
     //text-transform: unset;
     margin-right: auto !important;
     width: 210px !important;
+}
+.modalScrool .recordatorioButton {
+    display: block;
+    margin-left: auto;
+    //text-transform: unset;
+    margin-right: auto !important;
+    width: auto !important;
+    background-color: #f1f1f1 !important;
+    color: black !important;
+}
+
+.modalScrool .recordatorioButton:hover {
+    background-color: #f1f1f1 !important;
 }
 
 .modalBody .modalPie .anotacionToTareaButton {
@@ -1701,4 +1819,211 @@ a.btn-primary:hover {
 .hitosproyecto .YBTableActionsCell img {
     width: 24px !important;
     height: 24px !important;
+}
+
+@media (max-width: 768px){
+    .documentacion {
+        //visibility: hidden;
+        display: none;
+    }
+    .recordatorioSom {
+        //visibility: hidden;
+        display: none;
+    }
+    .recordatorio {
+        //visibility: hidden;
+        display: none;
+    }
+}
+
+/* Opciones configuración usuario */
+.formRecordAuthUser .principal{
+    margin-bottom: 50px !important;
+}
+
+.formRecordAuthUser .formInputSet div:nth-child(2) .formGroupBoxTitle{
+    color: #2D95C1;
+    font-size: 17px;
+    position: relative;
+    float: left;
+    overflow: hidden;
+    font-weight: bold;
+    margin-top: 2px;
+    text-transform: uppercase;
+}
+
+.formRecordAuthUser .YBCheckBox {
+    width: 100% !important;
+    min-height: auto !important;
+    padding-top: 0px;
+}
+
+.formRecordAuthUser .YBCheckBox .YBCheckBoxLabel{
+    float: none;
+}
+
+.formRecordAuthUser .YBCheckBox label + label{
+    width: 100% !important;
+}
+
+/* Modal recordatorios */
+
+/*.YBNavBarActions .recordatorioSom img{
+    float: right;
+    margin-top: 5px;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    box-shadow: 0 10px 15px 0 rgba(41, 51, 51, 0.15);
+    background-color: #f4f6f8;
+    //background-color: black;
+    padding: 3px;
+}*/
+.modalrecordatorios .modalPie .recordatorios .modalTexto {
+    text-align: left;
+}
+
+.modalTexto {
+    margin-top: 1px;
+    font-size: 18px;
+    //overflow: hidden;
+    //text-align: left;
+    display: none;
+    padding: 10px;
+}
+.modalBotones {
+    display: none;
+}
+.recordatoriosAcordeon .modalTexto, .recordatoriosAcordeon .modalBotones {
+    display: block;
+}
+/*.recordatoriosAcordeon {
+    height: 5px;
+    overflow: block !important;
+}*/
+
+.hitosproyecto .YBTableRow .YBTableActionsCell:last-child {
+    margin-top: 4px;
+}
+
+.modalrecordatorios {
+    font-weight: normal !important;
+}
+
+.modalrecordatorios .modalTitle {
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.modalrecordatorios .modalBotones {
+    //margin-bottom: 35px;
+}
+
+.modalTitleAcordeon {
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    //border-bottom: 1px solid #ccc;
+    //margin-top: 20px;
+    font-size: 18px;
+    //background-color: #ffeddc;
+    color: black;
+    cursor: pointer;
+    padding: 18px;
+    //padding-bottom: 35px;
+    width: 100%;
+    //border: none;
+    text-align: center;
+    outline: none;
+    //margin-top: -22px;
+    transition: 0.4s; 
+    display: flex;
+}
+
+.activoAcor, .modalTitleAcordeon:hover {
+  //background-color: #ffd7af;
+  //color: #42adaa;
+    background-color: #ff5722;
+    color: rgba(255,255,255, 0.84); 
+}
+
+.modalTitleAcordeon:after {
+    font-family: "Material Icons";
+    content: "\e5cf";
+    //content: '\02C5';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.modalScrool.modalrecordatorios {
+    min-width: 648px;
+}
+
+/*.modalTitleAcordeon.activo:after {
+    content: "\2212";
+}*/
+
+.acordeonatrasada:hover:after, .acordeonrevisada:hover:after, .acordeonespera_sin:hover:after, .acordeonrevisada_anotar:hover:after{
+    font-family: "Material Icons";
+    color: #f1f1f1;
+}
+
+.acordeonatrasada.activoAcor:after, .acordeonrevisada.activoAcor:after, .acordeonespera_sin.activoAcor:after, .acordeonrevisada_anotar.activoAcor:after {
+    font-family: "Material Icons";
+    content: "\e5ce";
+    color: #f1f1f1;
+}
+
+.btn-modal-acordeon {
+    //color: #fff !important;
+    //color: black;
+    //background-color: #50d2ce !important;
+    background-color: #f1f1f1 !important;
+    border-radius: 5px;
+    margin-right: 10px;
+    //border: 1px solid #2d95c1;
+    width: 200px;
+    box-shadow: none;
+    border: none;
+    border-radius: 2px;
+    position: relative;
+    //margin: 10px 1px 20px;
+    color: #ff5722;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    background: transparent;
+    display: inline-block;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 2px solid #ff5722;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-top: -5px;
+    margin-left: 20px;
+}
+
+.botonacordeoncentrado {
+    //flex-grow: 1;
+    margin-left: auto;
 }

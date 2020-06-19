@@ -73,3 +73,7 @@ class gesttare_aqn_user(yblogin_aqn_user, helpers.MixinConAcciones):
     def field_completaIcon(self):
         return form.iface.field_completaIcon(self)
 
+    @helpers.decoradores.accion(aqparam=["cursor"])
+    def activar_nomenclatura(self, cursor):
+        return form.iface.activar_nomenclatura(cursor)
+

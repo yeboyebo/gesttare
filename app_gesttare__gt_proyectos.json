@@ -43,6 +43,11 @@
                         "success": [{"slot": "return"}]
                     }
                 },
+                "labelAdjunto": {
+                    "componente": "YBLabel",
+                    "text": "Proyecto archivado",
+                    "className": "contieneAdjuntos"
+                },
                 "borrarTareaButton": {
                     "componente": "YBButton",
                     "title": "Borrar Proyecto",
@@ -158,6 +163,14 @@
                                 "key": "nuevaTarea",
                                 "iconurl" : "/static/dist/img/icons/anotar_modal.svg",
                                 "label": "Nueva tarea",
+                                "success": [
+                                    {"slot": "goto"}
+                                ]
+                            },
+                            {
+                                "tipo": "act",
+                                "key": "verTareasHito",
+                                "label": "Ver tareas del hito",
                                 "success": [
                                     {"slot": "goto"}
                                 ]
@@ -417,6 +430,12 @@
             "serverAction": "creartareahito",
             "icon": "alarm"
         },
+        "verTareasHito": {
+            "action": "legacy",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "verTarea",
+            "icon": "assignment"
+        },
         "actInvitarExterno": {
             "title": "Invitación de usuarios externos",
             "action": "legacy",
@@ -435,18 +454,25 @@
                     }
                 }
             ]    
+        },
+        "prueba": {
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "icon": "people_outline",
+            "serverAction": "invExterno"
         }
     },
     "drawIf": {
         "groupBoxPadre" :{
-            "groupBoxRentabilidad": "checkProyectosFormDraw"
+            "groupBoxRentabilidad": "checkProyectosFormDraw",
+            "labelAdjunto": "drawif_archivado"
         },
         "gb__proyectos": {
             "presupuesto": "checkProyectosFormDraw",
             "rentabilidad": "checkProyectosFormDraw",
             "costetotal": "checkProyectosFormDraw",
             "idresponsable": "checkResponsableDraw",
-            "cliente": "checkResponsableDraw"
+            "idcliente": "checkResponsableDraw"
         },
         "hitosproyecto": {
             "porcentaje": "checkDrawPorcentajeHito"

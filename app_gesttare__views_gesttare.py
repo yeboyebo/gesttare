@@ -1,6 +1,6 @@
 # @class_declaration interna #
 from YBLEGACY import qsatype
-
+from models.flgesttare import flgesttare_def
 
 class interna(qsatype.objetoBase):
 
@@ -14,6 +14,8 @@ class interna(qsatype.objetoBase):
 class gesttare(interna):
 
     def gesttare_get_app_info(self, model, data):
+        # print("entra")
+        # flgesttare_def.iface.revisar_indicadores()
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
         idcompany = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
@@ -88,7 +90,7 @@ class gesttare(interna):
         return appinfo
 
     def gesttare_get_app_drawIf(self, drawIf, pk):
-        return {"YBNavBarActions": {"pauseControlHorario": "drawIfPauseControl", "startControlHorario": "drawIfstartControl"}}
+        return {"YBNavBarActions": {"pauseControlHorario": "drawIfPauseControl", "startControlHorario": "drawIfstartControl", "recordatorio":"drawIffechaAtrasada", "recordatorioCon":"drawIffechaAtrasadaCon", "recordatorioAnotar":"drawIfrecordatorioAnotar", "recordatorioAnotarCon":"drawIfrecordatorioAnotarCon", "recordatorioPlanear":"drawIfrecordatorioPlanear", "recordatorioPlanearCon":"drawIfrecordatorioPlanearCon"}}
 
     def gesttare_drawIfPauseControl(self, cursor):
         usuario = qsatype.FLUtil.nameUser() 
@@ -117,6 +119,88 @@ class gesttare(interna):
             return "hidden"
         return True
 
+    def gesttare_drawIffechaAtrasada(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
+        # revisada = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario", "COUNT(idactualizusuario)", "revisada = false AND idusuario = '{}' ".format(str(usuario))) 
+        revisada_bandeja_fecha = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE".format(str(usuario)))
+
+        espera_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "codestado = 'En espera' AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 7".format(str(usuario)))
+
+        # if revisada_bandeja_fecha > 0 
+
+        if atrasada > 0 or revisada_bandeja_fecha > 0 or espera_sin_modificacion > 0:
+            return "hidden"
+        else:
+            revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00' AND gt_actualizaciones.tipo <> 'anotacion'".format(str(usuario)))
+            if atrasada > 0 or revisada_bandeja_hora > 0 or espera_sin_modificacion > 0:
+                return "hidden"
+        
+        # if atrasada > 0 or revisada > 0:
+        #     return "hidden"
+        return True
+
+    def gesttare_drawIffechaAtrasadaCon(self, cursor):
+        usuario = qsatype.FLUtil.nameUser() 
+        atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
+        # revisada = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario", "COUNT(idactualizusuario)", "revisada = false AND idusuario = '{}' ".format(str(usuario))) 
+        # if atrasada == 0 and revisada == 0:
+        #     return "hidden"
+        revisada_bandeja_fecha = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE".format(str(usuario)))
+
+        revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00' AND gt_actualizaciones.tipo <> 'anotacion'".format(str(usuario)))
+
+        espera_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "codestado = 'En espera' AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 7".format(str(usuario)))
+
+        if atrasada == 0 and revisada_bandeja_fecha == 0 and revisada_bandeja_hora == 0 and espera_sin_modificacion == 0:
+            return "hidden"
+        # else:
+        #     revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00'".format(str(usuario)))
+        #     print(revisada_bandeja_hora)
+        #     if atrasada == 0 and revisada_bandeja_hora == 0:
+        #         return "hidden"
+        return True
+
+    def gesttare_drawIfrecordatorioAnotar(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        revisada_bandeja_anotacion_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE  AND gt_actualizaciones.tipo = 'anotacion'".format(str(usuario)))
+
+
+        if revisada_bandeja_anotacion_hora > 0:
+            return "hidden"
+
+        return True
+
+    def gesttare_drawIfrecordatorioAnotarCon(self, cursor):
+        usuario = qsatype.FLUtil.nameUser() 
+
+        revisada_bandeja_anotacion_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE  AND gt_actualizaciones.tipo = 'anotacion'".format(str(usuario)))
+
+        if revisada_bandeja_anotacion_hora == 0:
+            return "hidden"
+
+        return True
+
+
+    def gesttare_drawIfrecordatorioPlanear(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        tarea_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "fechavencimiento is null AND fechaentrega is null AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 30".format(str(usuario)))
+
+        if tarea_sin_modificacion > 0:
+            return "hidden"
+
+        return True
+
+    def gesttare_drawIfrecordatorioPlanearCon(self, cursor):
+        usuario = qsatype.FLUtil.nameUser() 
+
+        tarea_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "fechavencimiento is null AND fechaentrega is null AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 30".format(str(usuario)))
+
+        if tarea_sin_modificacion == 0:
+            return "hidden"
+       
+        return True
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -131,6 +215,24 @@ class gesttare(interna):
 
     def drawIfstartControl(self, cursor):
         return self.ctx.gesttare_drawIfstartControl(cursor)
+
+    def drawIffechaAtrasada(self, cursor):
+        return self.ctx.gesttare_drawIffechaAtrasada(cursor)
+
+    def drawIffechaAtrasadaCon(self, cursor):
+        return self.ctx.gesttare_drawIffechaAtrasadaCon(cursor)
+
+    def drawIfrecordatorioAnotar(self, cursor):
+        return self.ctx.gesttare_drawIfrecordatorioAnotar(cursor)
+
+    def drawIfrecordatorioAnotarCon(self, cursor):
+        return self.ctx.gesttare_drawIfrecordatorioAnotarCon(cursor)
+
+    def drawIfrecordatorioPlanear(self, cursor):
+        return self.ctx.gesttare_drawIfrecordatorioPlanear(cursor)
+
+    def drawIfrecordatorioPlanearCon(self, cursor):
+        return self.ctx.gesttare_drawIfrecordatorioPlanearCon(cursor)
 
 
 # @class_declaration head #

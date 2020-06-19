@@ -22,7 +22,8 @@ class gesttare(yblogin):
 
     def gesttare_getUsuariosProyecto(self, oParam):
         data = []
-        if "idproyecto" not in oParam:
+        if "idproyecto" not in oParam or oParam['idproyecto'] == None:
+            qsatype.FLUtil.ponMsgError("Debes seleccionar la persona responsable del listado de participantes de este proyecto para que la tarea se guarde correctamente")
             return data
         q = qsatype.FLSqlQuery()
         q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user")
@@ -493,28 +494,91 @@ class gesttare(yblogin):
         tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_tareas ta LEFT JOIN gt_actualizaciones at ON ta.idtarea = at.idobjeto::INTEGER", "COUNT(ta.idtarea)", whereCompletadas) or 0
         return tareasCompletadas
 
+    def gesttare_calculaTareasCompletadasRanking(self, oParam):
+        where = "1=1"
+        usuario = qsatype.FLUtil.nameUser()
+
+        locale.setlocale(locale.LC_ALL, '')
+
+        if not oParam:
+            hoy = date.today()
+            ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+            where += " AND at.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+        if oParam:
+            if "idusuario" in oParam:
+                usuario = str(oParam["idusuario"])
+            if "d_fecha" not in oParam and "h_fecha" not in oParam and "fecha" not in oParam:
+                hoy = date.today()
+                ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
+                where += " AND at.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+            else:
+                if "fecha" in oParam:
+                    where += "AND at.fecha = '{}'".format(oParam["fecha"])
+                if "d_fecha" in oParam:
+                    where += " AND at.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
+        id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(usuario))
+        whereCompletadas = where + " AND u. idcompany = {} AND ta.resuelta = 'true' AND at.tipo='resuelta'".format(id_compania)
+        # tareasCompletadas = qsatype.FLUtil.sqlSelect("gt_tareas ta LEFT JOIN gt_actualizaciones at ON ta.idtarea = at.idobjeto::INTEGER", "COUNT(ta.idtarea)", whereCompletadas) or 0
+
+        ranking_completadas = []
+
+        q = qsatype.FLSqlQuery()
+        q.setTablesList(" gt_tareas, gt_actualizaciones, aqn_user")
+        q.setSelect("COUNT(ta.idtarea), u.idusuario")
+        q.setFrom("gt_tareas ta LEFT JOIN gt_actualizaciones at ON ta.idtarea = at.idobjeto::INTEGER INNER JOIN aqn_user u ON ta.idusuario = u.idusuario")
+        q.setWhere(whereCompletadas + " GROUP BY u.idusuario ORDER BY COUNT(ta.idtarea) DESC")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        while q.next():
+            # descripcion = str(q.value(2)) + "€ " + q.value(1)
+            ranking_completadas.append(q.value(1))
+
+        if int(usuario) in ranking_completadas:
+            posicion_completadas = ranking_completadas.index(int(usuario))
+            posicion_completadas = "#" + str(posicion_completadas + 1)
+        else:
+            posicion_completadas = "-"
+        return posicion_completadas
+
     def gesttare_cajasinfo(self, oParam):
         horasStyle = {
             "border": "1px solid #dfdfdf",
             "backgroundColor": "white",
-            "color": "grey"
+            "color": "grey",
+            "marginBottom": "5px"
         }
 
         presupuestoStyle = {
             "backgroundColor": "#bababa",
-            "color": "#ffffff"
+            "color": "#ffffff",
+            "marginBottom": "5px"
         }
 
         rentabilidadStyle = {
             "backgroundImage": "linear-gradient(to right, #e79b21, #ffc68d)",
-            "color": "#ffffff"
+            "color": "#ffffff",
+            "marginBottom": "5px"
         }
+
+        rankingStyle = {
+            "backgroundImage": "linear-gradient(to left, #89e3dc, #4abed8)",
+            "color": "#ffffff",
+            "marginBottom": "5px"
+        }
+
 
         tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("informes_info")
         if tengopermiso != True:
             return tengopermiso
 
         where = "1=1"
+        where_horas_trabajadas = "1=1"
         usuario = qsatype.FLUtil.nameUser()
 
         locale.setlocale(locale.LC_ALL, '')
@@ -524,6 +588,7 @@ class gesttare(yblogin):
             ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
             #where += " AND tt.fecha BETWEEN '" + str(hoy.year) + "-" + str(hoy.month) + "-1' AND '" + str(hoy.year) + "-" + str(hoy.month) + "-" + str(ultimo) +"'"
             where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+            where_horas_trabajadas += " AND gt_controldiario.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
         if oParam:
             if "idusuario" in oParam:
                 usuario = str(oParam["idusuario"])
@@ -531,18 +596,26 @@ class gesttare(yblogin):
                 hoy = date.today()
                 ultimo = calendar.monthrange(hoy.year,hoy.month)[1]
                 where += " AND tt.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
+                where_horas_trabajadas += " AND gt_controldiario.fecha BETWEEN '{}-{}-1' AND '{}-{}-{}'".format(str(hoy.year), str(hoy.month), str(hoy.year), str(hoy.month), str(ultimo))
             else:
                 #if "i_fecha" in oParam:
                 #    where += " AND tt.fecha < '" +  oParam["h_fecha"] + "'"
                 if "fecha" in oParam:
                     where += "AND tt.fecha = '{}'".format(oParam["fecha"])
+                    where_horas_trabajadas += "AND gt_controldiario.fecha = '{}'".format(oParam["fecha"])
                 if "d_fecha" in oParam:
                     where += " AND tt.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
+                    where_horas_trabajadas += " AND gt_controldiario.fecha BETWEEN ' {} ' AND ' {} '".format(oParam["d_fecha"], oParam["h_fecha"])
 
         # where += " AND tt.idusuario = {}".format(usuario)
         # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt", "SUM(tt.totaltiempo)", where)
-
+        id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(usuario))
+        where_ranking_trackeadas = where + " AND u.idcompany = {}".format(id_compania)
         where += " AND tt.idusuario = {}".format(usuario)
+        where_horas_trabajadas_ranking = where_horas_trabajadas + " AND aqn_user.idcompany = {}".format(id_compania)
+        where_horas_trabajadas += " AND gt_controldiario.idusuario = {}".format(usuario)
+
+
         # tiempo = qsatype.FLUtil.sqlSelect("gt_timetracking tt INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
         tiempo = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
 
@@ -567,15 +640,186 @@ class gesttare(yblogin):
         if tareasProduccion == None:
             tareasProduccion = 0
 
+
         if tiempo:
             tiempo = flgesttare_def.iface.seconds_to_time(tiempo.total_seconds(), all_in_hours=True)
             tiempo = flgesttare_def.iface.formatearTotalTiempo(tiempo).split(":")[0]
+            if tiempo[0] == "0":
+                tiempo = tiempo[1]
         else:
-            tiempo = "00"
+            tiempo = "0"
 
 
 
-        data = [{"name": "Horas Invertidas", "value": tiempo, "style": horasStyle} , {"name": "Tareas Completadas", "value": tareasCompletadas, "style": presupuestoStyle}, {"name": "Tareas En Producción", "value": tareasProduccion, "style" :rentabilidadStyle}]
+        horas_trabajadas =  qsatype.FLUtil.sqlSelect("gt_controldiario INNER JOIN aqn_user ON gt_controldiario.idusuario = aqn_user.idusuario", "SUM(gt_controldiario.totaltiempo)", where_horas_trabajadas)
+
+        if horas_trabajadas:
+            horas_trabajadas = flgesttare_def.iface.seconds_to_time(int(horas_trabajadas), all_in_hours=True)
+            horas_trabajadas = flgesttare_def.iface.formatearTotalTiempo(horas_trabajadas).split(":")[0]
+            if horas_trabajadas[0] == "0":
+                horas_trabajadas = horas_trabajadas[1]
+        else:
+            horas_trabajadas = "0"
+
+        if int(horas_trabajadas) != 0:
+            porcentaje_efectivo = (100 * int(tiempo)) / int(horas_trabajadas)
+
+            if porcentaje_efectivo != 0:
+                porcentaje_efectivo = str(round(porcentaje_efectivo, 2)) + "%"
+            else:
+                porcentaje_efectivo = "-"
+        else:
+            porcentaje_efectivo = "-"
+
+
+        numero_proyectos = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "COUNT(DISTINCT(t.idproyecto))", where)
+
+        numero_hitos = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_hitosproyecto h ON t.idproyecto = h.idproyecto INNER JOIN gt_tareas ta ON h.idhito = ta.idhito INNER JOIN gt_timetracking tt ON ta.idtarea = tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "COUNT(DISTINCT(h.idhito))", where)
+
+        # ranking_trackeadas = qsatype.FLUtil.sqlSelect("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario", "SUM(tt.totaltiempo)", where)
+        # ranking_trackeadas = []
+        # q = qsatype.FLSqlQuery()
+        # q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking, aqn_user")
+        # q.setSelect("SUM(tt.totaltiempo), u.idusuario")
+        # q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
+        # q.setWhere(where_ranking_trackeadas + " GROUP BY u.idusuario ORDER BY SUM(tt.totaltiempo) DESC")
+
+        # if not q.exec_():
+        #     print("Error inesperado")
+        #     return []
+        # if q.size() > 100:
+        #     print("sale por aqui")
+        #     return []
+
+        # while q.next():
+        #     print("el valor es: ",q.value(0))
+        #     # descripcion = str(q.value(2)) + "€ " + q.value(1)
+        #     ranking_trackeadas.append(q.value(1))
+
+        # if int(usuario) in ranking_trackeadas:
+        #     posicion_trackeadas = ranking_trackeadas.index(int(usuario))
+        #     posicion_trackeadas = "#" + str(posicion_trackeadas + 1)
+        # else:
+        #     posicion_trackeadas = "-"
+
+
+        # ranking_produccion = []
+        # q = qsatype.FLSqlQuery()
+        # q.setTablesList(" gt_tareas, gt_timetracking, aqn_user")
+        # q.setSelect("COUNT(DISTINCT(tt.idtarea)), u.idusuario")
+        # q.setFrom("gt_tareas ta INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
+        # q.setWhere(where_ranking_trackeadas + " GROUP BY u.idusuario ORDER BY COUNT(DISTINCT(tt.idtarea)) DESC")
+
+        # if not q.exec_():
+        #     print("Error inesperado")
+        #     return []
+        # if q.size() > 100:
+        #     print("sale por aqui")
+        #     return []
+
+        # while q.next():
+        #     # descripcion = str(q.value(2)) + "€ " + q.value(1)
+        #     ranking_produccion.append(q.value(1))
+
+        # if int(usuario) in ranking_produccion:
+        #     posicion_produccion = ranking_produccion.index(int(usuario))
+        #     posicion_produccion = "#" + str(posicion_produccion + 1)
+        # else:
+        #     posicion_produccion = "-"
+
+        q = qsatype.FLSqlQuery()
+        q.setTablesList("gt_proyectos, gt_tareas, gt_timetracking, aqn_user")
+        q.setSelect("SUM(tt.totaltiempo), u.idusuario")
+        q.setFrom("gt_proyectos t INNER JOIN gt_tareas ta ON t.idproyecto=ta.idproyecto INNER JOIN gt_timetracking tt ON ta.idtarea=tt.idtarea INNER JOIN aqn_user u ON u.idusuario = tt.idusuario")
+        q.setWhere(where_ranking_trackeadas + " GROUP BY u.idusuario ORDER BY SUM(tt.totaltiempo) DESC")
+
+        q2 = qsatype.FLSqlQuery()
+        q2.setTablesList("gt_controldiario, aqn_user")
+        q2.setSelect("SUM(gt_controldiario.totaltiempo), aqn_user.idusuario")
+        q2.setFrom("gt_controldiario INNER JOIN aqn_user ON gt_controldiario.idusuario = aqn_user.idusuario")
+        q2.setWhere(where_horas_trabajadas_ranking + " GROUP BY  aqn_user.idusuario ORDER BY SUM(gt_controldiario.totaltiempo) DESC")
+
+        if not q.exec_():
+            print("Error inesperado")
+            return []
+
+        if not q2.exec_():
+            print("Error inesperado")
+            return []
+
+        if q.size() > 100:
+            print("sale por aqui")
+            return []
+
+        if q2.size() > 100:
+            print("sale por aqui")
+            return []
+
+        usuarios = {}
+        while q2.next():
+            horas_trabajadas_q = q2.value(0)
+            if horas_trabajadas_q:
+                horas_trabajadas_q = flgesttare_def.iface.seconds_to_time(int(horas_trabajadas_q), all_in_hours=True)
+
+                horas_trabajadas_q = flgesttare_def.iface.formatearTotalTiempo(horas_trabajadas_q).split(":")[0]
+                if horas_trabajadas_q[0] == "0":
+                    horas_trabajadas_q = horas_trabajadas_q[1]
+            else:
+                horas_trabajadas_q = "0"
+            usuarios[q2.value(1)] = { "horas_trabajadas": horas_trabajadas_q, "horas_trackeadas": 0, "porcentaje": 0 }
+
+        porcentajes = {}
+        while q.next():
+            horas_trackeadas = q.value(0)
+            if horas_trackeadas:
+                horas_trackeadas = flgesttare_def.iface.seconds_to_time(horas_trackeadas.total_seconds(), all_in_hours=True)
+
+                horas_trackeadas = flgesttare_def.iface.formatearTotalTiempo(horas_trackeadas).split(":")[0]
+                if horas_trackeadas[0] == "0":
+                    horas_trackeadas = horas_trackeadas[1]
+            else:
+                horas_trackeadas = "0"
+            id_usuario = q.value(1)
+            if id_usuario not in usuarios:
+                continue
+
+            usuarios[id_usuario]["horas_trackeadas"] = horas_trackeadas
+            # print("el valor Trackeadas es: ", usuarios[id_usuario]["horas_trackeadas"])
+            # print("el valor horas_trabajadas es: ", usuarios[id_usuario]["horas_trabajadas"])
+            if int(usuarios[id_usuario]["horas_trabajadas"]) != 0:
+                porcentajes[id_usuario] =  (100 * int(usuarios[id_usuario]["horas_trackeadas"])) / int(usuarios[id_usuario]["horas_trabajadas"])
+            else:
+                porcentajes[id_usuario] = 0
+
+
+
+        contador = 1
+
+        if int(usuario) in usuarios:
+            sort_porcentajes = sorted(porcentajes.items(), key=lambda x: x[1], reverse=True)
+            for i in sort_porcentajes:
+                if i[0] == int(usuario):
+                    posicion_porcentaje = "#" + str(contador)
+                    contador = 0
+                else:
+                    contador = contador + 1
+                # print(type(i[0]), i[1])
+        else:
+            posicion_porcentaje = "-"
+
+
+
+
+        # if int(usuario) in sort_porcentajes:
+        #     posicion_porcentaje = sort_porcentajes.index(int(usuario))
+        #     posicion_porcentaje = "#" + str(posicion_porcentaje + 1)
+        # else:
+        #     posicion_porcentaje = "-"
+
+
+        posicion_completadas = self.iface.calculaTareasCompletadasRanking(oParam)
+
+        data = [{"name": "Nº Horas trabajadas", "value": horas_trabajadas, "style": horasStyle}, {"name": "Nº Horas Trackeadas", "value": tiempo, "style": presupuestoStyle}, {"name": "% horas Efectivas", "value": porcentaje_efectivo, "style": rentabilidadStyle}, {"name": "Nº Tareas En Producción", "value": tareasProduccion, "style" :horasStyle}, {"name": "Nº Proyectos en producción", "value": numero_proyectos, "style": presupuestoStyle}, {"name": "Nº Tareas Completadas", "value": tareasCompletadas, "style": rentabilidadStyle}, {"name": "horas efectivas", "value": posicion_porcentaje, "style": rankingStyle}, {"name": "tareas completadas", "value": posicion_completadas, "style": rankingStyle}]
         return {"type": "labelInfo", "data": data}
 
     def gesttare_queryGrid_tareasMasTiempo(self, model, filters):
@@ -679,11 +923,123 @@ class gesttare(yblogin):
         else:
             return True
 
+    # def gesttare_activar_nomenclatura(self, cursor):
+    #     usuario = qsatype.FLUtil.nameUser()
+    #     tiene_config = qsatype.FLUtil.sqlSelect("gt_configuser", "idusuario", "idusuario = " + str(usuario))
+    #     response = {}
+    #     if not tiene_config:
+    #         cur_config = qsatype.FLSqlCursor("gt_configuser")
+    #         cur_config.setModeAccess(cur_config.Insert)
+    #         cur_config.refreshBuffer()
+
+    #         cur_config.setValueBuffer("idusuario", str(usuario))
+    #         cur_config.setValueBuffer("nomenclatura", True)
+    #         if not cur_config.commitBuffer():
+    #             print("Ocurrió un error al insertar el registro de gt_configuser")
+    #             return False
+    #     else:
+    #         cur_config = qsatype.FLSqlCursor("gt_configuser")
+    #         cur_config.select("idusuario = {}".format(str(usuario)))
+
+    #         if cur_track.first():
+    #             cur_config = qsatype.FLSqlCursor("gt_configuser")
+    #             cur_config.setModeAccess(cur_config.Edit)
+    #             cur_config.refreshBuffer()
+
+    #             cur_config.setValueBuffer("nomenclatura", True)
+    #             if not cur_config.commitBuffer():
+    #                 print("Ocurrió un error al actualizar el registro de gt_configuser")
+    #                 return False
+
+    #     # sql = "INSERT INTO gt_configuser(idusuario, nomenclatura) VALUES (" + str(usuario) + ")"
+
+    #     # qsatype.FLUtil.execSql(sql)
+
+    #     response["resul"] = True
+    #     response["msg"] = "Nomenclatura Activada"
+    #     return response
+
+    # def gesttare_desactivar_nomenclatura(self, cursor):
+    #     usuario = qsatype.FLUtil.nameUser()
+    #     tiene_config = qsatype.FLUtil.sqlSelect("gt_configuser", "idusuario", "idusuario = " + str(usuario))
+    #     response = {}
+    #     if not tiene_config:
+    #         cur_config = qsatype.FLSqlCursor("gt_configuser")
+    #         cur_config.setModeAccess(cur_config.Insert)
+    #         cur_config.refreshBuffer()
+
+    #         cur_config.setValueBuffer("idusuario", str(usuario))
+    #         cur_config.setValueBuffer("nomenclatura", False)
+    #         if not cur_config.commitBuffer():
+    #             print("Ocurrió un error al insertar el registro de gt_configuser")
+    #             return False
+    #     else:
+    #         cur_config = qsatype.FLSqlCursor("gt_configuser")
+    #         cur_config.select("idusuario = {}".format(str(usuario)))
+
+    #         if cur_track.first():
+    #             cur_config = qsatype.FLSqlCursor("gt_configuser")
+    #             cur_config.setModeAccess(cur_config.Edit)
+    #             cur_config.refreshBuffer()
+
+    #             cur_config.setValueBuffer("nomenclatura", False)
+    #             if not cur_config.commitBuffer():
+    #                 print("Ocurrió un error al actualizar el registro de gt_configuser")
+    #                 return False
+
+    #     # sql = "INSERT INTO gt_configuser(idusuario, nomenclatura) VALUES (" + str(usuario) + ")"
+
+    #     # qsatype.FLUtil.execSql(sql)
+
+    #     response["resul"] = True
+    #     response["msg"] = "Nomenclatura Activada"
+    #     return response
+
+    # def get_config_usuario(self, usuario):
+    #     cur_config = new FLSqlCursor("gt_configuser")
+    #     cur_config.select("idusuario = " + str(usuario))
+    #     if not cur_config.first():
+    #         cur_config.setModeAccess(cur_config.Insert)
+    #         refreshBuffer
+    #         setValueBuffer("idusuario")
+    #         commitBuffer
+    #     else:
+    #         cur_config.setModeAccess(cur_config.Insert)
+    #         refreshBuffer
+    #     return  {
+    #         "nomenclatura": cursor.valueBuffer("nomenclatura")
+    #     }
+
+
+    # def gesttare_drawif_nomenclatura_activar(self, cursor):
+    #     print("????")
+    #     usuario = qsatype.FLUtil.nameUser()
+    #     config_usuario = self.get_config_usuario(usuario)
+    #     tiene_nomenclatura = qsatype.FLUtil.sqlSelect("gt_configuser", "nomenclatura", "idusuario = " + str(usuario))
+    #     if tiene_nomenclatura:
+    #         return "hidden"
+
+    # def gesttare_drawif_nomenclatura_desactivar(self, cursor):
+    #     print("????2")
+    #     usuario = qsatype.FLUtil.nameUser()
+    #     tiene_nomenclatura = qsatype.FLUtil.sqlSelect("gt_configuser", "nomenclatura", "idusuario = " + str(usuario))
+    #     if not tiene_nomenclatura:
+    #         return "hidden"
+
     def __init__(self, context=None):
         super().__init__(context)
 
     def checkDrawUser(self, cursor):
         return self.ctx.gesttare_checkDrawUser(cursor)
+
+    def activar_nomenclatura(self, cursor):
+        return self.ctx.gesttare_activar_nomenclatura(cursor)
+
+    def drawif_nomenclatura_activar(self, cursor):
+        return self.ctx.gesttare_drawif_nomenclatura_activar(cursor)
+
+    def drawif_nomenclatura_desactivar(self, cursor):
+        return self.ctx.gesttare_nomenclatura_desactivar(cursor)
 
     def checkResponsableDraw(self, cursor):
         return self.ctx.gesttare_checkResponsableDraw(cursor)
@@ -735,6 +1091,9 @@ class gesttare(yblogin):
 
     def calculaTareasCompletadas(self, oParam):
         return self.ctx.gesttare_calculaTareasCompletadas(oParam)
+
+    def calculaTareasCompletadasRanking(self, oParam):
+        return self.ctx.gesttare_calculaTareasCompletadasRanking(oParam)
 
     def cajasinfo(self, oParam):
         return self.ctx.gesttare_cajasinfo(oParam)

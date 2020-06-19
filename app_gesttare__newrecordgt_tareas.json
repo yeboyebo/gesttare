@@ -28,6 +28,23 @@
                     "text": "Contiene archivos adjuntos",
                     "className": "contieneAdjuntos"
                 },
+                "algo": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolveractu",
+                        "pk": "NF",
+                        "success": [{"slot": "return"}]
+                    }
+                },
                 "separator1": {
                     "componente": "YBSeparator"
                 },
@@ -42,6 +59,7 @@
                     "successmsg": "Tarea creada",
                     "saveEdit": true,
                     "saveReturn": true,
+                    "validateform": false,
                     "fields": {
                         "gb__": {
                             "title": "",
@@ -78,11 +96,20 @@
     "acciones": {
         "acctionVolver": {
             "action": "return"
+        },
+        "acctionVolveractu": {
+            "action": "legacy",
+            "prefix": "gt_tareas",
+            "icon": "arrow_back",
+            "pk": "NF",
+            "serverAction": "gotoReturnActualizacion"
         }
     },
     "drawIf": {
         "groupBoxPadre" :{
-            "labelAdjunto": "drawif_checkAdjuntos"
+            "labelAdjunto": "drawif_checkAdjuntos",
+            "volverButton": "drawif_checkNormal",
+            "algo": "drawif_checkActu2"
         }
     }
 }
