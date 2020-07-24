@@ -29,7 +29,7 @@ class gesttare(yblogin):
         q.setTablesList(u"gt_proyectos, gt_particproyecto, aqn_user")
         q.setSelect(u"DISTINCT(p.idusuario), u.usuario")
         q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto INNER JOIN aqn_user u ON u.idusuario =p.idusuario")
-        q.setWhere(u"t.idproyecto = '" + str(oParam['idproyecto']) + "' AND (UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') OR UPPER(u.email) LIKE UPPER('%" + oParam["val"] + "%')) AND u.activo  ORDER BY u.usuario LIMIT 7")
+        q.setWhere(u"t.idproyecto = '" + str(oParam['idproyecto']) + "' AND (UPPER(u.usuario) LIKE UPPER('%" + oParam["val"] + "%') OR UPPER(u.email) LIKE UPPER('%" + oParam["val"] + "%')) AND u.activo AND (p.tipo <> 'observador' or p.tipo = 'colaborador' or p.tipo is null) ORDER BY u.usuario LIMIT 7")
 
         if not q.exec_():
             print("Error inesperado")

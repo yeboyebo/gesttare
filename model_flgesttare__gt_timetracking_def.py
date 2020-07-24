@@ -122,7 +122,7 @@ class gesttare(interna):
             curProyectos.setModeAccess(curProyectos.Browse)
             curProyectos.refreshBuffer()
             # proin.append(curProyectos.valueBuffer("idproyecto"))
-            if curProyectos.valueBuffer("idproyecto"):
+            if curProyectos.valueBuffer("idproyecto") and curProyectos.valueBuffer("tipo") != "observador":
                 proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
 
         proin = proin + " null)"
@@ -167,7 +167,7 @@ class gesttare(interna):
             curProyectos.setModeAccess(curProyectos.Browse)
             curProyectos.refreshBuffer()
             # proin.append(curProyectos.valueBuffer("idproyecto"))
-            if curProyectos.valueBuffer("idproyecto"):
+            if curProyectos.valueBuffer("idproyecto") and curProyectos.valueBuffer("tipo") != "observador":
                 proin = proin + "'" + str(curProyectos.valueBuffer("idproyecto")) + "', "
 
         proin = proin + " null)"
@@ -208,11 +208,13 @@ class gesttare(interna):
                 {'verbose_name': 'Color usuario', 'func': 'color_usuario'},
                 {'verbose_name': 'aqn_user.usuario', 'func': 'field_nombre'},
                 {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+                {'verbose_name': 'Color nombre proyecto', 'func': 'color_nombreProyectoT'},
                 {'verbose_name': 'Cliente', 'func': 'field_cliente'}
             ]
         elif template == "mastertimetrackingagrupado":
             fields = [
                 {'verbose_name': 'Proyecto', 'func': 'field_proyecto'},
+                {'verbose_name': 'Color nombre proyecto', 'func': 'color_nombreProyecto'},
                 {'verbose_name': 'suma', 'func': 'field_sumTotalTiempo'}
 
             ]
@@ -228,6 +230,45 @@ class gesttare(interna):
         except Exception as e:
             print(e)
         return nombre
+
+    def gesttare_color_nombreProyecto(self, model):
+        username = qsatype.FLUtil.nameUser()
+        id_compania_usuario = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+        color = ""
+        try:
+            id_proyecto = qsatype.FLUtil.quickSqlSelect("gt_tareas", "idproyecto", "idtarea = {}".format(str(model["gt_tareas.idtarea"])))
+            # if idproyecto:
+            tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(username, str(id_proyecto)))
+            id_compania_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcompany", "idproyecto = '{}'".format(id_proyecto))
+            if tipo_participante == "observador":
+                color = "OBSER "
+            if id_compania_proyecto != id_compania_usuario and tipo_participante != "observador":
+                color = "COL "
+            if id_compania_proyecto == id_compania_usuario:
+                color = "INTERNO_EMPRESA "
+        except:
+            pass
+        return color
+
+    def gesttare_color_nombreProyectoT(self, model):
+        username = qsatype.FLUtil.nameUser()
+        id_compania_usuario = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+        color = ""
+        try:
+            id_tarea = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "idtarea", "idtracking = {}".format(str(model["pk"])))
+            id_proyecto = qsatype.FLUtil.quickSqlSelect("gt_tareas", "idproyecto", "idtarea = {}".format(str(id_tarea)))
+            # if idproyecto:
+            tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(username, str(id_proyecto)))
+            id_compania_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcompany", "idproyecto = '{}'".format(id_proyecto))
+            if tipo_participante == "observador":
+                color = "OBSER "
+            if id_compania_proyecto != id_compania_usuario and tipo_participante != "observador":
+                color = "COL "
+            if id_compania_proyecto == id_compania_usuario:
+                color = "INTERNO_EMPRESA "
+        except:
+            pass
+        return color
 
     def gesttare_seconds_to_time(self, seconds, total=False, all_in_hours=False):
         if not seconds:
@@ -402,13 +443,19 @@ class gesttare(interna):
 
     def gesttare_field_proyecto(self, model):
         # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model.idproyecto)) or ""
-        proyecto = model['gt_proyectos.nombre']
+        nombreUsuario = qsatype.FLUtil.nameUser()
+        id_compania_usuario = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(nombreUsuario))
         try:
+            proyecto = model['gt_proyectos.nombre']
             idcliente = model['gt_proyectos.idcliente']
             if idcliente:
                 codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
+                id_tarea = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "idtarea", "idtracking = {}".format(str(model["pk"])))
+                id_proyecto = qsatype.FLUtil.quickSqlSelect("gt_tareas", "idproyecto", "idtarea = {}".format(str(id_tarea)))
+                # print("id_proyecto", id_proyecto)
+                id_compania_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcompany", "idproyecto = {}".format(str(id_proyecto)))
                 # codcliente = model.idproyecto.idcliente.codcliente
-                if codcliente:
+                if codcliente and id_compania_proyecto == id_compania_usuario:
                     proyecto = "#" + codcliente + " " + proyecto
         except:
             pass
@@ -536,6 +583,12 @@ class gesttare(interna):
 
     def drawif_botonagrupado(self, cursor):
         return self.ctx.gesttare_drawif_botonagrupado(cursor)
+
+    def color_nombreProyecto(self, model):
+        return self.ctx.gesttare_color_nombreProyecto(model)
+
+    def color_nombreProyectoT(self, model):
+        return self.ctx.gesttare_color_nombreProyectoT(model)
 
 
 

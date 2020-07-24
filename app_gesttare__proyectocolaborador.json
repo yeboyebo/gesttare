@@ -48,39 +48,6 @@
                     "text": "Proyecto archivado",
                     "className": "contieneAdjuntos"
                 },
-                "borrarTareaButton": {
-                    "componente": "YBButton",
-                    "title": "Borrar Proyecto",
-                    "style": {
-                        "padding": "0px 20px",
-                        "marginTop": "5px"
-                    },
-                    "prefix": "gt_proyectos",
-                    "icon": "delete",
-                    "className": "floatRight",
-                    "buttonType": "icon",
-                    "action": {
-                        "key": "borrarProyecto",
-                        "success": [{"slot": "return"}]
-                    }
-                },
-                "copiarEmailButton": {
-                    "componente": "YBButton",
-                    "title": "Copiar email",
-                    "prefix": "gt_proyectos",
-                    "icon": "email",
-                    "className": "floatRight",
-                    "buttonType": "icon",
-                    "visible": false,
-                    "style": {
-                        "marginTop": "5px",
-                        "marginRight": "5px"
-                    },
-                    "action": {
-                        "key": "actionEmail",
-                        "success": [{"slot": "return"}]
-                    }
-                },
                 "gotoTareaButton": {
                     "componente": "YBButton",
                     "style": {
@@ -110,33 +77,27 @@
                         "icon": "info",
                         "class": "claseGrid",
                         "submit": "update",
+                        "send": false,
                         "label": "Información de proyecto",
                         "fields": {
                             "gb__proyectos": {
                                 "title": "",
                                 "fields": {
-                                    "nombre": {},
+                                    "nombre": {"disabled": true},
                                     "descripcion": {
-                                        "label": " ",
-                                        "wysiwyg": true
+                                        "label": "Descripcion",
+                                        "wysiwyg": false,
+                                        "disabled": true
                                     },
-                                    "estado": {},
-                                    "fechainicio": {},
-                                    "fechaterminado": {},
+                                    "estado": {"disabled": true},
+                                    "fechainicio": {"disabled": true},
+                                    "fechaterminado": {"disabled": true},
                                     "idresponsable": {
                                         "combolimit": 1,
                                         "showpk": false,
                                         "function": "getParticCompaniaUsu",
-                                        "required": true
-                                    },
-                                    "presupuesto": {},
-                                    "idcliente": {
-                                        "combolimit": 1,
-                                        "showpk": false,
-                                        "function": "getClientesCompaniaUsu"
-                                    },
-                                    "rentabilidad": {"visible": false, "disabled": true},
-                                    "costetotal": {"visible": false, "disabled": true}
+                                        "disabled": true
+                                    }
                                 }
                             }
                         },
@@ -152,11 +113,10 @@
                         "colorRowField": "color_hito",
                         "avatar": false,
                         "columns": [
-                            {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "width": 210, "title": true, "link": true},
+                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 210, "title": true, "link": true},
                             {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 67, "label": "F. Inicio"},
                             {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 67},
                             {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"},
-                            {"tipo": "progress", "key": "porcentaje", "width": 100, "label": "Presupuesto", "aux": "presupuesto", "title": "presupuesto_title"},
                             {"tipo": "foreignfield", "listpos": "body", "key": "ntareas", "width": 40, "label": "Pte"},
                             {
                                 "tipo": "act",
@@ -176,15 +136,7 @@
                                 ]
                             }
                         ],
-                        "rowclick": "link",
-                        "accionesGrid": [
-                            {
-                                "key": "actNuevoHito",
-                                "label": "Nuevo",
-                                "label": "Nuevo hito",
-                                "success": [{ "slot": "goto"}]
-                            }
-                        ]
+                        "rowclick": "link"
                     },
                     "separator3": {
                         "componente": "YBSeparator",
@@ -243,143 +195,21 @@
                                         "color": "Color_nombre_participante"
                                     }
                                 ],
-                                "rowclick": "",
-                                "accionesGrid": [
-                                    {
-                                        "key": "prueba",
-                                        "label": "Añadir externo",
-                                        "success": [{"slot": "refrescar"}]
-                                    },
-                                    {
-                                        "key": "actNuevoPartic",
-                                        "label": "Gestionar usuarios",
-                                        "success": [{"slot": "refrescar"}]
-                                    }
-                                ]
+                                "rowclick": ""
                             }
                         }
                     }
                 }
-            },
-            "separator2": {
-                "componente": "YBSeparator"
             },
             "groupBoxRentabilidad": {
                     "componente": "YBGroupBox",
                     "className": "gbTareasRighta",
                     "style": { },
                     "label": "Análisis",
-                    "visible": true,
+                    "visible": false,
                     "layout": {
-                       "labelHorasInvertidas": {
-                            "componente": "YBLabel",
-                            "style": {
-                                "width": "30%",
-                                "border": "1px solid #dfdfdf",
-                                "borderRadius": "8px",
-                                "backgroundColor": "white",
-                                "marginLeft": "5px",
-                                "marginRight": "5px",
-                                "fontSize": "48px",
-                                "fontWeight": "normal",
-                                "fontStyle": "normal",
-                                "fonttSretch": "normal",
-                                "lineHeight": "normal",
-                                "letterSpacing": "normal",
-                                "color": "grey",
-                                "padding": "10px"
-                            },
-                            "titlestyle": {
-                                "fontSize": "18px",
-                                "letterSpacing": "1.86px",
-                                "textTransform": "uppercase"
-                            },
-                            "title": "Horas Invertidas",
-                            "text": "%yb1",
-                            "action": {
-                                "key": "verTrackingProyecto"
-                            },
-                            "params": [
-                                {"type": "calc", "key": "horasinvertidas"}
-                            ]
-                        },
-                       "labelPresupuesto": {
-                            "componente": "YBLabel",
-                            "style": {
-                                "width": "30%",
-                                "borderRadius": "8px",
-                                "backgroundColor": "#bababa",
-                                "marginLeft": "5px",
-                                "marginRight": "5px",
-                                "fontSize": "48px",
-                                "fontWeight": "normal",
-                                "fontStyle": "normal",
-                                "fonttSretch": "normal",
-                                "lineHeight": "normal",
-                                "letterSpacing": "normal",
-                                "color": "#ffffff",
-                                "padding": "10px"
-                            },
-                            "titlestyle": {
-                                "fontSize": "18px",
-                                "letterSpacing": "1.86px",
-                                "textTransform": "uppercase"
-                            },
-                            "title": "Presupuesto",
-                            "text": "%yb1",
-                            "params": [
-                                {"type": "calc", "key": "presupuestoFormat"}
-                            ]
-                        },
-                       "labelCoste": {
-                            "componente": "YBLabel",
-                          "style": {
-                                "width": "30%",
-                                "borderRadius": "8px",
-                                "backgroundImage": "linear-gradient(to right, #e79b21, #ffc68d)",
-                                "marginLeft": "5px",
-                                "marginRight": "5px",
-                                "fontSize": "48px",
-                                "fontWeight": "normal",
-                                "fontStyle": "normal",
-                                "fonttSretch": "normal",
-                                "lineHeight": "normal",
-                                "letterSpacing": "normal",
-                                "color": "#ffffff",
-                                "padding": "10px"
-                            },
-                            "titlestyle": {
-                                "fontSize": "18px",
-                                "letterSpacing": "1.86px",
-                                "textTransform": "uppercase"
-                            },
-                            "title": "Coste",
-                            "text": "%yb1",
-                            "params": [
-                                {"type": "calc", "key": "costeFormat"}
-                            ]
-                        },
-                        "separatorGraphic": {
-                            "componente": "YBSeparator"
-                        },
-                        "groupBoxGraphic": {
-                            "componente": "YBGroupBox",
-                            "className": "",
-                            "label": "Rentabilidad",
-                            "style": {
-
-                            },
-                            "layout": {
-                                "pruebagrafico": {
-                                    "componente": "YBChart",
-                                    "d3": "pieChart",
-                                    "prefix": "grafico"
-                                }
-                            }
-                        }
                     }
-                }
-                
+                }   
             }
         }
     },
@@ -468,18 +298,11 @@
     },
     "drawIf": {
         "groupBoxPadre" :{
-            "groupBoxRentabilidad": "checkProyectosFormDraw",
             "labelAdjunto": "drawif_archivado"
         },
         "gb__proyectos": {
-            "presupuesto": "checkProyectosFormDraw",
-            "rentabilidad": "checkProyectosFormDraw",
-            "costetotal": "checkProyectosFormDraw",
-            "idresponsable": "checkResponsableDraw",
-            "idcliente": "checkResponsableDraw"
         },
         "hitosproyecto": {
-            "porcentaje": "checkDrawPorcentajeHito"
         }
     }
 }

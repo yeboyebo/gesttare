@@ -61,6 +61,10 @@ class gesttare_gt_actualizaciones(interna_gt_actualizaciones, helpers.MixinConAc
     def transpasarAnotacion(self, oParam):
         return form.iface.transpasarAnotacion(self, oParam)
 
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def aceptarColaborador(self, oParam, cursor):
+        return form.iface.aceptarColaborador(oParam, cursor)
+
 # @class_declaration gt_actualizaciones #
 class gt_actualizaciones(gesttare_gt_actualizaciones, helpers.MixinConAcciones):
     pass

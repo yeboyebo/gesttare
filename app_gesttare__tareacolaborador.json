@@ -119,7 +119,8 @@
                                         "idproyecto": {
                                             "combolimit": 1, 
                                             "showpk": false,
-                                            "function": "getProyectosUsuario"
+                                            "function": "getProyectosUsuario",
+                                            "disabled": true
                                         },
                                         "idhito": {
                                             "combolimit": 1, 

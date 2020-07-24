@@ -39,51 +39,6 @@
                         "success": [{"slot": "return"}]
                     }
                 },
-                "completar": {
-                    "componente": "YBButton",
-                    "title": "Completar tarea",
-                    "prefix": "gt_tareas",
-                    "icon": "check_box_outline_blank",
-                    "className": "floatRight",
-                    "buttonType": "icon",
-                    "style": {
-                        "marginRight": "8px"
-                    },
-                    "action": {
-                        "key": "complete",
-                        "success": [{"slot": "return"}]
-                    }
-                },
-                "abrir": {
-                    "componente": "YBButton",
-                    "title": "Abrir tarea",
-                    "prefix": "gt_tareas",
-                    "icon": "check_box",
-                    "className": "floatRight",
-                    "buttonType": "icon",
-                    "style": {
-                        "marginRight": "8px"
-                    },
-                    "action": {
-                        "key": "abrir",
-                        "success": [{"slot": "return"}]
-                    }
-                },
-                "borrarTareaButton": {
-                    "componente": "YBButton",
-                    "title": "Borrar Tarea",
-                    "style": {
-                        "padding": "0px 20px"
-                    },
-                    "prefix": "gt_tareas",
-                    "icon": "delete",
-                    "className": "floatRight",
-                    "buttonType": "icon",
-                    "action": {
-                        "key": "borrarTarea",
-                        "success": [{"slot": "return"}]
-                    }
-                },
                 "separator0": {
                     "componente": "YBSeparator"
                 },
@@ -101,12 +56,13 @@
                             "label": "Información de tarea",
                             "return": false,
                             "validateform": false,
+                            "send": false,
                             "successmsg": "Tarea actualizada",
                             "fields": {
                                 "gb__titulo": {
                                     "title": "",
                                     "fields": {
-                                        "nombre": {}
+                                        "nombre": {"disabled": true}
                                     }
                                 },
                                 "gb__body": {
@@ -114,27 +70,31 @@
                                     "fields": {
                                         "descripcion": {
                                             "label": " ",
-                                            "wysiwyg": true
+                                            "wysiwyg": false,
+                                            "disabled": true
                                         },
                                         "idproyecto": {
                                             "combolimit": 1, 
                                             "showpk": false,
-                                            "function": "getProyectosUsuario"
+                                            "function": "getProyectosUsuario",
+                                            "disabled": true
                                         },
                                         "idhito": {
                                             "combolimit": 1, 
                                             "showpk": false, 
                                             "function": "getHitosProyecto",
-                                            "params": {"idproyecto": "idproyecto"}
+                                            "params": {"idproyecto": "idproyecto"},
+                                            "disabled": true
                                         },
-                                        "fechavencimiento": {},
-                                        "fechaentrega": {},
-                                        "codestado": {},
+                                        "fechavencimiento": {"disabled": true},
+                                        "fechaentrega": {"disabled": true},
+                                        "codestado": {"disabled": true},
                                         "idusuario": {
                                             "combolimit": 1,
                                             "showpk": false,
                                             "function": "getUsuariosProyecto",
-                                            "params": {"idproyecto": "idproyecto"}
+                                            "params": {"idproyecto": "idproyecto"},
+                                            "disabled": true
                                         }
                                     }
                                 }
@@ -142,57 +102,6 @@
                             "exclude": {}
                         },
                         "separator1": {
-                            "componente": "YBSeparator"
-                        },
-                        "iniciarTrackingButton": {
-                            "componente": "YBButton",
-                            "prefix": "gt_tareas",
-                            "label": "Iniciar tarea",
-                            "className": "floatLeft inciarTarea",
-                            "buttonType": "raised",
-                            "action": {
-                                "key": "iniciarTimeTracking",
-                                "success": [{"slot": "refrescar"}]
-                            }
-                        },
-                        "pararTrackingButton": {
-                            "componente": "YBButton",
-                            "prefix": "gt_tareas",
-                            "label": "Parar tarea",
-                            "className": "floatLeft inciarTarea",
-                            "buttonType": "raised",
-                            "action": {
-                                "key": "iniciarTimeTracking",
-                                "success": [{"slot": "refrescar"}]
-                            }
-                        },
-                        "nuevoTimeTrackingButton": {
-                            "componente": "YBButton",
-                            "prefix": "gt_tareas",
-                            "label": "+ Añadir tiempo",
-                            "className": "floatLeft aniadirTiempo",
-                            "buttonType": "raised",
-                            "action": {
-                                "key": "gestionarTiempo",
-                                "success": [{"slot": "return"}]
-                            }
-                        },
-                        "labelTiempo": {
-                            "componente": "YBLabel",
-                            "className": "YBComponentInfo floatRight",
-                            "text": "%yb1",
-                            "style": {
-                                "fontWeight": "bold",
-                                "padding": "0px 20px",
-                                "textAlign": "right"
-                            },
-                            "prefix": "gt_tareas",
-                            "action": {
-                                "key": "verTrackingTarea"
-                            },
-                            "params": [{"type": "calc", "key": "tiempoTotal"}]
-                        },
-                        "separator2": {
                             "componente": "YBSeparator"
                         },
                         "groupBoxUsuarios": {
@@ -224,31 +133,11 @@
                                             "color": "Color_nombre_participante"
                                         }
                                     ],
-                                    "rowclick": "",
-                                    "accionesGrid": [
-                                        {
-                                            "key": "actNuevoPartic",
-                                            "label": "Nuevo",
-                                            "success": [
-                                                {
-                                                    "slot": "refrescar"
-                                                }
-                                            ]
-                                        }
-                                    ]
+                                    "rowclick": ""
                                 }
                             }
                         },
                         "separator3": {
-                            "componente": "YBSeparator"
-                        },
-                        "adjuntosTareas": {
-                            "componente":"YBAttachmentContainer",
-                            "prefix": "gt_tareas",
-                            "field": "adjuntoTarea",
-                            "action": "uploadFileTarea"
-                        },
-                        "separator4": {
                             "componente": "YBSeparator"
                         }
                     }
@@ -268,6 +157,7 @@
                                     "prefix": "otros",
                                     "className": "",
                                     "key": "adjunto",
+                                    "taobs": true,
                                     "label": "Comentar",
                                     "tipo": 1,
                                     "style": {
@@ -292,11 +182,12 @@
                                 }
                             }
                         },
-                        "comentariosGrid": {
+                        "comentariosGridObservador": {
                             "componente": "YBList",
                             "prefix": "gt_comentarios",
-                            "className": "claseGrid gbTareasBox",
+                            "className": "claseGrid gbTareasBox tareaObservador",
                             "avatar": false,
+                            "taobs":true,
                             "columns": [
                                 {
                                     "tipo": "foreignfield",
@@ -332,15 +223,6 @@
                                         {
                                             "slot": "refrescar"
                                         }
-                                    ]
-                                },
-                                {
-                                    "tipo": "act",
-                                    "key": "observador",
-                                    "calculatelabel": "observaTitle",
-                                    "calculateicon": "observaIcon",
-                                    "success": [
-                                        {"slot": "refrescar"}
                                     ]
                                 }
                             ],
@@ -415,12 +297,6 @@
             "icon": "delete",
             "prefix": "gt_comentarios",
             "msg": "El comentario será eliminado"
-        },
-        "observador": {
-            "action": "legacy",
-            "prefix": "gt_comentarios",
-            "serverAction": "comentario_publico",
-            "icon": "check"
         },
         "deleteParticipante": {
             "action": "deleteRow",

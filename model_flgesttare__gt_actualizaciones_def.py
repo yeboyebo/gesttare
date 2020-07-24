@@ -76,6 +76,10 @@ class gesttare(interna):
                 retorno = "aquaAnotar"
             elif model["gt_actualizaciones.tipo"] == "desarchivado":
                 retorno = "aquaAnotar"
+            elif model["gt_actualizaciones.tipo"] == "colaborador":
+                retorno = "aquaAnotar"
+            elif model["gt_actualizaciones.tipo"] == "observador":
+                retorno = "aquaAnotar"
 
         return retorno
 
@@ -107,6 +111,10 @@ class gesttare(interna):
                 retorno = "/static/dist/img/icons/archive.svg"
             elif model["gt_actualizaciones.tipo"] == "desarchivado":
                 retorno = "/static/dist/img/icons/unarchive.svg"
+            elif model["gt_actualizaciones.tipo"] == "colaborador":
+                retorno = "/static/dist/img/icons/colaborador.svg"
+            elif model["gt_actualizaciones.tipo"] == "observador":
+                retorno = "/static/dist/img/icons/observador_blanco.svg"
 
         return retorno
 
@@ -139,6 +147,10 @@ class gesttare(interna):
                 retorno = "Proyecto archivado"
             elif model["gt_actualizaciones.tipo"] == "desarchivado":
                 retorno = "Proyecto desarchivado"
+            elif model["gt_actualizaciones.tipo"] == "colaborador":
+                retorno = "Invitación a proyecto para colaborar"
+            elif model["gt_actualizaciones.tipo"] == "observador":
+                retorno = "Invitación a proyecto para observar"
 
         return retorno
     
@@ -193,8 +205,7 @@ class gesttare(interna):
                         documentos += "<li>" + str(q.value(0)) + " </li> "
                     response["confirm"] += "</br><div class='anotacionDescripcion'>Adjuntos: </div><div class='anotacionDescripcionTipobjeto'>" + documentos + "</div>"
             response["customButtons"] = []
-                    # print(response)
-            # return '/gesttare/gt_actualizaciones/' + str(cursor.valueBuffer("idactualizacion"))
+       
         elif cursor.valueBuffer("tipobjeto") in ["proyecto", "gt_proyecto"]:
             response["url"] = '/gesttare/gt_proyectos/' + str(cursor.valueBuffer("idobjeto"))
             return response
@@ -211,6 +222,46 @@ class gesttare(interna):
         else:
             response["url"] = '/gesttare/gt_tareas/' + str(cursor.valueBuffer("idobjeto"))
 
+        if cursor.valueBuffer("tipo") == "colaborador" or cursor.valueBuffer("tipo") == "observador":
+            if cursor.valueBuffer("tipo") == "colaborador":
+                tipo_participa = "colaborar"
+            else:
+                tipo_participa = "observar"
+            id_compania = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(cursor.valueBuffer("idusuarioorigen")))
+            nombre_compania = qsatype.FLUtil.sqlSelect("aqn_companies", "descripcion", "idcompany = '{}'".format(id_compania))
+            response["status"] = -1
+            response['data'] = {}
+            response["prefix"] = "gt_actualizaciones"
+            response["title"] = "<div class = 'modalExterno'>Has recibido una invitación para <strong>" + tipo_participa + "</strong> en el proyecto <strong>" + cursor.valueBuffer("otros") + "</strong> de la compañía <strong>" + nombre_compania + "</strong></div"
+            # response["title"] = "<div>algo</div>"
+
+            response["serverAction"] = "aceptarColaborador"
+            response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idactualizacion"), "nombre": "Aceptar invitación", "serverAction": "aceptarColaborador", "className": "creaAnotacionButton"}]
+            response["params"] = []
+
+
+        return response
+
+    def gesttare_aceptarColaborador(self, oParam, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        response = {}
+        cursor_paricipo = qsatype.FLSqlCursor(u"gt_particproyecto")
+        cursor_paricipo.setModeAccess(cursor_paricipo.Insert)
+        cursor_paricipo.refreshBuffer()
+        cursor_paricipo.setValueBuffer(u"idusuario", usuario)
+        cursor_paricipo.setValueBuffer(u"idproyecto", cursor.valueBuffer("idobjeto"))
+        cursor_paricipo.setValueBuffer(u"tipo", cursor.valueBuffer("tipo"))
+       
+        if not cursor_paricipo.commitBuffer():
+            return False
+
+        if not qsatype.FLUtil.sqlDelete(u"gt_actualizusuario",ustr(u"idactualizacion = ", cursor.valueBuffer("idactualizacion"), " AND idusuario = " + usuario)):
+            print("error")
+            return False
+       
+        # response["resul"] = True
+        # response["msg"] = "Invitación aceptada"
+        response["url"] = '/gesttare/gt_proyectos/' + str(cursor.valueBuffer("idobjeto"))
         return response
 
     def gesttare_borrarActualizacion(self, model, oParam):
@@ -326,6 +377,9 @@ class gesttare(interna):
 
     def transpasarAnotacion(self, model, oParam):
         return self.ctx.gesttare_transpasarAnotacion(model, oParam)
+
+    def aceptarColaborador(self, oParam, cursor):
+        return self.ctx.gesttare_aceptarColaborador(oParam, cursor)
 
 
 # @class_declaration head #

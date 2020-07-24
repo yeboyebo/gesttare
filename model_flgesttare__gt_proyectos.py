@@ -43,6 +43,14 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
         return form.iface.actInvitarExterno(oParam, cursor)
 
     @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def actInvitarExternoColaborador(self, oParam, cursor):
+        return form.iface.actInvitarExternoColaborador(oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def actInvitarExternoObservador(self, oParam, cursor):
+        return form.iface.actInvitarExternoObservador(oParam, cursor)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
     def invExterno(self, oParam, cursor):
         return form.iface.invExterno(oParam, cursor)
 
@@ -61,6 +69,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
     def checkDrawPorcentajeHito(cursor):
         return form.iface.checkDrawPorcentajeHito(cursor)
 
+    def checkProyectosExterno(cursor):
+        return form.iface.checkProyectosExterno(cursor)
+
     def commonCalculateField(fN, curP):
         return form.iface.commonCalculateField(fN, curP)
 
@@ -72,6 +83,9 @@ class gesttare_gt_proyectos(interna_gt_proyectos, helpers.MixinConAcciones):
 
     def field_usuario(self):
         return form.iface.field_usuario(self)
+
+    def color_nombre(self):
+        return form.iface.color_nombre(self)
 
     def color_responsable(self):
         return form.iface.color_responsable(self)

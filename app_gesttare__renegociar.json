@@ -10,13 +10,12 @@
     "layout": {
         "groupBoxPadre": {
             "componente": "YBGroupBox",
-            "className": " ",
+            "className": "padreTareas",
             "label": "",
             "style": {},
             "layout": {
                 "masterTareas": {
                     "componente": "YBGrid",
-                    "type": "query",
                     "prefix": "gt_tareas",
                     "cansavefilter": false,
                     "buscador": false,
@@ -41,7 +40,7 @@
                         },
                        
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
-                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre","width": 180, "title": true, "link": "idproyecto"},
+                        {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre proyecto","width": 180, "title": true, "link": "idproyecto"},
                         {
                             "tipo": "act",
                             "key": "upFecha",

@@ -709,6 +709,42 @@
             {
                 "name": "rango.svg",
                 "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__proyectocolaborador.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "manos.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "colaborador.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "observador_blanco.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__proyectoobservador.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "empresa_blanco.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__tareaobservador.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
+            },
+            {
+                "name": "pausa_blanco.svg",
+                "path": "assets/dist/img/icons/"
+            },
+            {
+                "name": "app_gesttare__tareacolaborador.json",
+                "path": "apps/gesttare/templates/gesttare/plantillas/"
             }
         ],
         "replaceFile": [

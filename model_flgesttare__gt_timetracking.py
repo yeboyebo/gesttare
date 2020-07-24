@@ -75,6 +75,12 @@ class gesttare_gt_timetracking(interna_gt_timetracking, helpers.MixinConAcciones
     def drawif_botonagrupado(cursor):
         return form.iface.drawif_botonagrupado(cursor)
 
+    def color_nombreProyecto(self):
+        return form.iface.color_nombreProyecto(self)
+
+    def color_nombreProyectoT(self):
+        return form.iface.color_nombreProyectoT(self)
+
     class Meta:
         proxy = True
 

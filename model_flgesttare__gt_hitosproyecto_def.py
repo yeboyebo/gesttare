@@ -111,7 +111,8 @@ class gesttare(interna):
             cursor.setValueBuffer("fechaterminado", curP.valueBuffer("fechaterminado"))
 
         # tieneCoordinacion = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"nombre = 'Coordinación' AND idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
-
+        # tieneHitos = False
+        # if cursor.valueBuffer("idproyecto"):
         tieneHitos = qsatype.FLUtil.sqlSelect(u"gt_hitosproyecto", u"nombre", ustr(u"idproyecto = '", str(cursor.valueBuffer("idproyecto")), u"'"))
 
         if cursor.valueBuffer("nombre") == None and not tieneHitos:
@@ -296,6 +297,17 @@ class gesttare(interna):
         #     if not cursor.valueBuffer("fechaterminado") and cursor.valueBuffer("idhito"):
         #         msg += "El campo fecha fin no puede estar vacío"
         #         error = True
+
+        if cursor.modeAccess() == cursor.Insert:
+            if cursor.valueBuffer("idproyecto") != None:
+                fecha_fin = qsatype.FLUtil.sqlSelect("gt_proyectos", "fechaterminado", "idproyecto = {}".format(str(cursor.valueBuffer(u"idproyecto")))) or 0
+                if cursor.valueBuffer("fechaterminado"):
+                    fecha_fin_hito = cursor.valueBuffer("fechaterminado")#datetime.datetime.strptime(cursor.valueBuffer("fechaterminado"), '%Y-%m-%d')
+                else:
+                    fecha_fin_hito = fecha_fin
+                if str(fecha_fin_hito) > str(fecha_fin):
+                    msg += "El campo fecha fin no puede ser superior a la del proyecto"
+                    error = True
         
         presupuestoHito = cursor.valueBuffer("presupuesto") or 0
         presupuestoProyecto = qsatype.FLUtil.sqlSelect(u"gt_proyectos", u"presupuesto", ustr(u"idproyecto = '", str(cursor.valueBuffer(u"idproyecto")), "'")) or 0

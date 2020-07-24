@@ -63,13 +63,13 @@
                         {
                             "tipo": "act",
                             "key": "startstop",
-                            "iconurl" : "/static/dist/img/icons/timetrakcer.svg",
+                            "icon" : "play",
                             "label": "TimeTracking",
+                            "calculateicon": "trackingIcon",
                             "success": [
                                 {"slot": "refrescar"}
                             ]
                         },
-
                         {"tipo": "field", "listpos": "title", "key": "nombre", "color": "Color nombre", "title": true, "width": 370, "link": true},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "Responsable", "color": "Color responsable", "width": 30, "title": true, "avatar": true, "label": " "},
                         {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Proyecto", "color": "Color nombre proyecto", "width": 180, "title": true, "link": "idproyecto"},
@@ -122,7 +122,7 @@
             "action": "legacy",
             "prefix": "gt_tareas",
             "serverAction": "startstop",
-            "icon": "alarm"
+            "icon": "play_arrow"
         },
         "complete": {
             "action": "legacy",

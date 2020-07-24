@@ -17,7 +17,7 @@ from YBLEGACY.constantes import *
 class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
-        fields = [{'verbose_name': 'nombre', 'func': 'field_nombre'}]
+        fields = [{'verbose_name': 'nombre', 'func': 'field_nombre'}, {'verbose_name': 'Color_nombre_participante', 'func': 'color_nombre_participante'}]
         return fields
 
     def gesttare_getDesc(self):
@@ -40,6 +40,20 @@ class gesttare(interna):
         except Exception:
             pass
         return usuario
+
+    def gesttare_color_nombre_participante(self, model):
+        username = model.idusuario.idusuario
+        id_company = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+
+        tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(username, str(model.idproyecto.idproyecto)))
+        if tipo_participante == "observador":
+            return "OBSER "
+        if model.idproyecto.idcompany.idcompany != id_company:
+            return "COL "
+        else:
+            return "INTERNO_EMPRESA "
+
+        return ""
 
     def gesttare_borrarPartic(self, oParam, cursor):
         idproyecto = cursor.valueBuffer("idproyecto")
@@ -75,6 +89,9 @@ class gesttare(interna):
 
     def borrarPartic(self, oParam, cursor):
         return self.ctx.gesttare_borrarPartic(oParam, cursor)
+
+    def color_nombre_participante(self, model):
+        return self.ctx.gesttare_color_nombre_participante(model)
 
 
 # @class_declaration head #

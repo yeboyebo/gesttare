@@ -33,13 +33,20 @@ class gesttare(interna):
             return {"groupBoxPadre": "Nº DE TAREAS: {}".format(ident["COUNT"])}
         if template == "master":
             return {"groupBoxPadre": "Nº DE TAREAS: {}".format(ident["PAG"]["COUNT"])}
+        if template == "renegociar" or template == "recordatorio" or template == "recordatorioPlanear":
+            return {"groupBoxPadre": "Nº DE TAREAS: {}".format(ident["PAG"]["COUNT"])}
         if template == "formRecord":
-            idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(data["idproyecto"])) or None
+            nombreUsuario = qsatype.FLUtil.nameUser()
+            idcompany = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcompany", "idproyecto = '{}'".format(data["idproyecto"])) or None
+            id_compania_usuario = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(nombreUsuario)) or None
+            
+            if idcompany == id_compania_usuario:
+                idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(data["idproyecto"])) or None
 
-            if idcliente:
-                codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"nombre", ustr(u"idcliente = '", str(idcliente), u"'"))
-                if codcliente:
-                    return {"tareasForm": "Información - Cliente: {}".format(codcliente)}
+                if idcliente:
+                    codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"nombre", ustr(u"idcliente = '", str(idcliente), u"'"))
+                    if codcliente:
+                        return {"tareasForm": "Información - Cliente: {}".format(codcliente)}
         return None
 
     def get_model_info(self, model, data, ident, template, where_filter):
@@ -67,6 +74,7 @@ class gesttare(interna):
                 {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
                 {'verbose_name': 'Color fechaentrega', 'func': 'color_fechaentrega'},
                 {'verbose_name': 'completaIcon', 'func': 'field_completaIcon'},
+                {'verbose_name': 'trackingIcon', 'func': 'field_trackingIcon'},
                 {'verbose_name': 'completaTitle', 'func': 'field_completaTitle'},
                 {'verbose_name': 'adjuntoTarea', 'func': 'fun_totalDays'}       
             ]
@@ -74,8 +82,15 @@ class gesttare(interna):
         if template == "formRecordcalendarioTareas":
             return [{'verbose_name': 'totalDays', 'func': 'fun_totalDays'}]
 
-        if template == "formRecord":
+        if template == "formRecord" or template == "tareacolaborador":
             return [{'verbose_name': 'adjuntoTarea', 'func': 'field_adjunto'}]
+
+        if template == "recordatorio" or template == "recordatorioPlanear":
+            return [
+                {'verbose_name': 'renegociaProyecto', 'func': 'ren_field_proyecto_espera'},
+                {'verbose_name': 'renegociacolorfechavencimiento', 'func': 'ren_color_fecha_espera'},
+                {'verbose_name': 'renecogiacolorfechaentrega', 'func': 'ren_color_fechaentrega_espera'}
+            ]
 
         if template == "revisionTareas":
             return [ {'verbose_name': 'Color fondo estado revision', 'func': 'color_fondo_estado_revision'}]
@@ -112,7 +127,7 @@ class gesttare(interna):
         return nombre
 
     def gesttare_iniciaValoresLabel(self, model, template, cursor, data):
-        if template == "formRecord":
+        if template == "formRecord" or template == "tareacolaborador":
             tiempototal = qsatype.FLUtil.quickSqlSelect("gt_timetracking", "SUM(totaltiempo)", "idtarea = {}".format(cursor.valueBuffer("idtarea"))) or 0
             if not tiempototal:
                 return {"tiempoTotal": "Tiempo total: 00:00:00"}
@@ -149,6 +164,7 @@ class gesttare(interna):
 
         fechaDesde = str(firstday - datetime.timedelta(days=7))
         fechaHasta = str(lastday + datetime.timedelta(days=7))
+        
         # fromyear = thisyear if thismonth > 1 else thisyear - 1
         # toyear = thisyear if thismonth < 12 else thisyear + 1
         # existe = qsatype.FLUtil.sqlSelect(u"gt_tareas", u"idtarea", ustr(u"extract(month from gt_tareas.fechavencimiento) = ", qsatype.Date().getMonth()))
@@ -219,9 +235,22 @@ class gesttare(interna):
                 proyecto = "#" + codcliente + " " + proyecto
         return proyecto
 
+    def gesttare_ren_field_proyecto_espera(self, model):
+        proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(str(model.idproyecto.idproyecto))) or ""
+        idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(str(model.idproyecto.idproyecto))) or None
+        if idcliente:
+            codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
+            if codcliente:
+                proyecto = "#" + codcliente + " " + proyecto
+        return proyecto
+
     def gesttare_field_proyecto(self, model):
         # proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "nombre", "idproyecto = '{}'".format(model.idproyecto)) or ""
+        nombreUsuario = qsatype.FLUtil.nameUser()
+        # idcompany = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcompany", "idproyecto = '{}'".format(data["idproyecto"])) or None
+        id_compania_usuario = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(nombreUsuario))
         proyecto = ""
+        
         try:
             proyecto = model.idproyecto.nombre
             # idcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos", "idcliente", "idproyecto = '{}'".format(model.idproyecto)) or None
@@ -229,7 +258,7 @@ class gesttare(interna):
             if idcliente:
                 # codcliente = qsatype.FLUtil.sqlSelect(u"gt_clientes", u"codcliente", ustr(u"idcliente = '", str(idcliente), u"'"))
                 codcliente = model.idproyecto.idcliente.codcliente
-                if codcliente:
+                if codcliente and model.idproyecto.idcompany.idcompany == id_compania_usuario:
                     proyecto = "#" + codcliente + " " + proyecto
         except:
             pass
@@ -240,6 +269,17 @@ class gesttare(interna):
             return "check_box"
         else:
             return "check_box_outline_blank"
+
+        return ""
+
+    def gesttare_field_trackingIcon(self, model):
+        username = qsatype.FLUtil.nameUser()
+        tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
+        
+        if model.idtarea == tareaactiva:
+            return "pause"
+        else:
+            return "play_arrow"
 
         return ""
 
@@ -275,11 +315,19 @@ class gesttare(interna):
     def gesttare_color_nombreProyecto(self, model):
         username = qsatype.FLUtil.nameUser()
         tareaactiva = qsatype.FLUtil.quickSqlSelect("aqn_user", "idtareaactiva", "idusuario = '{}'".format(username))
-
+        id_compania_usuario = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+        tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(username, str(model.idproyecto.idproyecto)))
+        color = ""
+        if tipo_participante == "observador":
+            color += "OBSER "
+        if model.idproyecto.idcompany.idcompany != id_compania_usuario and tipo_participante != "observador":
+            color += "COL "
+        if model.idproyecto.idcompany.idcompany == id_compania_usuario:
+            color += "INTERNO_EMPRESA "
         if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10] or model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
-            return "fcDanger"
+            color += "fcDanger"
 
-        return ""
+        return color
 
     def gesttare_color_fondo_estado(self, model):
         if model.codestado:
@@ -339,14 +387,37 @@ class gesttare(interna):
             return "fcWarning"
         return ""
 
+    def gesttare_ren_color_fecha_espera(self, model):
+        if model.fechavencimiento and str(model.fechavencimiento) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+        if model.fechavencimiento and model.fechaentrega and model.fechaentrega <  model.fechavencimiento:
+            return "fcWarning"
+        return ""
+
+    def gesttare_ren_color_fechaentrega_espera(self, model):
+        if model.fechaentrega and str(model.fechaentrega) < qsatype.Date().toString()[:10]:
+            return "fcDanger"
+        if model.fechavencimiento and model.fechaentrega and model.fechaentrega < model.fechavencimiento:
+            return "fcWarning"
+        return ""
+
     def gesttare_uploadFile(self, model, oParam):
         idUsuario = qsatype.FLUtil.nameUser()
-
         comentario = ""
         if "comentario" in oParam:
             comentario = oParam['comentario']
 
         if len(oParam["FILES"]) > 0 or "comentario" in oParam:
+            if "comentario_publico" in oParam:
+                params = {
+                    "comentario": oParam['comentario'],
+                    "idtarea": model.idtarea
+                }
+                pk = APIQSA.entry_point('post', "gt_comentarios", idUsuario, params, "comentario_publico_observador")
+                pk = pk.decode("utf-8")
+                if not gesDoc.fileUpload("gt_comentarios", pk, oParam['FILES']):
+                    return False
+                return True
             cursor = qsatype.FLSqlCursor(u"gt_comentarios")
             cursor.setModeAccess(cursor.Insert)
             cursor.refreshBuffer()
@@ -358,11 +429,16 @@ class gesttare(interna):
             cursor.setValueBuffer(u"costehora", 0)
             cursor.setValueBuffer(u"coste", 0)
             cursor.setValueBuffer(u"idusuario", idUsuario)
+            if "comentario_publico" in oParam:
+                cursor.setValueBuffer(u"publico", True)
+            else:
+                cursor.setValueBuffer(u"publico", False)
             if not cursor.commitBuffer():
                 print("algo salio mal")
                 return False
             if not gesDoc.fileUpload("gt_comentarios", cursor.valueBuffer("idcomentario"), oParam['FILES']):
                 return False
+
             return True
 
         resul = {}
@@ -544,7 +620,12 @@ class gesttare(interna):
         if tengopermiso != True:
             return tengopermiso
 
+        tipo_participante = tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(user_name, str(cursor.valueBuffer("idproyecto"))))
 
+        if tipo_participante == "observador":
+            response["resul"] = True
+            response["msg"] = "No puedes añadir tiempo a los proyectos en los que tienes un rol de observación"
+            return response
 
         tramoactivo = qsatype.FLUtil().quickSqlSelect("gt_controlhorario", "idc_horario", "idusuario = {} AND horafin IS NULL".format(user_name))
         if not tramoactivo:
@@ -624,6 +705,14 @@ class gesttare(interna):
 
     def gesttare_completar_tarea(self, model, cursor):
         response = {}
+        usuario = qsatype.FLUtil.nameUser()
+        id_proyecto = qsatype.FLUtil.sqlSelect("gt_tareas", "idproyecto", "idtarea = {}".format(str(cursor.valueBuffer("idtarea"))))
+        tipo_participante = qsatype.FLUtil.sqlSelect("gt_particproyecto", "tipo", "idproyecto = {} AND idusuario = {}".format(str(id_proyecto), str(usuario)))
+        response = {}
+        if tipo_participante == "observador":
+            response['status'] = 1
+            response["msg"] = "No puedes completar la tarea con el rol de observación"
+            return response
         resuelta = cursor.valueBuffer("resuelta")
         cursor.setValueBuffer("resuelta", not resuelta)
 
@@ -903,7 +992,14 @@ class gesttare(interna):
 
 
     def gesttare_incrementar_dia(self, model, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        id_proyecto = qsatype.FLUtil.sqlSelect("gt_tareas", "idproyecto", "idtarea = {}".format(str(cursor.valueBuffer("idtarea"))))
+        tipo_participante = qsatype.FLUtil.sqlSelect("gt_particproyecto", "tipo", "idproyecto = {} AND idusuario = {}".format(str(id_proyecto), str(usuario)))
         response = {}
+        if tipo_participante == "observador":
+            response['status'] = 1
+            response["msg"] = "No puedes modificar la fecha de ejecución con el rol de observación"
+            return response
         response['status'] = -1
         response['data'] = {}
         response["prefix"] = "gt_tareas"
@@ -1204,9 +1300,6 @@ class gesttare(interna):
         filters = []
         usuario = qsatype.FLUtil.nameUser()
         if name == "renegociarusuario":
-            return [{'criterio': 'idusuario__exact', 'valor': usuario}, {'criterio': 'fechavencimiento__lt', 'valor': str(qsatype.Date().toString()[:10])}]
-        if name == 'proyectosusuario':
-            # proin = "("
             proin = []
             # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
             # curProyectos.select("idusuario = '" + str(usuario) + "'")
@@ -1227,7 +1320,109 @@ class gesttare(interna):
 
             while q.next():
                 proin.append(q.value("idproyecto"))
-            return [{'criterio': 'idproyecto__in', 'valor': proin, 'tipo': 'q'}]
+            return [{'criterio': 'idusuario__exact', 'valor': usuario}, {'criterio': 'fechavencimiento__lt', 'valor': str(qsatype.Date().toString()[:10])}, {'criterio': 'idproyecto__in', 'valor': proin, 'tipo': 'q'}]
+
+        if name == "renegociarusuarioespera":
+            # proin = []
+            # # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            # # curProyectos.select("idusuario = '" + str(usuario) + "'")
+            # # while curProyectos.next():
+            # #     curProyectos.setModeAccess(curProyectos.Browse)
+            # #     curProyectos.refreshBuffer()
+            # #     proin.append(curProyectos.valueBuffer("idproyecto"))
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            # q.setSelect(u"t.idproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto")
+            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.archivado = false")
+
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
+
+            # while q.next():
+            #     proin.append(q.value("idproyecto"))
+
+            valores = flgesttare_def.iface.revisar_indicadores(usuario)
+            tain = []
+            if "idtarea" in valores and valores["idtarea"]:
+                for e in valores["idtarea"]:
+                    tain.append(e)
+            return [{'criterio': 'idusuario__exact', 'valor': usuario}, {'criterio': 'idtarea__in', 'valor': tain, 'tipo': 'q'}, {'criterio': 'codestado__exact', 'valor': "En espera"}]
+
+        
+
+        if name == "renegociarusuariotreinta":
+            proin = []
+            # # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            # # curProyectos.select("idusuario = '" + str(usuario) + "'")
+            # # while curProyectos.next():
+            # #     curProyectos.setModeAccess(curProyectos.Browse)
+            # #     curProyectos.refreshBuffer()
+            # #     proin.append(curProyectos.valueBuffer("idproyecto")),
+            # q = qsatype.FLSqlQuery()
+            # q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            # q.setSelect(u"t.idproyecto")
+            # q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto")
+            # q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.archivado = false")
+
+            # if not q.exec_():
+            #     return []
+            # if q.size() > 100:
+            #     return []
+
+            # while q.next():
+            #     proin.append(q.value("idproyecto"))
+
+            valores = flgesttare_def.iface.revisar_indicadores(usuario)
+            tain = []
+            if "idtarea_planear" in valores and valores["idtarea_planear"]:
+                for e in valores["idtarea_planear"]:
+                    tain.append(e)
+
+            return [{'criterio': 'idusuario__exact', 'valor': usuario}, {'criterio': 'idtarea__in', 'valor': tain, 'tipo': 'q'}]
+
+        if name == 'proyectosusuario':
+            # proin = "("
+            proin = []
+            # curProyectos = qsatype.FLSqlCursor("gt_particproyecto")
+            # curProyectos.select("idusuario = '" + str(usuario) + "'")
+            # while curProyectos.next():
+            #     curProyectos.setModeAccess(curProyectos.Browse)
+            #     curProyectos.refreshBuffer()
+            #     proin.append(curProyectos.valueBuffer("idproyecto"))
+            q = qsatype.FLSqlQuery()
+            q.setTablesList(u"gt_proyectos, gt_particproyecto")
+            q.setSelect(u"t.idproyecto")
+            q.setFrom(u"gt_proyectos t LEFT JOIN gt_particproyecto p ON t.idproyecto=p.idproyecto")
+            q.setWhere(u"p.idusuario = '" + usuario + "' AND  t.archivado = false AND (p.tipo <> 'observador' OR p.tipo is null)")
+
+            if not q.exec_():
+                return []
+            if q.size() > 100:
+                return []
+
+            while q.next():
+                proin.append(q.value("idproyecto"))
+
+
+            tain = []
+            qt = qsatype.FLSqlQuery()
+            qt.setTablesList(u"gt_tareas, gt_proyectos, gt_particproyecto, gt_partictarea")
+            qt.setSelect(u"gt_partictarea.idtarea")
+            qt.setFrom(u"gt_partictarea INNER JOIN gt_tareas ON gt_partictarea.idtarea = gt_tareas.idtarea INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto INNER JOIN gt_particproyecto ON gt_proyectos.idproyecto = gt_particproyecto.idproyecto")
+            qt.setWhere(u"gt_partictarea.idusuario = '" + usuario + "' AND gt_particproyecto.idusuario = '" + usuario + "' AND  gt_proyectos.archivado = false AND gt_particproyecto.tipo = 'observador'")
+            if not qt.exec_():
+                return []
+            if qt.size() > 100:
+                return []
+
+            while qt.next():
+                tain.append(qt.value("idtarea"))
+
+    
+            return [{'criterio': 'idproyecto__in', 'valor': proin, 'tipo': 'q'}, {'criterio': 'idtarea__in', 'valor': tain, 'tipo': 'q'}]
         return filters
 
     def gesttare_getTareasUsuario(self, oParam):
@@ -1598,13 +1793,13 @@ class gesttare(interna):
         if nomenclatura_activa:
             if cursor.modeAccess() == cursor.Insert and cursor.valueBuffer("nombre"):
                 nombre = cursor.valueBuffer("nombre")
-                
-                valor = nombre.strip()
+                valor = nombre.upper()
+                valor = valor.strip()
                 if nombre[0] == "#":
                     if " " in nombre:
-                        valor = nombre.split(" ", 1)
+                        valor = valor.split(" ", 1)
                         valor = valor[1].split(" ", 1)
-                        if valor[0][-2:] != "ar" and valor[0][-2:] != "er" and valor[0][-2:] != "ir":
+                        if valor[0][-2:] != "AR" and valor[0][-2:] != "ER" and valor[0][-2:] != "IR":
                             # qsatype.FLUtil.ponMsgError(msg + "Las tareas deben empezar por verbo en infinitivo")
                             msg += "Las tareas deben empezar por verbo en infinitivo"
                             error = True
@@ -1616,14 +1811,14 @@ class gesttare(interna):
                 else:
                     if " " in valor:
                         valor = valor.split(" ", 1)
-                        if valor[0][-2:] != "ar" and valor[0][-2:] != "er" and valor[0][-2:] != "ir":
+                        if valor[0][-2:] != "AR" and valor[0][-2:] != "ER" and valor[0][-2:] != "IR":
                             # qsatype.FLUtil.ponMsgError(msg + "Las tareas deben empezar por verbo en infinitivo")
                             msg += "Las tareas deben empezar por verbo en infinitivo"
                             error = True
                             # return False
 
                     else:
-                        if valor[-2:] != "ar" and valor[-2:] != "er" and valor[-2:] != "ir":
+                        if valor[-2:] != "AR" and valor[-2:] != "ER" and valor[-2:] != "IR":
                             # qsatype.FLUtil.ponMsgError(msg + "Las tareas deben empezar por verbo en infinitivo")
                             msg += "Las tareas deben empezar por verbo en infinitivo"
                             error = True
@@ -1715,7 +1910,7 @@ class gesttare(interna):
             response["status"] = 2
             response["confirm"] = "La tarea no ha sido guardada, si continuas perderás la información. </br></br> ¿Quieres salir de la página?"
             response["serverAction"] = "gotoReturnActualizacion"
-            response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_actualizaciones/master"}, {"accion": "cancel","nombre": "No"}]
+            response["customButtons"] = [{"accion": "goto","nombre": "Sí", "url": "/gesttare/gt_actualizaciones/master"}]
             # response["goto"] = {"nombre": "Sí", "url": "/gesttare/gt_tareas/custom/renegociar"}
             return response
 
@@ -1928,11 +2123,17 @@ class gesttare(interna):
     def field_completaIcon(self, model):
         return self.ctx.gesttare_field_completaIcon(model)
 
+    def field_trackingIcon(self, model):
+        return self.ctx.gesttare_field_trackingIcon(model)
+
     def field_completaTitle(self, model):
         return self.ctx.gesttare_field_completaTitle(model)
 
     def ren_field_proyecto(self, model):
         return self.ctx.gesttare_ren_field_proyecto(model)
+
+    def ren_field_proyecto_espera(self, model):
+        return self.ctx.gesttare_ren_field_proyecto_espera(model)
 
     def field_usuario(self, model):
         return self.ctx.gesttare_field_usuario(model)
@@ -1948,6 +2149,12 @@ class gesttare(interna):
 
     def ren_color_fechaentrega(self, model):
         return self.ctx.gesttare_ren_color_fechaentrega(model)
+
+    def ren_color_fecha_espera(self, model):
+        return self.ctx.gesttare_ren_color_fecha_espera(model)
+
+    def ren_color_fechaentrega_espera(self, model):
+        return self.ctx.gesttare_ren_color_fechaentrega_espera(model)
 
     def color_nombre(self, model):
         return self.ctx.gesttare_color_nombre(model)

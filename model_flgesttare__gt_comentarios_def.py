@@ -22,7 +22,7 @@ class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
         fields = []
-        fields = [{'verbose_name': 'adjunto', 'func': 'field_adjunto'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'}]
+        fields = [{'verbose_name': 'adjunto', 'func': 'field_adjunto'}, {'verbose_name': 'nombreUsuario', 'func': 'field_nombreUsuario'},{'verbose_name': 'observaIcon', 'func': 'field_observaIcon'},{'verbose_name': 'observaTitle', 'func': 'field_observaTitle'}]
         return fields
 
     def gesttare_getDesc(self):
@@ -51,6 +51,22 @@ class gesttare(interna):
         #     return file["nombre"]
         return nombre
 
+    def gesttare_field_observaIcon(self, model):
+        if model.publico:
+            return "visibility_off"
+        else:
+            return "visibility"
+
+        return ""
+
+    def gesttare_field_observaTitle(self, model):
+        if model.publico:
+            return "Quitar comentario de público"
+        else:
+            return "Pasar comentario a público"
+            
+        return ""
+
     def gesttare_field_nombreUsuario(self, model):
         # nombre = qsatype.FLUtil.quickSqlSelect("aqn_user", "email", "idusuario = {}".format(model.idusuario.idusuario)) or ""
         nombre = "@" + model.idusuario.usuario
@@ -65,6 +81,34 @@ class gesttare(interna):
             if not idUsuario:
                 return False
         return True
+
+    def gesttare_comentario_publico(self, model, oParam, cursor):
+        user_name = qsatype.FLUtil.nameUser()
+        msg = ""
+        response = {}
+       
+        if not oParam or "confirmacion" not in oParam:
+        
+            response["status"] = 2
+            response["confirm"] = "Vas a cambiar la visibilidad del comentario para observador. </br></br> ¿Quieres continuar?"
+            response["serverAction"] = "comentario_publico"
+          
+            return response
+
+        response["resul"] = True
+       
+        params = {
+            "pk": cursor.valueBuffer("idcomentario")
+        }
+        APIQSA.entry_point('post', "gt_comentarios", user_name, params, "comentario_publico")
+        publico = cursor.valueBuffer("publico")
+        if not publico:
+            msg = "Comentario visible para observador"
+        else:
+            msg = "Comentario no visible para observador"
+        response["msg"] = msg
+
+        return response
 
     def __init__(self, context=None):
         super().__init__(context)
@@ -83,6 +127,15 @@ class gesttare(interna):
 
     def check_permissions(self, model, prefix, pk, template, acl, accion=None):
         return self.ctx.gesttare_check_permissions(model, prefix, pk, template, acl, accion)
+
+    def field_observaIcon(self, model):
+        return self.ctx.gesttare_field_observaIcon(model)
+
+    def field_observaTitle(self, model):
+        return self.ctx.gesttare_field_observaTitle(model)
+
+    def comentario_publico(self, model, oParam, cursor):
+        return self.ctx.gesttare_comentario_publico(model, oParam, cursor)
 
 
 # @class_declaration head #

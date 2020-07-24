@@ -129,7 +129,7 @@
                         {"tipo": "field", "listpos": "secondaryitem", "key": "gt_timetracking.fecha", "width": 5},
                         {"tipo": "field", "listpos": "body", "key": "aqn_user.usuario","color": "Color usuario", "label": " ", "width": 20},
                         {"tipo": "field", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 370},
-                        {"tipo": "foreignfield", "listpos": "body", "key": "Proyecto", "label": "Proyecto", "title": true,"width": 180},
+                        {"tipo": "foreignfield", "listpos": "body", "key": "Proyecto", "color": "Color nombre proyecto", "label": "Proyecto", "title": true,"width": 180},
                         {"tipo": "field", "listpos": "title", "key": "gt_hitosproyecto.nombre", "label": "Hito", "title": true, "visible": false,"width": 370},
                         {"tipo": "foreignfield", "listpos": "body", "key": "Cliente", "label": "Cliente", "title": true, "visible": false,"width": 180},
                         {"tipo": "field", "listpos": "subtitle", "key": "gt_timetracking.totaltiempo", "width": 5}
@@ -211,7 +211,7 @@
                     },
                     "columns": [
                         {"tipo": "foreignfield", "listpos": "title", "key": "gt_tareas.nombre", "label": "Tarea", "title": true,"width": 570},
-                        {"tipo": "foreignfield", "listpos": "body", "key": "Proyecto", "label": "Proyecto", "title": true,"width": 180},
+                        {"tipo": "foreignfield", "listpos": "body", "key": "Proyecto", "color": "Color nombre proyecto", "label": "Proyecto", "title": true,"width": 180},
                         {"tipo": "foreignfield", "listpos": "subtitle", "key": "suma","label": "Total tiempo", "width": 5}
                     ],
                     "rowclick": "gototarea"

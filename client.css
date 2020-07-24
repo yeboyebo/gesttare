@@ -810,6 +810,20 @@ a.btn-primary:hover {
     margin-left: 2px;
 }
 
+.YBTableRow .YBTableActionsCell[title="TimeTracking"] i{
+    /*margin-top: -3px;
+    color: #50d2ce;*/
+    color: #f9a825;
+    /*color: white;
+    background-color:#f9a825;
+    padding: 3px;
+    border-radius: 5px;*/
+    width: 30px !important;
+    height: 30px !important;
+    //margin-top: -7px !important;
+    //margin-left: 2px;
+}
+
 /* Icono timetracking vista móvil */
 .YBListItemSecondaryAction img[src="/static/dist/img/icons/timetrakcer.svg"]{
     background-color: orange;
@@ -1351,6 +1365,7 @@ a.btn-primary:hover {
 .appInfo img {
     width: 20px !important;
     height: 22px !important;
+    margin-top: -1px;
     //position: absolute !important;
 }
 
@@ -1530,6 +1545,12 @@ a.btn-primary:hover {
     
 }
 
+.comentariosGrid div + ul {
+    list-style-type: disc;
+    /*margin-top: -37px;
+    margin-bottom: 9px;*/
+}
+
 .comentariosGrid ul {
     list-style-type: disc;
     margin-top: -37px;
@@ -1555,7 +1576,7 @@ a.btn-primary:hover {
     margin: -10px 0;
 }
 
-.comentariosGrid ol {
+.comentariosGrid div + ol {
     margin-top: -37px;
     margin-bottom: 9px;
 }
@@ -2026,4 +2047,161 @@ a.btn-primary:hover {
 .botonacordeoncentrado {
     //flex-grow: 1;
     margin-left: auto;
+}
+
+@media (max-height: 700px) {
+    .modalTitle .imagen img {
+        display: none !important;
+        /*width: 30px !important;
+        height: 30px !important;
+        float: left !important;*/
+    }
+    .modalrecordatorios .modalTitle {
+        margin-top: -40px;
+        margin-bottom: -5px;
+    }
+}
+
+.labelcheckboxYBFileInput {
+    float: right;
+    font-size: 20px !important;
+    color: black !important;
+    margin-top: 20px !important;
+}
+
+.checkboxYBFileInput {
+    margin-left: 15px !important;
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    transform: scale(2);
+    padding: 10px;
+}
+
+.field_publico_comentario {
+    display: none;
+}
+
+.comentariosGrid .comentarioPublico {
+    background-color: #e1fff5;
+}
+
+/*.comentariosGridObservador .YBListItems :not(.comentarioPublico){
+    display: none;
+}*/
+
+.comentariosGridObservador .comentarioNoPublico {
+    display: none;
+}
+
+.comentariosGridObservador .responsable{
+    padding: 5px 10px 5px 10px;
+}
+
+.comentariosGridObservador .YBListItemPrimaryTitle{
+    padding: 5px 10px 5px 10px;
+    margin-left: -15px;
+}
+
+.comentariosGridObservador .YBListItem{
+    box-shadow: none;
+}
+
+.comentariosGridObservador .YBListItemPrimaryBody {
+    font-family: sans-serif !important;
+}
+
+.comentariosGridObservador ol, .comentariosGrid ul {
+    //margin-block-start: -10px;
+    margin-block-end: -20px;
+    
+}
+
+.comentariosGridObservador ul {
+    list-style-type: disc;
+    margin-top: -37px;
+    margin-bottom: 9px;
+}
+
+.comentariosGridObservador li ul {
+    list-style-type: circle;
+    margin-top: -32px;
+    margin-bottom: -45px;
+}
+
+.comentariosGridObservador li:first-child ul{
+    margin-top: -43px;
+}
+
+.comentariosGridObservador li ul li ul{
+    margin-top: -32px !important;
+    list-style-type: square;
+}
+
+.comentariosGridObservador li {
+    margin: -10px 0;
+}
+
+.comentariosGridObservador div + ol {
+    margin-top: -37px;
+    margin-bottom: 9px;
+}
+
+.comentariosGridObservador .YBListItemPrimaryBody div.divEditor{
+    /*display: inline-block;
+    vertical-align: top;*/
+    margin-top: -30px;
+}
+
+.comentariosGridObservador .YBListItemPrimaryBody div.divEditor:nth-child(1){
+    /*display: inline-block;
+    vertical-align: top;*/
+    //line-height: 0.1;
+    margin-top: 17px
+}
+
+.comentariosGridObservador .YBListItemPrimaryBody {
+    font-size: 15px;
+}
+
+.comentariosGridObservador .YBListItemPrimaryTitle {
+    margin-bottom: 10px;
+}
+
+.comentariosGridObservador .YBListItemPrimaryBody a{
+    line-height: 1.6;
+}
+
+.gbTareasBox .participantesGrid .YBTableActionsCell {
+    margin-top: 3px;
+}
+
+.participantesGrid .YBTableOverGrid {
+    overflow: hidden;
+}
+
+.modalExterno {
+    font-weight: normal !important;
+}
+
+/*Diseño vista móvil*/
+
+
+
+@media (max-width: 769px) {
+    .masterTareas .YBLista .YBListItemSecondary .YBListItemSecondaryAction i:nth-child(2){
+        color: #f9a825;
+    }
+    #labelHorasInvertidas, #labelPresupuesto, #labelCoste {
+        width: 97% !important;
+        margin-left: 3px !important;
+        text-align: center;
+    }
+    .participantesGrid .YBListItemPrimaryTitle img {
+        margin-top: 2px !important;
+    }
+    .participantesGrid .YBListItemSecondaryAction i{
+        margin-bottom: 10px;
+    }
 }

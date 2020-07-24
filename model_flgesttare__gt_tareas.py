@@ -60,8 +60,14 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def ren_field_proyecto(self):
         return form.iface.ren_field_proyecto(self)
 
+    def ren_field_proyecto_espera(self):
+        return form.iface.ren_field_proyecto_espera(self)
+
     def field_completaIcon(self):
         return form.iface.field_completaIcon(self)
+
+    def field_trackingIcon(self):
+        return form.iface.field_trackingIcon(self)
 
     def field_usuario(self):
         return form.iface.field_usuario(self)
@@ -80,6 +86,12 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def ren_color_fechaentrega(self):
         return form.iface.ren_color_fechaentrega(self)
+
+    def ren_color_fecha_espera(self):
+        return form.iface.ren_color_fecha_espera(self)
+
+    def ren_color_fechaentrega(self):
+        return form.iface.ren_color_fechaentrega_espera(self)
 
     def color_nombre(self):
         return form.iface.color_nombre(self)
@@ -223,7 +235,7 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     @helpers.decoradores.accion(aqparam=["oParam"])
     def gotoNewRecordRecordatorioEspera(self, oParam):
         return form.iface.gotoNewRecordRecordatorioEspera(oParam)
-
+    
     def queryGrid_renegociacion(model):
         return form.iface.queryGrid_renegociacion(model)
 
@@ -264,6 +276,12 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
 
     def drawif_parartarea(cursor):
         return form.iface.drawif_parartarea(cursor)
+
+    def drawif_trackingplay(cursor):
+        return form.iface.drawif_trackingplay(cursor)
+
+    def drawif_trackingpause(cursor):
+        return form.iface.drawif_trackingpause(cursor)
 
     def field_verConvertirTarea(self):
         return form.iface.field_verConvertirTarea(self)

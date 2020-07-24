@@ -24,6 +24,9 @@ class gesttare_gt_partictarea(interna_gt_partictarea, helpers.MixinConAcciones):
     def field_nombre(self):
         return form.iface.field_nombre(self)
 
+    def color_nombre_participante(self):
+        return form.iface.color_nombre_participante(self)
+
 
 # @class_declaration gt_partictarea #
 class gt_partictarea(gesttare_gt_partictarea, helpers.MixinConAcciones):

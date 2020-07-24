@@ -24,6 +24,16 @@ class gesttare_gt_comentarios(interna_gt_comentarios, helpers.MixinConAcciones):
     def field_nombreUsuario(self):
         return form.iface.field_nombreUsuario(self)
 
+    def field_observaIcon(self):
+        return form.iface.field_observaIcon(self)
+
+    def field_observaTitle(self):
+        return form.iface.field_observaTitle(self)
+
+    @helpers.decoradores.accion(aqparam=["oParam", "cursor"])
+    def comentario_publico(self, oParam, cursor):
+        return form.iface.comentario_publico(self, oParam, cursor)
+
 
 # @class_declaration gt_comentarios #
 class gt_comentarios(gesttare_gt_comentarios, helpers.MixinConAcciones):

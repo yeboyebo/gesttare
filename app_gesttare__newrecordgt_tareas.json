@@ -23,12 +23,7 @@
                         "success": [{"slot": "return"}]
                     }
                 },
-                "labelAdjunto": {
-                    "componente": "YBLabel",
-                    "text": "Contiene archivos adjuntos",
-                    "className": "contieneAdjuntos"
-                },
-                "algo": {
+                "volverButtonActu": {
                     "componente": "YBButton",
                     "title": "Volver",
                     "prefix": "gt_tareas",
@@ -44,6 +39,11 @@
                         "pk": "NF",
                         "success": [{"slot": "return"}]
                     }
+                },
+                "labelAdjunto": {
+                    "componente": "YBLabel",
+                    "text": "Contiene archivos adjuntos",
+                    "className": "contieneAdjuntos"
                 },
                 "separator1": {
                     "componente": "YBSeparator"
@@ -67,6 +67,7 @@
                                 "nombre": {"className": "col-sm-12"},
                                 "descripcion": {
                                     "label": " ",
+                                    "className": "col-sm-12",
                                     "wysiwyg": true
                                 },
                                 "idproyecto": {"combolimit": 1, "showpk": false, "function": "getProyectosUsuario"},
@@ -109,7 +110,7 @@
         "groupBoxPadre" :{
             "labelAdjunto": "drawif_checkAdjuntos",
             "volverButton": "drawif_checkNormal",
-            "algo": "drawif_checkActu2"
+            "volverButtonActu": "drawif_checkActu2"
         }
     }
 }

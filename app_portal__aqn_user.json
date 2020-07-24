@@ -112,7 +112,8 @@
                     "title": "OPCIONES DE CONFIGURACIÓN",
                     "fields": {
                         "nomenclatura": {},
-                        "fentregaobligatoria": {}
+                        "fentregaobligatoria": {},
+                        "emailcomentario": {}
                     }
                 }
             }

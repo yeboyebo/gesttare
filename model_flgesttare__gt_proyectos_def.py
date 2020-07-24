@@ -18,6 +18,7 @@ class interna(qsatype.objetoBase):
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
 from models.flgesttare import flgesttare_def
+from YBUTILS.APIQSA import APIQSA
 
 
 class gesttare(interna):
@@ -45,7 +46,8 @@ class gesttare(interna):
                 {'verbose_name': 'nombreCliente', 'func': 'field_nombreCliente'},
                 {'verbose_name': 'Color fondo estado', 'func': 'color_fondo_estado'},
                 {'verbose_name': 'Responsable', 'func': 'field_usuario'},
-                {'verbose_name': 'Color responsable', 'func': 'color_responsable'}
+                {'verbose_name': 'Color responsable', 'func': 'color_responsable'},
+                {'verbose_name': 'Color nombre', 'func': 'color_nombre'}
             ]
         elif template == "proyectosarchivados":
             fields = [
@@ -61,11 +63,14 @@ class gesttare(interna):
         return fields
 
     def gesttare_field_nombreCliente(self, model):
+        usuario = qsatype.FLUtil.nameUser()
         nombre_cliente = ""
+        id_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = {}".format(str(usuario)))
         try:
             if not model.idcliente:
                 return nombre_cliente
-            nombre_cliente = model.idcliente.nombre
+            if model.idcompany.idcompany == id_company:
+                nombre_cliente = model.idcliente.nombre
         except Exception as e:
             print(e)
             pass
@@ -91,6 +96,19 @@ class gesttare(interna):
         except Exception:
             pass
         return nombre_usuario
+
+    def gesttare_color_nombre(self, model):
+        username = qsatype.FLUtil.nameUser()
+        id_company = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+        tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(username, str(model.idproyecto)))
+        # if tipo_participante == "observador":
+        #     return "OBSER "
+        # if model.idcompany.idcompany != id_company:
+        #     return "COL "
+        # else:
+        #     return "INTERNO_EMPRESA "
+
+        return ""
 
     def gesttare_color_fondo_estado(self, model):
         # try:
@@ -284,6 +302,7 @@ class gesttare(interna):
 
         while q.next():
             # descripcion = str(q.value(2)) + "€ " + q.value(1)
+
             des = str(q.value(1))
             codcliente = qsatype.FLUtil.sqlSelect("gt_proyectos INNER JOIN gt_clientes ON gt_clientes.idcliente = gt_proyectos.idcliente", "gt_clientes.codcliente", "gt_proyectos.idproyecto = '" + str(q.value(0)) + "'") or None
             if codcliente:
@@ -331,6 +350,8 @@ class gesttare(interna):
             return True
 
     def gesttare_actInvitarExterno(self, oParam, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        return True
         response = {}
         if not re.match('^[(a-z0-9\_\-\.)]+@[(a-z0-9\_\-\.)]+\.[(a-z)]{2,15}$', oParam["email"].lower()):
             print("Correo incorrecto")
@@ -341,9 +362,31 @@ class gesttare(interna):
         curUsuario = qsatype.FLSqlCursor("aqn_user")
         curUsuario.select("email = '" + str(oParam["email"]) + "'")
         if not curUsuario.next():
-            response["status"] = 1
-            response["msg"] = "No existe usuario"
-            return response
+            # response["status"] = 1
+            # response["msg"] = "No existe usuario"
+            # return response
+            codifica = oParam["email"] + str(cursor.valueBuffer("idproyecto"))
+            hashcode = hashlib.md5(codifica.encode('utf-8')).hexdigest()
+            curInvitacion = qsatype.FLSqlCursor(u"aqn_invitations")
+            curInvitacion.setModeAccess(curInvitacion.Insert)
+            curInvitacion.refreshBuffer()
+            curInvitacion.setValueBuffer(u"email", oParam["email"])
+            curInvitacion.setValueBuffer(u"hashcode", hashlib.md5(hashcode.encode('utf-8')).hexdigest())
+            # curInvitacion.setValueBuffer(u"idcompany", idcompany)
+            curInvitacion.setValueBuffer(u"idcompany", cursor.valueBuffer("idcompany"))
+            curInvitacion.setValueBuffer(u"idproyecto", cursor.valueBuffer("idproyecto"))
+            curInvitacion.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
+            curInvitacion.setValueBuffer(u"activo", True)
+            curInvitacion.setValueBuffer(u"tipo", "colaborador")
+            if not curInvitacion.commitBuffer():
+                return False
+
+            params = {
+                "email": curInvitacion.valueBuffer("email"),
+                "tipo_mensaje": "invitacion_proyecto",
+                "hashcode": curInvitacion.valueBuffer("hashcode")
+            }
+            APIQSA.entry_point('post', "aqn_precompanies", usuario, params, "post")    
         else:
             curUsuario.setModeAccess(curUsuario.Browse)
             curUsuario.refreshBuffer()
@@ -378,7 +421,7 @@ class gesttare(interna):
         response["msg"] = "Invitación enviada correctamente"
         return response
 
-    def gesttare_envioMailInvitacion(self, email, nombreProyecto, hashcode):
+    def gesttare_envioMailInvitacion(self, email, nombreProyecto, hashcode, invi):
         usuario = qsatype.FLUtil.nameUser()
         if usuario != "admin":
             idcompany = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
@@ -386,19 +429,22 @@ class gesttare(interna):
         else:
             nombreCompania = ""
         username = qsatype.FLUtil.sqlSelect(u"aqn_user", u"usuario", u"email = '" + str(email) + u"'")
-        urlJoin = "https://app.dailyjob.io/cooperate/" + hashcode
-        # urlJoin = "http://127.0.0.1:8000/cooperate/" + hashcode
+        # urlJoin = "https://app.dailyjob.io/cooperate/" + hashcode
+        urlJoin = "http://127.0.0.1:8000/cooperate/" + hashcode + "/" + str(invi)
         # cuerpo = "<img src='https://app.dailyjob.io/static/dist/img/logo/logo.png'/>"
         # cuerpo += "<br><a href='" + urlJoin + "''>Unirse DailyJob</a>"
         # cuerpo += "<br>"
 
-        cuerpo = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" style="" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths js csstransforms csstransforms3d csstransitions responsejs "><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Invitación Dailyjob</title><!-- Designed by https://github.com/kaytcat --><!-- Header image designed by Freepik.com --><style type="text/css">/* Take care of image borders and formatting */img { max-width: 600px; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;}a img { border: none; }table { border-collapse: collapse !important; }#outlook a { padding:0; }.ReadMsgBody { width: 100%; }.ExternalClass {width:100%;}.backgroundTable {margin:0 auto; padding:0; width:100% !important;}table td {border-collapse: collapse;}.ExternalClass * {line-height: 115%;}/* General styling */td {    font-family: Arial, sans-serif;}body {    -webkit-font-smoothing:antialiased;    -webkit-text-size-adjust:none;    width: 100%;    height: 100%;    color: #6f6f6f;    font-weight: 400;    font-size: 18px;}h1 {    margin: 10px 0;}a {    color: #27aa90;    text-decoration: none;}.force-full-width {    width: 100% !important;}.body-padding {    padding: 0 75px;}</style><style type="text/css" media="screen">        @media screen {            @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,900);            /* Thanks Outlook 2013! */            body {                font-family: "Source Sans Pro", "Helvetica Neue", "Arial", "sans-serif" !important;            }            .w280 {                width: 280px !important;            }        }</style><style type="text/css" media="only screen and (max-width: 480px)">    /* Mobile styles */    @media only screen and (max-width: 480px) {        table[class*="w320"] {            width: 320px !important;        }        td[class*="w320"] {            width: 280px !important;            padding-left: 20px !important;            padding-right: 20px !important;        }        img[class*="w320"] {            width: 250px !important;            height: 67px !important;        }        td[class*="mobile-spacing"] {            padding-top: 10px !important;            padding-bottom: 10px !important;        }        *[class*="mobile-hide"] {            display: none !important;        }        *[class*="mobile-br"] {            font-size: 12px !important;        }        td[class*="mobile-w20"] {            width: 20px !important;        }        img[class*="mobile-w20"] {            width: 20px !important;        }        td[class*="mobile-center"] {            text-align: center !important;        }        table[class*="w100p"] {            width: 100% !important;        }        td[class*="activate-now"] {            padding-right: 0 !important;            padding-top: 20px !important;        }        [class="mobile-block"] {            width: 100% !important;            display: block !important;        }    }</style>                                  </head><body offset="0" class="body ui-sortable" style="padding: 0px; margin: 0px; display: block; background: rgb(238, 235, 235); text-size-adjust: none; -webkit-font-smoothing: antialiased; width: 100%; height: 100%; color: rgb(111, 111, 111); font-weight: 400; font-size: 18px; cursor: auto; overflow: visible;" bgcolor="#eeebeb"><div data-section-wrapper="=" 1""="" align="center" valign="top" style="font-family: Arial, sans-serif;border-collapse: collapse;">    <center>        <table data-section="1" style="margin: 0px auto; border-collapse: collapse !important; background-color: rgb(255, 255, 255);" cellspacing="0" cellpadding="0" width="600" class="w320" bgcolor="#ffffff">            <tbody><tr>                <td data-slot-container="1" style="text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                    <div data-slot="image" data-param-padding-top="50" data-param-padding-bottom="50" style="padding-top: 50px; padding-bottom: 25px;">                        <a href="http://dailyjob.io" target="_blank" rel="noopener noreferrer"><img class="w320 fr-view" width="311" height="83" src="http://dailyjob.io/img-mailing/color-horizontal.png" alt="company logo" style="max-width: 600px; outline: none; text-decoration: none; border: none; width: 394px; height: 96px;" /><br /></a>                    </div>                </td>            </tr>        </tbody></table>    </center></div><div data-section-wrapper="=" 1""="">    <center>        <table data-section="1" cellspacing="0" cellpadding="0" width="600" class="w320" style="background-color: rgb(255, 255, 255); border-collapse: collapse !important;" bgcolor="#ffffff">            <tbody><tr>                <td style="font-family: Arial, sans-serif;border-collapse: collapse;">                    <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse !important;">                        <tbody><tr>                            <td data-slot-container="1" style="font-size: 18px;font-weight: 600;color: #ffffff;text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="mobile-spacing ui-sortable">                            <div data-slot="text" data-param-padding-top="" style="padding-top: 0px; padding-bottom: 20px;" data-param-padding-bottom=""><div style="padding: 20px 10%;"><div style="text-align: justify;"><span style="font-size: 14px;"><span style="color: #293333;">¡Hola! <strong><span style="color: #2d95c1;">' + username + '</span></strong></span></span></div><div style="text-align: justify;"><br /></div><div style="text-align: justify;"><span style="font-size: 14px;"><span style="color: #293333;"><strong><span style="color: #2d95c1;">' + nombreCompania + '</span></strong> te ha ha enviado una invitación para unirte al proyecto <strong><span style="color: #2d95c1;">' + nombreProyecto + '</span></strong></span></div><div style="text-align: justify;"><br /></div><div style="text-align: justify;"><span style="font-size: 14px;"><span style="color: #293333;">Para aceptar la invitación, haz clic en el siguiente enlace:</span></span></div></div><div style="padding: 20px 10%;"><span style="font-size: 18px;"><span style="color: #2d95c1;"><a href="' + urlJoin + '">' + urlJoin + '</a></span></span></div></div></td>                        </tr>                        <tr>                            <td data-slot-container="1" style="font-size: 24px;text-align: center;padding: 0 75px;color: #6f6f6f;font-family: Arial, sans-serif;border-collapse: collapse;" class="w320 mobile-spacing ui-sortable">                            </td>                        </tr>                    </tbody></table>                    <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse !important;">                        <tbody><tr>                            <td data-slot-container="1" style="font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                            </td>                        </tr>                    </tbody></table>                </td>            </tr>        </tbody></table>    </center></div><div data-section-wrapper="one-column">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0px auto; width: 600px; border-collapse: collapse !important; background-color: rgb(255, 255, 255);" class="w320" cellpadding="0" cellspacing="0" width="600" bgcolor="#ffffff">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="one-column" bgcolor="#ffffff" style="background-color: rgb(255, 255, 255);">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0px auto; width: 600px; border-collapse: collapse !important; background-color: rgb(255, 255, 255);" class="w320" cellpadding="0" cellspacing="0" width="600" bgcolor="#ffffff">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="one-column">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0 auto;border-collapse: collapse !important;width: 600px;" class="w320" cellpadding="0" cellspacing="0" width="600">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="one-column">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0 auto;border-collapse: collapse !important;width: 600px;" class="w320" cellpadding="0" cellspacing="0" width="600">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="=" 1""="">    <center>        <table data-section="1" cellspacing="0" cellpadding="0" width="600" class="w320" bgcolor="#2d95c1" style="background-color: #293333; border-collapse: collapse !important;">            <tbody><tr>                <td style="font-family: Arial, sans-serif;border-collapse: collapse;">                    <table cellspacing="0" cellpadding="0" class="force-full-width" style="border-collapse: collapse !important;width: 100% !important;">                        <tbody><tr>                            <td data-slot-container="1" style="text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                            <div data-slot="image" data-param-padding-top="20" style="padding-top: 20px; padding-bottom: 30px;" data-param-padding-bottom="30"><a href="http://dailyjob.io" target="_blank" rel="noopener noreferrer"><img src="http://dailyjob.io/img-mailing/blanco-vertical.png" alt="An image" class="fr-view" style="width: 96px; height: 68.6377px;" /><br /></a><div style="clear:both"></div>                            </div>                            </td>                        </tr>                        <tr>                            <td data-slot-container="1" style="color: #f0f0f0;font-size: 14px;text-align: center;padding-bottom: 4px;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                                <div data-slot="text">© 2019 Todos los derechos reservados - <a data-bcup-haslogintext="no" href="mailto:soporte@dailyjob.io" style="color: #ffffff;">Contacto</a><br /><br /></div>                            </td>                        </tr>                        <tr>                            <td data-slot-container="1" style="color: #27aa90;font-size: 14px;text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                            </td>                        </tr>                        <tr>                            <td style="font-size: 12px;font-family: Arial, sans-serif;border-collapse: collapse;">                            </td>                        </tr>                    </tbody></table>                </td>            </tr>        </tbody></table>    </center></div></body></html>'
+        # urlJoin = "https://app.dailyjob.io/cooperate/" + hashcode
+
+        cuerpo = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" style="" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths js csstransforms csstransforms3d csstransitions responsejs "><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Invitación Dailyjob</title><!-- Designed by https://github.com/kaytcat --><!-- Header image designed by Freepik.com --><style type="text/css">/* Take care of image borders and formatting */img { max-width: 600px; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;}a img { border: none; }table { border-collapse: collapse !important; }#outlook a { padding:0; }.ReadMsgBody { width: 100%; }.ExternalClass {width:100%;}.backgroundTable {margin:0 auto; padding:0; width:100% !important;}table td {border-collapse: collapse;}.ExternalClass * {line-height: 115%;}/* General styling */td {    font-family: Arial, sans-serif;}body {    -webkit-font-smoothing:antialiased;    -webkit-text-size-adjust:none;    width: 100%;    height: 100%;    color: #6f6f6f;    font-weight: 400;    font-size: 18px;}h1 {    margin: 10px 0;}a {    color: #27aa90;    text-decoration: none;}.force-full-width {    width: 100% !important;}.body-padding {    padding: 0 75px;}</style><style type="text/css" media="screen">        @media screen {            @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,900);            /* Thanks Outlook 2013! */            body {                font-family: "Source Sans Pro", "Helvetica Neue", "Arial", "sans-serif" !important;            }            .w280 {                width: 280px !important;            }        }</style><style type="text/css" media="only screen and (max-width: 480px)">    /* Mobile styles */    @media only screen and (max-width: 480px) {        table[class*="w320"] {            width: 320px !important;        }        td[class*="w320"] {            width: 280px !important;            padding-left: 20px !important;            padding-right: 20px !important;        }        img[class*="w320"] {            width: 250px !important;            height: 67px !important;        }        td[class*="mobile-spacing"] {            padding-top: 10px !important;            padding-bottom: 10px !important;        }        *[class*="mobile-hide"] {            display: none !important;        }        *[class*="mobile-br"] {            font-size: 12px !important;        }        td[class*="mobile-w20"] {            width: 20px !important;        }        img[class*="mobile-w20"] {            width: 20px !important;        }        td[class*="mobile-center"] {            text-align: center !important;        }        table[class*="w100p"] {            width: 100% !important;        }        td[class*="activate-now"] {            padding-right: 0 !important;            padding-top: 20px !important;        }        [class="mobile-block"] {            width: 100% !important;            display: block !important;        }    }</style>                                  </head><body offset="0" class="body ui-sortable" style="padding: 0px; margin: 0px; display: block; background: rgb(238, 235, 235); text-size-adjust: none; -webkit-font-smoothing: antialiased; width: 100%; height: 100%; color: rgb(111, 111, 111); font-weight: 400; font-size: 18px; cursor: auto; overflow: visible;" bgcolor="#eeebeb"><div data-section-wrapper="=" 1""="" align="center" valign="top" style="font-family: Arial, sans-serif;border-collapse: collapse;">    <center>        <table data-section="1" style="margin: 0px auto; border-collapse: collapse !important; background-color: rgb(255, 255, 255);" cellspacing="0" cellpadding="0" width="600" class="w320" bgcolor="#ffffff">            <tbody><tr>                <td data-slot-container="1" style="text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                    <div data-slot="image" data-param-padding-top="50" data-param-padding-bottom="50" style="padding-top: 50px; padding-bottom: 25px;">                        <a href="http://dailyjob.io" target="_blank" rel="noopener noreferrer"><img class="w320 fr-view" width="311" height="83" src="http://dailyjob.io/img-mailing/color-horizontal.png" alt="company logo" style="max-width: 600px; outline: none; text-decoration: none; border: none; width: 394px; height: 96px;" /><br /></a>                    </div>                </td>            </tr>        </tbody></table>    </center></div><div data-section-wrapper="=" 1""="">    <center>        <table data-section="1" cellspacing="0" cellpadding="0" width="600" class="w320" style="background-color: rgb(255, 255, 255); border-collapse: collapse !important;" bgcolor="#ffffff">            <tbody><tr>                <td style="font-family: Arial, sans-serif;border-collapse: collapse;">                    <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse !important;">                        <tbody><tr>                            <td data-slot-container="1" style="font-size: 18px;font-weight: 600;color: #ffffff;text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="mobile-spacing ui-sortable">                            <div data-slot="text" data-param-padding-top="" style="padding-top: 0px; padding-bottom: 20px;" data-param-padding-bottom=""><div style="padding: 20px 10%;"><div style="text-align: justify;"><span style="font-size: 14px;"><span style="color: #293333;">¡Hola! <strong><span style="color: #2d95c1;">' + username + '</span></strong></span></span></div><div style="text-align: justify;"><br /></div><div style="text-align: justify;"><span style="font-size: 14px;"><span style="color: #293333;"><strong><span style="color: #2d95c1;">' + nombreCompania + '</span></strong> te ha ha enviado una invitación para unirte al proyecto <strong><span style="color: #2d95c1;">' + nombreProyecto + '</span></strong></span></div><div style="text-align: justify;"><br /></div><div style="text-align: justify;"><span style="font-size: 14px;"><span style="color: #293333;">Para aceptar la invitación, haz clic en el siguiente enlace:</span></span></div></div><div style="padding: 20px 10%;"><span style="font-size: 18px;"><span style="color: #2d95c1;"><a href="' + urlJoin + '">Ir a link' '</a></span></span></div></div></td>                        </tr>                        <tr>                            <td data-slot-container="1" style="font-size: 24px;text-align: center;padding: 0 75px;color: #6f6f6f;font-family: Arial, sans-serif;border-collapse: collapse;" class="w320 mobile-spacing ui-sortable">                            </td>                        </tr>                    </tbody></table>                    <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse !important;">                        <tbody><tr>                            <td data-slot-container="1" style="font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                            </td>                        </tr>                    </tbody></table>                </td>            </tr>        </tbody></table>    </center></div><div data-section-wrapper="one-column">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0px auto; width: 600px; border-collapse: collapse !important; background-color: rgb(255, 255, 255);" class="w320" cellpadding="0" cellspacing="0" width="600" bgcolor="#ffffff">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="one-column" bgcolor="#ffffff" style="background-color: rgb(255, 255, 255);">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0px auto; width: 600px; border-collapse: collapse !important; background-color: rgb(255, 255, 255);" class="w320" cellpadding="0" cellspacing="0" width="600" bgcolor="#ffffff">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="one-column">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0 auto;border-collapse: collapse !important;width: 600px;" class="w320" cellpadding="0" cellspacing="0" width="600">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="one-column">                                <div data-section-wrapper="1"><center>    <table data-section="1" style="margin: 0 auto;border-collapse: collapse !important;width: 600px;" class="w320" cellpadding="0" cellspacing="0" width="600">        <tbody><tr>            <td data-slot-container="1" valign="top" class="mobile-block ui-sortable" style="padding-left: 5px; padding-right: 5px;">            </td>        </tr>    </tbody></table></center></div>                            </div><div data-section-wrapper="=" 1""="">    <center>        <table data-section="1" cellspacing="0" cellpadding="0" width="600" class="w320" bgcolor="#2d95c1" style="background-color: #293333; border-collapse: collapse !important;">            <tbody><tr>                <td style="font-family: Arial, sans-serif;border-collapse: collapse;">                    <table cellspacing="0" cellpadding="0" class="force-full-width" style="border-collapse: collapse !important;width: 100% !important;">                        <tbody><tr>                            <td data-slot-container="1" style="text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                            <div data-slot="image" data-param-padding-top="20" style="padding-top: 20px; padding-bottom: 30px;" data-param-padding-bottom="30"><a href="http://dailyjob.io" target="_blank" rel="noopener noreferrer"><img src="http://dailyjob.io/img-mailing/blanco-vertical.png" alt="An image" class="fr-view" style="width: 96px; height: 68.6377px;" /><br /></a><div style="clear:both"></div>                            </div>                            </td>                        </tr>                        <tr>                            <td data-slot-container="1" style="color: #f0f0f0;font-size: 14px;text-align: center;padding-bottom: 4px;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                                <div data-slot="text">© 2019 Todos los derechos reservados - <a data-bcup-haslogintext="no" href="mailto:soporte@dailyjob.io" style="color: #ffffff;">Contacto</a><br /><br /></div>                            </td>                        </tr>                        <tr>                            <td data-slot-container="1" style="color: #27aa90;font-size: 14px;text-align: center;font-family: Arial, sans-serif;border-collapse: collapse;" class="ui-sortable">                            </td>                        </tr>                        <tr>                            <td style="font-size: 12px;font-family: Arial, sans-serif;border-collapse: collapse;">                            </td>                        </tr>                    </tbody></table>                </td>            </tr>        </tbody></table>    </center></div></body></html>'
 
         asunto = "[dailyjob] Has recibido una invitación para unirte a un proyecto"
 
         # connection = notifications.get_connection("smtp.gmail.com", "todos.yeboyebo@gmail.com", "555zapato", "465", "SSL")Zv3-hZx4NB2eurm
         connection = notifications.get_connection("smtp.zoho.com", "soporte@dailyjob.io", "I7c5uXGnNuee", "465", "SSL")
         response = notifications.sendMail(connection, "Soporte dailyjob<soporte@dailyjob.io>", asunto, cuerpo, [email])
+
         if not response:
             return False
         return True
@@ -408,6 +454,8 @@ class gesttare(interna):
         if str(cursor.valueBuffer("idresponsable")) == str(usuario):
             return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        # id_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = ".format(str(usuario)))
+        # if not is_superuser or id_company != cursor.valueBuffer("idproyecto"):
         if not is_superuser:
             return "hidden"
         return True
@@ -417,18 +465,31 @@ class gesttare(interna):
         if str(cursor.valueBuffer("idresponsable")) == str(usuario):
             return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        # id_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = ".format(str(usuario)))
+        # if is_superuser and id_company == cursor.valueBuffer("idproyecto"):
         if is_superuser:
             return True
-        return "disabled"
+        return "hidden"
 
     def gesttare_checkDrawPorcentajeHito(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
         if str(cursor.valueBuffer("idresponsable")) == str(usuario):
             return True
         is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
-        if is_superuser:
+        id_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = ".format(str(usuario)))
+        if is_superuser and id_company == cursor.valueBuffer("idproyecto"):
             return True
         return "hidden"
+
+    def gesttare_checkProyectosExterno(self, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        if str(cursor.valueBuffer("idresponsable")) == str(usuario):
+            return True
+        is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
+        id_company = qsatype.FLUtil.sqlSelect("aqn_user", "idcompany", "idusuario = ".format(str(usuario)))
+        if is_superuser and id_company == cursor.valueBuffer("idproyecto"):
+            return True
+        return "disabled"
 
     def gesttare_commonCalculateField(self, fN=None, cursor=None):
         valor = None
@@ -481,8 +542,8 @@ class gesttare(interna):
         if "confirmacion" in oParam and oParam["confirmacion"]:
             usuario = qsatype.FLUtil.nameUser()
             is_superuser = qsatype.FLUtil.sqlSelect(u"auth_user", u"is_superuser", ustr(u"username = '", str(usuario), u"'"))
-            print("deberia entrar aqui?", cursor.valueBuffer("idresponsable"), usuario)
-            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or is_superuser:
+            id_company = qsatype.FLUtil.sqlSelect(u"aqn_user", u"idcompany", ustr(u"idusuario = '", str(usuario), u"'"))
+            if str(cursor.valueBuffer("idresponsable")) == str(usuario) or (is_superuser and id_company == cursor.valueBuffer("idcompany")):
                 cursor.setModeAccess(cursor.Edit)
                 cursor.refreshBuffer()
                 cursor.setValueBuffer("archivado", not cursor.valueBuffer("archivado"))
@@ -770,10 +831,10 @@ class gesttare(interna):
         response['status'] = -1
         response['data'] = {}
         response["prefix"] = "gt_proyectos"
-        response["title"] = "PInvitación de usuarios externos"
+        response["title"] = "Invitación de usuarios externos"
         # response["confirm"] = "</br></br> ¿Quieres continuar?"
         response["serverAction"] = ""
-        response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idproyecto"), "nombre": "Colaborador", "serverAction": "actInvitarExterno", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idproyecto"), "nombre": "Observador", "serverAction": "un_dia", "className": "creaAnotacionButton"}]
+        response["customButtons"] = [{"accion": "serverAction", "pk": cursor.valueBuffer("idproyecto"), "nombre": "Quiero que colabore", "serverAction": "actInvitarExternoColaborador", "className": "creaAnotacionButton"}, {"accion": "serverAction", "pk": cursor.valueBuffer("idproyecto"), "nombre": "Quiero que observe", "serverAction": "actInvitarExternoObservador", "className": "creaAnotacionButton"}]
         
         response['params'] = [
             {
@@ -788,6 +849,186 @@ class gesttare(interna):
             }
         ]
         
+        return response
+
+
+    def gesttare_actInvitarExternoColaborador(self, oParam, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        # print("param es ",oParam)
+        # return True
+        response = {}
+        if not re.match('^[(a-z0-9\_\-\.)]+@[(a-z0-9\_\-\.)]+\.[(a-z)]{2,15}$', oParam["email"].lower()):
+            print("Correo incorrecto")
+            response["status"] = 1
+            response["msg"] = "Formato correo intorrecto"
+            return response
+        # usuario = qsatype.FLUtil.nameUser()
+        curUsuario = qsatype.FLSqlCursor("aqn_user")
+        curUsuario.select("email = '" + str(oParam["email"]) + "'")
+        if not curUsuario.next():
+            # response["status"] = 1
+            # response["msg"] = "No existe usuario"
+            # return response
+            # codifica = oParam["email"] + str(cursor.valueBuffer("idproyecto"))
+            # hashcode = hashlib.md5(codifica.encode('utf-8')).hexdigest()
+            # curInvitacion = qsatype.FLSqlCursor(u"aqn_invitations")
+            # curInvitacion.setModeAccess(curInvitacion.Insert)
+            # curInvitacion.refreshBuffer()
+            # curInvitacion.setValueBuffer(u"email", oParam["email"])
+            # curInvitacion.setValueBuffer(u"hashcode", hashlib.md5(hashcode.encode('utf-8')).hexdigest())
+            # # curInvitacion.setValueBuffer(u"idcompany", idcompany)
+            # curInvitacion.setValueBuffer(u"idcompany", cursor.valueBuffer("idcompany"))
+            # curInvitacion.setValueBuffer(u"idproyecto", cursor.valueBuffer("idproyecto"))
+            # curInvitacion.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
+            # curInvitacion.setValueBuffer(u"activo", True)
+            # curInvitacion.setValueBuffer(u"tipo", "colaborador")
+            # curInvitacion.setValueBuffer(u"idusuarioorigen", usuario)
+            # if not curInvitacion.commitBuffer():
+            #     return False
+
+            params = {
+                "email": oParam["email"],
+                "idproyecto": cursor.valueBuffer("idproyecto"),
+                "idcompany": cursor.valueBuffer("idcompany"),
+                "idusuarioorigen": usuario,
+                "tipo": "colaborador"
+            }
+            APIQSA.entry_point('post', "aqn_invitations", usuario, params, "post")  
+            # APIQSA.entry_point('post', "aqn_precompanies", usuario, params, "post")    
+        else:
+            curUsuario.setModeAccess(curUsuario.Browse)
+            curUsuario.refreshBuffer()
+            idcompany = curUsuario.valueBuffer("idcompany")
+            # Comprobamos que no existe usuario con ese email para esa compañia
+            if idcompany == cursor.valueBuffer("idcompany"):
+                response["status"] = 1
+                response["msg"] = "El usuario ya pertenece a la compañia"
+                return response
+            else:
+
+                print("aqui enviamos la invitacion")
+                codifica = oParam["email"] + str(cursor.valueBuffer("idproyecto"))
+                hashcode = hashlib.md5(codifica.encode('utf-8')).hexdigest()
+                curInvitacion = qsatype.FLSqlCursor(u"aqn_invitations")
+                curInvitacion.setModeAccess(curInvitacion.Insert)
+                curInvitacion.refreshBuffer()
+                curInvitacion.setValueBuffer(u"email", oParam["email"])
+                curInvitacion.setValueBuffer(u"hashcode", hashlib.md5(hashcode.encode('utf-8')).hexdigest())
+                # curInvitacion.setValueBuffer(u"idcompany", idcompany)
+                curInvitacion.setValueBuffer(u"idcompany", cursor.valueBuffer("idcompany"))
+                curInvitacion.setValueBuffer(u"idproyecto", cursor.valueBuffer("idproyecto"))
+                curInvitacion.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
+                curInvitacion.setValueBuffer(u"activo", True)
+                curInvitacion.setValueBuffer(u"tipo", "colaborador")
+                curInvitacion.setValueBuffer(u"idusuarioorigen", usuario)
+                if not curInvitacion.commitBuffer():
+                    return False
+               
+                id_destinatario =  qsatype.FLUtil.quickSqlSelect("aqn_user", "idusuario", "email = '{}'".format(oParam["email"]))
+                curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+                curActualiz.setModeAccess(curActualiz.Insert)
+                curActualiz.refreshBuffer()
+                curActualiz.setValueBuffer(u"tipo", "colaborador")
+                curActualiz.setValueBuffer(u"tipobjeto", "particproyectoE")
+                curActualiz.setValueBuffer(u"otros", cursor.valueBuffer("nombre"))
+                curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+                curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+                curActualiz.setValueBuffer(u"idusuarioorigen", usuario)
+                curActualiz.setValueBuffer(u"idobjeto", cursor.valueBuffer("idproyecto"))
+                if not curActualiz.commitBuffer():
+                    return False
+                # _i = self.iface
+                # if not _i.envioMailInvitacion(curInvitacion.valueBuffer("email"), cursor.valueBuffer("nombre"), curInvitacion.valueBuffer("hashcode"), curActualiz.valueBuffer("idactualizacion")):
+                #     return False
+                # if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"otros", "fecha", "hora", "idusuarioorigen"]), qsatype.Array(["colaborador", "particproyectoE", cursor.valueBuffer("nombre"), datetime.date.today(), time.strftime('%H:%M:%S'), usuario])):
+                #     return False
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), id_destinatario, False])):
+                    return False
+                response["msg"] = "Invitación enviada correctamente"
+                return response
+                
+        response = {}
+        response["resul"] = True
+        response["msg"] = "Invitación enviada correctamente"
+        return response
+
+    def gesttare_actInvitarExternoObservador(self, oParam, cursor):
+        usuario = qsatype.FLUtil.nameUser()
+        # print("param es ",oParam)
+        # return True
+        response = {}
+        if not re.match('^[(a-z0-9\_\-\.)]+@[(a-z0-9\_\-\.)]+\.[(a-z)]{2,15}$', oParam["email"].lower()):
+            print("Correo incorrecto")
+            response["status"] = 1
+            response["msg"] = "Formato correo intorrecto"
+            return response
+        # usuario = qsatype.FLUtil.nameUser()
+        curUsuario = qsatype.FLSqlCursor("aqn_user")
+        curUsuario.select("email = '" + str(oParam["email"]) + "'")
+        if not curUsuario.next():
+            params = {
+                "email": oParam["email"],
+                "idproyecto": cursor.valueBuffer("idproyecto"),
+                "idcompany": cursor.valueBuffer("idcompany"),
+                "idusuarioorigen": usuario,
+                "tipo": "observador"
+            }
+            APIQSA.entry_point('post', "aqn_invitations", usuario, params, "post")  
+        else:
+            curUsuario.setModeAccess(curUsuario.Browse)
+            curUsuario.refreshBuffer()
+            idcompany = curUsuario.valueBuffer("idcompany")
+            # Comprobamos que no existe usuario con ese email para esa compañia
+            if idcompany == cursor.valueBuffer("idcompany"):
+                response["status"] = 1
+                response["msg"] = "El usuario ya pertenece a la compañia"
+                return response
+            else:
+
+                print("aqui enviamos la invitacion")
+                codifica = oParam["email"] + str(cursor.valueBuffer("idproyecto"))
+                hashcode = hashlib.md5(codifica.encode('utf-8')).hexdigest()
+                curInvitacion = qsatype.FLSqlCursor(u"aqn_invitations")
+                curInvitacion.setModeAccess(curInvitacion.Insert)
+                curInvitacion.refreshBuffer()
+                curInvitacion.setValueBuffer(u"email", oParam["email"])
+                curInvitacion.setValueBuffer(u"hashcode", hashlib.md5(hashcode.encode('utf-8')).hexdigest())
+                # curInvitacion.setValueBuffer(u"idcompany", idcompany)
+                curInvitacion.setValueBuffer(u"idcompany", cursor.valueBuffer("idcompany"))
+                curInvitacion.setValueBuffer(u"idproyecto", cursor.valueBuffer("idproyecto"))
+                curInvitacion.setValueBuffer(u"fecha", str(qsatype.Date())[:10])
+                curInvitacion.setValueBuffer(u"activo", True)
+                curInvitacion.setValueBuffer(u"tipo", "observador")
+                curInvitacion.setValueBuffer(u"idusuarioorigen", usuario)
+                if not curInvitacion.commitBuffer():
+                    return False
+               
+                id_destinatario =  qsatype.FLUtil.quickSqlSelect("aqn_user", "idusuario", "email = '{}'".format(oParam["email"]))
+                curActualiz = qsatype.FLSqlCursor(u"gt_actualizaciones")
+                curActualiz.setModeAccess(curActualiz.Insert)
+                curActualiz.refreshBuffer()
+                curActualiz.setValueBuffer(u"tipo", "observador")
+                curActualiz.setValueBuffer(u"tipobjeto", "particproyectoE")
+                curActualiz.setValueBuffer(u"otros", cursor.valueBuffer("nombre"))
+                curActualiz.setValueBuffer(u"fecha", datetime.date.today())
+                curActualiz.setValueBuffer(u"hora", time.strftime('%H:%M:%S'))
+                curActualiz.setValueBuffer(u"idusuarioorigen", usuario)
+                curActualiz.setValueBuffer(u"idobjeto", cursor.valueBuffer("idproyecto"))
+                if not curActualiz.commitBuffer():
+                    return False
+                # _i = self.iface
+                # if not _i.envioMailInvitacion(curInvitacion.valueBuffer("email"), cursor.valueBuffer("nombre"), curInvitacion.valueBuffer("hashcode"), curActualiz.valueBuffer("idactualizacion")):
+                #     return False
+                # if not qsatype.FLUtil.sqlInsert(u"gt_actualizaciones", qsatype.Array([u"tipo", u"tipobjeto", u"otros", "fecha", "hora", "idusuarioorigen"]), qsatype.Array(["colaborador", "particproyectoE", cursor.valueBuffer("nombre"), datetime.date.today(), time.strftime('%H:%M:%S'), usuario])):
+                #     return False
+                if not qsatype.FLUtil.sqlInsert(u"gt_actualizusuario", qsatype.Array([u"idactualizacion", u"idusuario", u"revisada"]), qsatype.Array([curActualiz.valueBuffer("idactualizacion"), id_destinatario, False])):
+                    return False
+                response["msg"] = "Invitación enviada correctamente"
+                return response
+                
+        response = {}
+        response["resul"] = True
+        response["msg"] = "Invitación enviada correctamente"
         return response
 
     def __init__(self, context=None):
@@ -814,6 +1055,9 @@ class gesttare(interna):
     def checkDrawPorcentajeHito(self, cursor):
         return self.ctx.gesttare_checkDrawPorcentajeHito(cursor)
 
+    def checkProyectosExterno(self, cursor):
+        return self.ctx.gesttare_checkProyectosExterno(cursor)
+
     def getDesc(self):
         return self.ctx.gesttare_getDesc()
 
@@ -835,11 +1079,17 @@ class gesttare(interna):
     def actInvitarExterno(self, oParam, cursor):
         return self.ctx.gesttare_actInvitarExterno(oParam, cursor)
 
+    def actInvitarExternoColaborador(self, oParam, cursor):
+        return self.ctx.gesttare_actInvitarExternoColaborador(oParam, cursor)
+
+    def actInvitarExternoObservador(self, oParam, cursor):
+        return self.ctx.gesttare_actInvitarExternoObservador(oParam, cursor)
+
     def invExterno(self, oParam, cursor):
         return self.ctx.gesttare_invExterno(oParam, cursor)
 
-    def envioMailInvitacion(self, email, nombreProyecto, hashcode):
-        return self.ctx.gesttare_envioMailInvitacion(email, nombreProyecto, hashcode)
+    def envioMailInvitacion(self, email, nombreProyecto, hashcode, invi):
+        return self.ctx.gesttare_envioMailInvitacion(email, nombreProyecto, hashcode, invi)
 
     def commonCalculateField(self, fN, cursor):
         return self.ctx.gesttare_commonCalculateField(fN, cursor)
@@ -870,6 +1120,9 @@ class gesttare(interna):
 
     def field_usuario(self, model):
         return self.ctx.gesttare_field_usuario(model)
+
+    def color_nombre(self, model):
+        return self.ctx.gesttare_color_nombre(model)
 
     def color_responsable(self, model):
         return self.ctx.gesttare_color_responsable(model)

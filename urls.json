@@ -101,6 +101,11 @@
             }
         },
         {
+            "type": "updateNode",
+            "path": "/portal/cooperate/url",
+            "value": "cooperate/(?P<hashparam>\\w+)/(?P<invi>\\w+)$"
+        },
+        {
             "type": "insertAfterNode",
             "path": "/portal",
             "value": {

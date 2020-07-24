@@ -42,8 +42,10 @@ class gesttare(interna):
 
         nombre_proyecto = " // Proyecto: "
         codcliente = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto INNER JOIN gt_clientes c on p.idcliente = c.idcliente", "c.codcliente", "ta.idtarea = {}".format(tareaactiva))
-        if codcliente:
-            nombre_proyecto += codcliente + " " 
+        compania_proyecto = qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto", "p.idcompany", "ta.idtarea = {}".format(tareaactiva))
+        if idcompany == compania_proyecto:
+            if codcliente:
+                nombre_proyecto += codcliente + " " 
         nombre_proyecto += qsatype.FLUtil.quickSqlSelect("gt_proyectos p INNER JOIN gt_tareas ta ON p.idproyecto = ta.idproyecto", "p.nombre", "ta.idtarea = {}".format(tareaactiva))
         nombre_tarea = qsatype.FLUtil.quickSqlSelect("gt_tareas", "nombre", "idtarea = {}".format(tareaactiva))
 
@@ -67,7 +69,7 @@ class gesttare(interna):
             "acciones": {
                 "startstop": {
                     "action": "legacy",
-                    "iconurl" : "/static/dist/img/icons/timetrakcer.svg",
+                    "iconurl" : "/static/dist/img/icons/pausa_blanco.svg",
                     "serverAction": "startstop"
                 }
             }
@@ -123,16 +125,16 @@ class gesttare(interna):
         usuario = qsatype.FLUtil.nameUser()
         atrasada = qsatype.FLUtil.quickSqlSelect("gt_tareas t INNER JOIN gt_proyectos p ON t.idproyecto = p.idproyecto", "COUNT(t.idtarea)", "t.resuelta = false AND t.fechavencimiento < '{}' AND t.idusuario = '{}' AND p.archivado = false".format(str(qsatype.Date())[:10] ,usuario))
         # revisada = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario", "COUNT(idactualizusuario)", "revisada = false AND idusuario = '{}' ".format(str(usuario))) 
-        revisada_bandeja_fecha = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE".format(str(usuario)))
+        revisada_bandeja_fecha = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.tipo <> 'anotacion' AND gt_actualizaciones.tipo <> 'inbox' AND gt_actualizaciones.fecha < CURRENT_DATE".format(str(usuario)))
 
-        espera_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "codestado = 'En espera' AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 7".format(str(usuario)))
+        espera_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto", "COUNT(gt_tareas.idtarea)", "gt_tareas.codestado = 'En espera' AND gt_tareas.resuelta = false AND gt_tareas.idusuario = '{}' AND gt_proyectos.archivado = false AND gt_tareas.ultimamodificacion < CURRENT_DATE - 7".format(str(usuario)))
 
         # if revisada_bandeja_fecha > 0 
 
         if atrasada > 0 or revisada_bandeja_fecha > 0 or espera_sin_modificacion > 0:
             return "hidden"
         else:
-            revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00' AND gt_actualizaciones.tipo <> 'anotacion'".format(str(usuario)))
+            revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00' AND gt_actualizaciones.tipo <> 'anotacion' AND gt_actualizaciones.tipo <> 'inbox'".format(str(usuario)))
             if atrasada > 0 or revisada_bandeja_hora > 0 or espera_sin_modificacion > 0:
                 return "hidden"
         
@@ -146,11 +148,11 @@ class gesttare(interna):
         # revisada = qsatype.FLUtil.quickSqlSelect("gt_actualizusuario", "COUNT(idactualizusuario)", "revisada = false AND idusuario = '{}' ".format(str(usuario))) 
         # if atrasada == 0 and revisada == 0:
         #     return "hidden"
-        revisada_bandeja_fecha = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE".format(str(usuario)))
+        revisada_bandeja_fecha = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.tipo <> 'anotacion' AND gt_actualizaciones.tipo <> 'inbox' AND gt_actualizaciones.fecha < CURRENT_DATE".format(str(usuario)))
 
-        revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00' AND gt_actualizaciones.tipo <> 'anotacion'".format(str(usuario)))
+        revisada_bandeja_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.hora < CURRENT_TIME - TIME '03:00' AND gt_actualizaciones.tipo <> 'anotacion' AND gt_actualizaciones.tipo <> 'inbox'".format(str(usuario)))
 
-        espera_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "codestado = 'En espera' AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 7".format(str(usuario)))
+        espera_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto", "COUNT(gt_tareas.idtarea)", "gt_tareas.codestado = 'En espera' AND gt_tareas.resuelta = false AND gt_tareas.idusuario = '{}' AND gt_proyectos.archivado = false AND gt_tareas.ultimamodificacion < CURRENT_DATE - 7".format(str(usuario)))
 
         if atrasada == 0 and revisada_bandeja_fecha == 0 and revisada_bandeja_hora == 0 and espera_sin_modificacion == 0:
             return "hidden"
@@ -163,7 +165,7 @@ class gesttare(interna):
 
     def gesttare_drawIfrecordatorioAnotar(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
-        revisada_bandeja_anotacion_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE  AND gt_actualizaciones.tipo = 'anotacion'".format(str(usuario)))
+        revisada_bandeja_anotacion_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE AND (gt_actualizaciones.tipo = 'anotacion' OR gt_actualizaciones.tipo = 'inbox')".format(str(usuario)))
 
 
         if revisada_bandeja_anotacion_hora > 0:
@@ -174,7 +176,7 @@ class gesttare(interna):
     def gesttare_drawIfrecordatorioAnotarCon(self, cursor):
         usuario = qsatype.FLUtil.nameUser() 
 
-        revisada_bandeja_anotacion_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE  AND gt_actualizaciones.tipo = 'anotacion'".format(str(usuario)))
+        revisada_bandeja_anotacion_hora = qsatype.FLUtil.quickSqlSelect("gt_actualizaciones INNER JOIN gt_actualizusuario ON gt_actualizaciones.idactualizacion = gt_actualizusuario.idactualizacion", "COUNT(gt_actualizaciones.fecha)", "gt_actualizusuario.revisada = false AND gt_actualizusuario.idusuario = '{}' AND gt_actualizaciones.fecha < CURRENT_DATE  AND (gt_actualizaciones.tipo = 'anotacion' OR gt_actualizaciones.tipo = 'inbox')".format(str(usuario)))
 
         if revisada_bandeja_anotacion_hora == 0:
             return "hidden"
@@ -184,7 +186,7 @@ class gesttare(interna):
 
     def gesttare_drawIfrecordatorioPlanear(self, cursor):
         usuario = qsatype.FLUtil.nameUser()
-        tarea_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "fechavencimiento is null AND fechaentrega is null AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 30".format(str(usuario)))
+        tarea_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto", "COUNT(gt_tareas.idtarea)", "gt_tareas.fechavencimiento is null AND gt_tareas.fechaentrega is null AND gt_tareas.resuelta = false AND gt_tareas.idusuario = '{}' AND gt_proyectos.archivado = false AND gt_tareas.ultimamodificacion < CURRENT_DATE - 30".format(str(usuario)))
 
         if tarea_sin_modificacion > 0:
             return "hidden"
@@ -194,7 +196,7 @@ class gesttare(interna):
     def gesttare_drawIfrecordatorioPlanearCon(self, cursor):
         usuario = qsatype.FLUtil.nameUser() 
 
-        tarea_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas", "COUNT(idtarea)", "fechavencimiento is null AND fechaentrega is null AND resuelta = false AND idusuario = '{}' AND ultimamodificacion < CURRENT_DATE - 30".format(str(usuario)))
+        tarea_sin_modificacion = qsatype.FLUtil.quickSqlSelect("gt_tareas INNER JOIN gt_proyectos ON gt_tareas.idproyecto = gt_proyectos.idproyecto", "COUNT(gt_tareas.idtarea)", "gt_tareas.fechavencimiento is null AND gt_tareas.fechaentrega is null AND gt_tareas.resuelta = false AND gt_tareas.idusuario = '{}' AND gt_proyectos.archivado = false AND gt_tareas.ultimamodificacion < CURRENT_DATE - 30".format(str(usuario)))
 
         if tarea_sin_modificacion == 0:
             return "hidden"

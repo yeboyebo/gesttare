@@ -1,0 +1,289 @@
+{
+    "querystring": {},
+    "schema": {
+        "gt_particproyecto": {
+            "rel": "idproyecto",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1,
+                "o_1": "idusuario"
+            }
+        },
+        "gt_hitosproyecto": {
+            "rel": "idproyecto",
+            "querystring": {
+                "p_l": 10,
+                "p_c": 1,
+                "o_1": "fechainicio"
+            }
+        },
+        "grafico": {
+            "custom": "getRentabilidadGraphic"
+        }
+    },
+    "layout": {
+        "groupBoxPadre": {
+            "componente": "YBGroupBox",
+            "className": "gbTareas gbTareasBox",
+            "style": { },
+            "layout": {
+                "volverButton": {
+                    "componente": "YBButton",
+                    "title": "Volver",
+                    "prefix": "gt_tareas",
+                    "icon": "arrow_back",
+                    "className": "floatLeft",
+                    "buttonType": "icon",
+                    "style": {
+                        "marginTop": "5px",
+                        "marginRight": "5px"
+                    },
+                    "action": {
+                        "key": "acctionVolver",
+                        "success": [{"slot": "return"}]
+                    }
+                },
+                "labelAdjunto": {
+                    "componente": "YBLabel",
+                    "text": "Proyecto archivado",
+                    "className": "contieneAdjuntos"
+                },
+                "gotoTareaButton": {
+                    "componente": "YBButton",
+                    "style": {
+                        "padding": "0px 20px",
+                        "marginTop": "5px"
+                    },
+                    "prefix": "gt_tareas",
+                    "title": "Ver tareas",
+                    "icon": "assignment",
+                    "className": "floatRight",
+                    "buttonType": "icon",
+                    "action": {
+                        "key": "vertareas"
+                    }
+                },
+                "separator1": {
+                    "componente": "YBSeparator"
+                },
+                "groupBoxRight": {
+                "componente": "YBGroupBox",
+                "className": "gbTareasLefta",
+                "style": { },
+                "layout": {
+                    "proyectosForm": {
+                        "prefix": "gt_proyectos",
+                        "componente": "YBForm",
+                        "icon": "info",
+                        "class": "claseGrid",
+                        "submit": "update",
+                        "send": false,
+                        "label": "Información de proyecto",
+                        "fields": {
+                            "gb__proyectos": {
+                                "title": "",
+                                "fields": {
+                                    "nombre": {"disabled": true},
+                                    "descripcion": {
+                                        "label": "Descripcion",
+                                        "wysiwyg": false,
+                                        "disabled": true
+                                    },
+                                    "estado": {"disabled": true},
+                                    "fechainicio": {"disabled": true},
+                                    "fechaterminado": {"disabled": true},
+                                    "idresponsable": {
+                                        "combolimit": 1,
+                                        "showpk": false,
+                                        "function": "getParticCompaniaUsu",
+                                        "disabled": true
+                                    }
+                                }
+                            }
+                        },
+                        "exclude": {}
+                    },
+                    "separator2": {
+                        "componente": "YBSeparator"
+                    },
+                    "hitosproyecto": {
+                        "componente": "YBGrid",
+                        "prefix": "gt_hitosproyecto",
+                        "label": "Hitos",
+                        "colorRowField": "color_hito",
+                        "avatar": false,
+                        "columns": [
+                            {"tipo": "field", "listpos": "title", "key": "nombre", "width": 210, "title": true, "link": true},
+                            {"tipo": "field", "listpos": "body", "key": "fechainicio", "width": 67, "label": "F. Inicio"},
+                            {"tipo": "field", "listpos": "body", "key": "fechaterminado", "width": 67},
+                            {"tipo": "foreignfield", "listpos": "secondaryitem", "key": "Responsable", "color": "Color responsable", "width": 50, "title": true, "avatar": true, "label": "Responsable"}
+                        ]
+                    },
+                    "separator3": {
+                        "componente": "YBSeparator",
+                        "visible": false
+                    },
+                    "nuevoParticipanteExterno": {
+                        "componente": "YBButton",
+                        "prefix": "gt_proyectos",
+                        "label": "Añadir externo",
+                        "className": "floatLeft",
+                        "buttonType": "raised",
+                        "visible": false,
+                        "action": {
+                            "key": "actInvitarExterno",
+                            "success": [{"slot": "refrescar"}]
+                        }
+                    },
+                    "verTareasProyecto": {
+                        "componente": "YBButton",
+                        "prefix": "gt_proyectos",
+                        "label": "Ver tareas",
+                        "className": "floatLeft",
+                        "buttonType": "raised",
+                        "visible": false,
+                        "action": {
+                            "key": "vertareas"
+                        }
+                    },
+                    "groupBoxUsuariosC": {
+                        "componente": "YBGroupBox",
+                        "className": "",
+                        "layout": {
+                            "separator1": {
+                                "componente": "YBSeparator"
+                            },
+                            "participantesGrid": {
+                                "label": "Participantes",
+                                "icon": "group",
+                                "componente": "YBGrid",
+                                "prefix": "gt_particproyecto",
+                                "className": "claseGrid",
+                                "hideheader": true,
+                                "columns": [
+                                    {
+                                        "tipo": "act",
+                                        "key": "borrarPartic",
+                                        "label": "Eliminar Participante",
+                                        "success": [
+                                            {"slot": "refrescar"}
+                                        ]
+                                    },
+                                    {
+                                        "tipo": "foreignfield",
+                                        "listpos": "title",
+                                        "key": "nombre",
+                                        "color": "Color_nombre_participante"
+                                    }
+                                ],
+                                "rowclick": ""
+                            }
+                        }
+                    }
+                }
+            },
+            "groupBoxRentabilidad": {
+                    "componente": "YBGroupBox",
+                    "className": "gbTareasRighta",
+                    "style": { },
+                    "label": "Análisis",
+                    "visible": false,
+                    "layout": {
+                    }
+                }   
+            }
+        }
+    },
+    "acciones": {
+        "acctionVolver": {
+            "action": "return"
+        },
+        "verTrackingProyecto": {
+            "action": "goto",
+            "prefix": "gt_proyectos",
+            "serverAction": "verTrackingProyecto"
+        },
+        "actionEmail": {
+            "action": "legacy",
+            "serverAction": "dameEmailCreaTarea"
+        },
+        "borrarPartic": {
+            "action": "legacy",
+            "serverAction": "borrarPartic",
+            "icon": "delete"
+        },
+        "borrarProyecto": {
+            "label": "Borrar proyecto",
+            "action": "legacy",
+            "serverAction": "borrar_proyecto"
+        },
+        "delete": {
+            "action": "deleteRow",
+            "icon": "delete"
+        },
+        "vertareas": {
+            "action": "goto",
+            "prefix": "gt_proyectos",
+            "icon": "assignment",
+            "serverAction": "vertareasproyecto"
+        },
+        "actNuevoPartic": {
+            "label": "Nuevo participante",
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "icon": "group",
+            "title": "Participantes",
+            "serverAction": "actNuevoPartic"
+        },
+        "actNuevoHito": {
+            "action": "newRow",
+            "icon": "add_circle"
+        },
+        "nuevaTarea": {
+            "action": "legacy",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "creartareahito",
+            "icon": "alarm"
+        },
+        "verTareasHito": {
+            "action": "goto",
+            "prefix": "gt_hitosproyecto",
+            "serverAction": "verTarea",
+            "icon": "assignment"
+        },
+        "actInvitarExterno": {
+            "title": "Invitación de usuarios externos",
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "icon": "people_outline",
+            "serverAction": "actInvitarExterno",
+            "params": [
+                {
+                    "tipo": 3,
+                    "verbose_name": "email",
+                    "key": "email",
+                    "validaciones": null,
+                    "select": true,
+                    "style": {
+                        "width": "100%"
+                    }
+                }
+            ]    
+        },
+        "prueba": {
+            "action": "legacy",
+            "prefix": "gt_proyectos",
+            "icon": "people_outline",
+            "serverAction": "invExterno"
+        }
+    },
+    "drawIf": {
+        "groupBoxPadre" :{
+            "labelAdjunto": "drawif_archivado"
+        },
+        "gb__proyectos": {
+        },
+        "hitosproyecto": {
+        }
+    }
+}

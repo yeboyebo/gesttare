@@ -17,7 +17,7 @@ from YBLEGACY.constantes import *
 class gesttare(interna):
 
     def gesttare_getForeignFields(self, model, template=None):
-        fields = [{'verbose_name': 'nombre', 'func': 'field_nombre'}]
+        fields = [{'verbose_name': 'nombre', 'func': 'field_nombre'}, {'verbose_name': 'Color_nombre_participante', 'func': 'color_nombre_participante'}]
         return fields
 
     def gesttare_getDesc(self):
@@ -40,6 +40,20 @@ class gesttare(interna):
             print(e)
         return nombre
 
+    def gesttare_color_nombre_participante(self, model):
+        username = model.idusuario.idusuario
+        id_company = qsatype.FLUtil.quickSqlSelect("aqn_user", "idcompany", "idusuario = '{}'".format(username))
+
+        tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(username, str(model.idtarea.idproyecto.idproyecto)))
+        if tipo_participante == "observador":
+            return "OBSER "
+        if model.idtarea.idproyecto.idcompany.idcompany != id_company:
+            return "COL "
+        else:
+            return "INTERNO_EMPRESA "
+
+        return ""
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -54,6 +68,9 @@ class gesttare(interna):
 
     def field_nombre(self, model):
         return self.ctx.gesttare_field_nombre(model)
+
+    def color_nombre_participante(self, model):
+        return self.ctx.gesttare_color_nombre_participante(model)
 
 
 # @class_declaration head #
