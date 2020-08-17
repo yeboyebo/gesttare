@@ -587,18 +587,6 @@
                 "path": "assets/dist/img/icons/"
             },
             {
-                "name": "model_flgesttare__gt_configuser.py",
-                "path": "models/flgesttare/"
-            },
-            {
-                "name": "model_flgesttare__gt_configuser_def.py",
-                "path": "models/flgesttare/"
-            },
-            {
-                "name": "producir_naranja.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
                 "name": "app_gesttare__proyectorenta.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
             },
@@ -607,40 +595,8 @@
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
             },
             {
-                "name": "analizar_gris.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "anotar_gris.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "planear_gris.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "producir_gris.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "anotar_rojo.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "planear_rojo.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
                 "name": "app_gesttare__recordatorioPlanear.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
-            },
-            {
-                "name": "producir_rojo.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "analizar_grisO.svg",
-                "path": "assets/dist/img/icons/"
             },
             {
                 "name": "diagrama-tareas-atrasadas.svg",
@@ -703,14 +659,6 @@
                 "path": "assets/dist/img/icons/"
             },
             {
-                "name": "diagrama-tareas-atrasadas2.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "rango.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
                 "name": "app_gesttare__proyectocolaborador.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
             },
@@ -720,10 +668,6 @@
             },
             {
                 "name": "colaborador.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
-                "name": "observador_blanco.svg",
                 "path": "assets/dist/img/icons/"
             },
             {
