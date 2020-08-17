@@ -53,6 +53,8 @@ class gesttare(interna):
                     return resul
 
         mes = str(fecha).split("-")[1]
+        anio = str(fecha).split("-")[0]
+        print("El valor es: ",anio)
         response = {}
         response["resul"] = False
         response["msg"] = ""
@@ -88,7 +90,7 @@ class gesttare(interna):
 
             return True
 
-        if qsatype.FLUtil().quickSqlSelect("gt_controlmensual", "validado_user", "mes = '{}' AND idusuario = '{}'".format(mes, user_name)):
+        if qsatype.FLUtil().quickSqlSelect("gt_controlmensual", "validado_user", "mes = '{}' AND anyo = '{}' AND idusuario = '{}'".format(mes, anio, user_name)):
             response["status"] = 1
             response["msg"] = "El mes ya esta validado por el usuario"
             return response
