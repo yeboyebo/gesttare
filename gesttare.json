@@ -667,10 +667,6 @@
                 "path": "assets/dist/img/icons/"
             },
             {
-                "name": "colaborador.svg",
-                "path": "assets/dist/img/icons/"
-            },
-            {
                 "name": "app_gesttare__proyectoobservador.json",
                 "path": "apps/gesttare/templates/gesttare/plantillas/"
             },
