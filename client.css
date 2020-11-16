@@ -2205,3 +2205,57 @@ a.btn-primary:hover {
         margin-bottom: 10px;
     }
 }
+
+/*.botonQuimera {
+    background-color: white;
+    border: 1px solid #50d2ce;
+    color: #50d2ce;
+    border-radius: 5px;
+    text-transform: none;
+}*/
+
+.botonQuimera{
+   /* width: 200px;
+    height: 32px !important;*/
+    font-family: Rubik;
+    font-size: 14px;
+    font-weight: 800 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    text-transform: none;
+    color: var(--white);
+    /*width: 215px;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    border-radius: 8px;*/
+    background-color: white !important;
+    border: 1px solid #50d2ce !important;
+    color: black;
+    border-radius: 5px !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    text-transform: none;
+}
+
+.botonQuimera .YBButtonPrimary.YBButtonRaised{
+    width: 215px;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    border-radius: 8px;
+    background-color: white !important;
+    border: 1px solid #50d2ce;
+    color: black;
+    border-radius: 5px;
+    text-transform: none;
+}
+
+.quimeraButtonLabel {
+    margin-top: 0px !important;
+}
+
+.botonQuimera .YBButtonIcon {
+    margin-top: -5px;
+}

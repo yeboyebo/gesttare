@@ -1038,14 +1038,22 @@ class gesttare(interna):
             response = {}
             response["status"] = 1
             response["resul"] = True
-            response["msg"] = "Debes tener un plan PROFESIONAL o superior para usar esta funcionalidad"
+            response["msg"] = "Debes tener un plan S o superior para usar esta funcionalidad"
+            return response
+
+
+        if accion == "cliente" and id_plan == 1:
+            response = {}
+            response["status"] = 1
+            response["resul"] = True
+            response["msg"] = "Debes tener un plan S o superior para usar esta funcionalidad"
             return response
 
         if accion == "start" and id_plan == 1 or accion == "start" and id_plan == 2 or accion == "start" and id_plan == 5:
             response = {}
             response["status"] = 1
             response["resul"] = True
-            response["msg"] = "Debes tener un plan SENIOR o superior para usar esta funcionalidad"
+            response["msg"] = "Debes tener un plan S o superior para usar esta funcionalidad"
             return response
 
         if accion == "informes_horizontal" and id_plan == 1:

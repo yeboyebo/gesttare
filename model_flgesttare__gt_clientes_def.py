@@ -12,6 +12,7 @@ class interna(qsatype.objetoBase):
 
 # @class_declaration gesttare #
 from YBLEGACY.constantes import *
+from models.flgesttare import flgesttare_def
 
 
 class gesttare(interna):
@@ -62,6 +63,9 @@ class gesttare(interna):
         return "nombre"
 
     def gesttare_gotonuevoCliente(self, model, oParam):
+        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("cliente")
+        if tengopermiso != True:
+            return tengopermiso
         # user_name = qsatype.FLUtil.nameUser()
         url='/system/gt_clientes/newRecord'
         resul = {}

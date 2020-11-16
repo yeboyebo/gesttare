@@ -306,6 +306,10 @@ class gesttare_gt_tareas(interna_gt_tareas, helpers.MixinConAcciones):
     def gotomomentos(self):
         return form.iface.gotomomentos()
 
+    @helpers.decoradores.accion(tipo="O")
+    def gotoquimera(self):
+        return form.iface.gotoquimera()
+
     @helpers.decoradores.accion(aqparam=["oParam"])
     def opciones_recordatorio(self, oParam):
         return form.iface.opciones_recordatorio(oParam)

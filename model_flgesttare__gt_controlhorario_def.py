@@ -54,7 +54,6 @@ class gesttare(interna):
 
         mes = str(fecha).split("-")[1]
         anio = str(fecha).split("-")[0]
-        print("El valor es: ",anio)
         response = {}
         response["resul"] = False
         response["msg"] = ""

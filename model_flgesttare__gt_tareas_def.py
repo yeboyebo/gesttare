@@ -615,10 +615,10 @@ class gesttare(interna):
         #     response["resul"] = True
         #     response["msg"] = "Debes tener un plan de pago para esta funcionalidad"
         #     return response
-        tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("startstop")
-        # response = self.plan_compania(user_name)
-        if tengopermiso != True:
-            return tengopermiso
+        # tengopermiso = flgesttare_def.iface.compruebaPermisosPlan("startstop")
+        # # response = self.plan_compania(user_name)
+        # if tengopermiso != True:
+        #     return tengopermiso
 
         tipo_participante = tipo_participante = qsatype.FLUtil.quickSqlSelect("gt_particproyecto", "tipo", "idusuario = '{}' AND idproyecto = {}".format(user_name, str(cursor.valueBuffer("idproyecto"))))
 
@@ -1847,6 +1847,14 @@ class gesttare(interna):
         # return response
         url = "https://doc.dailyjob.io/"
         return url
+
+    def gesttare_gotoquimera(self):
+        # response = {}
+        # response["newtab"] = True
+        # response["url"] = "http://doc.dailyjob.io/"
+        # return response
+        url = "https://app2.dailyjob.io/"
+        return url
         
 
     def gesttare_gotoNewRecordRecordatorioAtrasada(self, oParam):
@@ -2335,6 +2343,9 @@ class gesttare(interna):
 
     def gotomomentos(self):
         return self.ctx.gesttare_gotomomentos()
+
+    def gotoquimera(self):
+        return self.ctx.gesttare_gotoquimera()
 
     def opciones_recordatorio(self, oParam):
         return self.ctx.gesttare_opciones_recordatorio(oParam)
